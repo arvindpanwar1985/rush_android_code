@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#c1413a</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorEdtBg">#d27872</color>
+    <color name="civ_border">#6c2420</color>
 
 </resources>

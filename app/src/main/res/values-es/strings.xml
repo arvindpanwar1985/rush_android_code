@@ -3,4 +3,6 @@
     <string name="hint_password">Contrasena</string>
     <string name="str_login">Iniciar Sesion</string>
     <string name="str_create_account">Crear cuenta</string>
+    <string name="str_has_forgotPass">has olvidado tu Contrasena</string>
+    <string name="str_signup_with">Registrate con</string>
 </resources>
