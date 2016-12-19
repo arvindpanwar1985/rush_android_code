@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Rush</string>
+    <string name="hint_user">User</string>
+    <string name="hint_password">Password</string>
+    <string name="str_login">Log in</string>
+    <string name="str_create_account">Create Account</string>
 </resources>

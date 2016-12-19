@@ -30,7 +30,6 @@ public abstract class BaseFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof BaseActivity) {
             mActivity = (BaseActivity) context;
-
         }
     }
 

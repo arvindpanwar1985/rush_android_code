@@ -1,9 +1,12 @@
 package com.hoffmans.rush;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import com.hoffmans.rush.ui.activities.LoginActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -39,7 +42,10 @@ public class SplashActivity extends AppCompatActivity {
      * call activity from handler
      */
     private void callActivity() {
-
+        Intent loginIntent=new Intent(this, LoginActivity.class);
+        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(loginIntent);
+        this.finish();
     }
 
 }
