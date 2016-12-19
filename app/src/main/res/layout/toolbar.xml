@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:layout_gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorPrimary"
+    android:visibility="visible"
+    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+
+
+    <TextView
+        android:id="@+id/tv_toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="RUSH"
+        android:layout_gravity="center|right"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white"
+        android:layout_marginRight="@dimen/dp_10"
+        android:textStyle="bold"
+         />
+
+
+
+
+
+
+
+
+</android.support.v7.widget.Toolbar>
