@@ -3,13 +3,19 @@ package com.hoffmans.rush.ui.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.ui.activities.CreateAccountActivity;
+import com.hoffmans.rush.ui.activities.ForgotPassActivity;
+import com.hoffmans.rush.utils.Validation;
 
 /**
  * Created by devesh on 19/12/16.
@@ -19,6 +25,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 
     private View loginView;
     private TextView txtCreateAccount,txtForgotFassword;
+    private Button btnLogin;
+    private EditText edtEmail,edtPassword;
     public LoginFragment(){
 
     }
@@ -35,12 +43,19 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     protected void initViews(View view) {
         txtCreateAccount=(TextView) view.findViewById(R.id.flCreateAccount);
         txtForgotFassword=(TextView) view.findViewById(R.id.flForgotPass);
+        btnLogin=(Button)view.findViewById(R.id.flBtnLogin);
+        edtPassword=(EditText)view.findViewById(R.id.flPassword);
+        edtEmail=(EditText)view.findViewById(R.id.flUsername);
+
+
+
     }
 
     @Override
     protected void initListeners() {
      txtCreateAccount.setOnClickListener(this);
      txtForgotFassword.setOnClickListener(this);
+     btnLogin.setOnClickListener(this);
     }
 
     @Override
@@ -52,10 +67,57 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
                 startActivity(registerIntent);
                 break;
             case R.id.flForgotPass:
-               /* Intent forgotPassIntent=new Intent(mActivity, CreateAccountActivity.class);
-                registerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(registerIntent);*/
+                Intent forgotPassIntent=new Intent(mActivity, ForgotPassActivity.class);
+                forgotPassIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(forgotPassIntent);
+                break;
+            case R.id.flBtnLogin:
+                 validateFields();
                 break;
         }
+    }
+
+
+    /**
+     * Validate the login page
+     */
+    private void validateFields(){
+        // Store values at the time of the login attempt.
+        String email = edtEmail.getText().toString().trim();
+        String password = edtPassword.getText().toString().trim();
+
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(email)) {
+            mActivity.showSnackbar(getString(R.string.error_empty_email), Toast.LENGTH_SHORT);
+            return;
+
+        } else if (!Validation.isValidEmail(email)) {
+            mActivity.showSnackbar(getString(R.string.error_title_invalid_email), Toast.LENGTH_SHORT);
+            return;
+
+        }
+
+        if (TextUtils.isEmpty(password.trim())) {
+            mActivity.showSnackbar(getString(R.string.error_empty_password), Toast.LENGTH_SHORT);
+            return;
+        }
+        // Check for a valid password, if the user entered one.
+        if (TextUtils.isEmpty(password) || !Validation.isValidPassword(password)) {
+            mActivity.showSnackbar(getString(R.string.error_title_invalid_password), Toast.LENGTH_SHORT);
+
+            return;
+        }
+        proceedToLogin(email,password);
+
+    }
+
+
+    /**
+     *
+     * @param email email of user
+     * @param password password of user
+     */
+    private void proceedToLogin(String email,String password){
+
     }
 }

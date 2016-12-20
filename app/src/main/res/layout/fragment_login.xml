@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_40"
         android:hint="@string/hint_user"
+        android:inputType="textEmailAddress|textNoSuggestions"
         android:layout_marginRight="@dimen/dp_40"
         android:layout_centerInParent="true"
         style="@style/AppTheme.Input.Login"/>
@@ -20,6 +21,7 @@
         android:id="@+id/flPassword"
         android:layout_height="wrap_content"
         android:hint="@string/hint_password"
+        android:inputType="textWebPassword|textNoSuggestions"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_marginLeft="@dimen/dp_40"
         android:layout_marginRight="@dimen/dp_40"
@@ -27,6 +29,7 @@
         style="@style/AppTheme.Input.Login"/>
 
       <Button
+          android:id="@+id/flBtnLogin"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="@dimen/dp_20"

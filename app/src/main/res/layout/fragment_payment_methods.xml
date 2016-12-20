@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_4"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/sp_16"
+        android:textStyle="bold|italic"
+        android:text="@string/str_pay_method"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_4"
+        android:background="@android:color/white"/>
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:id="@+id/fpEdtCard"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20"
+        android:hint="@string/str_Number"
+        android:layout_marginTop="@dimen/dp_10"
+        style="@style/AppTheme.Input"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:id="@+id/fpEdtTitular"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_10"
+        style="@style/AppTheme.Input"/>
+
+
+     <LinearLayout android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginLeft="@dimen/dp_20"
+         android:layout_marginRight="@dimen/dp_20"
+         android:layout_marginTop="@dimen/dp_10"
+         android:weightSum="1"
+         android:orientation="horizontal"
+         >
+
+         <EditText
+             android:layout_width="0sp"
+             android:id="@+id/fpEdtExpiry"
+             android:layout_height="wrap_content"
+             android:layout_weight=".3"
+             style="@style/AppTheme.Input"/>
+
+         <TextView
+             android:layout_width="0sp"
+             android:layout_height="wrap_content"
+             android:text="@string/str_expiration"
+             android:textColor="@android:color/white"
+             android:textSize="@dimen/sp_14"
+             android:textStyle="bold|italic"
+             android:layout_gravity="center_vertical"
+             android:layout_weight=".25"/>
+
+         <EditText
+             android:layout_width="0sp"
+             android:id="@+id/fpEdtExpi"
+             android:layout_height="wrap_content"
+             android:textColor="@android:color/white"
+             android:textSize="@dimen/sp_14"
+
+             android:layout_marginLeft="@dimen/dp_2"
+             android:textStyle="bold|italic"
+             android:layout_gravity="center_vertical"
+             android:layout_weight=".3"
+             style="@style/AppTheme.Input"/>
+
+
+         <TextView
+             android:layout_width="0sp"
+             android:layout_height="wrap_content"
+             android:textColor="@android:color/white"
+             android:textSize="@dimen/sp_14"
+             android:textStyle="bold|italic"
+
+             android:layout_gravity="center_vertical"
+             android:layout_marginRight="@dimen/dp_2"
+             android:text="@string/str_cvv"
+             android:layout_weight=".15"/>
+
+         </LinearLayout>
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:id="@+id/frEdtCountry"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20"
+        android:hint="@string/str_country"
+        android:layout_marginTop="@dimen/dp_10"
+        style="@style/AppTheme.Input"/>
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:id="@+id/frEdtCity"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:hint="@string/str_city"
+        android:layout_marginRight="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_10"
+        style="@style/AppTheme.Input"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_4"
+        android:layout_marginTop="@dimen/dp_20"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/sp_16"
+        android:textStyle="bold|italic"
+        android:text="@string/str_card"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_4"
+        android:background="@android:color/white"/>
+
+
+
+    <Button
+        android:id="@+id/frBtnCreateAccount"
+        android:layout_width="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginLeft="@dimen/dp_40"
+        android:text="@string/str_save"
+        android:layout_marginRight="@dimen/dp_40"
+        style="@style/AppTheme.Button"/>
+</LinearLayout>

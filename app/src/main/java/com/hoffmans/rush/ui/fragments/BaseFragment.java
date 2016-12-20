@@ -33,27 +33,27 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
-    /**
-     * Replace current view to given fragment from fragment
-     *
-     * @param fragment
-     */
     protected void replaceFragment(Fragment fragment) {
-
+        if(mActivity.getToast()!=null){
+            mActivity.getToast().cancel();
+        }
         mActivity.replaceFragment(fragment, 10);
     }
 
 
     protected void replaceFragment(Fragment fragment, Boolean storeInStack) {
-
+        if(mActivity.getToast()!=null){
+            mActivity.getToast().cancel();
+        }
         mActivity.replaceFragment(fragment, 10, storeInStack);
     }
 
     protected void replaceFragment(Fragment fragment, boolean storeInStack, boolean isAdd) {
-
+        if(mActivity.getToast()!=null){
+            mActivity.getToast().cancel();
+        }
         mActivity.replaceFragment(fragment, 10, storeInStack, isAdd);
     }
-
     /**
      * initialize all views of activity under this method
      */

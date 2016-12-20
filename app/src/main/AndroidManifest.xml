@@ -18,6 +18,7 @@
         </activity>
         <activity android:name=".ui.activities.LoginActivity"/>
         <activity android:name=".ui.activities.CreateAccountActivity"/>
+        <activity android:name=".ui.activities.ForgotPassActivity"/>
     </application>
 
 </manifest>

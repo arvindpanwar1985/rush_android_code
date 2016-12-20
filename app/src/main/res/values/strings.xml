@@ -2,8 +2,32 @@
     <string name="app_name">Rush</string>
     <string name="hint_user">User</string>
     <string name="hint_password">Password</string>
+
     <string name="str_login">Log in</string>
     <string name="str_create_account">Create Account</string>
     <string name="str_has_forgotPass">have you forgotten your password?</string>
     <string name="str_signup_with">Sign up with</string>
+    <string name="str_facebook">Facebook</string>
+    <string name="str_google">Google</string>
+    <string name="str_pay_method">Payment Methods</string>
+    <string name="str_Number">Number</string>
+    <string name="str_expiration">Expiration</string>
+    <string name="str_cvv">CVV</string>
+    <string name="str_country">Country</string>
+    <string name="str_city">City</string>
+    <string name="str_card">Card</string>
+    <string name="str_save">Save</string>
+    <string name ="str_write_rush">Write  your Rush account</string>
+    <string name="str_submit">Submit</string>
+
+
+
+    <string name="error_empty_email">Email address cannot be empty.</string>
+    <string name="error_empty_password">Password cannot be empty.</string>
+    <string name="error_empty_Mobile">Mobile number cannot be empty.</string>
+    <string name="error_title_invalid_email">Invalid Email</string>
+    <string name="error_title_invalid_password">Invalid Password</string>
+    <string name="error_title_invalid_Mobile">Invalid Mobile Number</string>
+    <string name="error_title_invalid_profile">Invalid Profile Pic</string>
+    <string name="error_title_invalid_card">Invalid Card </string>
 </resources>

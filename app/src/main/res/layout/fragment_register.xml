@@ -7,8 +7,10 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
         <LinearLayout
+            android:id="@+id/linearRegistration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_30"
@@ -23,53 +25,194 @@
                 android:layout_gravity="center_horizontal"
                 app:civ_border_color="@color/civ_border"/>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:id="@+id/frEdtname"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_40"
-                android:hint="@string/hint_user"
-                android:layout_marginRight="@dimen/dp_40"
-                 android:layout_marginTop="@dimen/dp_20"
-                style="@style/AppTheme.Input"/>
 
-            <EditText
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:id="@+id/frEdtPassword"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_40"
-                android:hint="@string/hint_user"
                 android:layout_marginRight="@dimen/dp_40"
-                android:layout_centerInParent="true"
+                android:layout_marginTop="@dimen/dp_20"
+                android:padding="@dimen/dp_5"
+                android:background="@drawable/bg_edittext_shape">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_2"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_audiotrack"/>
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white"/>
+
+                <EditText
+
+                    android:layout_width="match_parent"
+                    android:id="@+id/frEdtname"
+                    android:layout_height="wrap_content"
+                    android:inputType="text|textNoSuggestions"
+                    android:padding="@dimen/dp_5"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold|italic"
+                    android:textColorHint="@android:color/white"
+                    android:textColor="@android:color/white"
+                    android:layout_marginLeft="@dimen/dp_2"
+                    android:background="@android:color/transparent"></EditText>
+
+                </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_40"
+                android:layout_marginRight="@dimen/dp_40"
                 android:layout_marginTop="@dimen/dp_10"
-                style="@style/AppTheme.Input"/>
+                android:padding="@dimen/dp_5"
+                android:background="@drawable/bg_edittext_shape">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_2"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_audiotrack"/>
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white"/>
+
+                <EditText
+
+                    android:layout_width="match_parent"
+                    android:id="@+id/frEdtPassword"
+                    android:inputType="textWebPassword|textNoSuggestions"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_5"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold|italic"
+                    android:textColorHint="@android:color/white"
+                    android:textColor="@android:color/white"
+                    android:layout_marginLeft="@dimen/dp_2"
+                    android:background="@android:color/transparent"></EditText>
+
+            </LinearLayout>
 
 
-            <EditText
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:id="@+id/frEdtEmail"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_40"
-                android:hint="@string/hint_user"
                 android:layout_marginRight="@dimen/dp_40"
-                android:layout_centerInParent="true"
                 android:layout_marginTop="@dimen/dp_10"
-                style="@style/AppTheme.Input"/>
+                android:padding="@dimen/dp_5"
+                android:background="@drawable/bg_edittext_shape">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_2"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_audiotrack"/>
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white"/>
+
+                <EditText
+
+                    android:layout_width="match_parent"
+                    android:id="@+id/frEdtConfirmPassword"
+                    android:inputType="textWebPassword|textNoSuggestions"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_5"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold|italic"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white"
+                    android:layout_marginLeft="@dimen/dp_2"
+                    android:background="@android:color/transparent"></EditText>
+
+            </LinearLayout>
 
 
-            <EditText
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:id="@+id/frEdtPhone"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_40"
-                android:hint="@string/hint_user"
                 android:layout_marginRight="@dimen/dp_40"
-                android:layout_centerInParent="true"
                 android:layout_marginTop="@dimen/dp_10"
-                style="@style/AppTheme.Input"/>
+                android:padding="@dimen/dp_5"
+                android:background="@drawable/bg_edittext_shape">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_2"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_audiotrack"/>
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white"/>
+
+                <EditText
+
+                    android:layout_width="match_parent"
+                    android:id="@+id/frEdtEmail"
+                    android:inputType="textEmailAddress|textNoSuggestions"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_5"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold|italic"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white"
+                    android:layout_marginLeft="@dimen/dp_2"
+                    android:background="@android:color/transparent"></EditText>
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_40"
+                android:layout_marginRight="@dimen/dp_40"
+                android:layout_marginTop="@dimen/dp_10"
+
+                android:padding="@dimen/dp_5"
+                android:background="@drawable/bg_edittext_shape">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_2"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_audiotrack"/>
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white"/>
+
+                <EditText
+
+                    android:layout_width="match_parent"
+                    android:id="@+id/frEdtPhone"
+                    android:inputType="textPhonetic|textNoSuggestions"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_5"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold|italic"
+                    android:textColorHint="@android:color/white"
+                    android:textColor="@android:color/white"
+                    android:layout_marginLeft="@dimen/dp_2"
+                    android:background="@android:color/transparent"></EditText>
+
+            </LinearLayout>
 
 
             <Button
+                android:id="@+id/frBtnCreateAccount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_20"
@@ -78,13 +221,11 @@
                 android:layout_marginRight="@dimen/dp_40"
                 style="@style/AppTheme.Button"/>
 
-
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/dp_2"
-                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_10"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/str_signup_with"
                 android:textColor="@android:color/white"
@@ -92,9 +233,33 @@
                 android:textSize="@dimen/sp_16"/>
 
 
+
             </LinearLayout>
 
 
+        <Button
+            android:id="@+id/frBtnFacebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginLeft="@dimen/dp_40"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_alignParentLeft="true"
+            android:text="@string/str_facebook"
+            android:layout_below="@+id/linearRegistration"
+            style="@style/AppTheme.Button"/>
+
+        <Button
+            android:id="@+id/frBtnGoogle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_40"
+            android:layout_alignParentRight="true"
+            android:text="@string/str_google"
+            android:layout_below="@+id/linearRegistration"
+            style="@style/AppTheme.Button"/>
 
         </RelativeLayout>
 

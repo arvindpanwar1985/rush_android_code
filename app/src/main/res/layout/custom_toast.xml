@@ -1,0 +1,21 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toast_layout_root"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp_6"
+    android:elevation="3dp"
+    android:background="@color/colorPrimaryDark" >
+    <TextView android:id="@+id/text_error_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFF"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_centerInParent="true"
+        android:textStyle="bold"
+        android:text="hello"
+        android:textSize="@dimen/sp_14"
+       />
+
+
+</RelativeLayout>

@@ -1,15 +1,21 @@
 package com.hoffmans.rush.ui.activities;
 
 import android.content.pm.ActivityInfo;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hoffmans.rush.R;
 
@@ -20,6 +26,8 @@ public abstract  class BaseActivity extends AppCompatActivity {
     private FrameLayout activityContent = null;
     private Toolbar mToolbar = null;
     private int mLayoutId = 0;
+    public static Toast toast;
+    private int mActionBarSize;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,6 +35,14 @@ public abstract  class BaseActivity extends AppCompatActivity {
         //hide keyboard initially
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.actvity_base);
+        if(toast==null){
+            toast=new Toast(this);
+        }
+        // find the actionbarSize
+        final TypedArray styledAttributes = getApplicationContext().getTheme().obtainStyledAttributes(
+                new int[] { android.R.attr.actionBarSize });
+        mActionBarSize = (int) styledAttributes.getDimension(0, 0);
+        styledAttributes.recycle();
         //set orientation to portrait
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         activityContent = (FrameLayout) this.findViewById(R.id.activity_content);
@@ -179,6 +195,9 @@ public abstract  class BaseActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
+        if(toast!=null) {
+            toast.cancel();
+        }
         if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
             finish();
             return;
@@ -186,6 +205,36 @@ public abstract  class BaseActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+
+
+    /**
+     *
+     * @param message
+     * @param lenth TSnackbar.LengthShort ,TSnackbar.LengthLong
+     */
+    public void showSnackbar(String message,int lenth) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast,
+                (ViewGroup) findViewById(R.id.toast_layout_root));
+
+
+        TextView textTitle = (TextView) layout.findViewById(R.id.text_error_title);
+
+        textTitle.setText(message);
+
+        if(toast!=null) {
+            toast.setGravity(Gravity.TOP | Gravity.FILL_HORIZONTAL, 0, mActionBarSize);
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout);
+            toast.show();
+        }
+    }
+    public  Toast getToast(){
+        if(toast!=null){
+            return  toast;
+        }
+        return null;
+    }
 
 
 

@@ -1,8 +1,18 @@
 <resources>
 <string name="hint_user">Usuario</string>
     <string name="hint_password">Contrasena</string>
+
     <string name="str_login">Iniciar Sesion</string>
     <string name="str_create_account">Crear cuenta</string>
     <string name="str_has_forgotPass">has olvidado tu Contrasena</string>
     <string name="str_signup_with">Registrate con</string>
+    <string name="str_pay_method">Formas de pago</string>
+    <string name="str_Number">Numero</string>
+    <string name="str_expiration">Caduciad</string>
+    <string name="str_country">Pais</string>
+    <string name="str_city">Cuidad</string>
+    <string name="str_card">Tarjeta</string>
+    <string name="str_save">Guardar</string>
+    <string name ="str_write_rush">Escribe al carreo de tu cuenta Rush</string>
+    <string name="str_submit">Enviar</string>
 </resources>

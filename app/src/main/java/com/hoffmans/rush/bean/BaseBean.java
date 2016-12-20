@@ -3,34 +3,38 @@ package com.hoffmans.rush.bean;
 @SuppressWarnings("serial")
 public class BaseBean {
 
-    public transient String statusMessage;
-    public transient int statusCode;
-    public transient String statusMsg;
-    private transient String progressMsg = "Please wait...";
-    private transient boolean progressEnable = true;
-    public String getProgressMsg() {
-        return progressMsg;
-    }
 
-    public void setProgressMsg(String progressMsg) {
-        this.progressMsg = progressMsg;
-    }
-
+    public transient String message;
+    private transient String progressMessage = "Please wait...";
     public boolean isProgressEnable() {
         return progressEnable;
     }
 
-    public void setProgressEnable(boolean enbale) {
-        progressEnable = enbale;
+    public void setProgressEnable(boolean progressEnable) {
+        this.progressEnable = progressEnable;
     }
 
-    public String getStatusMessage() {
-        return statusMessage;
+    public String getProgressMessage() {
+        return progressMessage;
     }
 
-    public void setStatusMessage(String statusMessage) {
-        this.statusMessage = statusMessage;
+    public void setProgressMessage(String progressMessage) {
+        this.progressMessage = progressMessage;
     }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    private transient boolean progressEnable = true;
+
+
+
+
 
 
 }
