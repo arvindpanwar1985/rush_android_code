@@ -23,6 +23,7 @@
 
 
     <string name="error_empty_email">Email address cannot be empty.</string>
+    <string name="error_empty_name">Fullname  cannot be empty.</string>
     <string name="error_empty_password">Password cannot be empty.</string>
     <string name="error_empty_Mobile">Mobile number cannot be empty.</string>
     <string name="error_title_invalid_email">Invalid Email</string>
@@ -30,4 +31,8 @@
     <string name="error_title_invalid_Mobile">Invalid Mobile Number</string>
     <string name="error_title_invalid_profile">Invalid Profile Pic</string>
     <string name="error_title_invalid_card">Invalid Card </string>
+
+    <string name="str_open_Camera">Open Camera</string>
+    <string name="str_open_Gallery">Open Gallery</string>
+    <string name="str_profile_pic">Select Profile Photo"</string>
 </resources>

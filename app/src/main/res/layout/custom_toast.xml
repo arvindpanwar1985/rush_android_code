@@ -12,9 +12,9 @@
         android:textColor="#FFF"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_centerInParent="true"
-        android:textStyle="bold"
+        android:textStyle="italic|bold"
         android:text="hello"
-        android:textSize="@dimen/sp_14"
+        android:textSize="@dimen/sp_12"
        />
 
 

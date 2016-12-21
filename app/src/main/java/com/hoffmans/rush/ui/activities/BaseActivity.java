@@ -1,10 +1,12 @@
 package com.hoffmans.rush.ui.activities;
 
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -237,6 +239,21 @@ public abstract  class BaseActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * check for permission granted
+     * @param arrPermission array of permission
+     * @return
+     */
+    public boolean isPermissionGranted(String[]arrPermission){
+        for(String permission:arrPermission){
+            int result = ContextCompat.checkSelfPermission(BaseActivity.this, permission);
+            if (result != PackageManager.PERMISSION_GRANTED){
+                return false;
+            }
+
+        }
+        return true;
+    }
 
 }
 

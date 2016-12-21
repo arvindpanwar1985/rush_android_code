@@ -17,9 +17,9 @@
             android:orientation="vertical">
             <de.hdodenhof.circleimageview.CircleImageView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/profile_image"
-                android:layout_width="@dimen/dp_100"
-                android:layout_height="@dimen/dp_100"
+                android:id="@+id/frImgProfile"
+                android:layout_width="@dimen/dp_130"
+                android:layout_height="@dimen/dp_130"
                 android:src="@mipmap/ic_launcher"
                 app:civ_border_width="2dp"
                 android:layout_gravity="center_horizontal"
@@ -100,40 +100,6 @@
 
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_40"
-                android:layout_marginRight="@dimen/dp_40"
-                android:layout_marginTop="@dimen/dp_10"
-                android:padding="@dimen/dp_5"
-                android:background="@drawable/bg_edittext_shape">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/dp_2"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_audiotrack"/>
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/white"/>
-
-                <EditText
-
-                    android:layout_width="match_parent"
-                    android:id="@+id/frEdtConfirmPassword"
-                    android:inputType="textWebPassword|textNoSuggestions"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/dp_5"
-                    android:textSize="@dimen/sp_16"
-                    android:textStyle="bold|italic"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="@android:color/white"
-                    android:layout_marginLeft="@dimen/dp_2"
-                    android:background="@android:color/transparent"></EditText>
-
-            </LinearLayout>
 
 
 
@@ -198,7 +164,7 @@
 
                     android:layout_width="match_parent"
                     android:id="@+id/frEdtPhone"
-                    android:inputType="textPhonetic|textNoSuggestions"
+                    android:inputType="phone|textNoSuggestions"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dp_5"
                     android:textSize="@dimen/sp_16"

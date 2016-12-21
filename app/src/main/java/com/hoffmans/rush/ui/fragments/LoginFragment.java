@@ -24,7 +24,7 @@ import com.hoffmans.rush.utils.Validation;
 public class LoginFragment extends BaseFragment implements View.OnClickListener {
 
     private View loginView;
-    private TextView txtCreateAccount,txtForgotFassword;
+    private TextView txtCreateAccount,txtForgotPassword;
     private Button btnLogin;
     private EditText edtEmail,edtPassword;
     public LoginFragment(){
@@ -42,7 +42,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     @Override
     protected void initViews(View view) {
         txtCreateAccount=(TextView) view.findViewById(R.id.flCreateAccount);
-        txtForgotFassword=(TextView) view.findViewById(R.id.flForgotPass);
+        txtForgotPassword=(TextView) view.findViewById(R.id.flForgotPass);
         btnLogin=(Button)view.findViewById(R.id.flBtnLogin);
         edtPassword=(EditText)view.findViewById(R.id.flPassword);
         edtEmail=(EditText)view.findViewById(R.id.flUsername);
@@ -54,7 +54,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     @Override
     protected void initListeners() {
      txtCreateAccount.setOnClickListener(this);
-     txtForgotFassword.setOnClickListener(this);
+     txtForgotPassword.setOnClickListener(this);
      btnLogin.setOnClickListener(this);
     }
 
@@ -76,7 +76,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
                 break;
         }
     }
-
 
     /**
      * Validate the login page
