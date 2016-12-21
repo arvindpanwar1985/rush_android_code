@@ -21,7 +21,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.http.ApiBuilder;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
@@ -32,6 +34,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -43,14 +50,15 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
 
     private static final String FILE_PROVIDER="com.example.android.fileprovider";
-
     private EditText edtname,edtEmail,edtphone,edtPassword;
     private Button btnRegister,btnFb,btnGoogle;
     private CircleImageView imgProfilePic;
+
     private static final int IMAGE_REQUEST_PERMISSION=100;
     private static final int CAMERA_PIC_REQUEST = 101;
     private static final int GALLERY_PIC_REQUEST = 102;
     private String  mCurrentPhotoPath;
+
 
 
     @Nullable
@@ -59,12 +67,14 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         View view =inflater.inflate(R.layout.fragment_register,container,false);
         initViews(view);
         initListeners();
+        Glide.with(mActivity).load(Constants.DEFAULT_PROFILE_URL).centerCrop().into(imgProfilePic);
         return view;
     }
 
 
     @Override
     protected void initViews(View view) {
+
 
         edtname=(EditText)view.findViewById(R.id.frEdtname);
         edtEmail=(EditText)view.findViewById(R.id.frEdtEmail);
@@ -116,8 +126,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
               requestPermissions(arrPermission, IMAGE_REQUEST_PERMISSION);
         }
     }
-
-
     /**
      * Alert dialog to show Image picker
      */
@@ -228,6 +236,8 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             imgProfilePic.setImageBitmap(bitmap);
 
     }
+
+
     private void validateFields(){
         // Store values at the time of the login attempt.
         String email = edtEmail.getText().toString().trim();
@@ -279,7 +289,24 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     }
 
 
+    private void uplaodFile(File file){
 
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse(Constants.CONTENT_TYPE_MULTIPART), file);
+
+        // MultipartBody.Part is used to send also the actual file name
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("picture", file.getName(), requestFile);
+
+
+        // add another part within the multipart request
+        String descriptionString = "Image upload";
+        RequestBody description =
+                RequestBody.create(
+                        MediaType.parse(Constants.CONTENT_TYPE_MULTIPART), descriptionString);
+
+        Call<ResponseBody> call = ApiBuilder.getPostRequestInstance().upload(description, body);
+    }
 
 
     @Override
@@ -287,10 +314,10 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode){
             case IMAGE_REQUEST_PERMISSION:
-                if(grantResults.length>2){
+                if(mActivity.isPermissionGranted(grantResults)){
                     pickImage();
                 }else{
-                    Toast.makeText(mActivity,"not granted",Toast.LENGTH_LONG).show();
+                    Toast.makeText(mActivity,"Permission denied.",Toast.LENGTH_LONG).show();
                 }
                 break;
         }
@@ -310,4 +337,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             setPic();
         }
     }
+
+
 }

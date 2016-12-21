@@ -28,6 +28,7 @@ public class Connection  {
     private static final String STATUS="status";
     private Gson mGson;
 
+
     public Connection(final Context context, Call<ResponseBody>call, final WebserviceType webserviceType, BaseBean object, final BaseListener.OnWebServiceCompleteListener mListener){
 
          this.mObject=object;
@@ -93,6 +94,11 @@ public class Connection  {
             }
         });
     }
+
+
+
+
+
 
 
 

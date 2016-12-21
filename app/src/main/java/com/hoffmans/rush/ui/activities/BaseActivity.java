@@ -218,12 +218,8 @@ public abstract  class BaseActivity extends AppCompatActivity {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_toast,
                 (ViewGroup) findViewById(R.id.toast_layout_root));
-
-
         TextView textTitle = (TextView) layout.findViewById(R.id.text_error_title);
-
         textTitle.setText(message);
-
         if(toast!=null) {
             toast.setGravity(Gravity.TOP | Gravity.FILL_HORIZONTAL, 0, mActionBarSize);
             toast.setDuration(Toast.LENGTH_SHORT);
@@ -242,7 +238,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
     /**
      * check for permission granted
      * @param arrPermission array of permission
-     * @return
+     * @return all self permission granted
      */
     public boolean isPermissionGranted(String[]arrPermission){
         for(String permission:arrPermission){
@@ -252,6 +248,21 @@ public abstract  class BaseActivity extends AppCompatActivity {
             }
 
         }
+        return true;
+    }
+
+    /**
+     *
+     * @param arrGrantedPermission array of permission granted
+     * @return all permission granted
+     */
+    public boolean isPermissionGranted(int[]arrGrantedPermission){
+        for(int grantPermission:arrGrantedPermission){
+            if(grantPermission!=PackageManager.PERMISSION_GRANTED){
+                return false;
+            }
+        }
+
         return true;
     }
 
