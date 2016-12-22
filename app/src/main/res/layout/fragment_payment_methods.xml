@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
     android:background="@color/colorPrimaryDark">
 
     <TextView
@@ -24,6 +25,8 @@
         android:layout_marginLeft="@dimen/dp_20"
         android:layout_marginRight="@dimen/dp_20"
         android:hint="@string/str_Number"
+        android:inputType="number|textNoSuggestions"
+        android:maxLength="17"
         android:layout_marginTop="@dimen/dp_10"
         style="@style/AppTheme.Input"/>
 
@@ -50,6 +53,7 @@
              android:layout_width="0sp"
              android:id="@+id/fpEdtExpiry"
              android:layout_height="wrap_content"
+             android:inputType="textNoSuggestions"
              android:layout_weight=".3"
              style="@style/AppTheme.Input"/>
 
@@ -65,11 +69,12 @@
 
          <EditText
              android:layout_width="0sp"
-             android:id="@+id/fpEdtExpi"
+             android:id="@+id/fpEdtCvv"
              android:layout_height="wrap_content"
              android:textColor="@android:color/white"
              android:textSize="@dimen/sp_14"
-
+             android:inputType="numberPassword"
+             android:maxLength="4"
              android:layout_marginLeft="@dimen/dp_2"
              android:textStyle="bold|italic"
              android:layout_gravity="center_vertical"
@@ -94,20 +99,22 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:id="@+id/frEdtCountry"
+        android:id="@+id/fpEdtCountry"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_20"
         android:layout_marginRight="@dimen/dp_20"
         android:hint="@string/str_country"
+        android:inputType="textNoSuggestions"
         android:layout_marginTop="@dimen/dp_10"
         style="@style/AppTheme.Input"/>
 
 
     <EditText
         android:layout_width="match_parent"
-        android:id="@+id/frEdtCity"
+        android:id="@+id/fpEdtCity"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_20"
+        android:inputType="textNoSuggestions"
         android:hint="@string/str_city"
         android:layout_marginRight="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_10"
@@ -130,7 +137,7 @@
 
 
     <Button
-        android:id="@+id/frBtnCreateAccount"
+        android:id="@+id/fpBtnSaveCard"
         android:layout_width="match_parent"
         android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content"

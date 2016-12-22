@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,15 +23,32 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.http.ApiBuilder;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -46,7 +64,7 @@ import static android.app.Activity.RESULT_OK;
  * Created by devesh on 19/12/16.
  */
 
-public class RegisterFragment extends BaseFragment implements View.OnClickListener {
+public class RegisterFragment extends BaseFragment implements View.OnClickListener,FacebookCallback<LoginResult> {
 
 
     private static final String FILE_PROVIDER="com.example.android.fileprovider";
@@ -58,13 +76,16 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     private static final int CAMERA_PIC_REQUEST = 101;
     private static final int GALLERY_PIC_REQUEST = 102;
     private String  mCurrentPhotoPath;
-
+    private static final int REQUEST_GOOGLE_SIGNIN=8;
+    private CallbackManager callbackManager;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =inflater.inflate(R.layout.fragment_register,container,false);
+        FacebookSdk.sdkInitialize(mActivity.getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
         initViews(view);
         initListeners();
         Glide.with(mActivity).load(Constants.DEFAULT_PROFILE_URL).centerCrop().into(imgProfilePic);
@@ -74,7 +95,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     protected void initViews(View view) {
-
 
         edtname=(EditText)view.findViewById(R.id.frEdtname);
         edtEmail=(EditText)view.findViewById(R.id.frEdtEmail);
@@ -88,14 +108,13 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     protected void initListeners() {
-
         btnRegister.setOnClickListener(this);
         btnFb.setOnClickListener(this);
         btnGoogle.setOnClickListener(this);
         imgProfilePic.setOnClickListener(this);
-
-
+        LoginManager.getInstance().registerCallback(callbackManager, this);
     }
+
 
     @Override
     public void onClick(View view) {
@@ -104,15 +123,66 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 validateFields();
                 break;
             case R.id.frBtnFacebook:
+                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
                 break;
             case R.id.frBtnGoogle:
+                googleSignIn();
                 break;
             case R.id.frImgProfile:
                 checkPermission();
                 break;
         }
+
     }
 
+
+    /**
+     * graph api caller to get user detail from Facebook account.
+     */
+    private void callGraphRequestFb(String accessToken) {
+        final GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(
+                            JSONObject object,
+                            GraphResponse response) {
+                        try {
+                            if(object!=null) {
+                                String name = object.getString("first_name") + " " + object.getString("last_name");
+
+                                String email = "";
+                                if (object.has("email")) {
+                                    email = object.getString("email");
+
+                                }
+                                String socialId = object.getString("id");
+                                String imageUrl = "http://graph.facebook.com/" + socialId + "/picture?type=large";
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }catch (Exception e){
+
+
+                        }
+                    }
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,first_name,last_name,email");
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
+
+
+    private void googleSignIn(){
+            GoogleApiClient googleApiClient=mActivity.setGoogleSignInOptions();
+            if(googleApiClient!=null) {
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+                startActivityForResult(signInIntent, REQUEST_GOOGLE_SIGNIN);
+            }
+
+    }
 
     /**
      * check the permission
@@ -126,11 +196,13 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
               requestPermissions(arrPermission, IMAGE_REQUEST_PERMISSION);
         }
     }
+
+
+
     /**
      * Alert dialog to show Image picker
      */
     private void pickImage(){
-
         AlertDialog.Builder getImageFrom = new AlertDialog.Builder(mActivity);
         getImageFrom.setTitle(getString(R.string.str_profile_pic));
         final CharSequence[] opsChars = {getString(R.string.str_open_Camera), getString(R.string.str_open_Gallery)};
@@ -194,12 +266,12 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
+
+
     /**
      * dispatch intent to select image from Gallery
      */
-
     private void dispatchSelectPictureIntent(){
-
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         galleryIntent.setType(Constants.IMAGE_TYPE);
         Intent chooser = new Intent(Intent.ACTION_CHOOSER);
@@ -284,7 +356,8 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
     private void createAccount(String name,String email,String password,String phone){
 
-
+     PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance("","");
+     replaceFragment(paymentMethodFragment,true);
 
     }
 
@@ -324,8 +397,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     }
 
 
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_PIC_REQUEST && resultCode == RESULT_OK) {
@@ -335,8 +406,51 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             Uri uri = data.getData();
             mCurrentPhotoPath= Utils.getRealPathFromURI(mActivity,uri);
             setPic();
+        }else if(requestCode ==REQUEST_GOOGLE_SIGNIN && resultCode == RESULT_OK){
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }else if(FacebookSdk.isFacebookRequestCode(requestCode)){
+            try {
+                callbackManager.onActivityResult(requestCode, resultCode, data);
+            }catch (Exception e){
+
+            }
         }
     }
 
 
+    /**
+     *
+     * @param result Result from google + login
+     */
+    private void handleSignInResult(GoogleSignInResult result) {
+
+        if (result.isSuccess()) {
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
+            String googleId=acct.getId();
+            String email=acct.getEmail();
+            String name =acct.getDisplayName();
+            Log.e("google data",googleId+email+name);
+
+        }
+    }
+
+
+    @Override
+    public void onSuccess(LoginResult loginResult) {
+
+        String accessToken=loginResult.getAccessToken().getToken();
+        callGraphRequestFb(accessToken);
+    }
+
+    @Override
+    public void onCancel() {
+
+    }
+
+    @Override
+    public void onError(FacebookException error) {
+
+    }
 }

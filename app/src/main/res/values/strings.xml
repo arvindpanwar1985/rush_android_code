@@ -17,9 +17,8 @@
     <string name="str_city">City</string>
     <string name="str_card">Card</string>
     <string name="str_save">Save</string>
-    <string name ="str_write_rush">Write  your Rush account</string>
+    <string name="str_write_rush">Write  your Rush account</string>
     <string name="str_submit">Submit</string>
-
 
 
     <string name="error_empty_email">Email address cannot be empty.</string>
@@ -35,4 +34,22 @@
     <string name="str_open_Camera">Open Camera</string>
     <string name="str_open_Gallery">Open Gallery</string>
     <string name="str_profile_pic">Select Profile Photo"</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="error_invalid_card">Invalid Card Number </string>
+    <string name="str_empty_expiry">Expiration should not be empty</string>
+
+    <string name="str_invalid_cvv">Cvv is Invalid</string>
+    <string name="str_empty_city">City is blank</string>
+    <string name="str_empty_country">Country is blank</string>
+    <string name="str_empty_headline">HeadLine is blank</string>
+
+    <string name="str_fb_id">1823860091226577</string>
+
+
+
+
 </resources>

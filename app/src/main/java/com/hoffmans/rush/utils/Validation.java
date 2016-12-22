@@ -33,4 +33,18 @@ public class Validation {
     public static boolean isValidLengthMobile(String mobilenumber) {
         return Pattern.matches("^[0-9]{10,10}$", mobilenumber);
     }
+
+
+    /**
+     *
+     * @param cardNumber card number of user
+     * @return is card valid
+     */
+    public static  boolean isValidCreditCard(String cardNumber) {
+        if (cardNumber.toString().length() == 15||cardNumber.toString().length() == 16||cardNumber.toString().length() == 17 ) {
+            return  true;
+        } else {
+            return false;
+        }
+    }
 }

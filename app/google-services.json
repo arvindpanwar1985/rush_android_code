@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "773660081313",
+    "project_id": "rush-153307"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773660081313:android:e5cf1f61a7627793",
+        "android_client_info": {
+          "package_name": "com.hoffmans.rush"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "773660081313-i047ecdf5gcgj8cigemgb5q33b670312.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hoffmans.rush",
+            "certificate_hash": "C3FCF47C696F1F89030BF702DEB3B55E510AF5F9"
+          }
+        },
+        {
+          "client_id": "773660081313-2jehojcvd7a2dvvm9460dbqra0r57ll8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJ7N7QkaV7EAnEaGkNurbNOEQV-OUjLHk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

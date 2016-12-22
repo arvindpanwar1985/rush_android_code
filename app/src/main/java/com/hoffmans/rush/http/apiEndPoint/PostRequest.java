@@ -20,6 +20,7 @@ public interface PostRequest {
     @POST("/apies/api.php")
     Call<ResponseBody> getArticleDetail(@Field("api") String name);
 
+
     @Multipart
     @POST("upload")
     Call<ResponseBody> upload(@Part("description") RequestBody description,
