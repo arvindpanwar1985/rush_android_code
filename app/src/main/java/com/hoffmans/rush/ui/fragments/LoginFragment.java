@@ -12,9 +12,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hoffmans.rush.R;
+import com.hoffmans.rush.bean.BaseBean;
+import com.hoffmans.rush.bean.User;
+import com.hoffmans.rush.bean.UserBean;
+import com.hoffmans.rush.http.request.LoginRequest;
+import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.ui.activities.CreateAccountActivity;
 import com.hoffmans.rush.ui.activities.ForgotPassActivity;
+import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Validation;
 
 /**
@@ -33,7 +38,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        loginView=inflater.inflate(R.layout.fragment_login,container,false);
+        loginView=inflater.inflate(com.hoffmans.rush.R.layout.fragment_login,container,false);
         initViews(loginView);
         initListeners();
         return loginView;
@@ -41,11 +46,11 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 
     @Override
     protected void initViews(View view) {
-        txtCreateAccount=(TextView) view.findViewById(R.id.flCreateAccount);
-        txtForgotPassword=(TextView) view.findViewById(R.id.flForgotPass);
-        btnLogin=(Button)view.findViewById(R.id.flBtnLogin);
-        edtPassword=(EditText)view.findViewById(R.id.flPassword);
-        edtEmail=(EditText)view.findViewById(R.id.flUsername);
+        txtCreateAccount=(TextView) view.findViewById(com.hoffmans.rush.R.id.flCreateAccount);
+        txtForgotPassword=(TextView) view.findViewById(com.hoffmans.rush.R.id.flForgotPass);
+        btnLogin=(Button)view.findViewById(com.hoffmans.rush.R.id.flBtnLogin);
+        edtPassword=(EditText)view.findViewById(com.hoffmans.rush.R.id.flPassword);
+        edtEmail=(EditText)view.findViewById(com.hoffmans.rush.R.id.flUsername);
 
 
 
@@ -61,17 +66,17 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.flCreateAccount:
+            case com.hoffmans.rush.R.id.flCreateAccount:
                 Intent registerIntent=new Intent(mActivity, CreateAccountActivity.class);
                 registerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(registerIntent);
                 break;
-            case R.id.flForgotPass:
+            case com.hoffmans.rush.R.id.flForgotPass:
                 Intent forgotPassIntent=new Intent(mActivity, ForgotPassActivity.class);
                 forgotPassIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(forgotPassIntent);
                 break;
-            case R.id.flBtnLogin:
+            case com.hoffmans.rush.R.id.flBtnLogin:
                  validateFields();
                 break;
         }
@@ -87,22 +92,22 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            mActivity.showSnackbar(getString(R.string.error_empty_email), Toast.LENGTH_SHORT);
+            mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.error_empty_email), Toast.LENGTH_SHORT);
             return;
 
         } else if (!Validation.isValidEmail(email)) {
-            mActivity.showSnackbar(getString(R.string.error_title_invalid_email), Toast.LENGTH_SHORT);
+            mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.error_title_invalid_email), Toast.LENGTH_SHORT);
             return;
 
         }
 
         if (TextUtils.isEmpty(password.trim())) {
-            mActivity.showSnackbar(getString(R.string.error_empty_password), Toast.LENGTH_SHORT);
+            mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.error_empty_password), Toast.LENGTH_SHORT);
             return;
         }
         // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(password) || !Validation.isValidPassword(password)) {
-            mActivity.showSnackbar(getString(R.string.error_title_invalid_password), Toast.LENGTH_SHORT);
+            mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.error_title_invalid_password), Toast.LENGTH_SHORT);
 
             return;
         }
@@ -118,9 +123,39 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
      */
     private void proceedToLogin(String email,String password){
 
+        Progress.showprogress(mActivity,"Loading..",false);
+        LoginRequest loginRequest =new LoginRequest();
+        loginRequest.loginUser(email, password, new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                Progress.dismissProgress();
+                UserBean bean=(UserBean)body;
+                User user=bean.getUser();
+                handleLoginResult(user);
+
+            }
+
+            @Override
+            public void onRequestFailed(String message) {
+                Progress.dismissProgress();
+            }
+        });
 
     }
 
+    private void handleLoginResult(User user){
+
+        if(!user.is_email_verified()){
+          mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.str_verify_email),0);
+        }else if(!user.is_card_verfied()){
+            PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance("","");
+            replaceFragment(paymentMethodFragment,true);
+
+        }else{
+            //TODO launch book a service Screeen
+        }
+
+    }
 
     private void register(){
 

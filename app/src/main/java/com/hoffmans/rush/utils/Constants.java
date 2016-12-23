@@ -16,4 +16,7 @@ public class Constants {
         public static final String FB_EMAIL="email";
         public static final String FB_IMG_URL="http://graph.facebook.com/";
     }
+    public static class EXTRAS{
+        public static final String KEY_USER="user";
+    }
 }

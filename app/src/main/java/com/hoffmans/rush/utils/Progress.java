@@ -13,7 +13,6 @@ public class Progress {
 
 
     public static void showprogress(Context context, String message, boolean isCancellable) {
-
         try {
             mprogressDialog = new ProgressDialog(context);
             mprogressDialog.setTitle("");
@@ -24,7 +23,7 @@ public class Progress {
         }catch (Exception e){
 
         }
-    }
+      }
 
 
 

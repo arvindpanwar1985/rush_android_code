@@ -35,12 +35,15 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.gson.JsonObject;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
+import com.hoffmans.rush.bean.UserBean;
 import com.hoffmans.rush.http.request.UserRequest;
 import com.hoffmans.rush.listners.ApiCallback;
-import com.hoffmans.rush.model.User;
+import com.hoffmans.rush.ui.activities.LoginActivity;
 import com.hoffmans.rush.utils.Constants;
+import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
 
@@ -76,6 +79,10 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     private String  mCurrentPhotoPath;
     private static final int REQUEST_GOOGLE_SIGNIN=8;
     private CallbackManager callbackManager;
+    private static  final String KEY_EMAIL="email";
+    private static  final String KEY_NAME="name";
+    private static  final  String KEY_PHONE="phone";
+    private static  final String KEY_PASSWORD="password";
 
 
     @Nullable
@@ -350,32 +357,42 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             return;
         }
 
-        User user=new User();
-        user.setEmail(email);
-        user.setName(fullname);
-        user.setPassword(password);
-        user.setPassword_confirmation(password);
-        user.setPhone(phoneNo);
-        createAccount(user);
+        try {
+            JsonObject object = new JsonObject();
+            object.addProperty(KEY_EMAIL, email);
+            object.addProperty(KEY_NAME,fullname);
+            object.addProperty(KEY_PHONE,phoneNo);
+            object.addProperty(KEY_PASSWORD,password);
+            createAccount(object);
+        }catch (Exception e){
+
+        }
+
     }
 
 
-    private void createAccount(User user){
+    private void createAccount(JsonObject _user){
 
+        Progress.showprogress(mActivity,"Loading",false);
         UserRequest request=new UserRequest();
-        request.createUser("", new ApiCallback() {
+        request.createUser(_user, new ApiCallback() {
             @Override
-            public void onRequestSuccess(BaseBean body) {
-                com.hoffmans.rush.bean.User user=(com.hoffmans.rush.bean.User) body;
-            }
+            public void onRequestSuccess(BaseBean baseBean) {
+                Progress.dismissProgress();
+                UserBean bean=(UserBean) baseBean;
+                Intent loginIntent=new Intent(mActivity, LoginActivity.class);
+                loginIntent.putExtra(Constants.EXTRAS.KEY_USER,bean.getUser());
+                mActivity.finish();
+              }
 
             @Override
             public void onRequestFailed(String message) {
-
+                Progress.dismissProgress();
+                mActivity.showSnackbar(message,Toast.LENGTH_LONG);
             }
-        },new BaseBean());
-     //PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance("","");
-     //replaceFragment(paymentMethodFragment,true);
+        });
+
+
 
     }
 

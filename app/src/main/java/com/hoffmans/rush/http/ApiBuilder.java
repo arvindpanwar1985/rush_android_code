@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by LOGAN on 5/1/2016.
@@ -31,6 +32,7 @@ public class ApiBuilder {
             retrofit = new Retrofit.Builder().baseUrl(ApiConfig.getdevBaseUrl())
                     // set the okhttpclient and add default connect and read timepouts
                     .client(okHttpClient.connectTimeout(45,TimeUnit.SECONDS).readTimeout(45,TimeUnit.SECONDS).build())
+                    .addConverterFactory(GsonConverterFactory.create())
                     .build();
             apiInterface=retrofit.create(ApiInterface.class);
             return apiInterface;
@@ -59,9 +61,10 @@ public class ApiBuilder {
         if(retrofit!=null){
             return retrofit;
         }else{
-            return new Retrofit.Builder().baseUrl(ApiConfig.getBaseUrl())
+            return new Retrofit.Builder().baseUrl(ApiConfig.getdevBaseUrl())
                     // set the okhttpclient and add default connect and read timepouts
                     .client(okHttpClient.connectTimeout(45,TimeUnit.SECONDS).readTimeout(45,TimeUnit.SECONDS).build())
+                    .addConverterFactory(GsonConverterFactory.create())
                     .build();
             // Create an instance of our GitHub API interface.
 

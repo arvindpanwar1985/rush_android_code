@@ -16,7 +16,7 @@ public class Validation {
             return false;
         }
 
-        return (password.trim().length() >= 4) ? true : false;
+        return (password.trim().length() >= 6) ? true : false;
 
     }
     public static boolean isMatchedPassword(String firstPassword, String secondPassword) {

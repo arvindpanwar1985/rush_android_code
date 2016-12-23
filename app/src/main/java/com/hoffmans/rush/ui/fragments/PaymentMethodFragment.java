@@ -1,6 +1,7 @@
 package com.hoffmans.rush.ui.fragments;
 
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,6 +106,10 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
         switch (view.getId()){
             case R.id.fpBtnSaveCard:
                 validateCardDetails();
+                break;
+            case R.id.fpEdtExpiry:
+                DialogFragment newFragment = new DatePickerFragment();
+                newFragment.show(mActivity.getSupportFragmentManager(), "datePicker");
                 break;
         }
     }

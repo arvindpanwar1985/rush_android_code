@@ -1,7 +1,6 @@
 package com.hoffmans.rush.http;
 
 import com.hoffmans.rush.listners.BaseListener;
-import com.hoffmans.rush.utils.ErrorUtils;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -41,8 +40,8 @@ public class ConnectionManager {
                 if(response.isSuccessful()){
                     mListener.onWebServiceComplete(response.body());
                 }else{
-                    APIError error = ErrorUtils.parseError(response);
-                    mListener.onWebStatusFalse(error.message());
+                    //APIError error = ErrorUtils.parseError(response);
+                    mListener.onWebStatusFalse(response.message());
                 }
 
             }
