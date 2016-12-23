@@ -1,4 +1,4 @@
-package com.hoffmans.rush.http.apiEndPoint;
+package com.hoffmans.rush.http;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -11,10 +11,10 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 
 /**
- * Created by devesh on 16/12/16.
+ * Created by devesh on 23/12/16.
  */
 
-public interface PostRequest {
+public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("/apies/api.php")
@@ -25,4 +25,9 @@ public interface PostRequest {
     @POST("upload")
     Call<ResponseBody> upload(@Part("description") RequestBody description,
                               @Part MultipartBody.Part file);
+    @FormUrlEncoded
+    @POST("/api/user/register")
+    Call<ResponseBody> createUser(@Field("user")String userdetail);
+
+
 }

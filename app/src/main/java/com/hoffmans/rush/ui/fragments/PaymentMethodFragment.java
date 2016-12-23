@@ -43,6 +43,7 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
      * @param param2 Parameter 2.
      * @return A new instance of fragment PaymentMethodFragment.
      */
+
     // TODO: Rename and change types and number of parameters
     public static PaymentMethodFragment newInstance(String param1, String param2) {
         PaymentMethodFragment fragment = new PaymentMethodFragment();

@@ -15,4 +15,8 @@
     <string name="str_save">Guardar</string>
     <string name ="str_write_rush">Escribe al carreo de tu cuenta Rush</string>
     <string name="str_submit">Enviar</string>
+    <string name ="str_fullname">Nombre completo</string>
+    <string name="str_password">Contraseña</string>
+    <string name="str_email">Email</string>
+    <string name="str_phone">Teléfono</string>
 </resources>

@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
 import android.view.View;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.hoffmans.rush.ui.activities.BaseActivity;
 
 /**
@@ -18,6 +20,7 @@ public abstract class BaseFragment extends Fragment {
     //protected Utils mUtils;
    // protected AppPreference mPreference;
     protected DateUtils mDateUtils;
+    protected Gson mGson;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,7 @@ public abstract class BaseFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof BaseActivity) {
             mActivity = (BaseActivity) context;
+            mGson=new GsonBuilder().create();
         }
     }
 

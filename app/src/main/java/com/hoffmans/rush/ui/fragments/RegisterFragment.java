@@ -22,7 +22,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -37,7 +36,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.hoffmans.rush.R;
-import com.hoffmans.rush.http.ApiBuilder;
+import com.hoffmans.rush.bean.BaseBean;
+import com.hoffmans.rush.http.request.UserRequest;
+import com.hoffmans.rush.listners.ApiCallback;
+import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
@@ -55,8 +57,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -66,12 +66,10 @@ import static android.app.Activity.RESULT_OK;
 
 public class RegisterFragment extends BaseFragment implements View.OnClickListener,FacebookCallback<LoginResult> {
 
-
     private static final String FILE_PROVIDER="com.example.android.fileprovider";
     private EditText edtname,edtEmail,edtphone,edtPassword;
     private Button btnRegister,btnFb,btnGoogle;
     private CircleImageView imgProfilePic;
-
     private static final int IMAGE_REQUEST_PERMISSION=100;
     private static final int CAMERA_PIC_REQUEST = 101;
     private static final int GALLERY_PIC_REQUEST = 102;
@@ -88,7 +86,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         callbackManager = CallbackManager.Factory.create();
         initViews(view);
         initListeners();
-        Glide.with(mActivity).load(Constants.DEFAULT_PROFILE_URL).centerCrop().into(imgProfilePic);
+
         return view;
     }
 
@@ -148,15 +146,13 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                             GraphResponse response) {
                         try {
                             if(object!=null) {
-                                String name = object.getString("first_name") + " " + object.getString("last_name");
-
+                                String name = object.getString(Constants.FBCONTANTS.FB_FIRST_NAME) + " " + object.getString(Constants.FBCONTANTS.FB_LAST_NAME);
                                 String email = "";
-                                if (object.has("email")) {
-                                    email = object.getString("email");
-
+                                if (object.has(Constants.FBCONTANTS.FB_EMAIL)) {
+                                    email = object.getString(Constants.FBCONTANTS.FB_EMAIL);
                                 }
-                                String socialId = object.getString("id");
-                                String imageUrl = "http://graph.facebook.com/" + socialId + "/picture?type=large";
+                                String socialId = object.getString(Constants.FBCONTANTS.FB_ID);
+                                String imageUrl = Constants.FBCONTANTS.FB_IMG_URL+socialId+"/picture?type=large";
 
                             }
 
@@ -175,6 +171,9 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     }
 
 
+    /**
+     * sign in through google
+     */
     private void googleSignIn(){
             GoogleApiClient googleApiClient=mActivity.setGoogleSignInOptions();
             if(googleApiClient!=null) {
@@ -350,14 +349,33 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             mActivity.showSnackbar(getString(R.string.error_title_invalid_Mobile), Toast.LENGTH_SHORT);
             return;
         }
-        createAccount(fullname,email,password,phoneNo);
+
+        User user=new User();
+        user.setEmail(email);
+        user.setName(fullname);
+        user.setPassword(password);
+        user.setPassword_confirmation(password);
+        user.setPhone(phoneNo);
+        createAccount(user);
     }
 
 
-    private void createAccount(String name,String email,String password,String phone){
+    private void createAccount(User user){
 
-     PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance("","");
-     replaceFragment(paymentMethodFragment,true);
+        UserRequest request=new UserRequest();
+        request.createUser("", new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                com.hoffmans.rush.bean.User user=(com.hoffmans.rush.bean.User) body;
+            }
+
+            @Override
+            public void onRequestFailed(String message) {
+
+            }
+        },new BaseBean());
+     //PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance("","");
+     //replaceFragment(paymentMethodFragment,true);
 
     }
 
@@ -378,7 +396,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 RequestBody.create(
                         MediaType.parse(Constants.CONTENT_TYPE_MULTIPART), descriptionString);
 
-        Call<ResponseBody> call = ApiBuilder.getPostRequestInstance().upload(description, body);
+        //Call<ResponseBody> call = ApiBuilder.getPostRequestInstance().upload(description, body);
     }
 
 

@@ -19,6 +19,11 @@
     <string name="str_save">Save</string>
     <string name="str_write_rush">Write  your Rush account</string>
     <string name="str_submit">Submit</string>
+    <string name ="str_fullname">Full name</string>
+    <string name="str_password">Password</string>
+    <string name="str_email">Email</string>
+    <string name="str_phone">Phone</string>
+
 
 
     <string name="error_empty_email">Email address cannot be empty.</string>

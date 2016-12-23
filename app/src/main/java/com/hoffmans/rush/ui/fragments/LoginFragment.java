@@ -13,17 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hoffmans.rush.R;
-import com.hoffmans.rush.bean.BaseBean;
-import com.hoffmans.rush.http.ApiBuilder;
-import com.hoffmans.rush.http.BaseListener;
-import com.hoffmans.rush.http.Connection;
-import com.hoffmans.rush.http.WebserviceType;
 import com.hoffmans.rush.ui.activities.CreateAccountActivity;
 import com.hoffmans.rush.ui.activities.ForgotPassActivity;
 import com.hoffmans.rush.utils.Validation;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 
 /**
  * Created by devesh on 19/12/16.
@@ -126,23 +118,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
      */
     private void proceedToLogin(String email,String password){
 
-        Call<ResponseBody> call = ApiBuilder.getPostRequestInstance().getArticleDetail("");
-        Connection connection=new Connection(mActivity, call,WebserviceType.ADDPHONENUMBER, new BaseBean(), new BaseListener.OnWebServiceCompleteListener() {
-            @Override
-            public void onWebServiceComplete(BaseBean baseObject, int statusCode) {
 
-            }
-
-            @Override
-            public void onWebServiceError(Exception exception, int statusCode) {
-
-            }
-
-            @Override
-            public void onWebStatusFalse(String message) {
-
-            }
-        });
     }
 
 
