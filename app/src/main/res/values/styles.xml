@@ -6,9 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorControlActivated">@color/colorPrimaryDark</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
     </style>
-
 
 
     <!-- Default editext app style -->
@@ -40,7 +39,7 @@
 
     <style name="AppTheme.Button" parent="Widget.AppCompat.Button">
 
-    <item name="android:background">@drawable/bg_edittext_shape</item>
+        <item name="android:background">@drawable/bg_edittext_shape</item>
         <item name="android:layout_height">@dimen/dp_50</item>
         <item name="android:textColorHint">@android:color/white</item>
         <item name="android:drawablePadding">@dimen/dp_10</item>
@@ -49,5 +48,9 @@
         <item name="android:textStyle">italic|bold</item>
         <item name="android:textSize">@dimen/sp_16</item>
         <item name="android:padding">@dimen/dp_10</item>
-   </style>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

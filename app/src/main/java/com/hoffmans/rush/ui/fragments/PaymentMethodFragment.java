@@ -1,7 +1,8 @@
 package com.hoffmans.rush.ui.fragments;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,15 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.braintreegateway.CreditCard;
+import com.braintreepayments.api.BraintreeFragment;
+import com.braintreepayments.api.exceptions.InvalidArgumentException;
+import com.braintreepayments.api.interfaces.BraintreeErrorListener;
+import com.braintreepayments.api.interfaces.PaymentMethodNonceCreatedListener;
+import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.model.Card;
 import com.hoffmans.rush.utils.Validation;
+import com.hoffmans.rush.widgets.MonthYearPicker;
 
 /**
  * A simple {@link BaseFragment} subclass.
@@ -21,7 +28,7 @@ import com.hoffmans.rush.utils.Validation;
  * Use the {@link PaymentMethodFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PaymentMethodFragment extends BaseFragment implements View.OnClickListener {
+public class PaymentMethodFragment extends BaseFragment implements View.OnClickListener,PaymentMethodNonceCreatedListener, BraintreeErrorListener {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -31,6 +38,7 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
     private EditText edtCardNumber,edtEdtTitular,edtExpiry,edtCvv,edtCountry,edtCity;
     private Button btnSaveCard;
     private CreditCard creditCard;
+    private BraintreeFragment mBraintreeFragment;
 
     public PaymentMethodFragment() {
         // Required empty public constructor
@@ -68,8 +76,11 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View paymentMethodView=inflater.inflate(R.layout.fragment_payment_methods,container,false);
+        mActivity.initToolBar("",false);
+        mActivity.hideToolbar();
         initViews(paymentMethodView);
         initListeners();
+        initializeBrainTree();
         return paymentMethodView;
     }
 
@@ -85,7 +96,6 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
         edtCity      =(EditText)view.findViewById(R.id.fpEdtCity);
         btnSaveCard  =(Button) view.findViewById(R.id.fpBtnSaveCard);
 
-
     }
 
     @Override
@@ -100,6 +110,16 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
     }
 
 
+    private void initializeBrainTree(){
+        try {
+            //TODO add client token
+            mBraintreeFragment = BraintreeFragment.newInstance(mActivity, "");
+        } catch (InvalidArgumentException e) {
+            // There was an issue with your authorization string.
+            Log.e("exception braintree", e.getMessage());
+        }
+    }
+
     @Override
     public void onClick(View view) {
 
@@ -108,8 +128,19 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
                 validateCardDetails();
                 break;
             case R.id.fpEdtExpiry:
-                DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(mActivity.getSupportFragmentManager(), "datePicker");
+                final MonthYearPicker monthYearPicker=new MonthYearPicker(mActivity);
+                monthYearPicker.build(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if(monthYearPicker!=null)
+                        edtExpiry.setText(monthYearPicker.getSelectedMonth()+1+"/"+monthYearPicker.getSelectedYear());
+                    }
+                },null);
+
+
+                monthYearPicker.show();
+               // DialogFragment newFragment = new DatePickerFragment();
+                //newFragment.show(mActivity.getSupportFragmentManager(), "datePicker");
                 break;
         }
     }
@@ -172,5 +203,16 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
                 return;
             }
         }
+    }
+
+    @Override
+    public void onError(Exception error) {
+        //Error when card is validated a
+    }
+
+    @Override
+    public void onPaymentMethodNonceCreated(PaymentMethodNonce paymentMethodNonce) {
+       //Nonce generated when card is build using Braintree card builder
+
     }
 }

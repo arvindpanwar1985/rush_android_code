@@ -17,6 +17,7 @@ import com.hoffmans.rush.bean.User;
 import com.hoffmans.rush.bean.UserBean;
 import com.hoffmans.rush.http.request.LoginRequest;
 import com.hoffmans.rush.listners.ApiCallback;
+import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.ui.activities.CreateAccountActivity;
 import com.hoffmans.rush.ui.activities.ForgotPassActivity;
 import com.hoffmans.rush.utils.Progress;
@@ -77,7 +78,9 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
                 startActivity(forgotPassIntent);
                 break;
             case com.hoffmans.rush.R.id.flBtnLogin:
-                 validateFields();
+                 Intent intent=new Intent(mActivity, BookServiceActivity.class);
+                 startActivity(intent);
+                // validateFields();
                 break;
         }
     }
@@ -132,6 +135,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
                 UserBean bean=(UserBean)body;
                 User user=bean.getUser();
                 handleLoginResult(user);
+               // PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance("","");
+              //  replaceFragment(paymentMethodFragment,true);
 
             }
 

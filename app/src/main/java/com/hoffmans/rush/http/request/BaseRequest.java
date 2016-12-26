@@ -14,6 +14,7 @@ public class BaseRequest {
     public String DATA="data";
     public String MESSAGE="message";
     public String STATUS="status";
+    public String SUCCESS="success";
 
     public  ApiInterface getAPIClient(){
         return  ApiBuilder.createApiBuilder();
@@ -21,6 +22,9 @@ public class BaseRequest {
     }
 
     public Gson getGsonBuilder(){
-       return new GsonBuilder().create();
+       Gson gson= new GsonBuilder().create();
+       gson.serializeNulls();
+        return gson;
+
     }
 }

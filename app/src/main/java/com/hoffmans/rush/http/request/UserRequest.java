@@ -36,7 +36,7 @@ public class UserRequest extends BaseRequest {
             public void onWebServiceComplete(ResponseBody responseBody) {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
-                    boolean status = obj.getBoolean(STATUS);
+                    boolean status = obj.getBoolean(SUCCESS);
                     String message=obj.getString(MESSAGE);
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();

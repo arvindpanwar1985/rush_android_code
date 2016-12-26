@@ -227,6 +227,9 @@ public abstract  class BaseActivity extends AppCompatActivity {
         TextView textTitle = (TextView) layout.findViewById(R.id.text_error_title);
         textTitle.setText(message);
         if(toast!=null) {
+            if(mToolbar!=null &&mToolbar.getVisibility()==View.GONE){
+                mActionBarSize=0;
+            }
             toast.setGravity(Gravity.TOP | Gravity.FILL_HORIZONTAL, 0, mActionBarSize);
             toast.setDuration(Toast.LENGTH_SHORT);
             toast.setView(layout);
@@ -241,6 +244,10 @@ public abstract  class BaseActivity extends AppCompatActivity {
     }
 
 
+
+    public Toolbar getToolBar(){
+        return mToolbar;
+    }
     /**
      * check for permission granted
      * @param arrPermission array of permission

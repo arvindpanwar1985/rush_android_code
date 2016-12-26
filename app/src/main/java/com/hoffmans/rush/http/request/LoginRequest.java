@@ -24,7 +24,7 @@ public class LoginRequest extends BaseRequest {
             public void onWebServiceComplete(ResponseBody responseBody) {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
-                    boolean status = obj.getBoolean(STATUS);
+                    boolean status = obj.getBoolean(SUCCESS);
                     String message=obj.getString(MESSAGE);
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
@@ -44,6 +44,51 @@ public class LoginRequest extends BaseRequest {
             public void onWebStatusFalse(String message) {
                 callback.onRequestFailed(message);
             }
+
+
+        });
+    }
+
+    /**
+     *
+     * @param uid
+     * @param first_name
+     * @param last_name
+     * @param email
+     * @param provider google/facebook
+     * @param callback
+     */
+    public void loginViaSocialNetwork(String uid, String first_name,  String last_name,  String email,  String provider,final ApiCallback callback){
+
+        Call<ResponseBody> loginCall=getAPIClient().loginViaSocialNetwork(uid,first_name,last_name,email,provider);
+        ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(loginCall);
+        connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
+            @Override
+            public void onWebServiceComplete(ResponseBody responseBody) {
+                try {
+                    JSONObject obj=new JSONObject(responseBody.string());
+                    boolean status = obj.getBoolean(SUCCESS);
+                    String message=obj.getString(MESSAGE);
+                    if (status) {
+                        String data = obj.getJSONObject(DATA).toString();
+                        UserBean bean = getGsonBuilder().fromJson(data, UserBean.class);
+                        bean.setMessage(message);
+                        callback.onRequestSuccess(bean);
+                    } else {
+                        callback.onRequestFailed(message);
+                    }
+
+                }catch (Exception e){
+                    callback.onRequestFailed(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onWebStatusFalse(String message) {
+                callback.onRequestFailed(message);
+            }
+
+
         });
     }
 }

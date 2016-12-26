@@ -54,7 +54,6 @@
              android:id="@+id/fpEdtExpiry"
              android:layout_height="wrap_content"
              android:editable="false"
-             android:inputType="textNoSuggestions"
              android:layout_weight=".3"
              style="@style/AppTheme.Input"/>
 

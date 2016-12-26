@@ -160,13 +160,13 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                                 }
                                 String socialId = object.getString(Constants.FBCONTANTS.FB_ID);
                                 String imageUrl = Constants.FBCONTANTS.FB_IMG_URL+socialId+"/picture?type=large";
-
+                                UpdateAccountFragment fragment=UpdateAccountFragment.newInstance("");
+                                mActivity.replaceFragment(fragment,0,false);
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }catch (Exception e){
-
 
                         }
                     }
@@ -294,7 +294,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             // Get the dimensions of the View
             int targetW = imgProfilePic.getWidth();
             int targetH = imgProfilePic.getHeight();
-
             // Get the dimensions of the bitmap
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
             bmOptions.inJustDecodeBounds = true;
