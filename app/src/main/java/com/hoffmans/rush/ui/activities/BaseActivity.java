@@ -3,6 +3,8 @@ package com.hoffmans.rush.ui.activities;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +39,8 @@ public abstract  class BaseActivity extends AppCompatActivity {
     public static Toast toast;
     private int mActionBarSize;
     private GoogleApiClient mGoogleApiClient;
+    private TextView titleTxt;
+    private ProgressBar progressBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,18 @@ public abstract  class BaseActivity extends AppCompatActivity {
         //hide keyboard initially
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.actvity_base);
+        initUI();
+
+
+    }
+
+
+
+    private void initUI(){
+
+        progressBar=(ProgressBar)findViewById(R.id.progressBar);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        titleTxt   =(TextView)findViewById(R.id.tv_toolbar);
         if(toast==null){
             toast=new Toast(this);
         }
@@ -55,9 +72,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         activityContent = (FrameLayout) this.findViewById(R.id.activity_content);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -81,6 +96,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
      */
     public void initToolBar(String title, boolean isHomeEnable) {
         mToolbar.setVisibility(View.VISIBLE);
+        titleTxt.setText(title);
         setSupportActionBar(mToolbar);
         if (isHomeEnable) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -213,8 +229,6 @@ public abstract  class BaseActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-
-
     /**
      *
      * @param message
@@ -244,6 +258,15 @@ public abstract  class BaseActivity extends AppCompatActivity {
     }
 
 
+
+
+    public  void showProgress(){
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    public void hideProgress(){
+        progressBar.setVisibility(View.GONE);
+    }
 
     public Toolbar getToolBar(){
         return mToolbar;

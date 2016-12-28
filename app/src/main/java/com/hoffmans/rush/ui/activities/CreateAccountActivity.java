@@ -2,9 +2,11 @@ package com.hoffmans.rush.ui.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.ui.fragments.RegisterFragment;
+import com.hoffmans.rush.ui.fragments.UpdateAccountFragment;
 
 /**
  * Created by devesh on 19/12/16.
@@ -37,5 +39,15 @@ public class CreateAccountActivity extends BaseActivity {
     @Override
     protected void initManagers() {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        int fragmentSize=fragmentManager.getBackStackEntryCount()-1;
+        if(!fragmentManager.getBackStackEntryAt(fragmentSize).getName().equals(UpdateAccountFragment.class.getCanonicalName())){
+            super.onBackPressed();
+        }
     }
 }

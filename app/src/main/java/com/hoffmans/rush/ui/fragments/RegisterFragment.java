@@ -14,7 +14,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,12 +34,13 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.gson.JsonObject;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.bean.UserBean;
+import com.hoffmans.rush.http.request.LoginRequest;
 import com.hoffmans.rush.http.request.UserRequest;
 import com.hoffmans.rush.listners.ApiCallback;
+import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.LoginActivity;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
@@ -55,6 +55,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
@@ -74,15 +76,16 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     private Button btnRegister,btnFb,btnGoogle;
     private CircleImageView imgProfilePic;
     private static final int IMAGE_REQUEST_PERMISSION=100;
-    private static final int CAMERA_PIC_REQUEST = 101;
-    private static final int GALLERY_PIC_REQUEST = 102;
-    private String  mCurrentPhotoPath;
-    private static final int REQUEST_GOOGLE_SIGNIN=8;
+    private static final int CAMERA_PIC_REQUEST    = 101;
+    private static final int GALLERY_PIC_REQUEST   = 102;
+    private static final int REQUEST_GOOGLE_SIGNIN = 8;
     private CallbackManager callbackManager;
-    private static  final String KEY_EMAIL="email";
-    private static  final String KEY_NAME="name";
-    private static  final  String KEY_PHONE="phone";
-    private static  final String KEY_PASSWORD="password";
+    private static  final  String KEY_EMAIL    ="user[email]";
+    private static  final  String KEY_NAME     ="user[name]";
+    private static  final  String KEY_PHONE    ="user[phone]";
+    private static  final  String KEY_PASSWORD ="user[password]";
+    private static  final  String KEY_PIC      ="user[picture]";
+    private String  mCurrentPhotoPath;
 
 
     @Nullable
@@ -153,15 +156,18 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                             GraphResponse response) {
                         try {
                             if(object!=null) {
-                                String name = object.getString(Constants.FBCONTANTS.FB_FIRST_NAME) + " " + object.getString(Constants.FBCONTANTS.FB_LAST_NAME);
+                                String first_name = object.getString(Constants.FBCONTANTS.FB_FIRST_NAME) ;
+                                String last_name  = object.getString(Constants.FBCONTANTS.FB_LAST_NAME);
                                 String email = "";
                                 if (object.has(Constants.FBCONTANTS.FB_EMAIL)) {
                                     email = object.getString(Constants.FBCONTANTS.FB_EMAIL);
                                 }
                                 String socialId = object.getString(Constants.FBCONTANTS.FB_ID);
                                 String imageUrl = Constants.FBCONTANTS.FB_IMG_URL+socialId+"/picture?type=large";
-                                UpdateAccountFragment fragment=UpdateAccountFragment.newInstance("");
-                                mActivity.replaceFragment(fragment,0,false);
+
+                                socialLogin(Constants.FB_PROVIDER,first_name,last_name,email,socialId,imageUrl);
+                                //UpdateAccountFragment fragment=UpdateAccountFragment.newInstance("");
+                                //mActivity.replaceFragment(fragment,0,false);
                             }
 
                         } catch (JSONException e) {
@@ -355,14 +361,22 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             mActivity.showSnackbar(getString(R.string.error_title_invalid_Mobile), Toast.LENGTH_SHORT);
             return;
         }
+        if(TextUtils.isEmpty(mCurrentPhotoPath)){
+            mActivity.showSnackbar(getString(R.string.str_profile_pic), Toast.LENGTH_SHORT);
+            return;
+        }
 
         try {
-            JsonObject object = new JsonObject();
-            object.addProperty(KEY_EMAIL, email);
-            object.addProperty(KEY_NAME,fullname);
-            object.addProperty(KEY_PHONE,phoneNo);
-            object.addProperty(KEY_PASSWORD,password);
-            createAccount(object);
+            File fileToUpload=new File(mCurrentPhotoPath);
+
+            Map<String,RequestBody> requestBodyMap=new HashMap<String,RequestBody>();
+            requestBodyMap.put(KEY_EMAIL, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),email));
+            requestBodyMap.put(KEY_PASSWORD, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),password));
+            requestBodyMap.put(KEY_PHONE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),phoneNo));
+            requestBodyMap.put(KEY_NAME, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),fullname));
+            RequestBody requestBody = RequestBody.create(MediaType.parse(Constants.CONTENT_TYPE_MULTIPART), fileToUpload);
+            MultipartBody.Part imageFileBody = MultipartBody.Part.createFormData(KEY_PIC, fileToUpload.getName(), requestBody);
+            createAccount(requestBodyMap,imageFileBody);
         }catch (Exception e){
 
         }
@@ -370,11 +384,10 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     }
 
 
-    private void createAccount(JsonObject _user){
-
+    private void createAccount(Map<String,RequestBody> requestBodyMap, MultipartBody.Part imageFileBody){
         Progress.showprogress(mActivity,"Loading",false);
         UserRequest request=new UserRequest();
-        request.createUser(_user, new ApiCallback() {
+        request.createUser(requestBodyMap, imageFileBody,new ApiCallback() {
             @Override
             public void onRequestSuccess(BaseBean baseBean) {
                 Progress.dismissProgress();
@@ -390,27 +403,50 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 mActivity.showSnackbar(message,Toast.LENGTH_LONG);
             }
         });
-
-
-
     }
 
 
+    private void socialLogin(String provider,String first_name,String last_name,String email,String uid,String picUrl){
+        mActivity.showProgress();
+        LoginRequest loginRequest=new LoginRequest();
+        loginRequest.loginViaSocialNetwork(uid, first_name, last_name, email, provider, picUrl, new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                mActivity.hideProgress();
+                UserBean userBean=(UserBean)body;
+                User user=userBean.getUser();
+                handleUserRegistrationCases(user);
+
+            }
+
+            @Override
+            public void onRequestFailed(String message) {
+                mActivity.hideProgress();
+                mActivity.showSnackbar(message,Toast.LENGTH_LONG);
+            }
+        });
+    }
+
+
+    private void handleUserRegistrationCases(User user){
+
+        if(!user.is_email_verified()){
+            UpdateAccountFragment fragment=UpdateAccountFragment.newInstance(user.getEmail(),user.getPhone(),user.getToken(),user.is_email_verified());
+            mActivity.replaceFragment(fragment,0,true);
+        }
+       else{
+            if(!user.is_card_verfied()){
+                PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance("","");
+                replaceFragment(paymentMethodFragment,true);
+            }else{
+                //TODO launch book a service Screeen
+            }
+        }
+    }
+
     private void uplaodFile(File file){
 
-        RequestBody requestFile =
-                RequestBody.create(MediaType.parse(Constants.CONTENT_TYPE_MULTIPART), file);
 
-        // MultipartBody.Part is used to send also the actual file name
-        MultipartBody.Part body =
-                MultipartBody.Part.createFormData("picture", file.getName(), requestFile);
-
-
-        // add another part within the multipart request
-        String descriptionString = "Image upload";
-        RequestBody description =
-                RequestBody.create(
-                        MediaType.parse(Constants.CONTENT_TYPE_MULTIPART), descriptionString);
 
         //Call<ResponseBody> call = ApiBuilder.getPostRequestInstance().upload(description, body);
     }
@@ -465,7 +501,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             String googleId=acct.getId();
             String email=acct.getEmail();
             String name =acct.getDisplayName();
-            Log.e("google data",googleId+email+name);
+            socialLogin(Constants.GOOGLE_PROVIDER,name,email,null,googleId,"");
 
         }
     }

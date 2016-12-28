@@ -1,4 +1,4 @@
-package com.hoffmans.rush.bean;
+package com.hoffmans.rush.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -34,9 +34,17 @@ public class User implements Parcelable {
     @Expose
     private String token;
 
+    private String uid;
+
+    private String provider;
+
+    private String pic_url;
+
     private boolean is_email_verified;
 
     private boolean is_card_verfied;
+
+    private UserLocation location;
 
     public Integer getId() {
         return id;
@@ -108,6 +116,38 @@ public class User implements Parcelable {
 
     public void setIs_card_verfied(boolean is_card_verfied) {
         this.is_card_verfied = is_card_verfied;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
+    public String getPic_url() {
+        return pic_url;
+    }
+
+    public void setPic_url(String pic_url) {
+        this.pic_url = pic_url;
+    }
+
+    public UserLocation getLocation() {
+        return location;
+    }
+
+    public void setLocation(UserLocation location) {
+        this.location = location;
     }
 
     public User() {

@@ -13,11 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hoffmans.rush.bean.BaseBean;
-import com.hoffmans.rush.bean.User;
 import com.hoffmans.rush.bean.UserBean;
 import com.hoffmans.rush.http.request.LoginRequest;
 import com.hoffmans.rush.listners.ApiCallback;
-import com.hoffmans.rush.ui.activities.BookServiceActivity;
+import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.CreateAccountActivity;
 import com.hoffmans.rush.ui.activities.ForgotPassActivity;
 import com.hoffmans.rush.utils.Progress;
@@ -78,9 +77,9 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
                 startActivity(forgotPassIntent);
                 break;
             case com.hoffmans.rush.R.id.flBtnLogin:
-                 Intent intent=new Intent(mActivity, BookServiceActivity.class);
-                 startActivity(intent);
-                // validateFields();
+                 //Intent intent=new Intent(mActivity, BookServiceActivity.class);
+                 //startActivity(intent);
+                 validateFields();
                 break;
         }
     }
@@ -118,7 +117,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 
     }
 
-
     /**
      *
      * @param email email of user
@@ -153,6 +151,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
         if(!user.is_email_verified()){
           mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.str_verify_email),0);
         }else if(!user.is_card_verfied()){
+
             PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance("","");
             replaceFragment(paymentMethodFragment,true);
 

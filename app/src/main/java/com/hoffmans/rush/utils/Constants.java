@@ -6,7 +6,11 @@ package com.hoffmans.rush.utils;
 
 public class Constants {
     public static final String IMAGE_TYPE="image/*";
+    public static final String TEXT_PLAIN_TYPE="text/plain";
     public static final String CONTENT_TYPE_MULTIPART="multipart/form-data";
+    public static final String FB_PROVIDER="facebook";
+    public static final String GOOGLE_PROVIDER="google";
+
 
 
     public static class FBCONTANTS{
