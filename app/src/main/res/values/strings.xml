@@ -2,6 +2,7 @@
     <string name="app_name">Rush</string>
     <string name="hint_user">User</string>
     <string name="hint_password">Password</string>
+    <string name="hint_confirm_password">Confirm Password</string>
 
     <string name="str_login">Log in</string>
     <string name="str_create_account">Create Account</string>
@@ -34,37 +35,30 @@
     <string name="error_title_invalid_Mobile">Invalid Mobile Number</string>
     <string name="error_title_invalid_profile">Invalid Profile Pic</string>
     <string name="error_title_invalid_card">Invalid Card </string>
-
+    <string name="error_pass_not_matched">Password not matched.</string>
     <string name="str_open_Camera">Open Camera</string>
     <string name="str_open_Gallery">Open Gallery</string>
     <string name="str_profile_pic">Select Profile Photo"</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
     <string name="error_invalid_card">Invalid Card Number </string>
-    <string name="str_empty_expiry">Expiration should not be empty</string>
-
+    <string name="str_empty_expiry">Expiration date should not be empty</string>
     <string name="str_invalid_cvv">Cvv is Invalid</string>
     <string name="str_empty_city">City is blank</string>
     <string name="str_empty_country">Country is blank</string>
     <string name="str_empty_headline">HeadLine is blank</string>
-
     <string name="str_fb_id">1823860091226577</string>
-
     <string name="str_verify_email">Please verify your email</string>
-
-
     <string name="alert_dialog_title">Please Select</string>
     <string name="positive_button_text">Select</string>
     <string name="negative_button_text">Cancel</string>
     <string name="title_activity_book_service">BookServiceActivity</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
+
+    <string name="str_verify_text">We\'ll send an email to you account.Please activate your account.</string>
 
 
 </resources>

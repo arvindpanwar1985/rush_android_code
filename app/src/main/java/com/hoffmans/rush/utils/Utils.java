@@ -8,6 +8,8 @@ import android.provider.MediaStore;
 
 import com.hoffmans.rush.R;
 
+import java.util.TimeZone;
+
 /**
  * Created by devesh on 21/12/16.
  */
@@ -59,5 +61,14 @@ public class Utils {
         }catch (Exception e){
 
         }
+    }
+
+    /**
+     *
+     * @return the time zone id
+     */
+    public static String getTimeZone(){
+        TimeZone tz = TimeZone.getDefault();
+        return tz.getID();
     }
 }

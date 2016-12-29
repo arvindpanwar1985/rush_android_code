@@ -44,6 +44,7 @@ public class User implements Parcelable {
 
     private boolean is_card_verfied;
 
+    private String bt_token;
     private UserLocation location;
 
     public Integer getId() {
@@ -153,6 +154,14 @@ public class User implements Parcelable {
     public User() {
     }
 
+    public String getBt_token() {
+        return bt_token;
+    }
+
+    public void setBt_token(String bt_token) {
+        this.bt_token = bt_token;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -167,8 +176,13 @@ public class User implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.role);
         dest.writeString(this.token);
+        dest.writeString(this.uid);
+        dest.writeString(this.provider);
+        dest.writeString(this.pic_url);
         dest.writeByte(this.is_email_verified ? (byte) 1 : (byte) 0);
         dest.writeByte(this.is_card_verfied ? (byte) 1 : (byte) 0);
+        dest.writeString(this.bt_token);
+        dest.writeParcelable(this.location, flags);
     }
 
     protected User(Parcel in) {
@@ -179,8 +193,13 @@ public class User implements Parcelable {
         this.name = in.readString();
         this.role = in.readString();
         this.token = in.readString();
+        this.uid = in.readString();
+        this.provider = in.readString();
+        this.pic_url = in.readString();
         this.is_email_verified = in.readByte() != 0;
         this.is_card_verfied = in.readByte() != 0;
+        this.bt_token = in.readString();
+        this.location = in.readParcelable(UserLocation.class.getClassLoader());
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

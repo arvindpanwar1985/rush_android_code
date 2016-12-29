@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_order"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:title="Order" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_pay"
             android:icon="@drawable/ic_menu_gallery"
 
-            android:title="Gallery" />
+            android:title="Payment Methods" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_record"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="Record" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_scheduled"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
-    </group>
+            android:title="Scheduled" />
 
-    <item android:title="Communicate">
-        <menu>
+
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_fav"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-        </menu>
-    </item>
+                android:title="My Favorite" />
 
-</menu>
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/ic_menu_send"
+        android:title="Sign Out" />
+        </menu>
+
+
+

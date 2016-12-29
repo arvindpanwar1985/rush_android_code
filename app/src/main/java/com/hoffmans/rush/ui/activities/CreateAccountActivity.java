@@ -4,7 +4,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import com.braintreepayments.api.interfaces.BraintreeErrorListener;
+import com.braintreepayments.api.interfaces.PaymentMethodNonceCreatedListener;
+import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.listners.BrainTreeHandler;
+import com.hoffmans.rush.ui.fragments.PaymentMethodFragment;
 import com.hoffmans.rush.ui.fragments.RegisterFragment;
 import com.hoffmans.rush.ui.fragments.UpdateAccountFragment;
 
@@ -12,9 +17,10 @@ import com.hoffmans.rush.ui.fragments.UpdateAccountFragment;
  * Created by devesh on 19/12/16.
  */
 
-public class CreateAccountActivity extends BaseActivity {
+public class CreateAccountActivity extends BaseActivity implements PaymentMethodNonceCreatedListener, BraintreeErrorListener {
 
 
+    private BrainTreeHandler brainTreeHandler;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +30,12 @@ public class CreateAccountActivity extends BaseActivity {
         //hideToolbar();
         Fragment fragment=new RegisterFragment();
         replaceFragment(fragment,R.id.content_create_account);
+    }
+
+
+
+    public void setBrainTreeHandler(BrainTreeHandler handler){
+        this.brainTreeHandler=handler;
     }
 
     @Override
@@ -46,8 +58,33 @@ public class CreateAccountActivity extends BaseActivity {
 
         FragmentManager fragmentManager=getSupportFragmentManager();
         int fragmentSize=fragmentManager.getBackStackEntryCount()-1;
-        if(!fragmentManager.getBackStackEntryAt(fragmentSize).getName().equals(UpdateAccountFragment.class.getCanonicalName())){
-            super.onBackPressed();
+        String lastFragmentName= fragmentManager.getBackStackEntryAt(fragmentSize).getName();
+        if(lastFragmentName.equals(UpdateAccountFragment.class.getCanonicalName())){
+           return;
+        }
+        if(lastFragmentName.equals(PaymentMethodFragment.class.getCanonicalName())){
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onError(Exception error) {
+        brainTreeHandler.onError(error);
+    }
+
+    @Override
+    public void onPaymentMethodNonceCreated(PaymentMethodNonce paymentMethodNonce) {
+       brainTreeHandler.onNonceCreated(paymentMethodNonce);
+
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(brainTreeHandler!=null){
+            brainTreeHandler=null;
         }
     }
 }

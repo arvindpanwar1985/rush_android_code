@@ -21,6 +21,7 @@
         android:layout_gravity="start"
         android:background="@color/colorPrimary"
         android:fitsSystemWindows="true"
+        app:itemTextColor="@android:color/white"
         app:headerLayout="@layout/nav_header_book_service"
         app:menu="@menu/activity_book_service_drawer" />
 

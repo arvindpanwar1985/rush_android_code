@@ -2,6 +2,8 @@ package com.hoffmans.rush.http;
 
 import com.hoffmans.rush.listners.BaseListener;
 
+import java.io.IOException;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,6 +50,10 @@ public class ConnectionManager {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                if(t instanceof IOException){
+                    mListener.onWebStatusFalse("Trouble reaching to server,No internet connection.");
+                    return;
+                }
                 mListener.onWebStatusFalse(t.getMessage());
             }
         });

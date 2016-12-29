@@ -1,8 +1,8 @@
 package com.hoffmans.rush.ui.fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +12,13 @@ import android.widget.EditText;
 import com.braintreegateway.CreditCard;
 import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.exceptions.InvalidArgumentException;
-import com.braintreepayments.api.interfaces.BraintreeErrorListener;
-import com.braintreepayments.api.interfaces.PaymentMethodNonceCreatedListener;
+import com.braintreepayments.api.models.CardBuilder;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.listners.BrainTreeHandler;
 import com.hoffmans.rush.model.Card;
+import com.hoffmans.rush.ui.activities.CreateAccountActivity;
+import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Validation;
 import com.hoffmans.rush.widgets.MonthYearPicker;
 
@@ -28,11 +30,11 @@ import com.hoffmans.rush.widgets.MonthYearPicker;
  * Use the {@link PaymentMethodFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PaymentMethodFragment extends BaseFragment implements View.OnClickListener,PaymentMethodNonceCreatedListener, BraintreeErrorListener {
+public class PaymentMethodFragment extends BaseFragment implements View.OnClickListener ,BrainTreeHandler {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private String mParam1;
+    private String nounce;
     private String mParam2;
 
     private EditText edtCardNumber,edtEdtTitular,edtExpiry,edtCvv,edtCountry,edtCity;
@@ -48,26 +50,34 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param btClientToken Parameter 1.
+     * @param token Parameter 2.
      * @return A new instance of fragment PaymentMethodFragment.
      */
 
     // TODO: Rename and change types and number of parameters
-    public static PaymentMethodFragment newInstance(String param1, String param2) {
+    public static PaymentMethodFragment newInstance(String btClientToken, String token) {
         PaymentMethodFragment fragment = new PaymentMethodFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, btClientToken);
+        args.putString(ARG_PARAM2, token);
         fragment.setArguments(args);
         return fragment;
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        // set the listner for nounce generated and error from braintree
+        ((CreateAccountActivity)context).setBrainTreeHandler(this);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            nounce = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -107,16 +117,16 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
         edtEdtTitular.setOnClickListener(this);
         edtCity.setOnClickListener(this);
         btnSaveCard.setOnClickListener(this);
+
     }
 
 
     private void initializeBrainTree(){
         try {
-            //TODO add client token
-            mBraintreeFragment = BraintreeFragment.newInstance(mActivity, "");
+            mBraintreeFragment = BraintreeFragment.newInstance(mActivity, nounce);
+
         } catch (InvalidArgumentException e) {
-            // There was an issue with your authorization string.
-            Log.e("exception braintree", e.getMessage());
+            mActivity.showSnackbar("Error Initializing payment method",0);
         }
     }
 
@@ -136,11 +146,8 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
                         edtExpiry.setText(monthYearPicker.getSelectedMonth()+1+"/"+monthYearPicker.getSelectedYear());
                     }
                 },null);
-
-
                 monthYearPicker.show();
-               // DialogFragment newFragment = new DatePickerFragment();
-                //newFragment.show(mActivity.getSupportFragmentManager(), "datePicker");
+
                 break;
         }
     }
@@ -202,17 +209,36 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
                 mActivity.showSnackbar(getString(R.string.str_empty_headline), 0);
                 return;
             }
+            buildCreditCard(card);
         }
     }
 
-    @Override
-    public void onError(Exception error) {
-        //Error when card is validated a
+
+    /**
+     * token the card at Braintree
+     * @param card user input card
+     */
+    private void buildCreditCard(Card card){
+        Progress.showprogress(mActivity,"Validating card..",false);
+        CardBuilder cardBuilder = new CardBuilder()
+
+                .cardholderName(card.getCardHeadline())
+                .cardNumber(card.getCardNumber())
+                .locality(card.getCityCard())
+                .expirationDate(card.getCardExpiry()).cvv(card.getCardCvv())
+                .countryName(card.getCountryCard());
+
+        com.braintreepayments.api.Card.tokenize(mBraintreeFragment, cardBuilder);
     }
 
-    @Override
-    public void onPaymentMethodNonceCreated(PaymentMethodNonce paymentMethodNonce) {
-       //Nonce generated when card is build using Braintree card builder
 
+    @Override
+    public void onError(Exception error) {
+        Progress.dismissProgress();
+        mActivity.showSnackbar(error.getMessage(),0);
+    }
+    @Override
+    public void onNonceCreated(PaymentMethodNonce paymentMethodNonce) {
+        Progress.dismissProgress();
     }
 }

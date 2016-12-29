@@ -1,5 +1,6 @@
 package com.hoffmans.rush.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -7,12 +8,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.hoffmans.rush.R;
 
 public class BookServiceActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
 
+    private TextView edtprofileTxt;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,10 +45,14 @@ public class BookServiceActivity extends BaseActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View navHeader=navigationView.getHeaderView(0);
+        edtprofileTxt=(TextView)navHeader.findViewById(R.id.headerEditTxt);
     }
 
     @Override
     protected void initListeners() {
+
+        edtprofileTxt.setOnClickListener(this);
 
     }
 
@@ -89,22 +97,31 @@ public class BookServiceActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_order) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_record) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_scheduled) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_fav) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        }  else if (id == R.id.nav_logout) {
 
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.headerEditTxt:
+                Intent edtProfileIntent=new Intent(BookServiceActivity.this,EditProfileActivity.class);
+                edtProfileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(edtProfileIntent);
+                break;
+        }
     }
 }

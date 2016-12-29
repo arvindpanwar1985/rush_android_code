@@ -28,13 +28,14 @@ dependencies {
 
     // JSON Converter
 
-    compile 'com.android.support:design:24.2.0'
+    compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.google.android.gms:play-services:10.0.1'
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.1.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
     compile 'com.google.firebase:firebase-core:10.0.1'
     compile 'com.google.firebase:firebase-messaging:10.0.1'
@@ -44,7 +45,7 @@ dependencies {
     compile 'com.braintreepayments.api:drop-in:2.+'
     compile 'com.braintreepayments.gateway:braintree-java:2.53.0'
     compile 'com.facebook.android:facebook-android-sdk:4.+'
-    compile 'com.android.support:design:24.2.1'
+    compile 'com.google.firebase:firebase-messaging:10.0.1'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

@@ -27,6 +27,8 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.hoffmans.rush.R;
 
 /**
@@ -302,18 +304,23 @@ public abstract  class BaseActivity extends AppCompatActivity {
         return true;
     }
 
-    public GoogleApiClient  setGoogleSignInOptions(){
+    public GoogleApiClient  setGoogleSignInOptions(int value){
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-        return  setGoogleApiClient(gso);
+        return  setGoogleApiClient(gso,value);
     }
 
-    public GoogleApiClient setGoogleApiClient(GoogleSignInOptions gso){
+
+    public GoogleApiClient getGoogleApiClient(){
+        return mGoogleApiClient;
+    }
+    public GoogleApiClient setGoogleApiClient(GoogleSignInOptions gso ,int value){
+
         return new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
+                .enableAutoManage(this, value,new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
@@ -322,6 +329,22 @@ public abstract  class BaseActivity extends AppCompatActivity {
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
     }
+
+
+    public void signOutGoogle(){
+        if(mGoogleApiClient!=null) {
+            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                    new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(Status status) {
+
+                        }
+                    });
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+
 
 }
 

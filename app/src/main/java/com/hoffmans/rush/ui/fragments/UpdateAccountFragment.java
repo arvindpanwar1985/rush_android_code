@@ -169,7 +169,7 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
                 UserBean bean=(UserBean)body;
                 User user=bean.getUser();
                 if(!user.is_email_verified()){
-                    showAlertDialog("We'll send an email to you account.Please  activate your account.");
+                    showAlertDialog(getString(R.string.str_verify_text));
                 }else if(user.getPhone()!=null && !user.is_card_verfied()){
                     //TODO open payment method fragment
                 }else{
@@ -203,4 +203,6 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
 
         }
     }
+
+
 }

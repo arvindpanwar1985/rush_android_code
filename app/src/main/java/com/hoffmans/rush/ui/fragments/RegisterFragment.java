@@ -85,8 +85,11 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     private static  final  String KEY_PHONE    ="user[phone]";
     private static  final  String KEY_PASSWORD ="user[password]";
     private static  final  String KEY_PIC      ="user[picture]";
+    private static  final  String KEY_TIME_ZONE="user[time_zone]";
+    private static  final  String KEY_UDID     ="user[udid]";
+    private static  final  String KEY_TYPE     ="user[type]";
     private String  mCurrentPhotoPath;
-
+    private int idGoogleApiclient;
 
     @Nullable
     @Override
@@ -124,6 +127,8 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     }
 
 
+
+
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -134,6 +139,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
                 break;
             case R.id.frBtnGoogle:
+                idGoogleApiclient++;
                 googleSignIn();
                 break;
             case R.id.frImgProfile:
@@ -188,12 +194,11 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
      * sign in through google
      */
     private void googleSignIn(){
-            GoogleApiClient googleApiClient=mActivity.setGoogleSignInOptions();
+           GoogleApiClient googleApiClient=(mActivity.getGoogleApiClient()==null)?mActivity.setGoogleSignInOptions(idGoogleApiclient):mActivity.getGoogleApiClient();
             if(googleApiClient!=null) {
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
                 startActivityForResult(signInIntent, REQUEST_GOOGLE_SIGNIN);
             }
-
     }
 
     /**
@@ -277,6 +282,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             }
         }
     }
+
 
 
 
@@ -368,12 +374,14 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
         try {
             File fileToUpload=new File(mCurrentPhotoPath);
-
             Map<String,RequestBody> requestBodyMap=new HashMap<String,RequestBody>();
             requestBodyMap.put(KEY_EMAIL, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),email));
             requestBodyMap.put(KEY_PASSWORD, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),password));
             requestBodyMap.put(KEY_PHONE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),phoneNo));
             requestBodyMap.put(KEY_NAME, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),fullname));
+            requestBodyMap.put(KEY_TIME_ZONE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),Utils.getTimeZone()));
+            requestBodyMap.put(KEY_UDID, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),"adddf -dadf -adsfasd-d8773"));
+            requestBodyMap.put(KEY_TYPE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),"ANDROID"));
             RequestBody requestBody = RequestBody.create(MediaType.parse(Constants.CONTENT_TYPE_MULTIPART), fileToUpload);
             MultipartBody.Part imageFileBody = MultipartBody.Part.createFormData(KEY_PIC, fileToUpload.getName(), requestBody);
             createAccount(requestBodyMap,imageFileBody);
@@ -406,6 +414,15 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     }
 
 
+    /**
+     * login via google and facebook
+     * @param provider facebook/google
+     * @param first_name
+     * @param last_name
+     * @param email
+     * @param uid  facebook_id/google_id
+     * @param picUrl pic_url in case of fb
+     */
     private void socialLogin(String provider,String first_name,String last_name,String email,String uid,String picUrl){
         mActivity.showProgress();
         LoginRequest loginRequest=new LoginRequest();
@@ -416,6 +433,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 UserBean userBean=(UserBean)body;
                 User user=userBean.getUser();
                 handleUserRegistrationCases(user);
+
 
             }
 
@@ -428,6 +446,8 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     }
 
 
+
+
     private void handleUserRegistrationCases(User user){
 
         if(!user.is_email_verified()){
@@ -436,19 +456,12 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         }
        else{
             if(!user.is_card_verfied()){
-                PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance("","");
+                PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance(user.getBt_token(),"");
                 replaceFragment(paymentMethodFragment,true);
             }else{
                 //TODO launch book a service Screeen
             }
         }
-    }
-
-    private void uplaodFile(File file){
-
-
-
-        //Call<ResponseBody> call = ApiBuilder.getPostRequestInstance().upload(description, body);
     }
 
 
@@ -522,5 +535,10 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onError(FacebookException error) {
 
+
     }
+
+
+
+
 }
