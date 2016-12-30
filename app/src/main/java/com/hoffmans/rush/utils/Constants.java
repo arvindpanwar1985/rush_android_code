@@ -10,6 +10,7 @@ public class Constants {
     public static final String CONTENT_TYPE_MULTIPART="multipart/form-data";
     public static final String FB_PROVIDER="facebook";
     public static final String GOOGLE_PROVIDER="google";
+    public static final String DEVICE_TYPE="ANDROID";
 
 
 
@@ -23,4 +24,6 @@ public class Constants {
     public static class EXTRAS{
         public static final String KEY_USER="user";
     }
+
+
 }

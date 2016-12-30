@@ -1,6 +1,7 @@
 package com.hoffmans.rush.ui.fragments;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -18,6 +19,7 @@ import com.hoffmans.rush.bean.UserBean;
 import com.hoffmans.rush.http.request.UserRequest;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.model.User;
+import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.utils.Validation;
 
 /**
@@ -171,9 +173,14 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
                 if(!user.is_email_verified()){
                     showAlertDialog(getString(R.string.str_verify_text));
                 }else if(user.getPhone()!=null && !user.is_card_verfied()){
-                    //TODO open payment method fragment
+                    PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance(user);
+                    replaceFragment(paymentMethodFragment,true);
                 }else{
-                    //login user.
+                    appPreference.saveUser(user);
+                    appPreference.setUserLogin(true);
+                    Intent bookServiceIntent=new Intent(mActivity, BookServiceActivity.class);
+                    bookServiceIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(bookServiceIntent);
                 }
             }
 

@@ -41,7 +41,7 @@ import com.hoffmans.rush.http.request.LoginRequest;
 import com.hoffmans.rush.http.request.UserRequest;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.model.User;
-import com.hoffmans.rush.ui.activities.LoginActivity;
+import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Utils;
@@ -171,7 +171,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                                 String socialId = object.getString(Constants.FBCONTANTS.FB_ID);
                                 String imageUrl = Constants.FBCONTANTS.FB_IMG_URL+socialId+"/picture?type=large";
 
-                                socialLogin(Constants.FB_PROVIDER,first_name,last_name,email,socialId,imageUrl);
+                                socialLogin(Constants.FB_PROVIDER,first_name,last_name,email,socialId,imageUrl,"adf-dad-fad98097",Constants.DEVICE_TYPE,Utils.getTimeZone());
                                 //UpdateAccountFragment fragment=UpdateAccountFragment.newInstance("");
                                 //mActivity.replaceFragment(fragment,0,false);
                             }
@@ -381,7 +381,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             requestBodyMap.put(KEY_NAME, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),fullname));
             requestBodyMap.put(KEY_TIME_ZONE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),Utils.getTimeZone()));
             requestBodyMap.put(KEY_UDID, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),"adddf -dadf -adsfasd-d8773"));
-            requestBodyMap.put(KEY_TYPE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),"ANDROID"));
+            requestBodyMap.put(KEY_TYPE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),Constants.DEVICE_TYPE));
             RequestBody requestBody = RequestBody.create(MediaType.parse(Constants.CONTENT_TYPE_MULTIPART), fileToUpload);
             MultipartBody.Part imageFileBody = MultipartBody.Part.createFormData(KEY_PIC, fileToUpload.getName(), requestBody);
             createAccount(requestBodyMap,imageFileBody);
@@ -400,9 +400,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             public void onRequestSuccess(BaseBean baseBean) {
                 Progress.dismissProgress();
                 UserBean bean=(UserBean) baseBean;
-                Intent loginIntent=new Intent(mActivity, LoginActivity.class);
-                loginIntent.putExtra(Constants.EXTRAS.KEY_USER,bean.getUser());
-                mActivity.finish();
+                mActivity.getSupportFragmentManager().popBackStackImmediate();
               }
 
             @Override
@@ -423,10 +421,10 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
      * @param uid  facebook_id/google_id
      * @param picUrl pic_url in case of fb
      */
-    private void socialLogin(String provider,String first_name,String last_name,String email,String uid,String picUrl){
+    private void socialLogin(String provider,String first_name,String last_name,String email,String uid,String picUrl,String uuid,String type,String timezone){
         mActivity.showProgress();
         LoginRequest loginRequest=new LoginRequest();
-        loginRequest.loginViaSocialNetwork(uid, first_name, last_name, email, provider, picUrl, new ApiCallback() {
+        loginRequest.loginViaSocialNetwork(uid, first_name, last_name, email, provider, picUrl, uuid,type,timezone,new ApiCallback() {
             @Override
             public void onRequestSuccess(BaseBean body) {
                 mActivity.hideProgress();
@@ -456,10 +454,15 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         }
        else{
             if(!user.is_card_verfied()){
-                PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance(user.getBt_token(),"");
+                PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance(user);
                 replaceFragment(paymentMethodFragment,true);
             }else{
-                //TODO launch book a service Screeen
+                  appPreference.saveUser(user);
+                  appPreference.setUserLogin(true);
+                  Intent bookServiceIntent=new Intent(mActivity, BookServiceActivity.class);
+                  bookServiceIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                  startActivity(bookServiceIntent);
+
             }
         }
     }
@@ -514,7 +517,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             String googleId=acct.getId();
             String email=acct.getEmail();
             String name =acct.getDisplayName();
-            socialLogin(Constants.GOOGLE_PROVIDER,name,email,null,googleId,"");
+            socialLogin(Constants.GOOGLE_PROVIDER,name,email,null,googleId,"","asd-dad-dad-45f4","ANDROID",Utils.getTimeZone());
 
         }
     }

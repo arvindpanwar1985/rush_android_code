@@ -1,8 +1,10 @@
 package com.hoffmans.rush.ui.fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,15 +14,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.bean.UserBean;
 import com.hoffmans.rush.http.request.LoginRequest;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
-import com.hoffmans.rush.ui.activities.CreateAccountActivity;
 import com.hoffmans.rush.ui.activities.ForgotPassActivity;
 import com.hoffmans.rush.utils.Progress;
+import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
 
 /**
@@ -68,9 +71,11 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()){
             case com.hoffmans.rush.R.id.flCreateAccount:
-                Intent registerIntent=new Intent(mActivity, CreateAccountActivity.class);
+               /* Intent registerIntent=new Intent(mActivity, CreateAccountActivity.class);
                 registerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(registerIntent);
+                startActivity(registerIntent);*/
+                Fragment fragment=new RegisterFragment();
+                replaceFragment(fragment,true);
                 break;
             case com.hoffmans.rush.R.id.flForgotPass:
                 Intent forgotPassIntent=new Intent(mActivity, ForgotPassActivity.class);
@@ -78,9 +83,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
                 startActivity(forgotPassIntent);
                 break;
             case com.hoffmans.rush.R.id.flBtnLogin:
-                 Intent intent=new Intent(mActivity, BookServiceActivity.class);
-                 startActivity(intent);
-                // validateFields();
+                validateFields();
                 break;
         }
     }
@@ -134,14 +137,13 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
                 UserBean bean=(UserBean)body;
                 User user=bean.getUser();
                 handleLoginResult(user);
-               // PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance("","");
-              //  replaceFragment(paymentMethodFragment,true);
 
             }
 
             @Override
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
+                Utils.showAlertDialog(mActivity,message);
             }
         });
 
@@ -149,16 +151,41 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 
     private void handleLoginResult(User user){
 
-        if(!user.is_email_verified()){
-          mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.str_verify_email),0);
+       // PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance(user.getBt_token(),"");
+        //replaceFragment(paymentMethodFragment,true);
+       if(!user.is_email_verified()){
+          showAlertDialog(getString(R.string.str_verify_text));
         }else if(!user.is_card_verfied()){
-            PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance(user.getBt_token(),"");
+            PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance(user);
             replaceFragment(paymentMethodFragment,true);
 
         }else{
-            //TODO launch book a service Screeen
+            appPreference.saveUser(user);
+            appPreference.setUserLogin(true);
+            Intent bookServiceIntent=new Intent(mActivity, BookServiceActivity.class);
+            bookServiceIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(bookServiceIntent);
         }
 
+    }
+
+
+    public void showAlertDialog(String message) {
+        try {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mActivity);
+            builder.setTitle(R.string.app_name)
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+
+                        }
+                    }).create().show();
+        }catch (Exception e){
+
+        }
     }
 
 

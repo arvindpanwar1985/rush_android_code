@@ -42,7 +42,7 @@ public class User implements Parcelable {
 
     private boolean is_email_verified;
 
-    private boolean is_card_verfied;
+    private boolean is_card_verified;
 
     private String bt_token;
     private UserLocation location;
@@ -112,11 +112,11 @@ public class User implements Parcelable {
     }
 
     public boolean is_card_verfied() {
-        return is_card_verfied;
+        return is_card_verified;
     }
 
     public void setIs_card_verfied(boolean is_card_verfied) {
-        this.is_card_verfied = is_card_verfied;
+        this.is_card_verified = is_card_verfied;
     }
 
     public String getUid() {
@@ -180,7 +180,7 @@ public class User implements Parcelable {
         dest.writeString(this.provider);
         dest.writeString(this.pic_url);
         dest.writeByte(this.is_email_verified ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.is_card_verfied ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.is_card_verified ? (byte) 1 : (byte) 0);
         dest.writeString(this.bt_token);
         dest.writeParcelable(this.location, flags);
     }
@@ -197,7 +197,7 @@ public class User implements Parcelable {
         this.provider = in.readString();
         this.pic_url = in.readString();
         this.is_email_verified = in.readByte() != 0;
-        this.is_card_verfied = in.readByte() != 0;
+        this.is_card_verified = in.readByte() != 0;
         this.bt_token = in.readString();
         this.location = in.readParcelable(UserLocation.class.getClassLoader());
     }

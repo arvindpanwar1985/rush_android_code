@@ -3,6 +3,8 @@ package com.hoffmans.rush.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.hoffmans.rush.model.User;
+
 
 public class AppPreference {
 
@@ -15,6 +17,7 @@ public class AppPreference {
     static AppPreference sessionObj;
     private final String mPREF_NAME = "RUSH_PREF";
     private final String mPREF_NAMEUTILS = "RUSH_PREF_UTILS";
+
 
 
     public AppPreference(Context context) {
@@ -33,7 +36,37 @@ public class AppPreference {
         return sessionObj;
     }
 
+    public void saveUser(User user){
+        mEditor.putString(PrefConstant.KEY_EMAIL,user.getEmail());
+        mEditor.putString(PrefConstant.KEY_FNAME,user.getName());
+        mEditor.putString(PrefConstant.KEY_PHONE,user.getPhone());
+        mEditor.putString(PrefConstant.KEY_PIC,user.getPic_url());
+        mEditor.putString(PrefConstant.KEY_token,user.getToken());
+        mEditor.commit();
+    }
 
+    public User getUserDetails(){
+        User user =new User();
+        user.setEmail(mPref.getString(PrefConstant.KEY_EMAIL,""));
+        user.setName(mPref.getString(PrefConstant.KEY_FNAME,""));
+        user.setPhone(mPref.getString(PrefConstant.KEY_PHONE,""));
+        user.setToken(mPref.getString(PrefConstant.KEY_token,""));
+        user.setPic_url(mPref.getString(PrefConstant.KEY_PIC,""));
+        return  user;
+
+    }
+
+    public void setUserLogin(boolean isuserLogin){
+        mEditor.putBoolean(PrefConstant.ISUSERLOGIN,isuserLogin).commit();
+    }
+
+    public boolean isUserLogin(){
+        return mPref.getBoolean(PrefConstant.ISUSERLOGIN,false);
+    }
+
+    public void logoutUser(){
+        mEditor.clear().commit();
+    }
 
 
 }

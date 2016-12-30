@@ -24,6 +24,7 @@
     <EditText
         android:layout_width="match_parent"
         android:id="@+id/fPEdtEmail"
+        android:inputType="textEmailAddress|textNoSuggestions"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_marginLeft="@dimen/dp_40"
@@ -33,6 +34,7 @@
 
 
     <Button
+        android:id="@+id/fPBtnSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/dp_10"

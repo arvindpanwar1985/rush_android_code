@@ -28,7 +28,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("/api/user/oauthRegister")
-    Call<ResponseBody> loginViaSocialNetwork(@Field("uid") String uid,@Field("first_name") String password,@Field("last_name") String last_name,@Field("email") String email,@Field("provider") String provider,@Field("profile_url") String picture);
+    Call<ResponseBody> loginViaSocialNetwork(@Field("uid") String uid,@Field("first_name") String password,@Field("last_name") String last_name,@Field("email") String email,@Field("provider") String provider,@Field("profile_url") String picture,@Field("uuid") String uuid,@Field("type") String type,@Field("time_zone") String time_zone);
 
 
     @Multipart
@@ -40,6 +40,16 @@ public interface ApiInterface {
 
     @POST("/api/user/profile_update")
     Call<ResponseBody> updateUser(@Header("Authorization")String authorization ,@Body HashMap<String,Object> userdetail);
+
+
+    @FormUrlEncoded
+    @POST("/api/user/forgot_password")
+    Call<ResponseBody> forgotPassword(@Field("email") String email);
+
+    @FormUrlEncoded
+    @POST("/api/creditcard/addCard")
+    Call<ResponseBody> addCreditCard(@Header("Authorization")String authorization,@Field("payment_method_nonce") String payment_method_nonce);
+
 
 
 

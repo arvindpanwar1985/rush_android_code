@@ -2,6 +2,8 @@
 <string name="hint_user">Usuario</string>
     <string name="hint_password">Contrasena</string>
     <string name="hint_confirm_password">Nueva Contrasena</string>
+    <string name="hint_new_password">nueva contraseña</string>
+    <string name="hint_confirm_new_password">Confirmar nueva contraseña</string>
 
     <string name="str_login">Iniciar Sesion</string>
     <string name="str_create_account">Crear cuenta</string>

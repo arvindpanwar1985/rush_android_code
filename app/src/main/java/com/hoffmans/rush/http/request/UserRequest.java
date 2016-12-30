@@ -1,6 +1,7 @@
 package com.hoffmans.rush.http.request;
 
 import com.google.gson.JsonObject;
+import com.hoffmans.rush.bean.ForgotPassBean;
 import com.hoffmans.rush.bean.UserBean;
 import com.hoffmans.rush.http.ConnectionManager;
 import com.hoffmans.rush.listners.ApiCallback;
@@ -64,12 +65,7 @@ public class UserRequest extends BaseRequest {
     }
 
 
-    /**
-     *
-     * @param email email of user
-     * @param phone phone number
-     * @param callback
-     */
+
 
     public void updateUser(JsonObject object,String token, final ApiCallback callback){
 
@@ -104,5 +100,44 @@ public class UserRequest extends BaseRequest {
             }
         });
     }
+
+    /**
+     *
+     * @param email
+     * @param callback
+     */
+
+    public void forgotPass(String email,final ApiCallback callback){
+
+        Call<ResponseBody> createUserCall=getAPIClient().forgotPassword(email);
+        ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(createUserCall);
+        connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
+            @Override
+            public void onWebServiceComplete(ResponseBody responseBody) {
+                try {
+                    JSONObject obj=new JSONObject(responseBody.string());
+                    boolean status = obj.getBoolean(SUCCESS);
+                    String message=obj.getString(MESSAGE);
+                    if (status) {
+                        ForgotPassBean forgotPassBean=new ForgotPassBean();
+                        forgotPassBean.setMessage(message);
+
+                        callback.onRequestSuccess(forgotPassBean);
+                    } else {
+                        callback.onRequestFailed(message);
+                    }
+
+                }catch (Exception e){
+                    callback.onRequestFailed(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onWebStatusFalse(String message) {
+                callback.onRequestFailed(message);
+            }
+        });
+    }
+
 
 }

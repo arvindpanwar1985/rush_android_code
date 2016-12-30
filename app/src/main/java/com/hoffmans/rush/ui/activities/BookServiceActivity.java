@@ -12,15 +12,19 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.utils.AppPreference;
 
 public class BookServiceActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
 
     private TextView edtprofileTxt;
+    private AppPreference appPreference;
+    private DrawerLayout drawer;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_book_service, getParentView());
+        appPreference=AppPreference.newInstance(this);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
         initManagers();
@@ -37,7 +41,7 @@ public class BookServiceActivity extends BaseActivity
     @Override
     protected void initViews() {
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer,getToolBar() , R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -59,7 +63,7 @@ public class BookServiceActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -94,6 +98,8 @@ public class BookServiceActivity extends BaseActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -106,7 +112,8 @@ public class BookServiceActivity extends BaseActivity
         } else if (id == R.id.nav_fav) {
 
         }  else if (id == R.id.nav_logout) {
-
+            appPreference.logoutUser();
+            this.finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -118,6 +125,9 @@ public class BookServiceActivity extends BaseActivity
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.headerEditTxt:
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                }
                 Intent edtProfileIntent=new Intent(BookServiceActivity.this,EditProfileActivity.class);
                 edtProfileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(edtProfileIntent);

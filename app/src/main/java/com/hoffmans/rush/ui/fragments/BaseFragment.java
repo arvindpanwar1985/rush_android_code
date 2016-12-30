@@ -9,6 +9,7 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hoffmans.rush.ui.activities.BaseActivity;
+import com.hoffmans.rush.utils.AppPreference;
 
 /**
  * Created by devesh on 19/12/16.
@@ -21,6 +22,7 @@ public abstract class BaseFragment extends Fragment {
    // protected AppPreference mPreference;
     protected DateUtils mDateUtils;
     protected Gson mGson;
+    protected AppPreference appPreference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public abstract class BaseFragment extends Fragment {
         if (context instanceof BaseActivity) {
             mActivity = (BaseActivity) context;
             mGson=new GsonBuilder().create();
+            appPreference=AppPreference.newInstance(mActivity);
         }
     }
 

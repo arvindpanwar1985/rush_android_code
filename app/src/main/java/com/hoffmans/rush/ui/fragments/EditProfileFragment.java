@@ -49,7 +49,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     private static final int GALLERY_PIC_REQUEST   = 102;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private EditText edtname,edtEmail,edtphone,edtPassword,edtConfirmPassword;
+    private EditText edtname,edtEmail,edtphone,edtoldPassword,edtNewPassword,edtConfirmNewPassword;
     private CircleImageView imgProfilePic;
     private Button btnSave;
     private String mCurrentPhotoPath;
@@ -94,21 +94,23 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         // Inflate the layout for this fragment
         mActivity.initToolBar("Edit Profile",true);
         View editProfileView=inflater.inflate(R.layout.fragment_edit_profile,container,false);
-        initViews(editProfileView);
-        initListeners();
+        //initViews(editProfileView);
+        //initListeners();
         return editProfileView;
     }
 
 
     @Override
     protected void initViews(View view) {
-        edtname=(EditText)view.findViewById(R.id.fEPEdtname);
+       /* edtname=(EditText)view.findViewById(R.id.fEPEdtname);
         edtEmail=(EditText)view.findViewById(R.id.fEPEdtEmail);
         edtphone=(EditText)view.findViewById(R.id.fEPEdtPhone);
-        edtPassword=(EditText)view.findViewById(R.id.fEPEdtPassword);
-        edtConfirmPassword=(EditText)view.findViewById(R.id.fEPEdtConfirmPassword);
+        edtoldPassword=(EditText)view.findViewById(R.id.fEPEdtPassword);
+        edtNewPassword=(EditText)view.findViewById(R.id.fEPEdtConfirmPassword);
+        edtConfirmNewPassword=(EditText)view.findViewById(R.id.fEPEdtConfirmPassword) ;
         btnSave=(Button)view.findViewById(R.id.fEPBtnSave);
         imgProfilePic=(CircleImageView)view.findViewById(R.id.fEPImgProfile);
+        edtEmail.setEnabled(false);*/
     }
 
     @Override
@@ -122,7 +124,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onClick(View view) {
 
-        switch (view.getId()){
+        /*switch (view.getId()){
             case R.id.fEPBtnSave:
                 validateFields();
                 break;
@@ -130,7 +132,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
             case R.id.fEPImgProfile:
                 checkPermission();
                 break;
-        }
+        }*/
     }
 
 
@@ -139,8 +141,9 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     private void validateFields() {
         // Store values at the time of the login attempt.
         String email = edtEmail.getText().toString().trim();
-        String password = edtPassword.getText().toString().trim();
-        String confirmpassword = edtConfirmPassword.getText().toString().trim();
+        String password = edtoldPassword.getText().toString().trim();
+        String confirmpassword = edtNewPassword.getText().toString().trim();
+        String confirmNewpassword = edtConfirmNewPassword.getText().toString().trim();
         String fullname = edtname.getText().toString().trim();
         String phoneNo = edtphone.getText().toString().trim();
         // Check for a valid email address.

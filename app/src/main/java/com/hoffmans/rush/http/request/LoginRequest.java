@@ -59,9 +59,9 @@ public class LoginRequest extends BaseRequest {
      * @param callback
      * @param pictureUrl
      */
-    public void loginViaSocialNetwork(String uid, String first_name,  String last_name,  String email,  String provider,String pictureUrl,final ApiCallback callback){
+    public void loginViaSocialNetwork(String uid, String first_name,  String last_name,  String email,  String provider,String pictureUrl,String uuid,String type,String timeZone,final ApiCallback callback){
 
-        Call<ResponseBody> loginCall=getAPIClient().loginViaSocialNetwork(uid,first_name,last_name,email,provider,pictureUrl);
+        Call<ResponseBody> loginCall=getAPIClient().loginViaSocialNetwork(uid,first_name,last_name,email,provider,pictureUrl,uuid,type,timeZone);
         ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(loginCall);
         connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
             @Override

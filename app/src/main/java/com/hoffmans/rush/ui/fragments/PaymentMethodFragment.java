@@ -2,6 +2,7 @@ package com.hoffmans.rush.ui.fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,15 +10,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.braintreegateway.CreditCard;
 import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.exceptions.InvalidArgumentException;
 import com.braintreepayments.api.models.CardBuilder;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.bean.BaseBean;
+import com.hoffmans.rush.http.request.PaymentRequest;
+import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.listners.BrainTreeHandler;
 import com.hoffmans.rush.model.Card;
-import com.hoffmans.rush.ui.activities.CreateAccountActivity;
+import com.hoffmans.rush.model.User;
+import com.hoffmans.rush.ui.activities.BookServiceActivity;
+import com.hoffmans.rush.ui.activities.LoginActivity;
+import com.hoffmans.rush.utils.AppPreference;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Validation;
 import com.hoffmans.rush.widgets.MonthYearPicker;
@@ -33,34 +39,25 @@ import com.hoffmans.rush.widgets.MonthYearPicker;
 public class PaymentMethodFragment extends BaseFragment implements View.OnClickListener ,BrainTreeHandler {
 
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private String nounce;
-    private String mParam2;
+
+    private User user;
+
 
     private EditText edtCardNumber,edtEdtTitular,edtExpiry,edtCvv,edtCountry,edtCity;
     private Button btnSaveCard;
-    private CreditCard creditCard;
     private BraintreeFragment mBraintreeFragment;
 
     public PaymentMethodFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param btClientToken Parameter 1.
-     * @param token Parameter 2.
-     * @return A new instance of fragment PaymentMethodFragment.
-     */
 
-    // TODO: Rename and change types and number of parameters
-    public static PaymentMethodFragment newInstance(String btClientToken, String token) {
+
+
+    public static PaymentMethodFragment newInstance(User user) {
         PaymentMethodFragment fragment = new PaymentMethodFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, btClientToken);
-        args.putString(ARG_PARAM2, token);
+        args.putParcelable(ARG_PARAM1, user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,15 +67,17 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
     public void onAttach(Context context) {
         super.onAttach(context);
         // set the listner for nounce generated and error from braintree
-        ((CreateAccountActivity)context).setBrainTreeHandler(this);
+        ((LoginActivity)context).setBrainTreeHandler(this);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            nounce = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            user = getArguments().getParcelable(ARG_PARAM1);
+        }
+        if(appPreference==null){
+            appPreference= AppPreference.newInstance(mActivity);
         }
     }
 
@@ -123,7 +122,7 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
 
     private void initializeBrainTree(){
         try {
-            mBraintreeFragment = BraintreeFragment.newInstance(mActivity, nounce);
+            mBraintreeFragment = BraintreeFragment.newInstance(mActivity, user.getBt_token());
 
         } catch (InvalidArgumentException e) {
             mActivity.showSnackbar("Error Initializing payment method",0);
@@ -228,7 +227,11 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
                 .expirationDate(card.getCardExpiry()).cvv(card.getCardCvv())
                 .countryName(card.getCountryCard());
 
-        com.braintreepayments.api.Card.tokenize(mBraintreeFragment, cardBuilder);
+        if(mBraintreeFragment!=null) {
+            com.braintreepayments.api.Card.tokenize(mBraintreeFragment, cardBuilder);
+        }else{
+            mActivity.showSnackbar("Error in initailizing Braintree",0);
+        }
     }
 
 
@@ -240,5 +243,31 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onNonceCreated(PaymentMethodNonce paymentMethodNonce) {
         Progress.dismissProgress();
+        if(paymentMethodNonce!=null) {
+            addPaymentMethod(paymentMethodNonce.getNonce());
+        }
+
+    }
+
+    private void addPaymentMethod(String nounce){
+        mActivity.showProgress();
+        PaymentRequest paymentRequest=new PaymentRequest();
+        paymentRequest.addCard(user.getToken(),nounce, new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                mActivity.hideProgress();
+                appPreference.saveUser(user);
+                appPreference.setUserLogin(true);
+                Intent bookServiceIntent=new Intent(mActivity, BookServiceActivity.class);
+                bookServiceIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(bookServiceIntent);
+            }
+
+            @Override
+            public void onRequestFailed(String message) {
+                mActivity.hideProgress();
+                mActivity.showSnackbar(message,0);
+            }
+        });
     }
 }
