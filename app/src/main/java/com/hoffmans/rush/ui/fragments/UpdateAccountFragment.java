@@ -101,9 +101,9 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
         btnSave =(Button)view.findViewById(R.id.fuSaveDetails);
 
         if(isEmailVerified){
-            edtEmail.setText(mEmail);
             edtEmail.setEnabled(false);
         }
+        edtEmail.setText(mEmail);
 
     }
 

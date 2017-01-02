@@ -13,4 +13,5 @@ public class PrefConstant {
     public static String KEY_PHONE  ="phone";
     public static String KEY_token  ="token";
     public static String ISUSERLOGIN  ="isUserLogin";
+    public static String IS_SOCIAL_PROVIDER  ="isSocialProvider";
 }

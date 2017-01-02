@@ -2,23 +2,33 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 
+
         <item
             android:id="@+id/nav_order"
             android:icon="@drawable/ic_menu_camera"
             android:title="Order" />
+
+
         <item
             android:id="@+id/nav_pay"
             android:icon="@drawable/ic_menu_gallery"
 
             android:title="Payment Methods" />
+
+
+
+
         <item
             android:id="@+id/nav_record"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Record" />
+
+
         <item
             android:id="@+id/nav_scheduled"
             android:icon="@drawable/ic_menu_manage"
             android:title="Scheduled" />
+
 
 
             <item
@@ -26,10 +36,13 @@
                 android:icon="@drawable/ic_menu_share"
                 android:title="My Favorite" />
 
-    <item
+
+
+           <item
         android:id="@+id/nav_logout"
         android:icon="@drawable/ic_menu_send"
         android:title="Sign Out" />
+
         </menu>
 
 

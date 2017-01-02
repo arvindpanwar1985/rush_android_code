@@ -30,7 +30,6 @@ public class BookServiceActivity extends BaseActivity
         initManagers();
         initViews();
         initListeners();
-
     }
 
     @Override
@@ -46,7 +45,6 @@ public class BookServiceActivity extends BaseActivity
                 this, drawer,getToolBar() , R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View navHeader=navigationView.getHeaderView(0);
@@ -113,6 +111,9 @@ public class BookServiceActivity extends BaseActivity
 
         }  else if (id == R.id.nav_logout) {
             appPreference.logoutUser();
+            Intent loginIntent=new Intent(BookServiceActivity.this,LoginActivity.class);
+            loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(loginIntent);
             this.finish();
         }
 

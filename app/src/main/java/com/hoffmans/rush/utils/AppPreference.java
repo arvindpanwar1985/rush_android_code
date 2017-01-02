@@ -36,14 +36,24 @@ public class AppPreference {
         return sessionObj;
     }
 
-    public void saveUser(User user){
+    /**
+     * save complete details of user
+     * @param user
+     * @throws NullPointerException
+     */
+    public void saveUser(User user) throws NullPointerException{
         mEditor.putString(PrefConstant.KEY_EMAIL,user.getEmail());
         mEditor.putString(PrefConstant.KEY_FNAME,user.getName());
         mEditor.putString(PrefConstant.KEY_PHONE,user.getPhone());
         mEditor.putString(PrefConstant.KEY_PIC,user.getPic_url());
         mEditor.putString(PrefConstant.KEY_token,user.getToken());
+        if(null!=user.getProvider()){
+            mEditor.putBoolean(PrefConstant.IS_SOCIAL_PROVIDER,true);
+        }
+
         mEditor.commit();
     }
+
 
     public User getUserDetails(){
         User user =new User();
@@ -52,10 +62,27 @@ public class AppPreference {
         user.setPhone(mPref.getString(PrefConstant.KEY_PHONE,""));
         user.setToken(mPref.getString(PrefConstant.KEY_token,""));
         user.setPic_url(mPref.getString(PrefConstant.KEY_PIC,""));
+        user.setSocialProvider(mPref.getBoolean(PrefConstant.IS_SOCIAL_PROVIDER,false));
         return  user;
 
     }
 
+    /**
+     * update user when profile changes
+     * @param user
+     * @throws NullPointerException
+     */
+    public void updateUserProfile(User user) throws NullPointerException{
+
+        mEditor.putString(PrefConstant.KEY_FNAME,user.getName());
+        mEditor.putString(PrefConstant.KEY_PHONE,user.getPhone());
+        mEditor.putString(PrefConstant.KEY_PIC,user.getPic_url());
+        if(null!=user.getProvider()){
+            mEditor.putBoolean(PrefConstant.IS_SOCIAL_PROVIDER,true);
+        }
+
+        mEditor.commit();
+    }
     public void setUserLogin(boolean isuserLogin){
         mEditor.putBoolean(PrefConstant.ISUSERLOGIN,isuserLogin).commit();
     }

@@ -56,20 +56,22 @@ import static android.app.Activity.RESULT_OK;
 public class EditProfileFragment extends BaseFragment implements View.OnClickListener{
 
 
-    private static final String KEY_NAME="user[name]";
-    private static final String KEY_PHONE="user[phone]";
-    private static final String KEY_PIC="user[picture]";
-    private static final String KEY_PASSWORD="user[password]";
+    private static final String KEY_NAME              ="user[name]";
+    private static final String KEY_PHONE             ="user[phone]";
+    private static final String KEY_PIC               ="user[picture]";
+
+    private static final String KEY_CURRENT_PASSWORD  ="user[current_password]";
+    private static final String KEY_NEW_PASSWORD      ="user[password]";
     private static final String KEY_PASSWORD_CONFIRMATION="user[password_confirmation]";
 
     private static final String FILE_PROVIDER="com.example.android.fileprovider";
     private static final int IMAGE_REQUEST_PERMISSION=100;
     private static final int CAMERA_PIC_REQUEST    = 101;
     private static final int GALLERY_PIC_REQUEST   = 102;
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM1         = "param1";
+    private static final String ARG_PARAM2         = "param2";
     private EditText edtname,edtEmail,edtphone,edtoldPassword,edtNewPassword,edtConfirmNewPassword;
-    private LinearLayout linearNewPass,linearConfirmNewPass;
+    private LinearLayout linearNewPass,linearConfirmNewPass,linearOldPass;
     private TextView editableName,editableNumber,editablePassword;
     private CircleImageView imgProfilePic;
     private Button btnSave;
@@ -134,12 +136,17 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
 
         linearNewPass=(LinearLayout)view.findViewById(R.id.linearNewPassword);
         linearConfirmNewPass=(LinearLayout)view.findViewById(R.id.linearConfirmNewPassword);
-
+        linearOldPass=(LinearLayout)view.findViewById(R.id.linearOldPass);
         editableName=(TextView)view.findViewById(R.id.editableName);
         editablePassword=(TextView)view.findViewById(R.id.editablePassword);
         editableNumber=(TextView)view.findViewById(R.id.editablePhone);
         btnSave=(Button)view.findViewById(R.id.fEPBtnSave);
         imgProfilePic=(CircleImageView)view.findViewById(R.id.fEPImgProfile);
+
+
+        if(appPreference.getUserDetails().isSocialProvider()){
+            linearOldPass.setVisibility(View.GONE);
+        }
 
 
     }
@@ -168,10 +175,11 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.editableName:
                 edtname.setEnabled(true);
+                edtname.setFocusable(true);
                 isEditableName=true;
                 break;
             case R.id.editablePassword:
-
+                edtoldPassword.setFocusable(true);
                  if(isEditablePassClicked){
                      editablePassword.setText("edit");
                      isEditablePassClicked=false;
@@ -187,6 +195,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
                  }
                 break;
             case R.id.editablePhone:
+                edtphone.setFocusable(true);
                 isEditablePhone=true;
                 edtphone.setEnabled(true);
                 break;
@@ -197,8 +206,6 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         edtname.setText(user.getName());
         edtphone.setText(user.getPhone());
         edtEmail.setText(user.getEmail());
-        edtoldPassword.setText("12345678");
-
         edtEmail.setEnabled(false);
         edtphone.setEnabled(false);
         edtname.setEnabled(false);
@@ -223,7 +230,6 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
             mActivity.showSnackbar(getString(R.string.error_empty_name), Toast.LENGTH_SHORT);
             return;
         }
-
 
         if (TextUtils.isEmpty(password.trim()) && isEditablePassClicked) {
             mActivity.showSnackbar(getString(R.string.error_empty_password), Toast.LENGTH_SHORT);
@@ -255,7 +261,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         if(!isEditablePassClicked&&!isEditableName&&!isEditablePhone &&TextUtils.isEmpty(mCurrentPhotoPath)){
             mActivity.showSnackbar("No change selected",0);
         }else{
-            buildParams(fullname,password,newpassword,phoneNo);
+            buildParams(fullname,password,newpassword,confirmNewpassword,phoneNo);
         }
 
 
@@ -264,7 +270,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
 
 
 
-    private void buildParams(String name,String oldpass,String newpass,String phone){
+    private void buildParams(String name,String oldpass,String newpass,String confirmPass,String phone){
 
         MultipartBody.Part imageFileBody=null;
         try {
@@ -277,8 +283,9 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
                 requestBodyMap.put(KEY_NAME, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),name));
             }
             if(isEditablePassClicked){
-                requestBodyMap.put(KEY_PASSWORD, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),oldpass));
-                requestBodyMap.put(KEY_PASSWORD_CONFIRMATION, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),newpass));
+                requestBodyMap.put(KEY_CURRENT_PASSWORD, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),oldpass));
+                requestBodyMap.put(KEY_NEW_PASSWORD, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),newpass));
+                requestBodyMap.put(KEY_PASSWORD_CONFIRMATION, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),confirmPass));
             }
             if(!TextUtils.isEmpty(mCurrentPhotoPath)){
                 File fileToUpload=new File(mCurrentPhotoPath);
@@ -421,9 +428,13 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
             @Override
             public void onRequestSuccess(BaseBean body) {
                 mActivity.hideProgress();
+                mActivity.showSnackbar(body.getMessage(),0);
                 UserBean userBean=(UserBean)body;
                 setProfile(userBean.getUser());
-                //appPreference.saveUser(userBean.getUser());
+                appPreference.updateUserProfile(userBean.getUser());
+                isEditablePhone=false;
+                isEditableName=false;
+                isEditablePassClicked=false;
             }
 
             @Override

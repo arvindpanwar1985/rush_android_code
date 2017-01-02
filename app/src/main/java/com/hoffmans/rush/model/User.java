@@ -47,6 +47,16 @@ public class User implements Parcelable {
     private String bt_token;
     private UserLocation location;
 
+    private boolean isSocialProvider;
+
+    public boolean isSocialProvider() {
+        return isSocialProvider;
+    }
+
+    public void setSocialProvider(boolean socialProvider) {
+        isSocialProvider = socialProvider;
+    }
+
     public Integer getId() {
         return id;
     }
