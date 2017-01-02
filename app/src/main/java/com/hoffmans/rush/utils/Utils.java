@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.hoffmans.rush.R;
 
@@ -30,10 +31,12 @@ public class Utils {
             String[] proj = { MediaStore.Images.Media.DATA };
             cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
             if(cursor==null){
+                Log.e("pic url",contentUri.getPath());
                 return contentUri.getPath();
             }else {
                 int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                 cursor.moveToFirst();
+                Log.e("pic url",contentUri.getPath());
                 return cursor.getString(column_index);
             }
         } finally {

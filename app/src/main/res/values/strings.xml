@@ -32,7 +32,7 @@
     <string name="error_empty_password">Password cannot be empty.</string>
     <string name="error_empty_Mobile">Mobile number cannot be empty.</string>
     <string name="error_title_invalid_email">Invalid Email</string>
-    <string name="error_title_invalid_password">Invalid Password</string>
+    <string name="error_title_invalid_password">Password must have minimum 8 characters.</string>
     <string name="error_title_invalid_Mobile">Invalid Mobile Number</string>
     <string name="error_title_invalid_profile">Invalid Profile Pic</string>
     <string name="error_title_invalid_card">Invalid Card </string>

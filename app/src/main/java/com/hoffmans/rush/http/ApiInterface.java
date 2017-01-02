@@ -51,6 +51,11 @@ public interface ApiInterface {
     Call<ResponseBody> addCreditCard(@Header("Authorization")String authorization,@Field("payment_method_nonce") String payment_method_nonce);
 
 
+    @Multipart
+    @POST("/api/user/profile_update")
+    Call<ResponseBody> updateUserWithImage(@Header("Authorization")String authorization,@PartMap() Map<String, RequestBody> requestBodyMap,@Part MultipartBody.Part file);
+
+
 
 
 

@@ -17,9 +17,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.bean.BaseBean;
+import com.hoffmans.rush.bean.UserBean;
+import com.hoffmans.rush.http.request.UserRequest;
+import com.hoffmans.rush.listners.ApiCallback;
+import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
@@ -28,8 +36,13 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -43,6 +56,12 @@ import static android.app.Activity.RESULT_OK;
 public class EditProfileFragment extends BaseFragment implements View.OnClickListener{
 
 
+    private static final String KEY_NAME="user[name]";
+    private static final String KEY_PHONE="user[phone]";
+    private static final String KEY_PIC="user[picture]";
+    private static final String KEY_PASSWORD="user[password]";
+    private static final String KEY_PASSWORD_CONFIRMATION="user[password_confirmation]";
+
     private static final String FILE_PROVIDER="com.example.android.fileprovider";
     private static final int IMAGE_REQUEST_PERMISSION=100;
     private static final int CAMERA_PIC_REQUEST    = 101;
@@ -50,9 +69,12 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private EditText edtname,edtEmail,edtphone,edtoldPassword,edtNewPassword,edtConfirmNewPassword;
+    private LinearLayout linearNewPass,linearConfirmNewPass;
+    private TextView editableName,editableNumber,editablePassword;
     private CircleImageView imgProfilePic;
     private Button btnSave;
     private String mCurrentPhotoPath;
+    private boolean isEditablePassClicked,isEditableName,isEditablePhone;
 
     private String mParam1;
     private String mParam2;
@@ -94,29 +116,41 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         // Inflate the layout for this fragment
         mActivity.initToolBar("Edit Profile",true);
         View editProfileView=inflater.inflate(R.layout.fragment_edit_profile,container,false);
-        //initViews(editProfileView);
-        //initListeners();
+        initViews(editProfileView);
+        initListeners();
+        setProfile(appPreference.getUserDetails());
         return editProfileView;
     }
 
 
     @Override
     protected void initViews(View view) {
-       /* edtname=(EditText)view.findViewById(R.id.fEPEdtname);
+        edtname=(EditText)view.findViewById(R.id.fEPEdtname);
         edtEmail=(EditText)view.findViewById(R.id.fEPEdtEmail);
         edtphone=(EditText)view.findViewById(R.id.fEPEdtPhone);
         edtoldPassword=(EditText)view.findViewById(R.id.fEPEdtPassword);
-        edtNewPassword=(EditText)view.findViewById(R.id.fEPEdtConfirmPassword);
-        edtConfirmNewPassword=(EditText)view.findViewById(R.id.fEPEdtConfirmPassword) ;
+        edtNewPassword=(EditText)view.findViewById(R.id.fEPEdtNewPassword);
+        edtConfirmNewPassword=(EditText)view.findViewById(R.id.fEPEdtConfirmPassword);
+
+        linearNewPass=(LinearLayout)view.findViewById(R.id.linearNewPassword);
+        linearConfirmNewPass=(LinearLayout)view.findViewById(R.id.linearConfirmNewPassword);
+
+        editableName=(TextView)view.findViewById(R.id.editableName);
+        editablePassword=(TextView)view.findViewById(R.id.editablePassword);
+        editableNumber=(TextView)view.findViewById(R.id.editablePhone);
         btnSave=(Button)view.findViewById(R.id.fEPBtnSave);
         imgProfilePic=(CircleImageView)view.findViewById(R.id.fEPImgProfile);
-        edtEmail.setEnabled(false);*/
+
+
     }
 
     @Override
     protected void initListeners() {
 
         imgProfilePic.setOnClickListener(this);
+        editableName.setOnClickListener(this);
+        editablePassword.setOnClickListener(this);
+        editableNumber.setOnClickListener(this);
         btnSave.setOnClickListener(this);
     }
 
@@ -124,7 +158,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onClick(View view) {
 
-        /*switch (view.getId()){
+        switch (view.getId()){
             case R.id.fEPBtnSave:
                 validateFields();
                 break;
@@ -132,65 +166,130 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
             case R.id.fEPImgProfile:
                 checkPermission();
                 break;
-        }*/
+            case R.id.editableName:
+                edtname.setEnabled(true);
+                isEditableName=true;
+                break;
+            case R.id.editablePassword:
+
+                 if(isEditablePassClicked){
+                     editablePassword.setText("edit");
+                     isEditablePassClicked=false;
+                     edtoldPassword.setEnabled(false);
+                     linearNewPass.setVisibility(View.GONE);
+                     linearConfirmNewPass.setVisibility(View.GONE);
+                 }else{
+                     isEditablePassClicked=true;
+                     edtoldPassword.setEnabled(true);
+                     editablePassword.setText("cancel");
+                     linearNewPass.setVisibility(View.VISIBLE);
+                     linearConfirmNewPass.setVisibility(View.VISIBLE);
+                 }
+                break;
+            case R.id.editablePhone:
+                isEditablePhone=true;
+                edtphone.setEnabled(true);
+                break;
+        }
     }
 
+    private void setProfile(User user){
+        edtname.setText(user.getName());
+        edtphone.setText(user.getPhone());
+        edtEmail.setText(user.getEmail());
+        edtoldPassword.setText("12345678");
+
+        edtEmail.setEnabled(false);
+        edtphone.setEnabled(false);
+        edtname.setEnabled(false);
+        edtoldPassword.setEnabled(false);
+        if(!TextUtils.isEmpty(user.getPic_url()))
+        Glide.with(mActivity).load(user.getPic_url()).into(imgProfilePic);
+
+    }
 
 
 
     private void validateFields() {
         // Store values at the time of the login attempt.
-        String email = edtEmail.getText().toString().trim();
+
         String password = edtoldPassword.getText().toString().trim();
-        String confirmpassword = edtNewPassword.getText().toString().trim();
+        String newpassword = edtNewPassword.getText().toString().trim();
         String confirmNewpassword = edtConfirmNewPassword.getText().toString().trim();
         String fullname = edtname.getText().toString().trim();
         String phoneNo = edtphone.getText().toString().trim();
         // Check for a valid email address.
-        if (TextUtils.isEmpty(fullname)) {
+        if (TextUtils.isEmpty(fullname) && isEditableName) {
             mActivity.showSnackbar(getString(R.string.error_empty_name), Toast.LENGTH_SHORT);
             return;
         }
 
-        if (TextUtils.isEmpty(email)) {
-            mActivity.showSnackbar(getString(R.string.error_empty_email), Toast.LENGTH_SHORT);
-            return;
 
-        } else if (!Validation.isValidEmail(email)) {
-            mActivity.showSnackbar(getString(R.string.error_title_invalid_email), Toast.LENGTH_SHORT);
-            return;
-
-        }
-
-        if (TextUtils.isEmpty(password.trim())) {
+        if (TextUtils.isEmpty(password.trim()) && isEditablePassClicked) {
             mActivity.showSnackbar(getString(R.string.error_empty_password), Toast.LENGTH_SHORT);
             return;
         }
         // Check for a valid password, if the user entered one.
-        if (TextUtils.isEmpty(password) || !Validation.isValidPassword(password)) {
+        if (isEditablePassClicked && !Validation.isValidPassword(password)) {
             mActivity.showSnackbar(getString(R.string.error_title_invalid_password), Toast.LENGTH_SHORT);
 
             return;
         }
-        if(!password.equals(confirmpassword)){
+        if (isEditablePassClicked && !Validation.isValidPassword(newpassword)) {
+            mActivity.showSnackbar(getString(R.string.error_title_invalid_password), Toast.LENGTH_SHORT);
+
+            return;
+        }
+        if(isEditablePassClicked && !newpassword.equals(confirmNewpassword)){
             mActivity.showSnackbar(getString(R.string.error_pass_not_matched), Toast.LENGTH_SHORT);
             return;
         }
-        if (TextUtils.isEmpty(phoneNo)) {
+        if (TextUtils.isEmpty(phoneNo) &&isEditablePhone) {
             mActivity.showSnackbar(getString(R.string.error_empty_Mobile), Toast.LENGTH_SHORT);
             return;
         }
-        if (!Validation.isValidMobile(phoneNo)) {
+        if (!Validation.isValidMobile(phoneNo) && isEditablePhone) {
             mActivity.showSnackbar(getString(R.string.error_title_invalid_Mobile), Toast.LENGTH_SHORT);
             return;
         }
-        if (TextUtils.isEmpty(mCurrentPhotoPath)) {
-            mActivity.showSnackbar(getString(R.string.str_profile_pic), Toast.LENGTH_SHORT);
-            return;
+        if(!isEditablePassClicked&&!isEditableName&&!isEditablePhone &&TextUtils.isEmpty(mCurrentPhotoPath)){
+            mActivity.showSnackbar("No change selected",0);
+        }else{
+            buildParams(fullname,password,newpassword,phoneNo);
         }
+
+
 
     }
 
+
+
+    private void buildParams(String name,String oldpass,String newpass,String phone){
+
+        MultipartBody.Part imageFileBody=null;
+        try {
+
+            Map<String,RequestBody> requestBodyMap=new HashMap<String,RequestBody>();
+            if(isEditablePhone){
+                requestBodyMap.put(KEY_PHONE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),phone));
+            }
+            if(isEditableName){
+                requestBodyMap.put(KEY_NAME, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),name));
+            }
+            if(isEditablePassClicked){
+                requestBodyMap.put(KEY_PASSWORD, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),oldpass));
+                requestBodyMap.put(KEY_PASSWORD_CONFIRMATION, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),newpass));
+            }
+            if(!TextUtils.isEmpty(mCurrentPhotoPath)){
+                File fileToUpload=new File(mCurrentPhotoPath);
+                RequestBody requestBody = RequestBody.create(MediaType.parse(Constants.CONTENT_TYPE_MULTIPART), fileToUpload);
+                imageFileBody = MultipartBody.Part.createFormData(KEY_PIC, fileToUpload.getName(), requestBody);
+            }
+            updateuserProfile(requestBodyMap,imageFileBody);
+        }catch (Exception e){
+
+        }
+    }
     /**
      * check the permission
      */
@@ -313,6 +412,27 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
 
     }
 
+
+    private void updateuserProfile(Map<String,RequestBody> requestBodyMap, MultipartBody.Part imageFileBody){
+        mActivity.showProgress();
+        String token=appPreference.getUserDetails().getToken();
+        UserRequest userRequest=new UserRequest();
+        userRequest.updateUserWithImageData(token,requestBodyMap,imageFileBody, new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                mActivity.hideProgress();
+                UserBean userBean=(UserBean)body;
+                setProfile(userBean.getUser());
+                //appPreference.saveUser(userBean.getUser());
+            }
+
+            @Override
+            public void onRequestFailed(String message) {
+                mActivity.hideProgress();
+                mActivity.showSnackbar(message,0);
+            }
+        });
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_PIC_REQUEST && resultCode == RESULT_OK) {
