@@ -22,7 +22,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginLeft="@dimen/dp_10"
         android:layout_toRightOf="@+id/headerImgProfile"
         android:orientation="vertical">
 
@@ -31,10 +31,11 @@
             android:id="@+id/headerTxtName"
             android:layout_height="wrap_content"
             android:text="Name"
+
             android:layout_gravity="start"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            android:textSize="@dimen/dp_14"/>
+            android:textSize="@dimen/sp_12"/>
 
 
         <TextView
@@ -45,7 +46,7 @@
             android:layout_gravity="start"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            android:textSize="@dimen/dp_14"/>
+            android:textSize="@dimen/sp_12"/>
 
 
         <TextView
@@ -56,19 +57,33 @@
             android:layout_gravity="start"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            android:textSize="@dimen/dp_14"/>
+            android:textSize="@dimen/sp_12"/>
 
 
+        <LinearLayout
+            android:id="@+id/linearHeaderEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
             android:id="@+id/headerEditTxt"
             android:layout_height="wrap_content"
             android:text="Edit Profile"
-            android:gravity="center_vertical"
-            android:drawableRight="@drawable/ic_edit"
+            android:layout_gravity="center_vertical"
             android:textColor="@android:color/white"
             android:textStyle="normal"
-            android:textSize="@dimen/dp_11"/>
-        </LinearLayout>
+            android:textSize="@dimen/sp_12"/>
 
+           <ImageView
+               android:layout_width="@dimen/dp_17"
+               android:layout_height="@dimen/dp_17"
+               android:gravity="center_vertical"
+               android:layout_marginLeft="@dimen/dp_7"
+               android:src="@drawable/edit_icon"/>
+        </LinearLayout>
+</LinearLayout>
 </RelativeLayout>

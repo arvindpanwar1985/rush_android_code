@@ -8,6 +8,7 @@
     android:fitsSystemWindows="false"
     tools:openDrawer="start">
 
+
     <FrameLayout
         android:id="@+id/activity_navigation_content"
         android:layout_width="match_parent"
@@ -23,6 +24,33 @@
         app:itemTextColor="@android:color/white"
         app:headerLayout="@layout/nav_header_book_service"
         app:itemIconTint="@android:color/white"
-        app:menu="@menu/activity_book_service_drawer" />
+        app:menu="@menu/activity_book_service_drawer" >
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/colorPrimaryDark"
+            android:clickable="true"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="@dimen/dp_25"
+                android:src="@drawable/white_arrow"/>
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/logo_rush"/>
+
+        </LinearLayout>
+    </android.support.design.widget.NavigationView>
+
+
+
 
 </android.support.v4.widget.DrawerLayout>

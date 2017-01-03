@@ -116,7 +116,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mActivity.initToolBar("Edit Profile",true);
+        mActivity.initToolBar("Edit Profile",true,true);
         View editProfileView=inflater.inflate(R.layout.fragment_edit_profile,container,false);
         initViews(editProfileView);
         initListeners();

@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +43,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
     private int mActionBarSize;
     private GoogleApiClient mGoogleApiClient;
     private TextView titleTxt;
+    private ImageView imgLogo;
     private ProgressBar progressBar;
 
     @Override
@@ -62,6 +64,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
         progressBar=(ProgressBar)findViewById(R.id.progressBar);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         titleTxt   =(TextView)findViewById(R.id.tv_toolbar);
+        imgLogo=(ImageView)findViewById(R.id.imgLogo);
         if(toast==null){
             toast=new Toast(this);
         }
@@ -100,9 +103,36 @@ public abstract  class BaseActivity extends AppCompatActivity {
         mToolbar.setVisibility(View.VISIBLE);
         titleTxt.setText(title);
         setSupportActionBar(mToolbar);
+        setHomeEnabled(isHomeEnable);
+
+
+
+    }
+
+
+    /**
+     * initialize Toolbar
+     *
+     * @param title        : title to set to Toolbar
+     * @param isHomeEnable : check is Back Button Enable or not
+     */
+    public void initToolBar(String title, boolean isHomeEnable,boolean showLogo) {
+        mToolbar.setVisibility(View.VISIBLE);
+        titleTxt.setText(title);
+
+        imgLogo.setVisibility(View.VISIBLE);
+        setSupportActionBar(mToolbar);
+        setHomeEnabled(isHomeEnable);
+
+
+
+    }
+
+    private void setHomeEnabled(boolean isHomeEnable){
         if (isHomeEnable) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().setTitle(null);
 
@@ -112,8 +142,6 @@ public abstract  class BaseActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().setTitle(null);
         }
-
-
     }
 
     public  void hideToolbar(){
@@ -343,6 +371,9 @@ public abstract  class BaseActivity extends AppCompatActivity {
             mGoogleApiClient.disconnect();
         }
     }
+
+
+
 
 
 

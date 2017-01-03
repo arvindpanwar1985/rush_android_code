@@ -5,7 +5,7 @@
 
         <item
             android:id="@+id/nav_order"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_order_24dp"
             android:title="Order" />
 
 
@@ -26,14 +26,14 @@
 
         <item
             android:id="@+id/nav_scheduled"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_schedule_24dp"
             android:title="Scheduled" />
 
 
 
             <item
                 android:id="@+id/nav_fav"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_favorite_24dp"
                 android:title="My Favorite" />
 
 
@@ -43,6 +43,27 @@
         android:icon="@drawable/ic_menu_send"
         android:title="Sign Out" />
 
+
+
+    <item
+        android:id="@+id/footer_spacer_1"
+        android:checkable="false"
+        android:enabled="false"
+        android:orderInCategory="200"
+        android:title="" />
+    <item
+        android:id="@+id/footer_spacer_2"
+        android:checkable="false"
+        android:enabled="false"
+        android:orderInCategory="200"
+        android:title="" />
+
+    <item
+        android:id="@+id/footer_spacer_3"
+        android:checkable="false"
+        android:enabled="false"
+        android:orderInCategory="200"
+        android:title="" />
         </menu>
 
 

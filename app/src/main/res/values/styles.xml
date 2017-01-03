@@ -39,7 +39,7 @@
 
     <style name="AppTheme.Button" parent="Widget.AppCompat.Button">
 
-        <item name="android:background">@drawable/bg_edittext_shape</item>
+        <item name="android:background">@drawable/btn_bg</item>
         <item name="android:layout_height">@dimen/dp_50</item>
         <item name="android:textColorHint">@android:color/white</item>
         <item name="android:drawablePadding">@dimen/dp_10</item>
