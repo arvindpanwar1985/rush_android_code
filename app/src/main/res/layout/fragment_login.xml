@@ -5,6 +5,13 @@
     android:background="@color/colorPrimary">
 
 
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logo_rush"/>
+
     <EditText
         android:layout_width="match_parent"
         android:id="@+id/flUsername"

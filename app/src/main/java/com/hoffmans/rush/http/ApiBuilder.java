@@ -29,7 +29,7 @@ public class ApiBuilder {
             apiInterface=retrofit.create(ApiInterface.class);
             return apiInterface;
         }else{
-            retrofit = new Retrofit.Builder().baseUrl(ApiConfig.getdevBaseUrl())
+            retrofit = new Retrofit.Builder().baseUrl(ApiConfig.getBaseUrl())
                     // set the okhttpclient and add default connect and read timepouts
                     .client(okHttpClient.connectTimeout(45,TimeUnit.SECONDS).readTimeout(45,TimeUnit.SECONDS).build())
                     .addConverterFactory(GsonConverterFactory.create())
@@ -61,13 +61,12 @@ public class ApiBuilder {
         if(retrofit!=null){
             return retrofit;
         }else{
-            return new Retrofit.Builder().baseUrl(ApiConfig.getdevBaseUrl())
+            return new Retrofit.Builder().baseUrl(ApiConfig.getBaseUrl())
                     // set the okhttpclient and add default connect and read timepouts
                     .client(okHttpClient.connectTimeout(45,TimeUnit.SECONDS).readTimeout(45,TimeUnit.SECONDS).build())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             // Create an instance of our GitHub API interface.
-
         }
 
     }

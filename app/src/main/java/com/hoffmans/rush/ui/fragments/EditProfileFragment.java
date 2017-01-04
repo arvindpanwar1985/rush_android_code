@@ -28,6 +28,7 @@ import com.hoffmans.rush.bean.UserBean;
 import com.hoffmans.rush.http.request.UserRequest;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.model.User;
+import com.hoffmans.rush.utils.ApiConfig;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
@@ -211,7 +212,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         edtname.setEnabled(false);
         edtoldPassword.setEnabled(false);
         if(!TextUtils.isEmpty(user.getPic_url()))
-        Glide.with(mActivity).load(user.getPic_url()).into(imgProfilePic);
+        Glide.with(mActivity).load(ApiConfig.getBaseUrl()+user.getPic_url()).into(imgProfilePic);
 
     }
 

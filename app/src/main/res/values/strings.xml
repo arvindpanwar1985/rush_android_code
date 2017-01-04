@@ -61,5 +61,15 @@
 
     <string name="str_verify_text">We\'ll send an email to you account.Please activate your account.</string>
 
+    <string name="str_notification">Notifications</string>
+
+    <string name="str_menu_order">Order</string>
+    <string name="str_menu_payment_method">Payment Methods</string>
+    <string name="str_menu_record">Record</string>
+    <string name="str_menu_schedule">Scheduled</string>
+    <string name="str_menu_fav">My Favourite</string>
+    <string name="str_menu_logout">Sign Out</string>
+
+
 
 </resources>

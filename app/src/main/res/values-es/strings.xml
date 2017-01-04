@@ -59,4 +59,14 @@
     <string name="action_settings">Ajustes</string>
 
     <string name="str_verify_text">Le enviaremos un correo electrónico a su cuenta.Por favor, active su cuenta.</string>
+
+    <string name="str_notification">Notificaciones</string>
+
+
+    <string name="str_menu_order">Orden</string>
+    <string name="str_menu_payment_method">Métodos de pago</string>
+    <string name="str_menu_record">Grabar</string>
+    <string name="str_menu_schedule">Programado</string>
+    <string name="str_menu_fav">Mi favorito</string>
+    <string name="str_menu_logout">Desconectar</string>
 </resources>

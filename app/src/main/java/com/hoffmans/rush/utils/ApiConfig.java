@@ -7,7 +7,7 @@ package com.hoffmans.rush.utils;
 public class ApiConfig {
 
 
-    private static final String BASE_URL = "http://54.86.93.44/triibe/api/";
+    private static final String BASE_URL = "http://35.161.140.168";
     public static String getBaseUrl(){
         return BASE_URL;
     }

@@ -43,6 +43,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         loginView=inflater.inflate(com.hoffmans.rush.R.layout.fragment_login,container,false);
+        mActivity.initToolBar("",false);
+        mActivity.hideToolbar();
         initViews(loginView);
         initListeners();
         return loginView;

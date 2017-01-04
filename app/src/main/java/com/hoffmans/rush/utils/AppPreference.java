@@ -45,7 +45,7 @@ public class AppPreference {
         mEditor.putString(PrefConstant.KEY_EMAIL,user.getEmail());
         mEditor.putString(PrefConstant.KEY_FNAME,user.getName());
         mEditor.putString(PrefConstant.KEY_PHONE,user.getPhone());
-        mEditor.putString(PrefConstant.KEY_PIC,user.getPic_url());
+        mEditor.putString(PrefConstant.KEY_PIC,ApiConfig.getBaseUrl()+user.getPic_url());
         mEditor.putString(PrefConstant.KEY_token,user.getToken());
         if(null!=user.getProvider()){
             mEditor.putBoolean(PrefConstant.IS_SOCIAL_PROVIDER,true);
@@ -76,7 +76,7 @@ public class AppPreference {
 
         mEditor.putString(PrefConstant.KEY_FNAME,user.getName());
         mEditor.putString(PrefConstant.KEY_PHONE,user.getPhone());
-        mEditor.putString(PrefConstant.KEY_PIC,user.getPic_url());
+        mEditor.putString(PrefConstant.KEY_PIC,ApiConfig.getBaseUrl()+user.getPic_url());
         if(null!=user.getProvider()){
             mEditor.putBoolean(PrefConstant.IS_SOCIAL_PROVIDER,true);
         }

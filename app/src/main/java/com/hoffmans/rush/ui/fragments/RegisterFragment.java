@@ -94,6 +94,8 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mActivity.initToolBar("",false);
+        mActivity.hideToolbar();
         View view =inflater.inflate(R.layout.fragment_register,container,false);
         FacebookSdk.sdkInitialize(mActivity.getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
@@ -125,8 +127,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         imgProfilePic.setOnClickListener(this);
         LoginManager.getInstance().registerCallback(callbackManager, this);
     }
-
-
 
 
     @Override
@@ -431,8 +431,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 UserBean userBean=(UserBean)body;
                 User user=userBean.getUser();
                 handleUserRegistrationCases(user);
-
-
             }
 
             @Override
@@ -518,7 +516,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             String email=acct.getEmail();
             String name =acct.getDisplayName();
             socialLogin(Constants.GOOGLE_PROVIDER,name,email,null,googleId,"","asd-dad-dad-45f4","ANDROID",Utils.getTimeZone());
-
         }
     }
 

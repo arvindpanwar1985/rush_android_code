@@ -6,14 +6,14 @@
         <item
             android:id="@+id/nav_order"
             android:icon="@drawable/ic_order_24dp"
-            android:title="Order" />
+            android:title="@string/str_menu_order" />
 
 
         <item
             android:id="@+id/nav_pay"
             android:icon="@drawable/ic_menu_gallery"
 
-            android:title="Payment Methods" />
+            android:title="@string/str_menu_payment_method" />
 
 
 
@@ -21,27 +21,27 @@
         <item
             android:id="@+id/nav_record"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Record" />
+            android:title="@string/str_menu_record" />
 
 
         <item
             android:id="@+id/nav_scheduled"
             android:icon="@drawable/ic_schedule_24dp"
-            android:title="Scheduled" />
+            android:title="@string/str_menu_schedule" />
 
 
 
             <item
                 android:id="@+id/nav_fav"
                 android:icon="@drawable/ic_favorite_24dp"
-                android:title="My Favorite" />
+                android:title="@string/str_menu_fav" />
 
 
 
            <item
         android:id="@+id/nav_logout"
         android:icon="@drawable/ic_menu_send"
-        android:title="Sign Out" />
+        android:title="@string/str_menu_logout" />
 
 
 

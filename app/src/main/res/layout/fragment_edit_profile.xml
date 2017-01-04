@@ -388,19 +388,73 @@
             </LinearLayout>
 
 
-            <Button
-                android:id="@+id/fEPBtnSave"
-                android:layout_width="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_20"
-                android:layout_marginLeft="@dimen/dp_40"
-                android:text="@string/str_save"
-                android:layout_marginRight="@dimen/dp_40"
-                style="@style/AppTheme.Button"/>
+
 
         </LinearLayout>
 
+
+        <LinearLayout
+            android:id="@+id/linearnotify"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/dp_30"
+            android:layout_below="@+id/linearRegistration"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtNotification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textColor="@android:color/white"
+                android:textStyle="bold|italic"
+                android:textSize="@dimen/sp_18"
+                android:text="@string/str_notification"/>
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_50"
+                android:textColor="@android:color/white"
+                android:textStyle="bold|italic"
+                android:textSize="@dimen/sp_16"
+                android:text="OFF"/>
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/switch_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:longClickable="false"
+                app:theme="@style/BrandedSwitch.control"
+                app:showText="true" />
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textColor="@android:color/white"
+                android:textStyle="bold|italic"
+                android:textSize="@dimen/sp_16"
+                android:text="ON"/>
+            </LinearLayout>
+
+
+        <Button
+            android:id="@+id/fEPBtnSave"
+            android:layout_width="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearnotify"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginLeft="@dimen/dp_40"
+            android:text="@string/str_save"
+            android:layout_marginRight="@dimen/dp_40"
+            style="@style/AppTheme.Button"/>
 
     </RelativeLayout>
 

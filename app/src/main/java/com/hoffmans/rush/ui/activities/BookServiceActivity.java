@@ -42,7 +42,6 @@ public class BookServiceActivity extends BaseActivity
         initListeners();
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
