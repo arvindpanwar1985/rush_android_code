@@ -86,7 +86,8 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =inflater.inflate(R.layout.fragment_update_account, container, false);
-        mActivity.initToolBar("Update Account",false);
+        mActivity.initToolBar("",false);
+        mActivity.hideToolbar();
         initViews(view);
         initListeners();
         return view;

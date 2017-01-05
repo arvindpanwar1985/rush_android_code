@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/menu_bg"
         android:fitsSystemWindows="true"
         app:itemTextColor="@android:color/white"
         app:headerLayout="@layout/nav_header_book_service"
@@ -27,7 +27,7 @@
         app:menu="@menu/activity_book_service_drawer" >
 
 
-        <LinearLayout
+        <!--<LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -47,7 +47,7 @@
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/logo_rush"/>
 
-        </LinearLayout>
+        </LinearLayout>-->
     </android.support.design.widget.NavigationView>
 
 

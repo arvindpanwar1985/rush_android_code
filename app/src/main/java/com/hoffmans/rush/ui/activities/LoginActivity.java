@@ -11,6 +11,7 @@ import com.hoffmans.rush.R;
 import com.hoffmans.rush.listners.BrainTreeHandler;
 import com.hoffmans.rush.ui.fragments.LoginFragment;
 import com.hoffmans.rush.ui.fragments.PaymentMethodFragment;
+import com.hoffmans.rush.ui.fragments.UpdateAccountFragment;
 
 /**
  * Created by devesh on 19/12/16.
@@ -53,9 +54,14 @@ public class LoginActivity extends BaseActivity implements PaymentMethodNonceCre
     public void onBackPressed() {
         FragmentManager fragmentManager=getSupportFragmentManager();
         int fragmentSize=fragmentManager.getBackStackEntryCount()-1;
-        if(!fragmentManager.getBackStackEntryAt(fragmentSize).getName().equals(PaymentMethodFragment.class.getCanonicalName())){
-            super.onBackPressed();
+        String lastFragmentName= fragmentManager.getBackStackEntryAt(fragmentSize).getName();
+        if(lastFragmentName.equals(UpdateAccountFragment.class.getCanonicalName())){
+            return;
         }
+        if(lastFragmentName.equals(PaymentMethodFragment.class.getCanonicalName())){
+            return;
+        }
+        super.onBackPressed();
     }
 
     @Override

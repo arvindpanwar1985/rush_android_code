@@ -382,7 +382,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             requestBodyMap.put(KEY_TIME_ZONE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),Utils.getTimeZone()));
             requestBodyMap.put(KEY_UDID, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),"adddf -dadf -adsfasd-d8773"));
             requestBodyMap.put(KEY_TYPE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),Constants.DEVICE_TYPE));
-            RequestBody requestBody = RequestBody.create(MediaType.parse(Constants.CONTENT_TYPE_MULTIPART), fileToUpload);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), fileToUpload);
             MultipartBody.Part imageFileBody = MultipartBody.Part.createFormData(KEY_PIC, fileToUpload.getName(), requestBody);
             createAccount(requestBodyMap,imageFileBody);
         }catch (Exception e){

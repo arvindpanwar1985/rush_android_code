@@ -2,15 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark">
+    android:background="@drawable/bg_app">
 
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/logo_rush"
-        android:layout_marginTop="@dimen/dp_10"/>
+        android:src="@drawable/logo_signup"
+        android:layout_marginTop="@dimen/dp_20"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,6 +25,7 @@
     <EditText
         android:layout_width="match_parent"
         android:id="@+id/fPEdtEmail"
+        android:drawableLeft="@drawable/ic_email"
         android:inputType="textEmailAddress|textNoSuggestions"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_20"

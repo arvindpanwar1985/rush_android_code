@@ -3,7 +3,28 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:background="@color/colorPrimaryDark">
+    android:background="@drawable/bg_app">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_toLeftOf="@+id/imgRushLogo"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow"/>
+        <ImageView
+            android:id="@+id/imgRushLogo"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginRight="@dimen/dp_30"
+            android:src="@drawable/logo_signup"/>
+        </RelativeLayout>
 
     <TextView
         android:layout_width="match_parent"
@@ -15,6 +36,7 @@
         android:text="@string/str_pay_method"
         android:paddingLeft="@dimen/dp_10"
         android:paddingBottom="@dimen/dp_4"
+        android:layout_marginTop="@dimen/dp_10"
         android:background="@android:color/white"/>
 
 
@@ -27,6 +49,7 @@
         android:hint="@string/str_Number"
         android:inputType="number|textNoSuggestions"
         android:maxLength="17"
+        android:padding="@dimen/dp_7"
         android:layout_marginTop="@dimen/dp_10"
         style="@style/AppTheme.Input"/>
 
@@ -36,6 +59,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_20"
         android:layout_marginRight="@dimen/dp_20"
+        android:hint="@string/str_headline"
+        android:padding="@dimen/dp_7"
         android:layout_marginTop="@dimen/dp_10"
         style="@style/AppTheme.Input"/>
 
@@ -54,6 +79,7 @@
              android:id="@+id/fpEdtExpiry"
              android:layout_height="wrap_content"
              android:editable="false"
+             android:padding="@dimen/dp_7"
              android:layout_weight=".3"
              style="@style/AppTheme.Input"/>
 
@@ -75,6 +101,7 @@
              android:textSize="@dimen/sp_14"
              android:inputType="numberPassword"
              android:maxLength="4"
+             android:padding="@dimen/dp_7"
              android:layout_marginLeft="@dimen/dp_2"
              android:textStyle="bold|italic"
              android:layout_gravity="center_vertical"
@@ -103,6 +130,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_20"
         android:layout_marginRight="@dimen/dp_20"
+        android:padding="@dimen/dp_7"
         android:hint="@string/str_country"
         android:inputType="textNoSuggestions"
         android:layout_marginTop="@dimen/dp_10"
@@ -115,6 +143,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_20"
         android:inputType="textNoSuggestions"
+        android:padding="@dimen/dp_7"
         android:hint="@string/str_city"
         android:layout_marginRight="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_10"
@@ -135,6 +164,39 @@
         android:background="@android:color/white"/>
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_10"
+        android:weightSum="1"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/visa_icon"
+            android:layout_weight=".25"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/american_icon"
+            android:layout_weight=".25"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/mastercard_icon"
+            android:layout_weight=".25"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/paypal_icon"
+            android:layout_gravity="center_vertical"
+            android:layout_weight=".25"/>
+        </LinearLayout>
 
     <Button
         android:id="@+id/fpBtnSaveCard"

@@ -14,14 +14,17 @@
     <style name="AppTheme.Input" parent="Widget.AppCompat.EditText">
         <item name="android:background">@drawable/bg_edittext_shape</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/dp_40</item>
-        <item name="android:drawablePadding">@dimen/dp_10</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawablePadding">@dimen/dp_3</item>
         <item name="android:singleLine">true</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">@dimen/sp_16</item>
         <item name="android:textColorHint">@android:color/white</item>
         <item name="android:textStyle">italic|bold</item>
-        <item name="android:padding">@dimen/dp_10</item>
+        <item name="android:paddingRight">@dimen/dp_2</item>
+        <item name="android:paddingTop">@dimen/dp_2</item>
+        <item name="android:paddingLeft">@dimen/dp_6</item>
+        <item name="android:paddingBottom">@dimen/dp_2</item>
     </style>
 
     <style name="AppTheme.Input.Login" parent="Widget.AppCompat.EditText">
@@ -39,15 +42,14 @@
 
     <style name="AppTheme.Button" parent="Widget.AppCompat.Button">
 
-        <item name="android:background">@drawable/bg_edittext_shape</item>
-        <item name="android:layout_height">@dimen/dp_50</item>
+        <item name="android:background">@drawable/button</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textColorHint">@android:color/white</item>
-        <item name="android:drawablePadding">@dimen/dp_10</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:singleLine">true</item>
         <item name="android:textStyle">italic|bold</item>
         <item name="android:textSize">@dimen/sp_16</item>
-        <item name="android:padding">@dimen/dp_10</item>
+        <item name="android:padding">@dimen/dp_5</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

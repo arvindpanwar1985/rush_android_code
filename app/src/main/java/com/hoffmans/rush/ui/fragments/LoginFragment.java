@@ -114,7 +114,13 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
             return;
         }
         // Check for a valid password, if the user entered one.
-        if (TextUtils.isEmpty(password) || !Validation.isValidPassword(password)) {
+      /*  if (TextUtils.isEmpty(password) || !Validation.isValidPassword(password)) {
+            mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.error_title_invalid_password), Toast.LENGTH_SHORT);
+
+            return;
+        }*/
+
+        if (TextUtils.isEmpty(password) ) {
             mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.error_title_invalid_password), Toast.LENGTH_SHORT);
 
             return;

@@ -14,6 +14,7 @@
     <string name="str_pay_method">Payment Methods</string>
     <string name="str_Number">Number</string>
     <string name="str_expiration">Expiration</string>
+    <string name="str_headline">Headline</string>
     <string name="str_cvv">CVV</string>
     <string name="str_country">Country</string>
     <string name="str_city">City</string>

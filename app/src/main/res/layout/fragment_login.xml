@@ -2,21 +2,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:background="@drawable/login_bg">
 
 
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_60"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/logo_rush"/>
+        android:src="@drawable/login_logo"/>
 
     <EditText
         android:layout_width="match_parent"
         android:id="@+id/flUsername"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_40"
+        android:drawableLeft="@drawable/user_icon"
         android:hint="@string/hint_user"
         android:inputType="textEmailAddress|textNoSuggestions"
         android:layout_marginRight="@dimen/dp_40"
@@ -28,6 +30,7 @@
         android:id="@+id/flPassword"
         android:layout_height="wrap_content"
         android:hint="@string/hint_password"
+        android:drawableLeft="@drawable/password_icon"
         android:inputType="textWebPassword|textNoSuggestions"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_marginLeft="@dimen/dp_40"

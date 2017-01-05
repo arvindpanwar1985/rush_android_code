@@ -5,7 +5,7 @@
     android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/colorPrimaryDark"
+    android:background="@drawable/menu_head"
     android:visibility="visible"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -27,11 +27,11 @@
      <ImageView
          android:id="@+id/imgLogo"
          android:layout_width="60dp"
-         android:layout_height="?attr/actionBarSize"
+         android:layout_height="wrap_content"
          android:layout_marginRight="@dimen/dp_5"
-         android:visibility="gone"
+         android:visibility="visible"
          android:layout_gravity="right|center_vertical"
-         android:background="@drawable/logo_rush"/>
+         android:background="@drawable/logo_signup"/>
 
 
 </android.support.v7.widget.Toolbar>

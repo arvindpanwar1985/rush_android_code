@@ -12,6 +12,7 @@
     <string name="str_pay_method">Formas de pago</string>
     <string name="str_Number">Numero</string>
     <string name="str_expiration">Caduciad</string>
+    <string name="str_headline">Titular</string>
     <string name="str_country">Pais</string>
     <string name="str_city">Cuidad</string>
     <string name="str_card">Tarjeta</string>

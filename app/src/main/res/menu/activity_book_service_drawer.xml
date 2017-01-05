@@ -11,7 +11,7 @@
 
         <item
             android:id="@+id/nav_pay"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_payment"
 
             android:title="@string/str_menu_payment_method" />
 
@@ -20,13 +20,13 @@
 
         <item
             android:id="@+id/nav_record"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_record"
             android:title="@string/str_menu_record" />
 
 
         <item
             android:id="@+id/nav_scheduled"
-            android:icon="@drawable/ic_schedule_24dp"
+            android:icon="@drawable/ic_schedule"
             android:title="@string/str_menu_schedule" />
 
 
@@ -40,7 +40,7 @@
 
            <item
         android:id="@+id/nav_logout"
-        android:icon="@drawable/ic_menu_send"
+        android:icon="@drawable/ic_logout"
         android:title="@string/str_menu_logout" />
 
 

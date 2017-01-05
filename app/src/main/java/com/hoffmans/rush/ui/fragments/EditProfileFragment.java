@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +28,6 @@ import com.hoffmans.rush.bean.UserBean;
 import com.hoffmans.rush.http.request.UserRequest;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.model.User;
-import com.hoffmans.rush.utils.ApiConfig;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
@@ -72,7 +71,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     private static final String ARG_PARAM1         = "param1";
     private static final String ARG_PARAM2         = "param2";
     private EditText edtname,edtEmail,edtphone,edtoldPassword,edtNewPassword,edtConfirmNewPassword;
-    private LinearLayout linearNewPass,linearConfirmNewPass,linearOldPass;
+    private RelativeLayout linearNewPass,linearConfirmNewPass,linearOldPass;
     private TextView editableName,editableNumber,editablePassword;
     private CircleImageView imgProfilePic;
     private Button btnSave;
@@ -135,9 +134,9 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         edtNewPassword=(EditText)view.findViewById(R.id.fEPEdtNewPassword);
         edtConfirmNewPassword=(EditText)view.findViewById(R.id.fEPEdtConfirmPassword);
 
-        linearNewPass=(LinearLayout)view.findViewById(R.id.linearNewPassword);
-        linearConfirmNewPass=(LinearLayout)view.findViewById(R.id.linearConfirmNewPassword);
-        linearOldPass=(LinearLayout)view.findViewById(R.id.linearOldPass);
+        linearNewPass=(RelativeLayout) view.findViewById(R.id.linearNewPassword);
+        linearConfirmNewPass=(RelativeLayout)view.findViewById(R.id.linearConfirmNewPassword);
+        linearOldPass=(RelativeLayout)view.findViewById(R.id.linearOldPass);
         editableName=(TextView)view.findViewById(R.id.editableName);
         editablePassword=(TextView)view.findViewById(R.id.editablePassword);
         editableNumber=(TextView)view.findViewById(R.id.editablePhone);
@@ -212,7 +211,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         edtname.setEnabled(false);
         edtoldPassword.setEnabled(false);
         if(!TextUtils.isEmpty(user.getPic_url()))
-        Glide.with(mActivity).load(ApiConfig.getBaseUrl()+user.getPic_url()).into(imgProfilePic);
+        Glide.with(mActivity).load(user.getPic_url()).into(imgProfilePic);
 
     }
 
@@ -290,7 +289,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
             }
             if(!TextUtils.isEmpty(mCurrentPhotoPath)){
                 File fileToUpload=new File(mCurrentPhotoPath);
-                RequestBody requestBody = RequestBody.create(MediaType.parse(Constants.CONTENT_TYPE_MULTIPART), fileToUpload);
+                RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), fileToUpload);
                 imageFileBody = MultipartBody.Part.createFormData(KEY_PIC, fileToUpload.getName(), requestBody);
             }
             updateuserProfile(requestBodyMap,imageFileBody);
