@@ -49,6 +49,8 @@ public class User implements Parcelable {
 
     private boolean isSocialProvider;
 
+    private int currency_symbol_id;
+
     public boolean isSocialProvider() {
         return isSocialProvider;
     }
@@ -172,6 +174,15 @@ public class User implements Parcelable {
         this.bt_token = bt_token;
     }
 
+
+    public int getCurrency_symbol_id() {
+        return currency_symbol_id;
+    }
+
+    public void setCurrency_symbol_id(int currency_symbol_id) {
+        this.currency_symbol_id = currency_symbol_id;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -193,6 +204,8 @@ public class User implements Parcelable {
         dest.writeByte(this.is_card_verified ? (byte) 1 : (byte) 0);
         dest.writeString(this.bt_token);
         dest.writeParcelable(this.location, flags);
+        dest.writeByte(this.isSocialProvider ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.currency_symbol_id);
     }
 
     protected User(Parcel in) {
@@ -210,6 +223,8 @@ public class User implements Parcelable {
         this.is_card_verified = in.readByte() != 0;
         this.bt_token = in.readString();
         this.location = in.readParcelable(UserLocation.class.getClassLoader());
+        this.isSocialProvider = in.readByte() != 0;
+        this.currency_symbol_id = in.readInt();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

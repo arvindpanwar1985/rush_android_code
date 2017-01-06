@@ -64,7 +64,6 @@
             android:id="@+id/linearHeaderEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
             android:paddingTop="@dimen/dp_4"
             android:paddingBottom="@dimen/dp_4"
             android:orientation="horizontal">

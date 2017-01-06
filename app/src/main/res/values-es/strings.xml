@@ -12,7 +12,7 @@
     <string name="str_pay_method">Formas de pago</string>
     <string name="str_Number">Numero</string>
     <string name="str_expiration">Caduciad</string>
-    <string name="str_headline">Titular</string>
+    <string name="str_headline">Nombre del titular de la tarjeta</string>
     <string name="str_country">Pais</string>
     <string name="str_city">Cuidad</string>
     <string name="str_card">Tarjeta</string>
@@ -43,6 +43,8 @@
     <string name="str_profile_pic">Seleccionar foto de perfil</string>
 
 
+
+    <string name="error_invalid_card_holdername">Nombre del titular de la tarjeta </string>
     <string name="error_invalid_card">Numero de tarjeta invalido</string>
     <string name="str_empty_expiry">La fecha de vencimiento no debe estar vacía</string>
     <string name="str_invalid_cvv">Cvv no es válido</string>
@@ -70,4 +72,8 @@
     <string name="str_menu_schedule">Programado</string>
     <string name="str_menu_fav">Mi favorito</string>
     <string name="str_menu_logout">Desconectar</string>
+
+    <string name ="str_select_currency">Por favor Seleccione el tipo de moneda</string>
+
+    <string name="str_link_card">Enlaza una tarjeta a tu cuenta.</string>
 </resources>

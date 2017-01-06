@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.braintreepayments.api.BraintreeFragment;
 import com.braintreepayments.api.exceptions.InvalidArgumentException;
@@ -25,6 +26,7 @@ import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.ui.activities.LoginActivity;
 import com.hoffmans.rush.utils.AppPreference;
 import com.hoffmans.rush.utils.Progress;
+import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
 import com.hoffmans.rush.widgets.MonthYearPicker;
 
@@ -43,7 +45,8 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
     private User user;
 
 
-    private EditText edtCardNumber,edtEdtTitular,edtExpiry,edtCvv,edtCountry,edtCity;
+    private EditText edtCardNumber,edtEdtTitular,edtCvv;
+    private TextView txtExpiry;
     private Button btnSaveCard;
     private BraintreeFragment mBraintreeFragment;
 
@@ -90,6 +93,7 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
         initViews(paymentMethodView);
         initListeners();
         initializeBrainTree();
+        Utils.showAlertDialog(mActivity,"Please link a card to your account.");
         return paymentMethodView;
     }
 
@@ -99,10 +103,9 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
 
         edtCardNumber=(EditText)view.findViewById(R.id.fpEdtCard);
         edtEdtTitular=(EditText)view.findViewById(R.id.fpEdtTitular);
-        edtExpiry    =(EditText)view.findViewById(R.id.fpEdtExpiry);
+        txtExpiry    =(TextView) view.findViewById(R.id.fpEdtExpiry);
         edtCvv       =(EditText)view.findViewById(R.id.fpEdtCvv);
-        edtCountry   =(EditText)view.findViewById(R.id.fpEdtCountry);
-        edtCity      =(EditText)view.findViewById(R.id.fpEdtCity);
+
         btnSaveCard  =(Button) view.findViewById(R.id.fpBtnSaveCard);
 
     }
@@ -110,11 +113,9 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
     @Override
     protected void initListeners() {
         edtCardNumber.setOnClickListener(this);
-        edtExpiry.setOnClickListener(this);
-        edtCountry.setOnClickListener(this);
+        txtExpiry.setOnClickListener(this);
         edtCvv.setOnClickListener(this);
         edtEdtTitular.setOnClickListener(this);
-        edtCity.setOnClickListener(this);
         btnSaveCard.setOnClickListener(this);
 
     }
@@ -142,7 +143,7 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if(monthYearPicker!=null)
-                        edtExpiry.setText(monthYearPicker.getSelectedMonth()+1+"/"+monthYearPicker.getSelectedYear());
+                            txtExpiry.setText(monthYearPicker.getSelectedMonth()+1+"/"+monthYearPicker.getSelectedYear());
                     }
                 },null);
                 monthYearPicker.show();
@@ -159,17 +160,14 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
     private Card getCreditCard(){
         Card card=new Card();
         String cardnumber=edtCardNumber.getText().toString().trim();
-        String expiry    =edtExpiry.getText().toString().trim();
-        String country   =edtCountry.getText().toString().trim();
-        String city      =edtCity.getText().toString().trim();
+        String expiry    =txtExpiry.getText().toString().trim();
         String headLine  =edtEdtTitular.getText().toString().trim();
         String cvv       =edtCvv.getText().toString().trim();
         card.setCardNumber(cardnumber);
         card.setCardCvv(cvv);
         card.setCardHeadline(headLine);
         card.setCardExpiry(expiry);
-        card.setCityCard(city);
-        card.setCountryCard(country);
+
         return card;
 
     }
@@ -184,30 +182,24 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
                 mActivity.showSnackbar(getString(R.string.error_title_invalid_card),0);
                 return;
             }
+            if (card.getCardHeadline().length()==0) {
+                //mUtils.showToast(mActivity, "Please select Month");
+                mActivity.showSnackbar(getString(R.string.error_invalid_card_holdername), 0);
+                return;
+            }
             if (card.getCardExpiry().length()==0) {
                 //mUtils.showToast(mActivity, "Please select Month");
                 mActivity.showSnackbar(getString(R.string.str_empty_expiry), 0);
                 return;
             }
 
-            if (card.getCityCard().length()==0) {
-                //Utils.showToast(mActivity, "Cvv is blank");
-                mActivity.showSnackbar(getString(R.string.str_empty_city),0);
-                return;
-            }
+
             if (card.getCardCvv().length()<3 || card.getCardCvv().length()>4) {
                 // Utils.showToast(mActivity, "Invalid Cvv.");
                 mActivity.showSnackbar(getString(R.string.str_invalid_cvv), 0);
                 return;
             }
-            if(card.getCountryCard().length()==0){
-                mActivity.showSnackbar(getString(R.string.str_empty_country), 0);
-                return;
-            }
-            if(card.getCardHeadline().length()==0){
-                mActivity.showSnackbar(getString(R.string.str_empty_headline), 0);
-                return;
-            }
+
             buildCreditCard(card);
         }
     }
@@ -223,9 +215,9 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
 
                 .cardholderName(card.getCardHeadline())
                 .cardNumber(card.getCardNumber())
-                .locality(card.getCityCard())
-                .expirationDate(card.getCardExpiry()).cvv(card.getCardCvv())
-                .countryName(card.getCountryCard());
+                .cardholderName(card.getCardHeadline())
+                .expirationDate(card.getCardExpiry()).cvv(card.getCardCvv());
+
 
         if(mBraintreeFragment!=null) {
             com.braintreepayments.api.Card.tokenize(mBraintreeFragment, cardBuilder);
@@ -250,12 +242,12 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
     }
 
     private void addPaymentMethod(String nounce){
-        mActivity.showProgress();
+        Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         PaymentRequest paymentRequest=new PaymentRequest();
         paymentRequest.addCard(user.getToken(),nounce, new ApiCallback() {
             @Override
             public void onRequestSuccess(BaseBean body) {
-                mActivity.hideProgress();
+               Progress.dismissProgress();
                 appPreference.saveUser(user);
                 appPreference.setUserLogin(true);
                 Intent bookServiceIntent=new Intent(mActivity, BookServiceActivity.class);
@@ -265,7 +257,7 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
 
             @Override
             public void onRequestFailed(String message) {
-                mActivity.hideProgress();
+                Progress.dismissProgress();
                 mActivity.showSnackbar(message,0);
             }
         });

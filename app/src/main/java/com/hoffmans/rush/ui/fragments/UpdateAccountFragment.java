@@ -5,22 +5,33 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
+import com.hoffmans.rush.bean.CurrencyBean;
 import com.hoffmans.rush.bean.UserBean;
+import com.hoffmans.rush.http.request.AppCurrencyRequest;
 import com.hoffmans.rush.http.request.UserRequest;
 import com.hoffmans.rush.listners.ApiCallback;
+import com.hoffmans.rush.model.Currency;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
+import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Validation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +39,7 @@ import com.hoffmans.rush.utils.Validation;
  * Use the {@link UpdateAccountFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UpdateAccountFragment extends BaseFragment implements View.OnClickListener {
+public class UpdateAccountFragment extends BaseFragment implements View.OnClickListener,AdapterView.OnItemSelectedListener {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -42,6 +53,12 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
     private static  final String KEY_EMAIL="email";
     private static  final String KEY_NAME="name";
     private static  final  String KEY_PHONE="phone";
+    private static  final  String KEY_CURRENCY ="currency_symbol_id";
+
+
+    private Spinner spinnerCurrency;
+    private Currency selectedCurrency;
+    private List<Currency> currencyList =new ArrayList<>();
 
 
 
@@ -90,6 +107,7 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
         mActivity.hideToolbar();
         initViews(view);
         initListeners();
+        getAllCurrency();
         return view;
     }
 
@@ -100,6 +118,7 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
         edtEmail=(EditText)view.findViewById(R.id.fuEdtEmail);
         edtPhone=(EditText)view.findViewById(R.id.fuEdtPhone);
         btnSave =(Button)view.findViewById(R.id.fuSaveDetails);
+        spinnerCurrency=(Spinner)view.findViewById(R.id.spinnerCurrency);
 
         if(isEmailVerified){
             edtEmail.setEnabled(false);
@@ -151,10 +170,15 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
             return;
         }
 
+        if(selectedCurrency==null){
+            mActivity.showSnackbar(getString(R.string.str_select_currency), Toast.LENGTH_SHORT);
+            return;
+        }
         try {
             JsonObject object = new JsonObject();
             object.addProperty(KEY_EMAIL, email);
             object.addProperty(KEY_PHONE,phoneNo);
+            object.addProperty(KEY_CURRENCY,selectedCurrency.getId().toString());
             updateUser(object,token);
         }catch (Exception e){
 
@@ -163,12 +187,12 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
     }
 
     private  void updateUser(JsonObject object,String token){
-        mActivity.showProgress();
+        Progress.showprogress(mActivity,"Updating Account..",false);
         UserRequest userRequest=new UserRequest();
         userRequest.updateUser(object,token, new ApiCallback() {
             @Override
             public void onRequestSuccess(BaseBean body) {
-                mActivity.hideProgress();
+                Progress.dismissProgress();
                 UserBean bean=(UserBean)body;
                 User user=bean.getUser();
                 if(!user.is_email_verified()){
@@ -187,7 +211,7 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
 
             @Override
             public void onRequestFailed(String message) {
-                mActivity.hideProgress();
+                Progress.dismissProgress();
                 mActivity.showSnackbar(message,Toast.LENGTH_LONG);
             }
         });
@@ -213,4 +237,56 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
     }
 
 
+    private void getAllCurrency(){
+
+        Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
+        AppCurrencyRequest appCurrencyRequest=new AppCurrencyRequest();
+        appCurrencyRequest.getCurrency(new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+
+                Progress.dismissProgress();
+                CurrencyBean currencyBean=(CurrencyBean)body;
+                currencyList.clear();
+                currencyList =currencyBean.getCurrencies();
+                List<String> currencyListString =new ArrayList<String>();
+                currencyListString.add(getString(R.string.str_select_currency));
+                if(currencyList.size()!=0){
+                    for(Currency currency:currencyList){
+                        currencyListString.add(currency.getCurrencyName());
+                    }
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity, R.layout.texview_spinner,currencyListString);
+                    spinnerCurrency.setAdapter(adapter);
+                    spinnerCurrency.setSelection(0,false);
+                    setSpinnerListner();
+                }
+            }
+
+            @Override
+            public void onRequestFailed(String message) {
+                Progress.dismissProgress();
+            }
+        });
+    }
+
+
+
+    private  void setSpinnerListner(){
+        spinnerCurrency.setOnItemSelectedListener(this);
+    }
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int selectedPosition, long l) {
+        Log.e("pos",selectedPosition+"");
+        if(currencyList!=null && selectedPosition!=0) {
+            selectedPosition=selectedPosition-1;
+            selectedCurrency = currencyList.get(selectedPosition);
+        }else{
+            selectedCurrency=null;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }

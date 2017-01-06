@@ -14,7 +14,7 @@
     <string name="str_pay_method">Payment Methods</string>
     <string name="str_Number">Number</string>
     <string name="str_expiration">Expiration</string>
-    <string name="str_headline">Headline</string>
+    <string name="str_headline">Card Holder Name</string>
     <string name="str_cvv">CVV</string>
     <string name="str_country">Country</string>
     <string name="str_city">City</string>
@@ -42,8 +42,8 @@
     <string name="str_open_Gallery">Open Gallery</string>
     <string name="str_profile_pic">Select Profile Photo"</string>
 
-
-
+    Nombre del titular de la tarjeta
+    <string name="error_invalid_card_holdername">Fill Card Holder Name </string>
     <string name="error_invalid_card">Invalid Card Number </string>
     <string name="str_empty_expiry">Expiration date should not be empty</string>
     <string name="str_invalid_cvv">Cvv is Invalid</string>
@@ -70,6 +70,10 @@
     <string name="str_menu_schedule">Scheduled</string>
     <string name="str_menu_fav">My Favourite</string>
     <string name="str_menu_logout">Sign Out</string>
+    <string name ="str_select_currency">Please Select currency</string>
+
+    <string name ="progress_loading">Loading..</string>
+    <string name="str_link_card">Please link a card to your account.</string>
 
 
 

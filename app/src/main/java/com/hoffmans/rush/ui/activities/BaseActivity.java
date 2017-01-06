@@ -45,6 +45,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
     private TextView titleTxt;
     private ImageView imgLogo;
     private ProgressBar progressBar;
+    public boolean userIsInteracting;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -375,6 +376,12 @@ public abstract  class BaseActivity extends AppCompatActivity {
 
 
 
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        userIsInteracting = true;
+    }
 
 
 

@@ -14,11 +14,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -36,10 +40,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
+import com.hoffmans.rush.bean.CurrencyBean;
 import com.hoffmans.rush.bean.UserBean;
+import com.hoffmans.rush.http.request.AppCurrencyRequest;
 import com.hoffmans.rush.http.request.LoginRequest;
 import com.hoffmans.rush.http.request.UserRequest;
 import com.hoffmans.rush.listners.ApiCallback;
+import com.hoffmans.rush.model.Currency;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.utils.Constants;
@@ -53,9 +60,11 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -69,12 +78,13 @@ import static android.app.Activity.RESULT_OK;
  * Created by devesh on 19/12/16.
  */
 
-public class RegisterFragment extends BaseFragment implements View.OnClickListener,FacebookCallback<LoginResult> {
+public class RegisterFragment extends BaseFragment implements View.OnClickListener,FacebookCallback<LoginResult>,AdapterView.OnItemSelectedListener {
 
     private static final String FILE_PROVIDER="com.example.android.fileprovider";
     private EditText edtname,edtEmail,edtphone,edtPassword;
     private Button btnRegister,btnFb,btnGoogle;
     private CircleImageView imgProfilePic;
+    private Spinner spinnerCurrency;
     private static final int IMAGE_REQUEST_PERMISSION=100;
     private static final int CAMERA_PIC_REQUEST    = 101;
     private static final int GALLERY_PIC_REQUEST   = 102;
@@ -88,8 +98,12 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     private static  final  String KEY_TIME_ZONE="user[time_zone]";
     private static  final  String KEY_UDID     ="user[udid]";
     private static  final  String KEY_TYPE     ="user[type]";
+    private static  final  String KEY_CURRENCY ="user[currency_symbol_id]";
     private String  mCurrentPhotoPath;
+    private Currency selectedCurrency;
     private int idGoogleApiclient;
+    private List<Currency> currencyList =new ArrayList<>();
+
 
     @Nullable
     @Override
@@ -102,6 +116,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         initViews(view);
         initListeners();
 
+        getAllCurrency();
         return view;
     }
 
@@ -117,6 +132,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         btnFb=(Button)view.findViewById(R.id.frBtnFacebook);
         btnGoogle=(Button)view.findViewById(R.id.frBtnGoogle);
         imgProfilePic=(CircleImageView)view.findViewById(R.id.frImgProfile);
+        spinnerCurrency=(Spinner)view.findViewById(R.id.spinnerCurrency);
     }
 
     @Override
@@ -126,6 +142,8 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         btnGoogle.setOnClickListener(this);
         imgProfilePic.setOnClickListener(this);
         LoginManager.getInstance().registerCallback(callbackManager, this);
+
+
     }
 
 
@@ -371,6 +389,10 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             mActivity.showSnackbar(getString(R.string.str_profile_pic), Toast.LENGTH_SHORT);
             return;
         }
+        if(selectedCurrency==null){
+            mActivity.showSnackbar(getString(R.string.str_select_currency), Toast.LENGTH_SHORT);
+            return;
+        }
 
         try {
             File fileToUpload=new File(mCurrentPhotoPath);
@@ -382,6 +404,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             requestBodyMap.put(KEY_TIME_ZONE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),Utils.getTimeZone()));
             requestBodyMap.put(KEY_UDID, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),"adddf -dadf -adsfasd-d8773"));
             requestBodyMap.put(KEY_TYPE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),Constants.DEVICE_TYPE));
+            requestBodyMap.put(KEY_CURRENCY, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),selectedCurrency.getId().toString()));
             RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), fileToUpload);
             MultipartBody.Part imageFileBody = MultipartBody.Part.createFormData(KEY_PIC, fileToUpload.getName(), requestBody);
             createAccount(requestBodyMap,imageFileBody);
@@ -400,6 +423,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             public void onRequestSuccess(BaseBean baseBean) {
                 Progress.dismissProgress();
                 UserBean bean=(UserBean) baseBean;
+                Utils.showAlertDialog(mActivity,baseBean.getMessage());
                 mActivity.getSupportFragmentManager().popBackStackImmediate();
               }
 
@@ -422,12 +446,12 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
      * @param picUrl pic_url in case of fb
      */
     private void socialLogin(String provider,String first_name,String last_name,String email,String uid,String picUrl,String uuid,String type,String timezone){
-        mActivity.showProgress();
+        Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         LoginRequest loginRequest=new LoginRequest();
         loginRequest.loginViaSocialNetwork(uid, first_name, last_name, email, provider, picUrl, uuid,type,timezone,new ApiCallback() {
             @Override
             public void onRequestSuccess(BaseBean body) {
-                mActivity.hideProgress();
+                Progress.dismissProgress();
                 UserBean userBean=(UserBean)body;
                 User user=userBean.getUser();
                 handleUserRegistrationCases(user);
@@ -435,7 +459,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
             @Override
             public void onRequestFailed(String message) {
-                mActivity.hideProgress();
+                Progress.dismissProgress();
                 mActivity.showSnackbar(message,Toast.LENGTH_LONG);
             }
         });
@@ -480,6 +504,39 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
+
+
+    private void getAllCurrency(){
+
+        Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
+        AppCurrencyRequest appCurrencyRequest=new AppCurrencyRequest();
+        appCurrencyRequest.getCurrency(new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+
+                Progress.dismissProgress();
+                CurrencyBean currencyBean=(CurrencyBean)body;
+                currencyList.clear();
+                currencyList =currencyBean.getCurrencies();
+                List<String> currencyListString =new ArrayList<String>();
+                currencyListString.add(getString(R.string.str_select_currency));
+                if(currencyList.size()!=0){
+                    for(Currency currency:currencyList){
+                        currencyListString.add(currency.getCurrencyName());
+                    }
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity, R.layout.texview_spinner,currencyListString);
+                    spinnerCurrency.setAdapter(adapter);
+                    spinnerCurrency.setSelection(0,false);
+                    setSpinnerListner();
+                }
+            }
+
+            @Override
+            public void onRequestFailed(String message) {
+                Progress.dismissProgress();
+            }
+        });
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -540,5 +597,22 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
 
 
+    private  void setSpinnerListner(){
+        spinnerCurrency.setOnItemSelectedListener(this);
+    }
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int selectedPosition, long l) {
+        Log.e("pos",selectedPosition+"");
+        if(currencyList!=null && selectedPosition!=0) {
+            selectedPosition=selectedPosition-1;
+            selectedCurrency = currencyList.get(selectedPosition);
+        }else{
+            selectedCurrency=null;
+        }
+    }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }

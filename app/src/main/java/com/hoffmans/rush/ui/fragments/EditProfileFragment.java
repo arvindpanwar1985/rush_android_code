@@ -12,31 +12,41 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
+import com.hoffmans.rush.bean.CurrencyBean;
 import com.hoffmans.rush.bean.UserBean;
+import com.hoffmans.rush.http.request.AppCurrencyRequest;
 import com.hoffmans.rush.http.request.UserRequest;
 import com.hoffmans.rush.listners.ApiCallback;
+import com.hoffmans.rush.model.Currency;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.utils.Constants;
+import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -53,7 +63,7 @@ import static android.app.Activity.RESULT_OK;
  * Use the {@link EditProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EditProfileFragment extends BaseFragment implements View.OnClickListener{
+public class EditProfileFragment extends BaseFragment implements View.OnClickListener,AdapterView.OnItemSelectedListener{
 
 
     private static final String KEY_NAME              ="user[name]";
@@ -63,6 +73,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     private static final String KEY_CURRENT_PASSWORD  ="user[current_password]";
     private static final String KEY_NEW_PASSWORD      ="user[password]";
     private static final String KEY_PASSWORD_CONFIRMATION="user[password_confirmation]";
+    private static  final  String KEY_CURRENCY ="user[currency_symbol_id]";
 
     private static final String FILE_PROVIDER="com.example.android.fileprovider";
     private static final int IMAGE_REQUEST_PERMISSION=100;
@@ -74,10 +85,12 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     private RelativeLayout linearNewPass,linearConfirmNewPass,linearOldPass;
     private TextView editableName,editableNumber,editablePassword;
     private CircleImageView imgProfilePic;
+    private Spinner spinnerCurrency;
     private Button btnSave;
     private String mCurrentPhotoPath;
     private boolean isEditablePassClicked,isEditableName,isEditablePhone;
-
+    private Currency selectedCurrency;
+    private List<Currency> currencyList =new ArrayList<>();
     private String mParam1;
     private String mParam2;
 
@@ -121,6 +134,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         initViews(editProfileView);
         initListeners();
         setProfile(appPreference.getUserDetails());
+        getAllCurrency();
         return editProfileView;
     }
 
@@ -142,6 +156,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         editableNumber=(TextView)view.findViewById(R.id.editablePhone);
         btnSave=(Button)view.findViewById(R.id.fEPBtnSave);
         imgProfilePic=(CircleImageView)view.findViewById(R.id.fEPImgProfile);
+        spinnerCurrency=(Spinner)view.findViewById(R.id.spinnerCurrency);
 
 
         if(appPreference.getUserDetails().isSocialProvider()){
@@ -258,6 +273,10 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
             mActivity.showSnackbar(getString(R.string.error_title_invalid_Mobile), Toast.LENGTH_SHORT);
             return;
         }
+        if(selectedCurrency==null){
+            mActivity.showSnackbar(getString(R.string.str_select_currency), Toast.LENGTH_SHORT);
+            return;
+        }
         if(!isEditablePassClicked&&!isEditableName&&!isEditablePhone &&TextUtils.isEmpty(mCurrentPhotoPath)){
             mActivity.showSnackbar("No change selected",0);
         }else{
@@ -287,6 +306,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
                 requestBodyMap.put(KEY_NEW_PASSWORD, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),newpass));
                 requestBodyMap.put(KEY_PASSWORD_CONFIRMATION, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),confirmPass));
             }
+            requestBodyMap.put(KEY_CURRENCY, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),selectedCurrency.getId().toString()));
             if(!TextUtils.isEmpty(mCurrentPhotoPath)){
                 File fileToUpload=new File(mCurrentPhotoPath);
                 RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), fileToUpload);
@@ -421,13 +441,13 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
 
 
     private void updateuserProfile(Map<String,RequestBody> requestBodyMap, MultipartBody.Part imageFileBody){
-        mActivity.showProgress();
+        Progress.showprogress(mActivity,"updating profile..",false);
         String token=appPreference.getUserDetails().getToken();
         UserRequest userRequest=new UserRequest();
         userRequest.updateUserWithImageData(token,requestBodyMap,imageFileBody, new ApiCallback() {
             @Override
             public void onRequestSuccess(BaseBean body) {
-                mActivity.hideProgress();
+                Progress.dismissProgress();
                 mActivity.showSnackbar(body.getMessage(),0);
                 UserBean userBean=(UserBean)body;
                 setProfile(userBean.getUser());
@@ -439,10 +459,64 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
 
             @Override
             public void onRequestFailed(String message) {
-                mActivity.hideProgress();
+                Progress.dismissProgress();
                 mActivity.showSnackbar(message,0);
             }
         });
+    }
+
+
+
+    private void getAllCurrency(){
+
+        Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
+        AppCurrencyRequest appCurrencyRequest=new AppCurrencyRequest();
+        appCurrencyRequest.getCurrency(new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+
+                Progress.dismissProgress();
+                CurrencyBean currencyBean=(CurrencyBean)body;
+                currencyList.clear();
+                currencyList =currencyBean.getCurrencies();
+                List<String> currencyListString =new ArrayList<String>();
+                if(currencyList.size()!=0){
+                   currencyListString.add(getString(R.string.str_select_currency));
+                    for(Currency currency:currencyList){
+                        currencyListString.add(currency.getCurrencyName());
+                    }
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity, R.layout.texview_spinner,currencyListString);
+                    spinnerCurrency.setAdapter(adapter);
+                    spinnerCurrency.setSelection(0,false);
+                    setSpinnerListner();
+                }
+            }
+
+            @Override
+            public void onRequestFailed(String message) {
+                Progress.dismissProgress();
+            }
+        });
+    }
+
+
+    private  void setSpinnerListner(){
+        spinnerCurrency.setOnItemSelectedListener(this);
+    }
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int selectedPosition, long l) {
+        Log.e("pos",selectedPosition+"");
+        if(currencyList!=null &&selectedPosition!=0) {
+            selectedPosition=selectedPosition-1;
+            selectedCurrency = currencyList.get(selectedPosition);
+        }else{
+            selectedCurrency=null;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

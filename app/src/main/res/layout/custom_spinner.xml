@@ -1,0 +1,24 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp_7"
+    android:background="@color/colorEdtBg">
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:id="@+id/spinnerCurrency"
+        android:spinnerMode="dropdown"
+        android:prompt="@string/str_select_currency"
+        android:layout_height="wrap_content"
+        android:background="@null"
+
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_drop_down" />
+
+</RelativeLayout>
