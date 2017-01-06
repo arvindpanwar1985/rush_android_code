@@ -75,6 +75,8 @@
     <string name ="progress_loading">Loading..</string>
     <string name="str_link_card">Please link a card to your account.</string>
 
+    <string name="str_no_changes">No change selected</string>
+
 
 
 </resources>

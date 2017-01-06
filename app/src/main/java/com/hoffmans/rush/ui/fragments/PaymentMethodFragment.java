@@ -217,14 +217,12 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
                 .cardNumber(card.getCardNumber())
                 .cardholderName(card.getCardHeadline())
                 .expirationDate(card.getCardExpiry()).cvv(card.getCardCvv());
-
-
         if(mBraintreeFragment!=null) {
             com.braintreepayments.api.Card.tokenize(mBraintreeFragment, cardBuilder);
         }else{
             mActivity.showSnackbar("Error in initailizing Braintree",0);
         }
-    }
+       }
 
 
     @Override

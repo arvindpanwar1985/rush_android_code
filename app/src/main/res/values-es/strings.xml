@@ -76,4 +76,5 @@
     <string name ="str_select_currency">Por favor Seleccione el tipo de moneda</string>
 
     <string name="str_link_card">Enlaza una tarjeta a tu cuenta.</string>
+    <string name="str_no_changes">Ningún cambio seleccionado</string>
 </resources>

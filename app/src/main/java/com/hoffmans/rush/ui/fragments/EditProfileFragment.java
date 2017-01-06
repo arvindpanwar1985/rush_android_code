@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -66,14 +67,7 @@ import static android.app.Activity.RESULT_OK;
 public class EditProfileFragment extends BaseFragment implements View.OnClickListener,AdapterView.OnItemSelectedListener{
 
 
-    private static final String KEY_NAME              ="user[name]";
-    private static final String KEY_PHONE             ="user[phone]";
-    private static final String KEY_PIC               ="user[picture]";
 
-    private static final String KEY_CURRENT_PASSWORD  ="user[current_password]";
-    private static final String KEY_NEW_PASSWORD      ="user[password]";
-    private static final String KEY_PASSWORD_CONFIRMATION="user[password_confirmation]";
-    private static  final  String KEY_CURRENCY ="user[currency_symbol_id]";
 
     private static final String FILE_PROVIDER="com.example.android.fileprovider";
     private static final int IMAGE_REQUEST_PERMISSION=100;
@@ -217,6 +211,10 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
+    /**
+     * set user profile
+     * @param user
+     */
     private void setProfile(User user){
         edtname.setText(user.getName());
         edtphone.setText(user.getPhone());
@@ -225,12 +223,26 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         edtphone.setEnabled(false);
         edtname.setEnabled(false);
         edtoldPassword.setEnabled(false);
+
         if(!TextUtils.isEmpty(user.getPic_url()))
         Glide.with(mActivity).load(user.getPic_url()).into(imgProfilePic);
 
     }
 
 
+    /**
+     *
+     * @param id currency id
+     * @return the position of object in collection
+     */
+    private int findCurrencyPositionByid(int id){
+        for(Currency currency :currencyList){
+            if(currency.getId()==id){
+                return currencyList.indexOf(currency);
+            }
+        }
+        return -1;
+    }
 
     private void validateFields() {
         // Store values at the time of the login attempt.
@@ -277,8 +289,8 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
             mActivity.showSnackbar(getString(R.string.str_select_currency), Toast.LENGTH_SHORT);
             return;
         }
-        if(!isEditablePassClicked&&!isEditableName&&!isEditablePhone &&TextUtils.isEmpty(mCurrentPhotoPath)){
-            mActivity.showSnackbar("No change selected",0);
+        if(!isEditablePassClicked&&!isEditableName&&!isEditablePhone &&TextUtils.isEmpty(mCurrentPhotoPath) && selectedCurrency==null){
+            mActivity.showSnackbar(getString(R.string.str_no_changes),0);
         }else{
             buildParams(fullname,password,newpassword,confirmNewpassword,phoneNo);
         }
@@ -288,7 +300,14 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     }
 
 
-
+    /**
+     * build the update profile parameters
+     * @param name name of user
+     * @param oldpass old password of user
+     * @param newpass new password of user
+     * @param confirmPass new password of user
+     * @param phone phone number of user
+     */
     private void buildParams(String name,String oldpass,String newpass,String confirmPass,String phone){
 
         MultipartBody.Part imageFileBody=null;
@@ -296,21 +315,24 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
 
             Map<String,RequestBody> requestBodyMap=new HashMap<String,RequestBody>();
             if(isEditablePhone){
-                requestBodyMap.put(KEY_PHONE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),phone));
+                requestBodyMap.put(Constants.KEY_PHONE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),phone));
             }
             if(isEditableName){
-                requestBodyMap.put(KEY_NAME, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),name));
+                requestBodyMap.put(Constants.KEY_NAME, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),name));
             }
             if(isEditablePassClicked){
-                requestBodyMap.put(KEY_CURRENT_PASSWORD, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),oldpass));
-                requestBodyMap.put(KEY_NEW_PASSWORD, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),newpass));
-                requestBodyMap.put(KEY_PASSWORD_CONFIRMATION, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),confirmPass));
+                requestBodyMap.put(Constants.KEY_CURRENT_PASSWORD, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),oldpass));
+                requestBodyMap.put(Constants.KEY_NEW_PASSWORD, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),newpass));
+                requestBodyMap.put(Constants.KEY_PASSWORD_CONFIRMATION, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),confirmPass));
             }
-            requestBodyMap.put(KEY_CURRENCY, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),selectedCurrency.getId().toString()));
+            requestBodyMap.put(Constants.KEY_CURRENCY, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),selectedCurrency.getId().toString()));
             if(!TextUtils.isEmpty(mCurrentPhotoPath)){
                 File fileToUpload=new File(mCurrentPhotoPath);
-                RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), fileToUpload);
-                imageFileBody = MultipartBody.Part.createFormData(KEY_PIC, fileToUpload.getName(), requestBody);
+                // compress the original file
+                File compressedImageFile = Compressor.getDefault(mActivity).compressToFile(fileToUpload);
+                // creating request body for image upload
+                RequestBody requestBody = RequestBody.create(MediaType.parse(Constants.CONTENT_IMAGE), compressedImageFile);
+                imageFileBody = MultipartBody.Part.createFormData(Constants.KEY_PIC, fileToUpload.getName(), requestBody);
             }
             updateuserProfile(requestBodyMap,imageFileBody);
         }catch (Exception e){
@@ -395,6 +417,11 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     }
 
 
+    /**
+     *
+     * @return file created using camera request
+     * @throws IOException
+     */
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -440,6 +467,11 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     }
 
 
+    /**
+     *
+     * @param requestBodyMap map containing image data and text data
+     * @param imageFileBody image file multipart
+     */
     private void updateuserProfile(Map<String,RequestBody> requestBodyMap, MultipartBody.Part imageFileBody){
         Progress.showprogress(mActivity,"updating profile..",false);
         String token=appPreference.getUserDetails().getToken();
@@ -466,7 +498,9 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     }
 
 
-
+    /**
+     * get all currency from server
+     */
     private void getAllCurrency(){
 
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
@@ -485,24 +519,40 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
                     for(Currency currency:currencyList){
                         currencyListString.add(currency.getCurrencyName());
                     }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity, R.layout.texview_spinner,currencyListString);
-                    spinnerCurrency.setAdapter(adapter);
-                    spinnerCurrency.setSelection(0,false);
+                    // set currency to spinner
+                    setSpinnerAdapter(currencyListString);
+                    // find the default currency
+                    if(findCurrencyPositionByid(appPreference.getUserDetails().getCurrency_symbol_id())!=-1) {
+                        spinnerCurrency.setSelection(findCurrencyPositionByid(appPreference.getUserDetails().getCurrency_symbol_id()) + 1);
+                    }
+                    // set spinner selected spinner
                     setSpinnerListner();
-                }
+              }
             }
 
             @Override
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
+                mActivity.showSnackbar(message,0);
             }
         });
     }
 
+    /**
+     *
+     * @param currencyListString currency list
+     */
+    private void setSpinnerAdapter(List<String> currencyListString){
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity, R.layout.texview_spinner,currencyListString);
+        spinnerCurrency.setAdapter(adapter);
+        spinnerCurrency.setSelection(0,false);
+    }
 
     private  void setSpinnerListner(){
         spinnerCurrency.setOnItemSelectedListener(this);
     }
+
+
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int selectedPosition, long l) {
         Log.e("pos",selectedPosition+"");

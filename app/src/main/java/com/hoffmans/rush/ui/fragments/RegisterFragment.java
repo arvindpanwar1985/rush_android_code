@@ -68,6 +68,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -90,15 +91,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     private static final int GALLERY_PIC_REQUEST   = 102;
     private static final int REQUEST_GOOGLE_SIGNIN = 8;
     private CallbackManager callbackManager;
-    private static  final  String KEY_EMAIL    ="user[email]";
-    private static  final  String KEY_NAME     ="user[name]";
-    private static  final  String KEY_PHONE    ="user[phone]";
-    private static  final  String KEY_PASSWORD ="user[password]";
-    private static  final  String KEY_PIC      ="user[picture]";
-    private static  final  String KEY_TIME_ZONE="user[time_zone]";
-    private static  final  String KEY_UDID     ="user[udid]";
-    private static  final  String KEY_TYPE     ="user[type]";
-    private static  final  String KEY_CURRENCY ="user[currency_symbol_id]";
+
     private String  mCurrentPhotoPath;
     private Currency selectedCurrency;
     private int idGoogleApiclient;
@@ -394,36 +387,45 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             return;
         }
 
-        try {
-            File fileToUpload=new File(mCurrentPhotoPath);
-            Map<String,RequestBody> requestBodyMap=new HashMap<String,RequestBody>();
-            requestBodyMap.put(KEY_EMAIL, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),email));
-            requestBodyMap.put(KEY_PASSWORD, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),password));
-            requestBodyMap.put(KEY_PHONE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),phoneNo));
-            requestBodyMap.put(KEY_NAME, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),fullname));
-            requestBodyMap.put(KEY_TIME_ZONE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),Utils.getTimeZone()));
-            requestBodyMap.put(KEY_UDID, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),"adddf -dadf -adsfasd-d8773"));
-            requestBodyMap.put(KEY_TYPE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),Constants.DEVICE_TYPE));
-            requestBodyMap.put(KEY_CURRENCY, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),selectedCurrency.getId().toString()));
-            RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), fileToUpload);
-            MultipartBody.Part imageFileBody = MultipartBody.Part.createFormData(KEY_PIC, fileToUpload.getName(), requestBody);
-            createAccount(requestBodyMap,imageFileBody);
-        }catch (Exception e){
-
-        }
+        buildParams(email,password,phoneNo,fullname);
 
     }
 
 
+    private void buildParams(String email,String password,String phoneNo,String fullname){
+        try {
+            File fileToUpload=new File(mCurrentPhotoPath);
+            Map<String,RequestBody> requestBodyMap=new HashMap<>();
+            requestBodyMap.put(Constants.KEY_EMAIL, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),email));
+            requestBodyMap.put(Constants.KEY_PASSWORD, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),password));
+            requestBodyMap.put(Constants.KEY_PHONE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),phoneNo));
+            requestBodyMap.put(Constants.KEY_NAME, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),fullname));
+            requestBodyMap.put(Constants.KEY_TIME_ZONE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),Utils.getTimeZone()));
+            //TODO add the original notification token
+            requestBodyMap.put(Constants.KEY_UDID, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),"adddf -dadf -adsfasd-d8773"));
+            requestBodyMap.put(Constants.KEY_TYPE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),Constants.DEVICE_TYPE));
+            requestBodyMap.put(Constants.KEY_CURRENCY, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),selectedCurrency.getId().toString()));
+            //compress the original file using zetbaitsu/Compressor
+            File compressedImageFile = Compressor.getDefault(mActivity).compressToFile(fileToUpload);
+            // add different media type to request body for image
+            RequestBody requestBody = RequestBody.create(MediaType.parse(Constants.CONTENT_IMAGE), compressedImageFile);
+            MultipartBody.Part imageFileBody = MultipartBody.Part.createFormData(Constants.KEY_PIC, fileToUpload.getName(), requestBody);
+            // call api to create new account
+            createAccount(requestBodyMap,imageFileBody);
+        }catch (Exception e){
+
+        }
+    }
+
     private void createAccount(Map<String,RequestBody> requestBodyMap, MultipartBody.Part imageFileBody){
-        Progress.showprogress(mActivity,"Loading",false);
+        Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         UserRequest request=new UserRequest();
         request.createUser(requestBodyMap, imageFileBody,new ApiCallback() {
             @Override
             public void onRequestSuccess(BaseBean baseBean) {
                 Progress.dismissProgress();
                 UserBean bean=(UserBean) baseBean;
-                Utils.showAlertDialog(mActivity,baseBean.getMessage());
+                Utils.showAlertDialog(mActivity,bean.getMessage());
                 mActivity.getSupportFragmentManager().popBackStackImmediate();
               }
 
@@ -532,8 +534,10 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             }
 
             @Override
-            public void onRequestFailed(String message) {
+            public void onRequestFailed(String message)
+            {
                 Progress.dismissProgress();
+                mActivity.showSnackbar(message,0);
             }
         });
     }
@@ -591,8 +595,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void onError(FacebookException error) {
-
-
+     mActivity.showSnackbar(error.getMessage(),0);
     }
 
 

@@ -51,9 +51,8 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
     private EditText edtEmail,edtPhone;
     private Button btnSave;
     private static  final String KEY_EMAIL="email";
-    private static  final String KEY_NAME="name";
-    private static  final  String KEY_PHONE="phone";
-    private static  final  String KEY_CURRENCY ="currency_symbol_id";
+    private static  final String KEY_PHONE="phone";
+    private static  final String KEY_CURRENCY ="currency_symbol_id";
 
 
     private Spinner spinnerCurrency;
@@ -264,6 +263,7 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
 
             @Override
             public void onRequestFailed(String message) {
+                mActivity.showSnackbar(message,0);
                 Progress.dismissProgress();
             }
         });
