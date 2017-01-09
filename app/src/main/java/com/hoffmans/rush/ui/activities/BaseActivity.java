@@ -47,6 +47,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     public boolean userIsInteracting;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -382,6 +383,11 @@ public abstract  class BaseActivity extends AppCompatActivity {
         super.onUserInteraction();
         userIsInteracting = true;
     }
+
+
+
+
+
 
 
 

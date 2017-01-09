@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.braintreepayments.api.BraintreeFragment;
@@ -49,6 +50,7 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
     private TextView txtExpiry;
     private Button btnSaveCard;
     private BraintreeFragment mBraintreeFragment;
+    private LinearLayout topLinear;
 
     public PaymentMethodFragment() {
         // Required empty public constructor
@@ -107,6 +109,7 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
         edtCvv       =(EditText)view.findViewById(R.id.fpEdtCvv);
 
         btnSaveCard  =(Button) view.findViewById(R.id.fpBtnSaveCard);
+        topLinear    =(LinearLayout)view.findViewById(R.id.topLinearPayment);
 
     }
 
@@ -117,6 +120,7 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
         edtCvv.setOnClickListener(this);
         edtEdtTitular.setOnClickListener(this);
         btnSaveCard.setOnClickListener(this);
+        topLinear.setOnClickListener(this);
 
     }
 
@@ -149,6 +153,9 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
                 monthYearPicker.show();
 
                 break;
+            case R.id.topLinearPayment:
+                 Utils.hideKeyboard(mActivity);
+                 break;
         }
     }
 

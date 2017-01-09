@@ -1,11 +1,15 @@
 package com.hoffmans.rush.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import com.hoffmans.rush.R;
 
@@ -73,5 +77,22 @@ public class Utils {
     public static String getTimeZone(){
         TimeZone tz = TimeZone.getDefault();
         return tz.getID();
+    }
+
+
+    /**
+     * Hide keyboard method
+     *
+     * @param activity
+     */
+    public static void hideKeyboard(Activity activity) {
+        //start with an 'always hidden' command for the activity's window
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        //now tell the IMM to hide the keyboard FROM whatever has focus in the activity
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View currentFocusedView = activity.getCurrentFocus();
+        if (currentFocusedView != null) {
+            inputMethodManager.hideSoftInputFromWindow(currentFocusedView.getWindowToken(), 0);
+        }
     }
 }

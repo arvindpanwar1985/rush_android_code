@@ -1,8 +1,10 @@
 package com.hoffmans.rush.ui.fragments;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -11,6 +13,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -22,11 +26,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
+import com.facebook.FacebookAuthorizationException;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
@@ -82,7 +88,7 @@ import static android.app.Activity.RESULT_OK;
 public class RegisterFragment extends BaseFragment implements View.OnClickListener,FacebookCallback<LoginResult>,AdapterView.OnItemSelectedListener {
 
     private static final String FILE_PROVIDER="com.example.android.fileprovider";
-    private EditText edtname,edtEmail,edtphone,edtPassword;
+    private EditText edtname,edtEmail,edtphone,edtPassword,edtcc;
     private Button btnRegister,btnFb,btnGoogle;
     private CircleImageView imgProfilePic;
     private Spinner spinnerCurrency;
@@ -91,25 +97,32 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     private static final int GALLERY_PIC_REQUEST   = 102;
     private static final int REQUEST_GOOGLE_SIGNIN = 8;
     private CallbackManager callbackManager;
-
     private String  mCurrentPhotoPath;
     private Currency selectedCurrency;
     private int idGoogleApiclient;
+    private RelativeLayout topView;
+    private View view;
     private List<Currency> currencyList =new ArrayList<>();
+    Fragment fragment;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mActivity.initToolBar("",false);
-        mActivity.hideToolbar();
-        View view =inflater.inflate(R.layout.fragment_register,container,false);
-        FacebookSdk.sdkInitialize(mActivity.getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
-        initViews(view);
-        initListeners();
 
-        getAllCurrency();
+         if(view==null) {
+             fragment = this;
+             mActivity.initToolBar("", false);
+             mActivity.hideToolbar();
+             view = inflater.inflate(R.layout.fragment_register, container, false);
+             FacebookSdk.sdkInitialize(mActivity.getApplicationContext());
+             callbackManager = CallbackManager.Factory.create();
+             initViews(view);
+             initListeners();
+             getAllCurrency();
+             setRetainInstance(true);
+         }
+
         return view;
     }
 
@@ -120,12 +133,14 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         edtname=(EditText)view.findViewById(R.id.frEdtname);
         edtEmail=(EditText)view.findViewById(R.id.frEdtEmail);
         edtphone=(EditText)view.findViewById(R.id.frEdtPhone);
+        edtcc=(EditText)view.findViewById(R.id.frEdtCC);
         edtPassword=(EditText)view.findViewById(R.id.frEdtPassword);
         btnRegister=(Button)view.findViewById(R.id.frBtnCreateAccount);
         btnFb=(Button)view.findViewById(R.id.frBtnFacebook);
         btnGoogle=(Button)view.findViewById(R.id.frBtnGoogle);
         imgProfilePic=(CircleImageView)view.findViewById(R.id.frImgProfile);
         spinnerCurrency=(Spinner)view.findViewById(R.id.spinnerCurrency);
+        topView =(RelativeLayout)view.findViewById(R.id.topRegistration);
     }
 
     @Override
@@ -134,6 +149,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         btnFb.setOnClickListener(this);
         btnGoogle.setOnClickListener(this);
         imgProfilePic.setOnClickListener(this);
+        topView.setOnClickListener(this);
         LoginManager.getInstance().registerCallback(callbackManager, this);
 
 
@@ -155,6 +171,9 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.frImgProfile:
                 checkPermission();
+                break;
+            case R.id.topRegistration:
+                Utils.hideKeyboard(mActivity);
                 break;
         }
 
@@ -239,6 +258,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(which == 0){
+
                     dispatchTakePictureIntent();
                 }else
                 if(which == 1){
@@ -275,7 +295,9 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(mActivity.getPackageManager()) != null) {
-            // Create the File where the photo should go
+            //takePictureIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //startActivityForResult(takePictureIntent, CAMERA_PIC_REQUEST);
+            //Create the File where the photo should go
             File photoFile = null;
             try {
                 photoFile = createImageFile();
@@ -343,7 +365,9 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         String email = edtEmail.getText().toString().trim();
         String password = edtPassword.getText().toString().trim();
         String fullname=edtname.getText().toString().trim();
-        String phoneNo=edtphone.getText().toString().trim();
+        String number=edtphone.getText().toString().trim();
+        String countrycode=edtcc.getText().toString().trim();
+        String phoneNo=countrycode+number;
         // Check for a valid email address.
         if(TextUtils.isEmpty(fullname)){
             mActivity.showSnackbar(getString(R.string.error_empty_name),Toast.LENGTH_SHORT);
@@ -383,7 +407,14 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             return;
         }
         if(selectedCurrency==null){
-            mActivity.showSnackbar(getString(R.string.str_select_currency), Toast.LENGTH_SHORT);
+           // mActivity.showSnackbar(getString(R.string.str_select_currency), Toast.LENGTH_SHORT);
+            Snackbar.make(getView(),"Currency data not found!",Snackbar.LENGTH_LONG)
+                    .setAction("Try again", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            getAllCurrency();
+                        }
+                    }).show();
             return;
         }
 
@@ -426,7 +457,8 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 Progress.dismissProgress();
                 UserBean bean=(UserBean) baseBean;
                 Utils.showAlertDialog(mActivity,bean.getMessage());
-                mActivity.getSupportFragmentManager().popBackStackImmediate();
+                //mActivity.getSupportFragmentManager().popBackStackImmediate();
+                mActivity.finish();
               }
 
             @Override
@@ -544,9 +576,19 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_PIC_REQUEST && resultCode == RESULT_OK) {
-            setPic();
-
+            if(mCurrentPhotoPath!=null) {
+               // Bundle bundle =data.getExtras();
+               // Bitmap bitmap=bundle.get("data");
+                setPic();
+               /* Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                imgProfilePic.setImageBitmap(imageBitmap);
+                Uri selectedImageUri = data.getData();
+                mCurrentPhotoPath = Utils.getRealPathFromURI(mActivity,selectedImageUri);*/
+                //String d=selectedImagePath;
+            }
         }else if(requestCode==GALLERY_PIC_REQUEST &&resultCode==RESULT_OK && data != null && data.getData() != null){
             Uri uri = data.getData();
             mCurrentPhotoPath= Utils.getRealPathFromURI(mActivity,uri);
@@ -558,7 +600,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             try {
                 callbackManager.onActivityResult(requestCode, resultCode, data);
             }catch (Exception e){
-
+                e.printStackTrace();
             }
         }
     }
@@ -596,6 +638,11 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onError(FacebookException error) {
      mActivity.showSnackbar(error.getMessage(),0);
+        if (error instanceof FacebookAuthorizationException) {
+            if (AccessToken.getCurrentAccessToken() != null) {
+                LoginManager.getInstance().logOut();
+            }
+        }
     }
 
 
@@ -617,5 +664,23 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if ( Progress.mprogressDialog!=null && Progress.mprogressDialog.isShowing() ){
+            Progress.mprogressDialog.cancel();
+        }
+    }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser) {
+            Activity a = getActivity();
+            if(a != null) a.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
     }
 }

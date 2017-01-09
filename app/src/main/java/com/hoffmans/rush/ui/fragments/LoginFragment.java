@@ -73,9 +73,9 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()){
             case com.hoffmans.rush.R.id.flCreateAccount:
-               /* Intent registerIntent=new Intent(mActivity, CreateAccountActivity.class);
-                registerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(registerIntent);*/
+               // Intent registerIntent=new Intent(mActivity, CreateAccountActivity.class);
+                //registerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+               // startActivity(registerIntent);
                 Fragment fragment=new RegisterFragment();
                 replaceFragment(fragment,true);
                 break;
@@ -145,7 +145,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
                 UserBean bean=(UserBean)body;
                 User user=bean.getUser();
                 handleLoginResult(user);
-
             }
 
             @Override

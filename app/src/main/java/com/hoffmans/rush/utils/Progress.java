@@ -9,7 +9,7 @@ import android.content.Context;
 
 public class Progress {
 
-    private static ProgressDialog mprogressDialog;
+    public static ProgressDialog mprogressDialog;
 
 
     public static void showprogress(Context context, String message, boolean isCancellable) {

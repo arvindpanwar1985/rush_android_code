@@ -3,6 +3,7 @@ package com.hoffmans.rush.ui.fragments;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -48,7 +49,7 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
 
     private String mEmail,mPhone,token;
     private boolean isEmailVerified;
-    private EditText edtEmail,edtPhone;
+    private EditText edtEmail,edtPhone,edtcc;
     private Button btnSave;
     private static  final String KEY_EMAIL="email";
     private static  final String KEY_PHONE="phone";
@@ -116,6 +117,7 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
 
         edtEmail=(EditText)view.findViewById(R.id.fuEdtEmail);
         edtPhone=(EditText)view.findViewById(R.id.fuEdtPhone);
+        edtcc=(EditText)view.findViewById(R.id.fuEdtCC);
         btnSave =(Button)view.findViewById(R.id.fuSaveDetails);
         spinnerCurrency=(Spinner)view.findViewById(R.id.spinnerCurrency);
 
@@ -146,7 +148,9 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
     private void validateFields(){
         // Store values at the time of the login attempt.
         String email = edtEmail.getText().toString().trim();
-        String phoneNo=edtPhone.getText().toString().trim();
+        String number=edtPhone.getText().toString().trim();
+        String cc=edtcc.getText().toString().trim();
+        String phoneNo=cc+number;
         // Check for a valid email address.
 
 
@@ -170,7 +174,14 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
         }
 
         if(selectedCurrency==null){
-            mActivity.showSnackbar(getString(R.string.str_select_currency), Toast.LENGTH_SHORT);
+            //mActivity.showSnackbar(getString(R.string.str_select_currency), Toast.LENGTH_SHORT);
+            Snackbar.make(getView(),"Currency data not found!",Snackbar.LENGTH_LONG)
+                    .setAction("Try again", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            getAllCurrency();
+                        }
+                    }).show();
             return;
         }
         try {
@@ -227,6 +238,7 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             mActivity.getSupportFragmentManager().popBackStackImmediate();
+                           // mActivity.finish();
 
                         }
                     }).create().show();

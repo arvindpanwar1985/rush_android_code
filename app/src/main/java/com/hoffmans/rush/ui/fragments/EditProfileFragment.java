@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -75,8 +76,8 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     private static final int GALLERY_PIC_REQUEST   = 102;
     private static final String ARG_PARAM1         = "param1";
     private static final String ARG_PARAM2         = "param2";
-    private EditText edtname,edtEmail,edtphone,edtoldPassword,edtNewPassword,edtConfirmNewPassword;
-    private RelativeLayout linearNewPass,linearConfirmNewPass,linearOldPass;
+    private EditText edtname,edtEmail,edtphone,edtoldPassword,edtNewPassword,edtConfirmNewPassword,edtcc;
+    private RelativeLayout linearNewPass,linearConfirmNewPass,linearOldPass,topView;
     private TextView editableName,editableNumber,editablePassword;
     private CircleImageView imgProfilePic;
     private Spinner spinnerCurrency;
@@ -138,6 +139,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         edtname=(EditText)view.findViewById(R.id.fEPEdtname);
         edtEmail=(EditText)view.findViewById(R.id.fEPEdtEmail);
         edtphone=(EditText)view.findViewById(R.id.fEPEdtPhone);
+        edtcc=(EditText)view.findViewById(R.id.fEPEdtCC);
         edtoldPassword=(EditText)view.findViewById(R.id.fEPEdtPassword);
         edtNewPassword=(EditText)view.findViewById(R.id.fEPEdtNewPassword);
         edtConfirmNewPassword=(EditText)view.findViewById(R.id.fEPEdtConfirmPassword);
@@ -151,7 +153,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         btnSave=(Button)view.findViewById(R.id.fEPBtnSave);
         imgProfilePic=(CircleImageView)view.findViewById(R.id.fEPImgProfile);
         spinnerCurrency=(Spinner)view.findViewById(R.id.spinnerCurrency);
-
+        topView =(RelativeLayout)view.findViewById(R.id.topRegistration);
 
         if(appPreference.getUserDetails().isSocialProvider()){
             linearOldPass.setVisibility(View.GONE);
@@ -208,6 +210,9 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
                 isEditablePhone=true;
                 edtphone.setEnabled(true);
                 break;
+            case R.id.topRegistration:
+                Utils.hideKeyboard(mActivity);
+                break;
         }
     }
 
@@ -251,7 +256,9 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         String newpassword = edtNewPassword.getText().toString().trim();
         String confirmNewpassword = edtConfirmNewPassword.getText().toString().trim();
         String fullname = edtname.getText().toString().trim();
-        String phoneNo = edtphone.getText().toString().trim();
+        String cc =edtcc.getText().toString().trim();
+        String number = edtphone.getText().toString().trim();
+        String phoneNo = cc+number;
         // Check for a valid email address.
         if (TextUtils.isEmpty(fullname) && isEditableName) {
             mActivity.showSnackbar(getString(R.string.error_empty_name), Toast.LENGTH_SHORT);
@@ -286,7 +293,14 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
             return;
         }
         if(selectedCurrency==null){
-            mActivity.showSnackbar(getString(R.string.str_select_currency), Toast.LENGTH_SHORT);
+           // mActivity.showSnackbar(getString(R.string.str_select_currency), Toast.LENGTH_SHORT);
+            Snackbar.make(getView(),"Currency data not found!",Snackbar.LENGTH_LONG)
+                    .setAction("Try again", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            getAllCurrency();
+                        }
+                    }).show();
             return;
         }
         if(!isEditablePassClicked&&!isEditableName&&!isEditablePhone &&TextUtils.isEmpty(mCurrentPhotoPath) && selectedCurrency==null){
@@ -571,7 +585,9 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_PIC_REQUEST && resultCode == RESULT_OK) {
-            setPic();
+            if(mCurrentPhotoPath!=null) {
+                setPic();
+            }
 
         }else if(requestCode==GALLERY_PIC_REQUEST &&resultCode==RESULT_OK && data != null && data.getData() != null){
             Uri uri = data.getData();
