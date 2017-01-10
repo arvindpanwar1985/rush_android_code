@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.model.User;
+import com.hoffmans.rush.ui.fragments.SelectVechileFragment;
 import com.hoffmans.rush.utils.AppPreference;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -35,11 +36,11 @@ public class BookServiceActivity extends BaseActivity
         getLayoutInflater().inflate(R.layout.activity_book_service, getParentView());
         initToolBar("",true,true);
         appPreference=AppPreference.newInstance(this);
-
-
         initManagers();
         initViews();
         initListeners();
+        SelectVechileFragment selectVechileFragment= SelectVechileFragment.newInstance("","");
+        replaceFragment(selectVechileFragment,R.id.activity_navigation_content,true);
     }
 
     @Override

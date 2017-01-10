@@ -275,7 +275,7 @@
                         android:paddingBottom="@dimen/dp_3"
                         android:paddingLeft="@dimen/dp_6"
                         android:paddingTop="@dimen/dp_3"
-                        android:text="+1"
+                        android:hint="CC"
                         android:inputType="phone|textNoSuggestions"
                         android:background="@android:color/transparent"/>
 

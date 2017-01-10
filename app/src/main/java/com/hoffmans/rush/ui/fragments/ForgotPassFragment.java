@@ -1,5 +1,7 @@
 package com.hoffmans.rush.ui.fragments;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -14,7 +16,6 @@ import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.http.request.UserRequest;
 import com.hoffmans.rush.listners.ApiCallback;
-import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
 
 /**
@@ -78,7 +79,7 @@ public class ForgotPassFragment extends BaseFragment implements View.OnClickList
             @Override
             public void onRequestSuccess(BaseBean body) {
                 mActivity.hideProgress();
-                Utils.showAlertDialog(mActivity,body.getMessage());
+                showAlertDialog(mActivity,body.getMessage());
 
             }
 
@@ -88,5 +89,25 @@ public class ForgotPassFragment extends BaseFragment implements View.OnClickList
                 mActivity.showSnackbar(message,0);
             }
         });
+    }
+
+
+    public  void showAlertDialog(Context context, String message) {
+        try {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
+            builder.setTitle(R.string.app_name)
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            dialog.dismiss();
+                            mActivity.finish();
+                        }
+                    }).create().show();
+        }catch (Exception e){
+
+        }
     }
 }

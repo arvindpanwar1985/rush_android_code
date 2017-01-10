@@ -5,10 +5,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
@@ -170,6 +172,8 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         editablePassword.setOnClickListener(this);
         editableNumber.setOnClickListener(this);
         btnSave.setOnClickListener(this);
+        topView.setOnClickListener(this);
+
     }
 
 
@@ -476,10 +480,53 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        imgProfilePic.setImageBitmap(bitmap);
+        Bitmap rotatedBitmap=checkOrientation(bitmap);
+        if(rotatedBitmap!=null){
+            imgProfilePic.setImageBitmap(rotatedBitmap);
+        }
 
     }
 
+    private Bitmap checkOrientation(Bitmap bitmap){
+
+        try {
+            ExifInterface ei = new ExifInterface(mCurrentPhotoPath);
+            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_UNDEFINED);
+            Bitmap bitmap1=null;
+            switch (orientation) {
+
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    bitmap1=Utils.rotateImage(bitmap, 90);
+                    //imgProfilePic.setImageBitmap(bitmap1);
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    bitmap1=Utils.rotateImage(bitmap, 180);
+                    //imgProfilePic.setImageBitmap(bitmap1);
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    bitmap1=Utils.rotateImage(bitmap, 270);
+
+                    break;
+
+                case ExifInterface.ORIENTATION_NORMAL:
+                    bitmap1=bitmap;
+                    break;
+
+                case 0:
+                    bitmap1=bitmap;
+
+                    break;
+            }
+            return  bitmap1;
+
+        }catch (IOException e){
+
+        }
+        return  null;
+    }
 
     /**
      *
@@ -593,6 +640,21 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
             Uri uri = data.getData();
             mCurrentPhotoPath= Utils.getRealPathFromURI(mActivity,uri);
             setPic();
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case IMAGE_REQUEST_PERMISSION:
+                if(mActivity.isPermissionGranted(grantResults)){
+                    pickImage();
+                }else{
+                    Toast.makeText(mActivity,"Permission denied.",Toast.LENGTH_LONG).show();
+                }
+                break;
         }
     }
 }

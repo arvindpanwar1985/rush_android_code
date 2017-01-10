@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -104,6 +105,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     private View view;
     private List<Currency> currencyList =new ArrayList<>();
     Fragment fragment;
+    private Uri photoURI;
 
 
     @Nullable
@@ -307,7 +309,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-               Uri photoURI = FileProvider.getUriForFile(mActivity,
+               photoURI = FileProvider.getUriForFile(mActivity,
                         FILE_PROVIDER,
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
@@ -355,9 +357,57 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             bmOptions.inPurgeable = true;
 
             Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-            imgProfilePic.setImageBitmap(bitmap);
+            Bitmap rotatedBitmap=checkOrientation(bitmap);
+            if(rotatedBitmap!=null){
+                imgProfilePic.setImageBitmap(rotatedBitmap);
+
+            }
 
     }
+
+    private Bitmap checkOrientation(Bitmap bitmap){
+
+        try {
+            ExifInterface ei = new ExifInterface(mCurrentPhotoPath);
+            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_UNDEFINED);
+            Bitmap bitmap1=null;
+            switch (orientation) {
+
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    bitmap1=Utils.rotateImage(bitmap, 90);
+                    //imgProfilePic.setImageBitmap(bitmap1);
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    bitmap1=Utils.rotateImage(bitmap, 180);
+                    //imgProfilePic.setImageBitmap(bitmap1);
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    bitmap1=Utils.rotateImage(bitmap, 270);
+
+                    break;
+
+                case ExifInterface.ORIENTATION_NORMAL:
+                    bitmap1=bitmap;
+                    break;
+
+                case 0:
+                    bitmap1=bitmap;
+
+                    break;
+            }
+            return  bitmap1;
+
+        }catch (IOException e){
+
+        }
+      return  null;
+    }
+
+
+
 
 
     private void validateFields(){
@@ -457,8 +507,8 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 Progress.dismissProgress();
                 UserBean bean=(UserBean) baseBean;
                 Utils.showAlertDialog(mActivity,bean.getMessage());
-                //mActivity.getSupportFragmentManager().popBackStackImmediate();
-                mActivity.finish();
+                mActivity.getSupportFragmentManager().popBackStackImmediate();
+                //mActivity.finish();
               }
 
             @Override
@@ -588,6 +638,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 Uri selectedImageUri = data.getData();
                 mCurrentPhotoPath = Utils.getRealPathFromURI(mActivity,selectedImageUri);*/
                 //String d=selectedImagePath;
+                //imgProfilePic.setImageURI(photoURI);
             }
         }else if(requestCode==GALLERY_PIC_REQUEST &&resultCode==RESULT_OK && data != null && data.getData() != null){
             Uri uri = data.getData();

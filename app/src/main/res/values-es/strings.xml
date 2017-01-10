@@ -75,6 +75,13 @@
 
     <string name ="str_select_currency">Por favor Seleccione el tipo de moneda</string>
 
+
+
     <string name="str_link_card">Enlaza una tarjeta a tu cuenta.</string>
     <string name="str_no_changes">Ningún cambio seleccionado</string>
+    <string name="str_reservation">reserva</string>
+    <string name="str_now">Ahora</string>
+
+    <string name="str_hint_start">indica punto de partida</string>
+    <string name="str_hint_end">indica punto de destino</string>
 </resources>
