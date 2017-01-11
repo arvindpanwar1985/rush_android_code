@@ -7,8 +7,8 @@
 
     android:background="@drawable/bg_accept_reject">
     <de.hdodenhof.circleimageview.CircleImageView
-     android:layout_width="@dimen/dp_60"
-     android:layout_height="@dimen/dp_60"
+     android:layout_width="@dimen/dp_50"
+     android:layout_height="@dimen/dp_50"
      android:src="@drawable/default_profile_photo"
      />
 
@@ -17,8 +17,8 @@
         android:id="@+id/txtACNow"
         android:layout_marginLeft="@dimen/dp_10"
         android:gravity="center"
-        android:layout_height="@dimen/dp_60"
-        android:padding="@dimen/dp_10"
+        android:layout_height="@dimen/dp_50"
+        android:padding="@dimen/dp_7"
         android:text="@string/str_now"
         android:minWidth="@dimen/dp_80"
         android:textColor="@color/colorPrimaryDark"
@@ -29,9 +29,9 @@
      <TextView
          android:id="@+id/txtACReserve"
          android:layout_width="wrap_content"
-         android:layout_marginLeft="@dimen/dp_10"
+         android:layout_marginLeft="@dimen/dp_7"
          android:gravity="center"
-         android:layout_height="@dimen/dp_60"
+         android:layout_height="@dimen/dp_50"
          android:padding="@dimen/dp_10"
          android:text="@string/str_reservation"
          android:minWidth="@dimen/dp_80"

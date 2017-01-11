@@ -99,6 +99,7 @@ public class AppPreference {
     }
 
     public void logoutUser(){
+
         mEditor.clear().commit();
     }
 

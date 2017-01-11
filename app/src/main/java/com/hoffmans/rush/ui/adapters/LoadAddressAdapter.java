@@ -23,7 +23,7 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
 
     private List<String> addressdata;
     private Context mContext;
-    private OnitemClickListner mItemClickListener;
+    private OnitemClickListner.OnFrequentAddressClicked mItemClickListener;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -31,11 +31,12 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // each data item is just a string in this case
 
-        TextView txtAddress;
+        TextView txtAddress,txtviewFrequentlyAddress;
 
         public ViewHolder(View v) {
             super(v);
             txtAddress=(TextView)v.findViewById(R.id.txtAddress);
+            txtviewFrequentlyAddress=(TextView)v.findViewById(R.id.viewFrequentlyAddress);
             v.setOnClickListener(this);
 
         }
@@ -45,13 +46,13 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
 
             if (mItemClickListener != null) {
 
-                mItemClickListener.onitemclicked(v,getPosition());
+                //mItemClickListener.onitemclicked(v,getPosition());
             }
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public LoadAddressAdapter(Context context,List<String > addressData, OnitemClickListner listner) {
+    public LoadAddressAdapter(Context context,List<String > addressData, OnitemClickListner.OnFrequentAddressClicked listner) {
         addressdata=addressData;
         mContext=context;
         mItemClickListener = listner;
@@ -73,7 +74,7 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
 
         if(position==0){
             holder.txtAddress.setHint(mContext.getString(R.string.str_hint_start));
@@ -86,6 +87,20 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
             holder.txtAddress.setText(address);
         }
 
+        holder.txtAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mItemClickListener.onitemclicked(view,position);
+            }
+        });
+
+        holder.txtviewFrequentlyAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mItemClickListener.onfrequentAddressclicked(view,position);
+            }
+        });
 
     }
 

@@ -156,7 +156,8 @@ public class BookServiceActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_order) {
-            // Handle the camera action
+            SelectVechileFragment selectVechileFragment= SelectVechileFragment.newInstance("","");
+            replaceFragment(selectVechileFragment,R.id.activity_navigation_content,true);
         } else if (id == R.id.nav_record) {
 
         } else if (id == R.id.nav_scheduled) {

@@ -125,7 +125,6 @@ public class LocationData implements GoogleApiClient.ConnectionCallbacks, Google
     @Override
     public void onConnectionSuspended(int i) {
 
-
     }
 
     @Override

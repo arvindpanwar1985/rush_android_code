@@ -6,6 +6,11 @@ import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
 import android.view.View;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hoffmans.rush.ui.activities.BaseActivity;
@@ -73,6 +78,15 @@ public abstract class BaseFragment extends Fragment {
 
 
 
+    //addmarker
+    protected Marker addlocationMarker(LatLng latLng, int marker, GoogleMap mMap){
+        if(marker==0){
+            return   mMap.addMarker(new MarkerOptions().position(latLng).draggable(false));
+        }else {
+            return  mMap.addMarker(new MarkerOptions().position(latLng).draggable(false).icon(BitmapDescriptorFactory.fromResource(marker)));
+
+        }
+    }
 
     @Override
     public void onStop() {

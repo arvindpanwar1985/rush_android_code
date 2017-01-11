@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -40,7 +42,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
     private Toolbar mToolbar = null;
     private int mLayoutId = 0;
     public static Toast toast;
-    private int mActionBarSize;
+    private int mActionBarSize,statusBarHeight;
     private GoogleApiClient mGoogleApiClient;
     private TextView titleTxt;
     private ImageView imgLogo;
@@ -54,6 +56,10 @@ public abstract  class BaseActivity extends AppCompatActivity {
         //hide keyboard initially
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        Rect rectangle = new Rect();
+        Window window = getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
+        statusBarHeight = rectangle.top;
         setContentView(R.layout.actvity_base);
         initUI();
 

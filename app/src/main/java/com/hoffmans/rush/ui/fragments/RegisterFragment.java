@@ -629,16 +629,9 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_PIC_REQUEST && resultCode == RESULT_OK) {
             if(mCurrentPhotoPath!=null) {
-               // Bundle bundle =data.getExtras();
-               // Bitmap bitmap=bundle.get("data");
+
                 setPic();
-               /* Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                imgProfilePic.setImageBitmap(imageBitmap);
-                Uri selectedImageUri = data.getData();
-                mCurrentPhotoPath = Utils.getRealPathFromURI(mActivity,selectedImageUri);*/
-                //String d=selectedImagePath;
-                //imgProfilePic.setImageURI(photoURI);
+
             }
         }else if(requestCode==GALLERY_PIC_REQUEST &&resultCode==RESULT_OK && data != null && data.getData() != null){
             Uri uri = data.getData();

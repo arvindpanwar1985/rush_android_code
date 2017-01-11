@@ -10,9 +10,9 @@
         android:layout_above="@+id/linearVehicle">
         <fragment
             android:id="@+id/map_fragment"
-            class="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            class="com.google.android.gms.maps.SupportMapFragment"
             />
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,39 +46,30 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/linearVehicle"
         android:layout_height="wrap_content"
+        android:id="@+id/linearVehicle"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:weightSum="4"
-        android:background="@drawable/vehicle_selection_bg">
+        android:orientation="vertical">
 
-        <ImageView
 
-            android:layout_width="0sp"
-            android:layout_weight="1"
+
+        <include
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/bike_icon"/>
-
-        <ImageView
-            android:layout_width="0sp"
-            android:layout_weight="1"
+            layout="@layout/layout_vehicle"/>
+        <TextView
+            android:id="@+id/txtEstimatePrice"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/moto_icon"/>
-
-        <ImageView
-            android:layout_width="0sp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:src="@drawable/car_icon"/>
-
-        <ImageView
-            android:layout_width="0sp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:src="@drawable/truck_icon"/>
-        </LinearLayout>
+            android:text="ESTIMATE PRICE"
+            android:gravity="center"
+            android:padding="@dimen/dp_13"
+            android:textColor="@android:color/white"
+            android:textStyle="bold|italic"
+            android:textSize="@dimen/sp_18"
+            android:visibility="gone"
+            android:background="@color/colorPrimaryDark"/>
+    </LinearLayout>
 
 
 

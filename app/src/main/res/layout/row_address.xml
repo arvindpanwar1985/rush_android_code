@@ -7,8 +7,20 @@
     >
 
 
+    <TextView
+        android:id="@+id/viewFrequentlyAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Frequently used Address"
+        android:textSize="@dimen/sp_10"
+        android:padding="@dimen/dp_4"
+        android:textColor="@android:color/white"
+        android:textStyle="bold|italic"
+        android:background="@drawable/bg_reservation_btn"/>
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_below="@+id/viewFrequentlyAddress"
+        android:layout_marginTop="@dimen/dp_2"
         android:background="@drawable/address_text"
         android:padding="@dimen/dp_4"
         android:layout_height="wrap_content">

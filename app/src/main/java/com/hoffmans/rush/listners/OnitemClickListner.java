@@ -8,5 +8,12 @@ import android.view.View;
 
 public interface OnitemClickListner {
 
-    public  void onitemclicked(View view,int position);
+    interface OnFrequentAddressClicked {
+
+         void onitemclicked(View view, int position);
+         void onfrequentAddressclicked(View view, int position);
+
+
+    }
+
 }

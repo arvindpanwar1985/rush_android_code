@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +25,16 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.listners.OnitemClickListner;
 import com.hoffmans.rush.location.LocationData;
 import com.hoffmans.rush.location.LocationInterface;
+import com.hoffmans.rush.ui.activities.ConfirmServiceActivity;
 import com.hoffmans.rush.ui.adapters.LoadAddressAdapter;
 
 import java.util.ArrayList;
@@ -35,12 +43,14 @@ import java.util.List;
 import static android.app.Activity.RESULT_CANCELED;
 
 
-public class SelectVechileFragment extends BaseFragment implements OnitemClickListner,View.OnClickListener,GoogleApiClient.OnConnectionFailedListener,LocationInterface {
+public class SelectVechileFragment extends BaseFragment implements OnitemClickListner.OnFrequentAddressClicked,View.OnClickListener,GoogleApiClient.OnConnectionFailedListener,LocationInterface ,OnMapReadyCallback{
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
     private static final int  PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     private static final int REQUEST_LOCATION_PERMISSION=2;
+    private static final int DESTINATION_SELECTED=1;
     private String TAG=SelectVechileFragment.class.getCanonicalName();
     private int clickedAddressPostion;
 
@@ -54,7 +64,11 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     private ImageView imageViewLoadMoreAddress;
     private TextView txtNow,txtReservation;
     private LocationData mLocationData;
-
+    private TextView txtEstimateCost;
+    private ImageView imgTypeCycle,imgTypeBike,imgTypeCar,imgTypeTruck;
+    private GoogleMap mGoogleMap;
+    private Location mCurrentLocation;
+    private boolean isVehicleSelected;
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -93,7 +107,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                 .enableAutoManage(mActivity, this)
                 .build();
 
-        checkPermission();
+
     }
 
     @Override
@@ -103,19 +117,42 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         imageViewLoadMoreAddress=(ImageView)view.findViewById(R.id.imgAddMoreAddress);
         txtNow                  =(TextView)view.findViewById(R.id.txtACNow);
         txtReservation          =(TextView)view.findViewById(R.id.txtACReserve);
+        txtEstimateCost         =(TextView)view.findViewById(R.id.txtEstimatePrice);
         recyclerView.setHasFixedSize(true);
+        imgTypeCycle            =(ImageView)view.findViewById(R.id.imgTypeCycle);
+        imgTypeBike             =(ImageView)view.findViewById(R.id.imgTypeBike);
+        imgTypeCar              =(ImageView)view.findViewById(R.id.imgTypeCar);
+        imgTypeTruck            =(ImageView)view.findViewById(R.id.imgTypeTruck);
+
         LinearLayoutManager llm = new LinearLayoutManager(mActivity);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
+        txtNow.setSelected(true);
+
 
 
     }
 
     @Override
     protected void initListeners() {
-     imageViewLoadMoreAddress.setOnClickListener(this);
-     txtNow.setOnClickListener(this);
+        imageViewLoadMoreAddress.setOnClickListener(this);
+        txtNow.setOnClickListener(this);
         txtReservation.setOnClickListener(this);
+        txtEstimateCost.setOnClickListener(this);
+        imgTypeCar.setOnClickListener(this);
+        imgTypeCycle.setOnClickListener(this);
+        imgTypeTruck.setOnClickListener(this);
+        imgTypeBike.setOnClickListener(this);
+
+    }
+
+    private void initMap(){
+       SupportMapFragment mapFragment = ((SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map_fragment));
+        if(mapFragment!=null){
+        mapFragment.getMapAsync(this);
+        }else {
+            Toast.makeText(getActivity(),"Error in iniializing map",Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -128,9 +165,10 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             initListeners();
             listAddressData.clear();
             listAddressData.add("");
-
+            listAddressData.add("");
             addressAdapter=new LoadAddressAdapter(mActivity,listAddressData,this);
             recyclerView.setAdapter(addressAdapter);
+            checkPermission();
         }
         return view;
     }
@@ -146,6 +184,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         String [] arrPermission=new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
         if(mActivity.isPermissionGranted(arrPermission)){
             mLocationData=new LocationData(mActivity,this);
+            initMap();
 
         }else {
             requestPermissions(arrPermission, REQUEST_LOCATION_PERMISSION);
@@ -162,13 +201,158 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                 }
                 break;
             case R.id.txtACNow:
-
-                break;
+                enableNow();
+                 break;
             case R.id.txtACReserve:
+                enableReservation();
+                break;
+            case R.id.txtEstimatePrice:
+                //validateFields();
+                Intent confirmSercviceIntet=new Intent(mActivity, ConfirmServiceActivity.class);
+                confirmSercviceIntet.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(confirmSercviceIntet);
+                break;
+
+            case R.id.imgTypeCycle:
+                setBackgroundVehicle(imgTypeCycle);
+                break;
+            case R.id.imgTypeBike:
+                setBackgroundVehicle(imgTypeBike);
+                break;
+            case R.id.imgTypeCar:
+                setBackgroundVehicle(imgTypeCar);
+                break;
+            case R.id.imgTypeTruck:
+                setBackgroundVehicle(imgTypeTruck);
                 break;
         }
     }
 
+
+    private void validateFields(){
+
+        if(listAddressData==null){
+            return;
+        }
+        String source =listAddressData.get(0);
+        String destination=listAddressData.get(1);
+        if(TextUtils.isEmpty(source)){
+            mActivity.showSnackbar("Please select source",0);
+            return;
+        }
+        if(TextUtils.isEmpty(destination)){
+            mActivity.showSnackbar("Please select destination",0);
+            return;
+        }
+        if(!isVehicleSelected){
+            mActivity.showSnackbar("Please select vehicle",0);
+            return;
+        }
+
+
+
+    }
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mGoogleMap=googleMap;
+        try {
+            mGoogleMap.setMyLocationEnabled(true);
+        }catch (SecurityException e){
+
+        }
+        if(mCurrentLocation!=null){
+            LatLng latLng=new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
+            addlocationMarker(latLng,R.drawable.marker,mGoogleMap);
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+        }
+    }
+
+
+
+    private void enableNow(){
+
+        if(txtReservation.isSelected()){
+            txtNow.setBackground(ContextCompat.getDrawable(mActivity,R.drawable.bg_now_btn));
+            txtNow.setTextColor(ContextCompat.getColor(mActivity,R.color.colorPrimaryDark));
+            txtReservation.setBackground(ContextCompat.getDrawable(mActivity,R.drawable.bg_reservation_btn));
+            txtReservation.setTextColor(ContextCompat.getColor(mActivity,android.R.color.white));
+            txtNow.setSelected(true);
+        }
+
+    }
+
+    private void enableReservation(){
+        if(txtNow.isSelected()){
+            txtReservation.setBackground(ContextCompat.getDrawable(mActivity,R.drawable.bg_now_btn));
+            txtReservation.setTextColor(ContextCompat.getColor(mActivity,R.color.colorPrimaryDark));
+            txtNow.setBackground(ContextCompat.getDrawable(mActivity,R.drawable.bg_reservation_btn));
+            txtNow.setTextColor(ContextCompat.getColor(mActivity,android.R.color.white));
+            txtReservation.setSelected(true);
+        }
+    }
+
+
+    private  void getVechileType(){
+        if(imgTypeCar.isSelected()){
+            return;
+        }
+        if(imgTypeBike.isSelected()){
+            return;
+        }
+        if(imgTypeCycle.isSelected()){
+            return;
+        }
+        if(imgTypeTruck.isSelected()){
+            return;
+        }
+    }
+
+    private void setBackgroundVehicle(ImageView view){
+        if(view.isSelected()){
+            view.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
+            view.setSelected(false);
+            isVehicleSelected=false;
+        }else{
+            view.setBackground(ContextCompat.getDrawable(mActivity,R.drawable.selection_ring));
+            view.setSelected(true);
+            isVehicleSelected=true;
+        }
+        int id=view.getId();
+        if(id==R.id.imgTypeCycle){
+            imgTypeCar.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
+            imgTypeBike.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
+            imgTypeTruck.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
+            imgTypeCar.setSelected(false);
+            imgTypeBike.setSelected(false);
+            imgTypeTruck.setSelected(false);
+
+        }else if(id==R.id.imgTypeBike){
+            imgTypeCar.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
+            imgTypeCycle.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
+            imgTypeTruck.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
+            imgTypeCar.setSelected(false);
+            imgTypeCycle.setSelected(false);
+            imgTypeTruck.setSelected(false);
+
+        }else if(id==R.id.imgTypeCar){
+            imgTypeCycle.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
+            imgTypeBike.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
+            imgTypeTruck.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
+            imgTypeCycle.setSelected(false);
+            imgTypeBike.setSelected(false);
+            imgTypeTruck.setSelected(false);
+        }else{
+            imgTypeCar.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
+            imgTypeBike.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
+            imgTypeCycle.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
+            imgTypeCar.setSelected(false);
+            imgTypeBike.setSelected(false);
+            imgTypeCycle.setSelected(false);
+        }
+
+    }
 
     @Override
     public void onitemclicked(View view, int position) {
@@ -181,10 +365,17 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                             .build(mActivity);
             startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException e) {
-            // TODO: Handle the error.
+
         } catch (GooglePlayServicesNotAvailableException e) {
-            // TODO: Handle the error.
+
         }
+    }
+
+
+
+    @Override
+    public void onfrequentAddressclicked(View view, int position) {
+
     }
 
 
@@ -192,15 +383,13 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == mActivity.RESULT_OK) {
-                Place place = PlaceAutocomplete.getPlace(mActivity, data);
                 try {
-                    listAddressData.set(clickedAddressPostion, place.getAddress().toString());
-                    addressAdapter.notifyDataSetChanged();
+                    Place place = PlaceAutocomplete.getPlace(mActivity, data);
+                    Log.i(TAG, "Place: " + place.getName()+ ""+place.getAddress());
+                    setAddress(place, clickedAddressPostion);
                 }catch (Exception e){
-                    mActivity.showSnackbar("Something went Wrong",0);
-                }
 
-                Log.i(TAG, "Place: " + place.getName()+ ""+place.getAddress());
+                }
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(mActivity, data);
                 mActivity.showSnackbar(status.getStatusMessage(),0);
@@ -209,6 +398,16 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         }
     }
 
+
+    private void setAddress(Place place ,int position){
+
+            listAddressData.set(position, place.getAddress().toString());
+            addressAdapter.notifyDataSetChanged();
+            if(position==DESTINATION_SELECTED){
+                txtEstimateCost.setVisibility(View.VISIBLE);
+            }
+
+    }
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         mActivity.showSnackbar(connectionResult.getErrorMessage(),0);
@@ -217,7 +416,9 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
     @Override
     public void onLocation(Location location) {
-
+     if(location!=null){
+         mCurrentLocation=location;
+     }
     }
 
     @Override
@@ -232,6 +433,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             case REQUEST_LOCATION_PERMISSION:
                 if(mActivity.isPermissionGranted(grantResults)){
                     mLocationData=new LocationData(mActivity,this);
+                    initMap();
                 }else{
                     Toast.makeText(mActivity,"Permission denied.",Toast.LENGTH_LONG).show();
                 }
