@@ -60,6 +60,9 @@ public interface ApiInterface {
     @GET("/api/currencies/all_currency_symbols")
     Call<ResponseBody> getCurrency();
 
+    @GET("/api/creditcard/listCards")
+    Call<ResponseBody> getCardList(@Header("Authorization")String authorization);
+
 
 
 }

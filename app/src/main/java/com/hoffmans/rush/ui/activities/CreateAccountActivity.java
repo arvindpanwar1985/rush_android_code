@@ -24,9 +24,6 @@ public class CreateAccountActivity extends BaseActivity  {
         hideToolbar();
         Fragment fragment=new RegisterFragment();
         replaceFragment(fragment,R.id.content_create_account,false);
-
-
-
     }
 
     @Override

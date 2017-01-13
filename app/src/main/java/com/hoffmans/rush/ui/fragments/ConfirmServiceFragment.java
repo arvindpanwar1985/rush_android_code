@@ -1,18 +1,21 @@
 package com.hoffmans.rush.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.ui.activities.CardListActivity;
 
 
-
-public class ConfirmServiceFragment extends BaseFragment {
+public class ConfirmServiceFragment extends BaseFragment implements View.OnClickListener {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private RelativeLayout viewCardDetails;
 
     public ConfirmServiceFragment() {
         // Required empty public constructor
@@ -59,12 +62,24 @@ public class ConfirmServiceFragment extends BaseFragment {
     @Override
     protected void initViews(View view) {
 
+        viewCardDetails=(RelativeLayout)view.findViewById(R.id.viewCardDetails);
     }
 
     @Override
     protected void initListeners() {
 
+        viewCardDetails.setOnClickListener(this);
     }
 
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.viewCardDetails:
+                Intent cardListIntent=new Intent(mActivity, CardListActivity.class);
+                cardListIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(cardListIntent);
+                break;
+        }
+    }
 }

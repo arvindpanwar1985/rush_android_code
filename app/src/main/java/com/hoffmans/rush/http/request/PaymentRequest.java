@@ -1,5 +1,6 @@
 package com.hoffmans.rush.http.request;
 
+import com.hoffmans.rush.bean.CardListBean;
 import com.hoffmans.rush.bean.MessageBean;
 import com.hoffmans.rush.http.ConnectionManager;
 import com.hoffmans.rush.listners.ApiCallback;
@@ -16,7 +17,6 @@ import retrofit2.Call;
  */
 
 public class PaymentRequest extends BaseRequest {
-
 
     /**
      *
@@ -39,6 +39,46 @@ public class PaymentRequest extends BaseRequest {
                         messageBean.setMessage(message);
 
                         callback.onRequestSuccess(messageBean);
+                    } else {
+                        callback.onRequestFailed(message);
+                    }
+
+                }catch (Exception e){
+                    callback.onRequestFailed(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onWebStatusFalse(String message) {
+                callback.onRequestFailed(message);
+            }
+
+
+        });
+    }
+
+    /**
+     *
+      *@param authToken authentication os user
+     * @param callback
+     */
+
+    public void getPaymentCardList(String authToken,final ApiCallback callback){
+
+        Call<ResponseBody> listCardCall=getAPIClient().getCardList(authToken);
+        ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(listCardCall);
+        connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
+            @Override
+            public void onWebServiceComplete(ResponseBody responseBody) {
+                try {
+                    JSONObject obj=new JSONObject(responseBody.string());
+                    boolean status = obj.getBoolean(SUCCESS);
+                    String message=obj.getString(MESSAGE);
+                    if (status) {
+                        String data = obj.getJSONObject(DATA).toString();
+                        CardListBean bean = getGsonBuilder().fromJson(data, CardListBean.class);
+                        bean.setMessage(message);
+                        callback.onRequestSuccess(bean);
                     } else {
                         callback.onRequestFailed(message);
                     }

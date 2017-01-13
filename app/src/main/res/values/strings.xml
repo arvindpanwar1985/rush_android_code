@@ -88,5 +88,9 @@
 
     <string name="str_hint_end">Indicates ending point</string>
 
+    <string name="str_make_order">Make an order</string>
+    <string name="str_value_estimate">Valor estimado</string>
+    <string name="str_value_time">Hora prevista</string>
+
 
 </resources>

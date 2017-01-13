@@ -1,0 +1,57 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg_app"
+    tools:context="com.hoffmans.rush.ui.fragments.CardListFragment">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_toLeftOf="@+id/imgRushLogo"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow"/>
+        <ImageView
+            android:id="@+id/imgRushLogo"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginRight="@dimen/dp_30"
+            android:src="@drawable/logo_signup"/>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_4"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/sp_16"
+        android:textStyle="bold|italic"
+        android:text="@string/str_pay_method"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_4"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@android:color/white"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imgAddCard"
+        android:layout_gravity="end"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_height="wrap_content"
+        android:id="@+id/cardListRecycler"/>
+
+</LinearLayout>
