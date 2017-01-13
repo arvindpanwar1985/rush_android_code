@@ -1,5 +1,6 @@
 package com.hoffmans.rush.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,18 +10,32 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.bean.BaseBean;
+import com.hoffmans.rush.bean.CardListBean;
+import com.hoffmans.rush.http.request.PaymentRequest;
+import com.hoffmans.rush.listners.ApiCallback;
+import com.hoffmans.rush.listners.OnitemClickListner;
+import com.hoffmans.rush.model.CardData;
+import com.hoffmans.rush.ui.activities.AddCardActivity;
+import com.hoffmans.rush.ui.adapters.CardListAdapter;
+import com.hoffmans.rush.utils.Progress;
+
+import java.util.ArrayList;
+
+import static com.hoffmans.rush.ui.activities.AddCardActivity.REQUEST_ADD_CARD;
 
 
-
-public class CardListFragment extends BaseFragment implements View.OnClickListener {
+public class CardListFragment extends BaseFragment implements View.OnClickListener,OnitemClickListner.OnFrequentAddressClicked {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
     private String mParam2;
-
+    private View view;
+    private ArrayList<CardData> cardDataList;
     private RecyclerView recyclerCardList;
     private ImageButton btnAddCard;
+    private CardListAdapter adapter;
 
 
 
@@ -50,8 +65,13 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_card_list, container, false);
+        if(view==null) {
+            view = inflater.inflate(R.layout.fragment_card_list, container, false);
+            initViews(view);
+            initListeners();
+            getCarList();
+        }
+        return view;
     }
 
 
@@ -79,8 +99,65 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
 
         switch (view.getId()){
             case R.id.imgAddCard:
-
+                Intent addCardIntent=new Intent(mActivity, AddCardActivity.class);
+                startActivityForResult(addCardIntent,AddCardActivity.REQUEST_ADD_CARD);
                 break;
+        }
+    }
+
+
+    private void getCarList(){
+        Progress.showprogress(mActivity,"Loading cards..",false);
+        String authToken=appPreference.getUserDetails().getToken();
+        PaymentRequest request=new PaymentRequest();
+        request.getPaymentCardList(authToken, new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                Progress.dismissProgress();
+                CardListBean cardListBean=(CardListBean)body;
+                if(cardListBean!=null && cardListBean.getCards().size()!=0) {
+                    cardDataList =cardListBean.getCards();
+                    setCardAdapter(cardDataList);
+
+                }
+            }
+
+            @Override
+            public void onRequestFailed(String message) {
+                Progress.dismissProgress();
+                mActivity.showSnackbar(message,0);
+            }
+        });
+    }
+
+    private void setCardAdapter(ArrayList<CardData> cardDataList ){
+
+        adapter=new CardListAdapter(mActivity,cardDataList,this);
+        recyclerCardList.setAdapter(adapter);
+    }
+
+    @Override
+    public void onitemclicked(View view, int position) {
+
+        if(cardDataList!=null){
+            CardData selectCard=cardDataList.get(position);
+        }
+    }
+
+    @Override
+    public void onfrequentAddressclicked(View view, int position) {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==REQUEST_ADD_CARD && resultCode==mActivity.RESULT_OK){
+           if(data!=null){
+               CardData newlyAddedCard=data.getParcelableExtra(AddCardActivity.KEY_CARD_DATA);
+               cardDataList.add(newlyAddedCard);
+               adapter.notifyDataSetChanged();
+               mActivity.showSnackbar("Card added Successfully.",0);
+           }
         }
     }
 }

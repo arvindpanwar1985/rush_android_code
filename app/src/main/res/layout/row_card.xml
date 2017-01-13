@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
-    android:background="@drawable/bg_app">
+    android:background="@android:color/transparent">
 
     <View
         android:layout_width="match_parent"
@@ -21,18 +20,32 @@
         >
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:padding="@dimen/dp_3"
             android:id="@+id/imgCardType"
-            android:src="@drawable/visa_icon"/>
+            />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txtCardNumber"
+            android:id="@+id/txtCardType"
             android:layout_toRightOf="@+id/imgCardType"
+            android:textColor="@android:color/white"
+            android:textStyle="bold|italic"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/sp_16"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginRight="@dimen/dp_4"
+            android:text="CREDIT"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtCardNumber"
+            android:layout_toRightOf="@+id/txtCardType"
             android:textColor="@android:color/white"
             android:textStyle="bold|italic"
             android:layout_centerVertical="true"

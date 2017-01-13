@@ -75,7 +75,13 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ui.activities.CardListActivity"></activity>
+        <activity
+            android:name=".ui.activities.CardListActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".ui.activities.AddCardActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

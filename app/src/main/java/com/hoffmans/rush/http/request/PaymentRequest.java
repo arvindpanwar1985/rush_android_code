@@ -1,7 +1,6 @@
 package com.hoffmans.rush.http.request;
 
 import com.hoffmans.rush.bean.CardListBean;
-import com.hoffmans.rush.bean.MessageBean;
 import com.hoffmans.rush.http.ConnectionManager;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.listners.BaseListener;
@@ -35,10 +34,10 @@ public class PaymentRequest extends BaseRequest {
                     boolean status = obj.getBoolean(SUCCESS);
                     String message=obj.getString(MESSAGE);
                     if (status) {
-                        MessageBean messageBean=new MessageBean();
-                        messageBean.setMessage(message);
-
-                        callback.onRequestSuccess(messageBean);
+                        String data = obj.getJSONObject(DATA).toString();
+                        CardListBean bean = getGsonBuilder().fromJson(data, CardListBean.class);
+                        bean.setMessage(message);
+                        callback.onRequestSuccess(bean);
                     } else {
                         callback.onRequestFailed(message);
                     }
@@ -59,7 +58,7 @@ public class PaymentRequest extends BaseRequest {
 
     /**
      *
-      *@param authToken authentication os user
+      *@param authToken authentication os u
      * @param callback
      */
 
@@ -71,9 +70,12 @@ public class PaymentRequest extends BaseRequest {
             @Override
             public void onWebServiceComplete(ResponseBody responseBody) {
                 try {
+                    String message="";
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-                    String message=obj.getString(MESSAGE);
+                    if(obj.has(MESSAGE)){
+                        message=obj.getString(MESSAGE);
+                    }
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
                         CardListBean bean = getGsonBuilder().fromJson(data, CardListBean.class);

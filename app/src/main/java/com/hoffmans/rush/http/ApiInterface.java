@@ -24,7 +24,7 @@ import retrofit2.http.PartMap;
 public interface ApiInterface {
 
     @FormUrlEncoded
-    @POST("/auth/authenticate")
+    @POST("/auth/authenticat")
     Call<ResponseBody> login(@Field("login") String email,@Field("password") String password);
 
     @FormUrlEncoded

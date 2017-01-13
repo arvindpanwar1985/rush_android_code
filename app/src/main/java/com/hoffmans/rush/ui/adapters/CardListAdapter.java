@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.listners.OnitemClickListner;
+import com.hoffmans.rush.model.CardData;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by devesh on 13/1/17.
@@ -20,7 +22,7 @@ import java.util.List;
 public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHolder> {
 
 
-    private List<String> addressdata;
+    private ArrayList<CardData> cardDataList;
     private Context mContext;
     private OnitemClickListner.OnFrequentAddressClicked mItemClickListener;
 
@@ -32,13 +34,14 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
 
 
         ImageView imgCardType;
-        TextView  txtCardnumber;
+        TextView  txtCardnumber,txtCardtype;
         View bottomLine;
 
         public ViewHolder(View v) {
             super(v);
             imgCardType  =(ImageView)v.findViewById(R.id.imgCardType);
             txtCardnumber=(TextView)v.findViewById(R.id.txtCardNumber);
+            txtCardtype=(TextView)v.findViewById(R.id.txtCardType);
             bottomLine   =(View)v.findViewById(R.id.viewCardBottomLine);
             v.setOnClickListener(this);
 
@@ -49,14 +52,14 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
 
             if (mItemClickListener != null) {
 
-                //mItemClickListener.onitemclicked(v,getPosition());
+                mItemClickListener.onitemclicked(v,getPosition());
             }
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public CardListAdapter(Context context,List<String > addressData, OnitemClickListner.OnFrequentAddressClicked listner) {
-        addressdata=addressData;
+    public CardListAdapter(Context context, ArrayList<CardData> cardData, OnitemClickListner.OnFrequentAddressClicked listner) {
+        cardDataList=cardData;
         mContext=context;
         mItemClickListener = listner;
 
@@ -67,7 +70,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
     public CardListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                             int viewType) {
         // create a new view
-        View v = LayoutInflater.from(parent.getContext())
+        View v = LayoutInflater.from(mContext)
                 .inflate(R.layout.row_card, parent, false);
         // set the view's size, margins, paddings and layout parameters
 
@@ -79,6 +82,19 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
     @Override
     public void onBindViewHolder(CardListAdapter.ViewHolder holder, final int position) {
 
+        if(position==cardDataList.size()-1){
+            holder.bottomLine.setVisibility(View.VISIBLE);
+        }else{
+            holder.bottomLine.setVisibility(View.GONE);
+        }
+        final CardData cardData=cardDataList.get(position);
+        try {
+            holder.txtCardnumber.setText("************" + cardData.getLast4());
+            Glide.with(mContext).load(cardData.getImageUrl()).into(holder.imgCardType);
+            holder.txtCardtype.setText(cardData.getCardType());
+        }catch (NullPointerException e){
+
+        }
 
 
     }
@@ -86,7 +102,9 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return addressdata.size();
+        return cardDataList.size();
     }
+
+
 
 }
