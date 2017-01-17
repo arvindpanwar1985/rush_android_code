@@ -25,6 +25,7 @@ public class Constants {
     public static final String KEY_CURRENT_PASSWORD  ="user[current_password]";
     public static final String KEY_NEW_PASSWORD      ="user[password]";
     public static final String KEY_PASSWORD_CONFIRMATION="user[password_confirmation]";
+    public static final String KEY_IS_CARD_SELECTABLE="is_card_selectable";
 
 
 

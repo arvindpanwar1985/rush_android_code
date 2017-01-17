@@ -101,10 +101,10 @@
         android:background="@color/colorPrimaryDark">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/dp_10"
             android:id="@+id/imgCardType"
             android:src="@drawable/visa_icon"/>
 
@@ -117,6 +117,7 @@
             android:textStyle="bold|italic"
             android:layout_centerVertical="true"
             android:textSize="@dimen/sp_16"
+            android:layout_marginLeft="@dimen/dp_7"
             android:layout_marginRight="@dimen/dp_4"
             android:text="PERSONAL *********4567"
             android:layout_toLeftOf="@+id/imgArrow"/>

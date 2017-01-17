@@ -34,11 +34,23 @@ import com.hoffmans.rush.R;
 import com.hoffmans.rush.listners.OnitemClickListner;
 import com.hoffmans.rush.location.LocationData;
 import com.hoffmans.rush.location.LocationInterface;
-import com.hoffmans.rush.ui.activities.ConfirmServiceActivity;
+import com.hoffmans.rush.model.FetchAddressEvent;
+import com.hoffmans.rush.model.PickDropAddress;
+import com.hoffmans.rush.model.Service;
+import com.hoffmans.rush.services.BuildAddressService;
 import com.hoffmans.rush.ui.adapters.LoadAddressAdapter;
+import com.hoffmans.rush.utils.DateUtils;
+import com.hoffmans.rush.utils.Progress;
+import com.hoffmans.rush.utils.Utils;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
 
 import static android.app.Activity.RESULT_CANCELED;
 
@@ -54,10 +66,10 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     private String TAG=SelectVechileFragment.class.getCanonicalName();
     private int clickedAddressPostion;
 
-    // TODO: Rename and change types of parameters
+
     private String mParam1;
     private String mParam2;
-    private List<String> listAddressData=new ArrayList<>();
+    private ArrayList<PickDropAddress> listAddressData=new ArrayList<>();
     private View view;
     private RecyclerView recyclerView;
     private LoadAddressAdapter addressAdapter;
@@ -69,9 +81,11 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     private GoogleMap mGoogleMap;
     private Location mCurrentLocation;
     private boolean isVehicleSelected;
+    private DateUtils mDateUtils;
+
 
     private GoogleApiClient mGoogleApiClient;
-
+    // = new Geocoder(mActivity, Locale.getDefault());
 
 
 
@@ -98,13 +112,17 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
+
+        mDateUtils=DateUtils.getInstance();
+
 
         mGoogleApiClient = new GoogleApiClient
                 .Builder(mActivity)
                 .addApi(Places.GEO_DATA_API)
                 .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(mActivity, this)
+                .addOnConnectionFailedListener(this)
                 .build();
 
 
@@ -164,8 +182,12 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             initViews(view);
             initListeners();
             listAddressData.clear();
-            listAddressData.add("");
-            listAddressData.add("");
+            PickDropAddress start_address =new PickDropAddress();
+            PickDropAddress end_address   =new PickDropAddress();
+            start_address.setStreetAddress("");
+            end_address.setStreetAddress("");
+            listAddressData.add(start_address);
+            listAddressData.add(end_address);
             addressAdapter=new LoadAddressAdapter(mActivity,listAddressData,this);
             recyclerView.setAdapter(addressAdapter);
             checkPermission();
@@ -174,8 +196,18 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
 
 
+    @Override
+    public void onPause() {
+        EventBus.getDefault().unregister(this);
+        super.onPause();
+    }
 
     /**
      * check the permission
@@ -196,7 +228,9 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         switch (view.getId()){
             case R.id.imgAddMoreAddress:
                 if(listAddressData.size()!=4){
-                    listAddressData.add("");
+                    PickDropAddress newDetination=new PickDropAddress();
+                    newDetination.setStreetAddress("");
+                    listAddressData.add(newDetination);
                     addressAdapter.notifyDataSetChanged();
                 }
                 break;
@@ -207,10 +241,10 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                 enableReservation();
                 break;
             case R.id.txtEstimatePrice:
-                //validateFields();
-                Intent confirmSercviceIntet=new Intent(mActivity, ConfirmServiceActivity.class);
-                confirmSercviceIntet.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(confirmSercviceIntet);
+                validateFields();
+                //Intent confirmSercviceIntet=new Intent(mActivity, ConfirmServiceActivity.class);
+               // confirmSercviceIntet.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                //startActivity(confirmSercviceIntet);
                 break;
 
             case R.id.imgTypeCycle:
@@ -234,8 +268,8 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         if(listAddressData==null){
             return;
         }
-        String source =listAddressData.get(0);
-        String destination=listAddressData.get(1);
+        String source =listAddressData.get(0).getStreetAddress();
+        String destination=listAddressData.get(1).getStreetAddress();
         if(TextUtils.isEmpty(source)){
             mActivity.showSnackbar("Please select source",0);
             return;
@@ -244,14 +278,37 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             mActivity.showSnackbar("Please select destination",0);
             return;
         }
-        if(!isVehicleSelected){
+        if(!isVehicleSelected && getVechileType()==-1){
             mActivity.showSnackbar("Please select vehicle",0);
             return;
         }
 
+         Progress.showprogress(mActivity,"Please wait..",false);
+         BuildAddressService.buildAddresses(mActivity,listAddressData);
 
 
     }
+
+
+    /**
+     *
+     * @param event from buildAddress intent service
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFetchAddressEvent(FetchAddressEvent event) {
+        Progress.dismissProgress();
+        if(event.isSucess()){
+
+            DateUtils dateUtils=DateUtils.getInstance();
+            Service service =event.getService();
+            service.setVehicle_type_id(getVechileType());
+            if(dateUtils.getUtcDateTime()!=null){
+             service.setDate(dateUtils.getUtcDateTime());
+            }
+
+        }
+    }
+
 
 
     @Override
@@ -290,23 +347,26 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             txtNow.setBackground(ContextCompat.getDrawable(mActivity,R.drawable.bg_reservation_btn));
             txtNow.setTextColor(ContextCompat.getColor(mActivity,android.R.color.white));
             txtReservation.setSelected(true);
+            showDatePicker();
+
         }
     }
 
 
-    private  void getVechileType(){
+    private  int getVechileType(){
         if(imgTypeCar.isSelected()){
-            return;
+            return 2;
         }
         if(imgTypeBike.isSelected()){
-            return;
+            return 1;
         }
         if(imgTypeCycle.isSelected()){
-            return;
+            return 0;
         }
         if(imgTypeTruck.isSelected()){
-            return;
+            return 3;
         }
+        return  -1;
     }
 
     private void setBackgroundVehicle(ImageView view){
@@ -399,14 +459,63 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     }
 
 
+    /**
+     *
+     * @param place place from autocompleter
+     * @param position postion of list to be refreshed.
+     */
     private void setAddress(Place place ,int position){
 
-            listAddressData.set(position, place.getAddress().toString());
+            PickDropAddress pickDropAddress=listAddressData.get(position);
+            pickDropAddress.setStreetAddress(place.getAddress().toString());
+            pickDropAddress.setLatitude(place.getLatLng().latitude);
+            pickDropAddress.setLongitude(place.getLatLng().longitude);
+            listAddressData.set(position, pickDropAddress);
             addressAdapter.notifyDataSetChanged();
             if(position==DESTINATION_SELECTED){
                 txtEstimateCost.setVisibility(View.VISIBLE);
             }
 
+    }
+
+
+    private void showDatePicker(){
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+                        String date =mActivity.formatDate(year,monthOfYear,dayOfMonth);
+                        showTimePicker(date);
+                    }
+                },
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        dpd.setTitle("Select date");
+        dpd.show(mActivity.getFragmentManager(), "Datepickerdialog");
+    }
+
+
+
+    private void showTimePicker(final String date){
+        Calendar now = Calendar.getInstance();
+        TimePickerDialog dpd = TimePickerDialog.newInstance(
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+
+                        Log.e("dateTime",date+" "+hourOfDay+":"+minute+":"+second);
+                        String dateTime=date+"T"+hourOfDay+":"+minute+":"+second+"Z";
+                        Utils.showAlertDialog(mActivity,mDateUtils.getUtcDateTime(dateTime));
+                    }
+                },
+                now.get(Calendar.HOUR_OF_DAY),
+                now.get(Calendar.MINUTE),
+                now.get(Calendar.SECOND),true
+        );
+        dpd.show(mActivity.getFragmentManager(), "Datepickerdialog");
     }
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -441,11 +550,21 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         }
     }
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         mLocationData.disconnect();
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.stopAutoManage(mActivity);
+            mGoogleApiClient.disconnect();
+        }
     }
+
+
+
+
+
 
 
 

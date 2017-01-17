@@ -33,6 +33,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.utils.DateUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 
 /**
  * Created by devesh on 19/12/16.
@@ -284,9 +288,10 @@ public abstract  class BaseActivity extends AppCompatActivity {
                 mActionBarSize=0;
             }
             toast.setGravity(Gravity.TOP | Gravity.FILL_HORIZONTAL, 0, mActionBarSize);
-            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setDuration(Toast.LENGTH_LONG);
             toast.setView(layout);
             toast.show();
+
         }
     }
     public  Toast getToast(){
@@ -383,12 +388,29 @@ public abstract  class BaseActivity extends AppCompatActivity {
 
 
 
+    /**
+     * format the date String
+     * @param year
+     * @param month
+     * @param day
+     * @return
+     */
+    public String formatDate(int year, int month, int day) {
+
+        GregorianCalendar c = new GregorianCalendar(year, month, day);
+//        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat(DateUtils.DATE_FORMAT);
+        return sdf.format(c.getTime());
+    }
+
 
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
         userIsInteracting = true;
     }
+
+
 
 
 

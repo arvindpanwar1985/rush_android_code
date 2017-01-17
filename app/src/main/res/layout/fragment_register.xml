@@ -55,16 +55,44 @@
                     android:hint="@string/str_fullname"
                     style="@style/AppTheme.Input"></EditText>
 
+            <android.support.design.widget.TextInputLayout
+
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_height="wrap_content"
+                app:hintEnabled="false"
+                app:passwordToggleEnabled="true">
+
                 <EditText
 
-                    android:layout_marginTop="@dimen/dp_10"
+
                     android:id="@+id/frEdtPassword"
+
                     android:drawableLeft="@drawable/ic_pass"
+                    android:drawableStart="@drawable/ic_pass"
                     android:inputType="textWebPassword|textNoSuggestions"
                     android:hint="@string/str_password"
                     style="@style/AppTheme.Input"></EditText>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_height="wrap_content"
+                app:hintEnabled="false"
+                app:passwordToggleEnabled="true">
+            <EditText
 
 
+                android:id="@+id/frEdtConfirmPassword"
+                android:drawableLeft="@drawable/ic_pass"
+                android:drawableStart="@drawable/ic_pass"
+                android:inputType="textWebPassword|textNoSuggestions"
+                android:hint="@string/hint_confirm_password"
+                style="@style/AppTheme.Input"></EditText>
+
+</android.support.design.widget.TextInputLayout>
 
 
 

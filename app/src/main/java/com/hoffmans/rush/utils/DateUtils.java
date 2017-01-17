@@ -16,8 +16,9 @@ public class DateUtils {
 
 
     public static String DEFAULT_FORMAT="yyyy-MM-dd HH:mm:ss";
-    public static String DATE_FORMAT="dd-MM-yyyy";
+    public static String DATE_FORMAT="yyyy-MM-dd";
     private static DateUtils mDateUtils;
+    public static String GMT_FORMAT="yyyy-MM-dd'T'HH:mm:ss'Z'";
     private String daysList[] = {"Sunday", "Monday", "Tuesday", "Wednesday",
             "Thursday", "Friday", "Saturday"};
 
@@ -126,6 +127,41 @@ public class DateUtils {
     }
 
 
+
+
+    public String getUtcDateTime() {
+
+        SimpleDateFormat dateFormat=null;
+        try {
+            dateFormat = new SimpleDateFormat(GMT_FORMAT);
+            TimeZone utcZone = TimeZone.getTimeZone("UTC");
+            dateFormat.setTimeZone(utcZone);
+            Date date=new Date();
+            return dateFormat.format(date);
+        }  catch (Exception e) {
+            e.printStackTrace();
+            return  null;
+        }
+
+    }
+
+
+    public String getUtcDateTime(String dateString) {
+        Date convertedDate = null;
+        SimpleDateFormat dateFormat=null;
+        try {
+            dateFormat = new SimpleDateFormat(GMT_FORMAT);
+            TimeZone utcZone = TimeZone.getTimeZone("GMT");
+            dateFormat.setTimeZone(utcZone);
+            convertedDate = dateFormat.parse(dateString);
+            //eturn  convertedDate.toString();
+            return dateFormat.format(convertedDate);
+        }  catch (Exception e) {
+            e.printStackTrace();
+            return  null;
+        }
+
+    }
     /**
      * get the day name from given date object
      * @param date
@@ -217,7 +253,5 @@ public class DateUtils {
     }
 
 
-
-
-    }
+ }
 

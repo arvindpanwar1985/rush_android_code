@@ -1,5 +1,6 @@
 package com.hoffmans.rush.ui.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.listners.OnitemClickListner;
 import com.hoffmans.rush.model.CardData;
 import com.hoffmans.rush.ui.activities.AddCardActivity;
+import com.hoffmans.rush.ui.activities.ConfirmServiceActivity;
 import com.hoffmans.rush.ui.adapters.CardListAdapter;
 import com.hoffmans.rush.utils.Progress;
 
@@ -29,7 +31,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private String mParam1;
+    private boolean isCardSelectable;
     private String mParam2;
     private View view;
     private ArrayList<CardData> cardDataList;
@@ -44,11 +46,11 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
     }
 
 
-    public static CardListFragment newInstance(String param1, String param2) {
+    public static CardListFragment newInstance(boolean param1, String param2) {
         CardListFragment fragment = new CardListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putBoolean(ARG_PARAM1, param1);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,8 +59,8 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            isCardSelectable = getArguments().getBoolean(ARG_PARAM1);
+
         }
     }
 
@@ -139,8 +141,12 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onitemclicked(View view, int position) {
 
-        if(cardDataList!=null){
+        if(cardDataList!=null && isCardSelectable){
             CardData selectCard=cardDataList.get(position);
+            Intent intent=new Intent();
+            intent.putExtra(ConfirmServiceActivity.KEY_CARD_DATA,selectCard);
+            getActivity().setResult(Activity.RESULT_OK,intent);
+            mActivity.finish();
         }
     }
 

@@ -78,7 +78,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     private static final int GALLERY_PIC_REQUEST   = 102;
     private static final String ARG_PARAM1         = "param1";
     private static final String ARG_PARAM2         = "param2";
-    private EditText edtname,edtEmail,edtphone,edtoldPassword,edtNewPassword,edtConfirmNewPassword,edtcc;
+    private EditText edtname,edtEmail,edtphone,edtoldPassword,edtNewPassword,edtConfirmNewPassword;
     private RelativeLayout linearNewPass,linearConfirmNewPass,linearOldPass,topView;
     private TextView editableName,editableNumber,editablePassword;
     private CircleImageView imgProfilePic;
@@ -141,7 +141,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         edtname=(EditText)view.findViewById(R.id.fEPEdtname);
         edtEmail=(EditText)view.findViewById(R.id.fEPEdtEmail);
         edtphone=(EditText)view.findViewById(R.id.fEPEdtPhone);
-        edtcc=(EditText)view.findViewById(R.id.fEPEdtCC);
+       // edtcc=(EditText)view.findViewById(R.id.fEPEdtCC);
         edtoldPassword=(EditText)view.findViewById(R.id.fEPEdtPassword);
         edtNewPassword=(EditText)view.findViewById(R.id.fEPEdtNewPassword);
         edtConfirmNewPassword=(EditText)view.findViewById(R.id.fEPEdtConfirmPassword);
@@ -156,7 +156,6 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         imgProfilePic=(CircleImageView)view.findViewById(R.id.fEPImgProfile);
         spinnerCurrency=(Spinner)view.findViewById(R.id.spinnerCurrency);
         topView =(RelativeLayout)view.findViewById(R.id.topRegistration);
-
         if(appPreference.getUserDetails().isSocialProvider()){
             linearOldPass.setVisibility(View.GONE);
         }
@@ -199,11 +198,13 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
                      editablePassword.setText("edit");
                      isEditablePassClicked=false;
                      edtoldPassword.setEnabled(false);
+                     edtoldPassword.setHint(getString(R.string.str_password));
                      linearNewPass.setVisibility(View.GONE);
                      linearConfirmNewPass.setVisibility(View.GONE);
                  }else{
                      isEditablePassClicked=true;
                      edtoldPassword.setEnabled(true);
+                     edtoldPassword.setHint(getString(R.string.str_hint_password));
                      editablePassword.setText("cancel");
                      linearNewPass.setVisibility(View.VISIBLE);
                      linearConfirmNewPass.setVisibility(View.VISIBLE);
@@ -260,9 +261,8 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         String newpassword = edtNewPassword.getText().toString().trim();
         String confirmNewpassword = edtConfirmNewPassword.getText().toString().trim();
         String fullname = edtname.getText().toString().trim();
-        String cc =edtcc.getText().toString().trim();
-        String number = edtphone.getText().toString().trim();
-        String phoneNo = cc+number;
+        String phoneNo = edtphone.getText().toString().trim();
+
         // Check for a valid email address.
         if (TextUtils.isEmpty(fullname) && isEditableName) {
             mActivity.showSnackbar(getString(R.string.error_empty_name), Toast.LENGTH_SHORT);
@@ -639,7 +639,9 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         }else if(requestCode==GALLERY_PIC_REQUEST &&resultCode==RESULT_OK && data != null && data.getData() != null){
             Uri uri = data.getData();
             mCurrentPhotoPath= Utils.getRealPathFromURI(mActivity,uri);
-            setPic();
+            if(mCurrentPhotoPath!=null) {
+                setPic();
+            }
         }
     }
 

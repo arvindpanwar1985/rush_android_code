@@ -17,6 +17,7 @@ import com.hoffmans.rush.R;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.fragments.SelectVechileFragment;
 import com.hoffmans.rush.utils.AppPreference;
+import com.hoffmans.rush.utils.Constants;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -124,7 +125,7 @@ public class BookServiceActivity extends BaseActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            finish();
         }
     }
 
@@ -156,9 +157,16 @@ public class BookServiceActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_order) {
-            SelectVechileFragment selectVechileFragment= SelectVechileFragment.newInstance("","");
-            replaceFragment(selectVechileFragment,R.id.activity_navigation_content,true);
-        } else if (id == R.id.nav_record) {
+           SelectVechileFragment selectVechileFragment= SelectVechileFragment.newInstance("","");
+           replaceFragment(selectVechileFragment,R.id.activity_navigation_content,true);
+        }else if(id==R.id.nav_pay){
+            Intent cardListIntent=new Intent(BookServiceActivity.this, CardListActivity.class);
+            cardListIntent.putExtra(Constants.KEY_IS_CARD_SELECTABLE,false);
+            startActivity(cardListIntent);
+
+        }
+
+        else if (id == R.id.nav_record) {
 
         } else if (id == R.id.nav_scheduled) {
 

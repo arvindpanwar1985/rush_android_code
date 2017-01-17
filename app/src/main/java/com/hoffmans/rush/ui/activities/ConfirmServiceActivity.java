@@ -10,6 +10,8 @@ import com.hoffmans.rush.ui.fragments.ConfirmServiceFragment;
  */
 
 public class ConfirmServiceActivity extends BaseActivity {
+
+    public static final String KEY_CARD_DATA="key_card_data";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

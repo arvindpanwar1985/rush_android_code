@@ -1,5 +1,7 @@
 package com.hoffmans.rush.http;
 
+import com.hoffmans.rush.model.EstimateServiceParams;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +26,7 @@ import retrofit2.http.PartMap;
 public interface ApiInterface {
 
     @FormUrlEncoded
-    @POST("/auth/authenticat")
+    @POST("/auth/authenticate")
     Call<ResponseBody> login(@Field("login") String email,@Field("password") String password);
 
     @FormUrlEncoded
@@ -64,5 +66,7 @@ public interface ApiInterface {
     Call<ResponseBody> getCardList(@Header("Authorization")String authorization);
 
 
+    @POST("/api/services/estimate_service")
+    Call<ResponseBody> estimateService(@Header("Authorization")String authorization , @Body EstimateServiceParams estimateServiceParams);
 
 }

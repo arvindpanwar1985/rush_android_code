@@ -62,23 +62,26 @@
             android:text="@string/str_create_account"
             android:layout_gravity="start"
             android:padding="@dimen/dp_2"
+            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/flForgotPass"
             android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textSize="@dimen/dp_14"/>
+            android:textStyle="bold|italic"
+            android:textSize="@dimen/sp_14"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:id="@+id/flForgotPass"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:padding="@dimen/dp_2"
-            android:layout_toLeftOf="@+id/flCreateAccount"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:text="@string/str_has_forgotPass"
             android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textSize="@dimen/dp_14"/>
+            android:textStyle="bold|italic"
+            android:textSize="@dimen/sp_16"/>
         </RelativeLayout>
 
 </RelativeLayout>

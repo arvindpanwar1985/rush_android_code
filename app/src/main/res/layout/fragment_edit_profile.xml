@@ -128,16 +128,24 @@
                 android:layout_marginRight="@dimen/dp_20"
 
                 android:orientation="horizontal">
+                <android.support.design.widget.TextInputLayout
 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:hintEnabled="false"
+                    android:layout_toLeftOf="@+id/editablePassword"
+                    app:passwordToggleEnabled="true">
 
                     <EditText
                         android:layout_width="match_parent"
                         android:id="@+id/fEPEdtPassword"
                         android:drawableLeft="@drawable/ic_pass"
+                        android:drawableStart="@drawable/ic_pass"
                         android:inputType="textWebPassword|textNoSuggestions"
-                        android:layout_toLeftOf="@+id/editablePassword"
+
                         android:hint="@string/str_password"
                         style="@style/AppTheme.Input"></EditText>
+                </android.support.design.widget.TextInputLayout>
 
 
                 <TextView
@@ -146,7 +154,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerInParent="true"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="center|right"
                     android:text="edit"
                     android:gravity="center"
                     android:textSize="@dimen/sp_12"
@@ -164,18 +172,25 @@
                 android:layout_marginRight="@dimen/dp_20"
                 android:visibility="gone"
                 android:orientation="horizontal">
+                <android.support.design.widget.TextInputLayout
 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:hintEnabled="false"
+                    android:layout_toLeftOf="@+id/txtNewPass"
+                    app:passwordToggleEnabled="true">
 
                     <EditText
                         android:layout_width="match_parent"
                         android:drawableLeft="@drawable/ic_pass"
+                        android:drawableStart="@drawable/ic_pass"
                         android:id="@+id/fEPEdtNewPassword"
                         android:inputType="textWebPassword|textNoSuggestions"
-                        android:layout_toLeftOf="@+id/txtNewPass"
+
                         android:hint="@string/hint_new_password"
                         style="@style/AppTheme.Input"></EditText>
 
-
+                 </android.support.design.widget.TextInputLayout>
                 <TextView
                     android:id="@+id/txtNewPass"
                     android:layout_width="wrap_content"
@@ -203,6 +218,13 @@
                 android:visibility="gone"
                 android:orientation="horizontal">
 
+                <android.support.design.widget.TextInputLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:hintEnabled="false"
+                    android:layout_toLeftOf="@+id/txtConfirmPass"
+                    app:passwordToggleEnabled="true">
 
                     <EditText
 
@@ -210,10 +232,12 @@
                         android:id="@+id/fEPEdtConfirmPassword"
                         android:inputType="textWebPassword|textNoSuggestions"
                         android:drawableLeft="@drawable/ic_pass"
+                        android:drawableStart="@drawable/ic_pass"
                         android:layout_toLeftOf="@+id/txtConfirmPass"
                         android:hint="@string/hint_confirm_new_password"
                         style="@style/AppTheme.Input"></EditText>
 
+                </android.support.design.widget.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -258,26 +282,7 @@
                         android:padding="@dimen/dp_2"
                         android:src="@drawable/ic_phone"/>
 
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:id="@+id/fEPEdtCC"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/sp_16"
-                        android:layout_marginLeft="2dp"
-                        android:drawablePadding="@dimen/dp_3"
-                        android:singleLine="true"
-                        android:layout_gravity="center_vertical"
-                        android:textColor="@android:color/white"
-                        android:textColorHint="@android:color/white"
-                        android:textStyle="bold|italic"
-                        android:maxLength="3"
-                        android:paddingRight="@dimen/dp_2"
-                        android:paddingBottom="@dimen/dp_3"
-                        android:paddingLeft="@dimen/dp_6"
-                        android:paddingTop="@dimen/dp_3"
-                        android:hint="CC"
-                        android:inputType="phone|textNoSuggestions"
-                        android:background="@android:color/transparent"/>
+
 
                     <EditText
                         android:layout_width="match_parent"

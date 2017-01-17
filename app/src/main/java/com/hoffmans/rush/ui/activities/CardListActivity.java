@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.ui.fragments.CardListFragment;
+import com.hoffmans.rush.utils.Constants;
 
 public class CardListActivity extends BaseActivity {
 
@@ -13,7 +14,8 @@ public class CardListActivity extends BaseActivity {
         getLayoutInflater().inflate(R.layout.activity_card_list, getParentView());
         initToolBar(" ",false);
         hideToolbar();
-        CardListFragment fragment=CardListFragment.newInstance("","");
+        boolean isCardSelectable=getIntent().getBooleanExtra(Constants.KEY_IS_CARD_SELECTABLE,false);
+        CardListFragment fragment=CardListFragment.newInstance(isCardSelectable,"");
         replaceFragment(fragment,R.id.content_cardList,false);
 
 

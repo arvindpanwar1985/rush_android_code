@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.listners.OnitemClickListner;
+import com.hoffmans.rush.model.PickDropAddress;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ import java.util.List;
 public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter.ViewHolder> {
 
 
-    private List<String> addressdata;
+    private List<PickDropAddress> addressdata;
     private Context mContext;
     private OnitemClickListner.OnFrequentAddressClicked mItemClickListener;
 
@@ -52,7 +53,7 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public LoadAddressAdapter(Context context,List<String > addressData, OnitemClickListner.OnFrequentAddressClicked listner) {
+    public LoadAddressAdapter(Context context,List<PickDropAddress> addressData, OnitemClickListner.OnFrequentAddressClicked listner) {
         addressdata=addressData;
         mContext=context;
         mItemClickListener = listner;
@@ -81,10 +82,10 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
         }else{
             holder.txtAddress.setHint(mContext.getString(R.string.str_hint_end));
         }
-        final  String address=addressdata.get(position);
-        if(!TextUtils.isEmpty(address)){
+        final  PickDropAddress address=addressdata.get(position);
+        if(!TextUtils.isEmpty(address.getStreetAddress())){
             //update address
-            holder.txtAddress.setText(address);
+            holder.txtAddress.setText(address.getStreetAddress());
         }
 
         holder.txtAddress.setOnClickListener(new View.OnClickListener() {

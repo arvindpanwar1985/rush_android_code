@@ -79,9 +79,14 @@
             android:name=".ui.activities.CardListActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ui.activities.AddCardActivity"
+        <activity
+            android:name=".ui.activities.AddCardActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+
+        <service
+            android:name=".services.BuildAddressService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

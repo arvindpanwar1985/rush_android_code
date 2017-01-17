@@ -89,7 +89,7 @@ import static android.app.Activity.RESULT_OK;
 public class RegisterFragment extends BaseFragment implements View.OnClickListener,FacebookCallback<LoginResult>,AdapterView.OnItemSelectedListener {
 
     private static final String FILE_PROVIDER="com.example.android.fileprovider";
-    private EditText edtname,edtEmail,edtphone,edtPassword,edtcc;
+    private EditText edtname,edtEmail,edtphone,edtPassword,edtConfirmPassword,edtcc;
     private Button btnRegister,btnFb,btnGoogle;
     private CircleImageView imgProfilePic;
     private Spinner spinnerCurrency;
@@ -137,6 +137,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         edtphone=(EditText)view.findViewById(R.id.frEdtPhone);
         edtcc=(EditText)view.findViewById(R.id.frEdtCC);
         edtPassword=(EditText)view.findViewById(R.id.frEdtPassword);
+        edtConfirmPassword=(EditText)view.findViewById(R.id.frEdtConfirmPassword);
         btnRegister=(Button)view.findViewById(R.id.frBtnCreateAccount);
         btnFb=(Button)view.findViewById(R.id.frBtnFacebook);
         btnGoogle=(Button)view.findViewById(R.id.frBtnGoogle);
@@ -414,6 +415,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         // Store values at the time of the login attempt.
         String email = edtEmail.getText().toString().trim();
         String password = edtPassword.getText().toString().trim();
+        String confirmpassword = edtConfirmPassword.getText().toString().trim();
         String fullname=edtname.getText().toString().trim();
         String number=edtphone.getText().toString().trim();
         String countrycode=edtcc.getText().toString().trim();
@@ -438,12 +440,17 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             mActivity.showSnackbar(getString(R.string.error_empty_password), Toast.LENGTH_SHORT);
             return;
         }
+        if (!password.equals(confirmpassword)) {
+            mActivity.showSnackbar(getString(R.string.error_pass_not_matched), Toast.LENGTH_SHORT);
+            return;
+        }
         // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(password) || !Validation.isValidPassword(password)) {
             mActivity.showSnackbar(getString(R.string.error_title_invalid_password), Toast.LENGTH_SHORT);
 
             return;
         }
+
         if(TextUtils.isEmpty(phoneNo)){
             mActivity.showSnackbar(getString(R.string.error_empty_Mobile), Toast.LENGTH_SHORT);
             return;
@@ -452,10 +459,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             mActivity.showSnackbar(getString(R.string.error_title_invalid_Mobile), Toast.LENGTH_SHORT);
             return;
         }
-        if(TextUtils.isEmpty(mCurrentPhotoPath)){
-            mActivity.showSnackbar(getString(R.string.str_profile_pic), Toast.LENGTH_SHORT);
-            return;
-        }
+
         if(selectedCurrency==null){
            // mActivity.showSnackbar(getString(R.string.str_select_currency), Toast.LENGTH_SHORT);
             Snackbar.make(getView(),"Currency data not found!",Snackbar.LENGTH_LONG)
@@ -475,7 +479,18 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
     private void buildParams(String email,String password,String phoneNo,String fullname){
         try {
-            File fileToUpload=new File(mCurrentPhotoPath);
+            MultipartBody.Part imageFileBody=null;
+
+            if(!TextUtils.isEmpty(mCurrentPhotoPath)){
+                File fileToUpload=new File(mCurrentPhotoPath);
+                //compress the original file using zetbaitsu/Compressor
+                File compressedImageFile = Compressor.getDefault(mActivity).compressToFile(fileToUpload);
+                // add different media type to request body for image
+                RequestBody requestBody = RequestBody.create(MediaType.parse(Constants.CONTENT_IMAGE), compressedImageFile);
+                imageFileBody = MultipartBody.Part.createFormData(Constants.KEY_PIC, fileToUpload.getName(), requestBody);
+                // call api to create new account
+            }
+
             Map<String,RequestBody> requestBodyMap=new HashMap<>();
             requestBodyMap.put(Constants.KEY_EMAIL, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),email));
             requestBodyMap.put(Constants.KEY_PASSWORD, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),password));
@@ -486,12 +501,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             requestBodyMap.put(Constants.KEY_UDID, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),"adddf -dadf -adsfasd-d8773"));
             requestBodyMap.put(Constants.KEY_TYPE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),Constants.DEVICE_TYPE));
             requestBodyMap.put(Constants.KEY_CURRENCY, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),selectedCurrency.getId().toString()));
-            //compress the original file using zetbaitsu/Compressor
-            File compressedImageFile = Compressor.getDefault(mActivity).compressToFile(fileToUpload);
-            // add different media type to request body for image
-            RequestBody requestBody = RequestBody.create(MediaType.parse(Constants.CONTENT_IMAGE), compressedImageFile);
-            MultipartBody.Part imageFileBody = MultipartBody.Part.createFormData(Constants.KEY_PIC, fileToUpload.getName(), requestBody);
-            // call api to create new account
+
             createAccount(requestBodyMap,imageFileBody);
         }catch (Exception e){
 
@@ -629,14 +639,14 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_PIC_REQUEST && resultCode == RESULT_OK) {
             if(mCurrentPhotoPath!=null) {
-
                 setPic();
-
             }
         }else if(requestCode==GALLERY_PIC_REQUEST &&resultCode==RESULT_OK && data != null && data.getData() != null){
             Uri uri = data.getData();
             mCurrentPhotoPath= Utils.getRealPathFromURI(mActivity,uri);
-            setPic();
+            if (mCurrentPhotoPath!=null) {
+                setPic();
+            }
         }else if(requestCode ==REQUEST_GOOGLE_SIGNIN && resultCode == RESULT_OK){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);

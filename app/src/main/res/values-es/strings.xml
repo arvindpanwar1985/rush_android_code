@@ -21,6 +21,7 @@
     <string name="str_submit">Enviar</string>
     <string name ="str_fullname">Nombre completo</string>
     <string name="str_password">Contraseña</string>
+    <string name="str_hint_password">Contraseña anterior</string>
     <string name="str_email">Email</string>
     <string name="str_phone">Teléfono</string>
 
@@ -61,7 +62,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Ajustes</string>
 
-    <string name="str_verify_text">Le enviaremos un correo electrónico a su cuenta.Por favor, active su cuenta.</string>
+    <string name="str_verify_text">Se ha enviado un correo electrónico de confirmación a tu ID de correo electrónico, Confirma que para continuar</string>
 
     <string name="str_notification">Notificaciones</string>
 

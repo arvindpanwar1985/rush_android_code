@@ -4,7 +4,7 @@
     <string name="hint_password">Password</string>
     <string name="hint_new_password">New Password</string>
     <string name="hint_confirm_new_password">Confirm new Password</string>
-
+    <string name="hint_confirm_password">Confirm Password</string>
     <string name="str_login">Log in</string>
     <string name="str_create_account">Create Account</string>
     <string name="str_has_forgotPass">have you forgotten your password?</string>
@@ -24,6 +24,7 @@
     <string name="str_submit">Submit</string>
     <string name="str_fullname">Full name</string>
     <string name="str_password">Password</string>
+    <string name="str_hint_password">Old Password</string>
     <string name="str_email">Email</string>
     <string name="str_phone">Phone</string>
 
@@ -60,7 +61,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
 
-    <string name="str_verify_text">We\'ll send an email to you account.Please activate your account.</string>
+    <string name="str_verify_text">A confirmation email has been sent to your email id,Please confirm that to continue </string>
 
     <string name="str_notification">Notifications</string>
 
