@@ -93,6 +93,7 @@
     <string name="str_value_estimate">Valor estimado</string>
     <string name="str_value_time">Hora prevista</string>
     <string name="str_fav_message">Are you sure ,you want to mark this address to Favourite?</string>
+    <string name="str_marking_fav">Marking Favourite..</string>
 
 
 </resources>

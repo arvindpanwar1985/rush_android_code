@@ -22,7 +22,6 @@ import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.ui.activities.ForgotPassActivity;
-import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
 
@@ -136,20 +135,23 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
      */
     private void proceedToLogin(String email,String password){
 
-        Progress.showprogress(mActivity,"Loading..",false);
+        //Progress.showprogress(mActivity,"Loading..",false);
+        mActivity.showProgress();
         LoginRequest loginRequest =new LoginRequest();
         loginRequest.loginUser(email, password, new ApiCallback() {
             @Override
             public void onRequestSuccess(BaseBean body) {
-                Progress.dismissProgress();
+                //Progress.dismissProgress();
                 UserBean bean=(UserBean)body;
                 User user=bean.getUser();
                 handleLoginResult(user);
+                mActivity.hideProgress();
             }
 
             @Override
             public void onRequestFailed(String message) {
-                Progress.dismissProgress();
+                mActivity.hideProgress();
+                //Progress.dismissProgress();
                 Utils.showAlertDialog(mActivity,message);
             }
         });

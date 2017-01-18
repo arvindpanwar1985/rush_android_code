@@ -63,7 +63,7 @@ public interface ApiInterface {
     @GET("/api/currencies/all_currency_symbols")
     Call<ResponseBody> getCurrency();
 
-    @GET("/api/creditcard/listCards")
+    @GET("/api/creditcard/list_cards")
     Call<ResponseBody> getCardList(@Header("Authorization")String authorization);
 
 
@@ -72,5 +72,12 @@ public interface ApiInterface {
 
     @POST("/api/address/create_fav_address")
     Call<ResponseBody> createfavoriteAddress(@Header("Authorization")String authorization , @Body AddFavouriteBody addFavouriteBody);
+
+    @GET("/api/address/my_favorite")
+    Call<ResponseBody> getMyFavourite(@Header("Authorization")String authorization);
+
+    @FormUrlEncoded
+    @POST("/api/address/mark_favorite_unfavorite")
+    Call<ResponseBody> markFavUnfav(@Header("Authorization")String authorization,@Field("address_id") String password);
 
 }

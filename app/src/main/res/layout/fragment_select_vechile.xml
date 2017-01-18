@@ -49,6 +49,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/linearVehicle"
         android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimaryDark"
         android:orientation="vertical">
 
 
@@ -57,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             layout="@layout/layout_vehicle"/>
-        <TextView
+       <!-- <TextView
             android:id="@+id/txtEstimatePrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,7 +69,21 @@
             android:textStyle="bold|italic"
             android:textSize="@dimen/sp_18"
             android:visibility="gone"
-            android:background="@color/colorPrimaryDark"/>
+            android:background="@color/colorPrimaryDark"/>-->
+
+        <Button
+            android:id="@+id/btnEstimatePrice"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/dp_40"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_40"
+            android:text="ESTIMATE PRICE"
+            android:visibility="gone"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold|italic"
+            android:background="@drawable/bg_now_btn"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 

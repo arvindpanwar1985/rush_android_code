@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
     private TextView titleTxt;
     private ImageView imgLogo;
     private ProgressBar progressBar;
+    private RelativeLayout progressRelative;
     public boolean userIsInteracting;
 
 
@@ -58,7 +60,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //hide keyboard initially
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         Rect rectangle = new Rect();
         Window window = getWindow();
@@ -76,6 +78,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
 
         progressBar=(ProgressBar)findViewById(R.id.progressBar);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        progressRelative=(RelativeLayout)findViewById(R.id.progressRelative);
         titleTxt   =(TextView)findViewById(R.id.tv_toolbar);
         imgLogo=(ImageView)findViewById(R.id.imgLogo);
         if(toast==null){
@@ -104,7 +107,13 @@ public abstract  class BaseActivity extends AppCompatActivity {
     }
 
 
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(toast!=null) {
+            toast.cancel();
+        }
+    }
 
     /**
      * initialize Toolbar
@@ -291,8 +300,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
             toast.setDuration(Toast.LENGTH_LONG);
             toast.setView(layout);
             toast.show();
-
-        }
+         }
     }
     public  Toast getToast(){
         if(toast!=null){
@@ -305,11 +313,11 @@ public abstract  class BaseActivity extends AppCompatActivity {
 
 
     public  void showProgress(){
-        progressBar.setVisibility(View.VISIBLE);
+        progressRelative.setVisibility(View.VISIBLE);
     }
 
     public void hideProgress(){
-        progressBar.setVisibility(View.GONE);
+        progressRelative.setVisibility(View.GONE);
     }
 
     public Toolbar getToolBar(){

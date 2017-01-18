@@ -19,14 +19,33 @@
 
     </FrameLayout>
 
+    <RelativeLayout
+        android:id="@+id/progressRelative"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#8cc1413a"
+        android:visibility="gone"
+        android:clickable="true"
+        android:layout_below="@+id/toolbar">
 
      <ProgressBar
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:id="@+id/progressBar"
          android:layout_centerInParent="true"
-         android:visibility="gone"
+         android:visibility="visible"
          style="@style/Widget.AppCompat.ProgressBar"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loading.."
+            android:textColor="@android:color/white"
+            android:textStyle="bold|italic"
+            android:textSize="@dimen/sp_16"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/progressBar"/>
+        </RelativeLayout>
 
 </RelativeLayout>
 

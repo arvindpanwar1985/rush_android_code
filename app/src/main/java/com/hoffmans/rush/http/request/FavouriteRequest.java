@@ -52,4 +52,73 @@ public class FavouriteRequest extends BaseRequest {
         });
     }
 
+
+    public void getFavourites(String token,final ApiCallback callback){
+        Call<ResponseBody> favCall=getAPIClient().getMyFavourite(token);
+        ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(favCall);
+        connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
+            @Override
+            public void onWebServiceComplete(ResponseBody responseBody) {
+                try {
+                    JSONObject obj=new JSONObject(responseBody.string());
+                    boolean status = obj.getBoolean(SUCCESS);
+
+                    String message=obj.getString(MESSAGE);
+                    if (status) {
+                        String data = obj.getJSONObject(DATA).toString();
+                        FavouriteBean bean = getGsonBuilder().fromJson(data, FavouriteBean.class);
+                        bean.setMessage(message);
+                        callback.onRequestSuccess(bean);
+                    } else {
+                        callback.onRequestFailed(message);
+                    }
+
+                }catch (Exception e){
+                    callback.onRequestFailed(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onWebStatusFalse(String message) {
+                callback.onRequestFailed(message);
+            }
+
+
+        });
+    }
+
+    public void markFavUnFavourite(String token,String address_id,final ApiCallback callback){
+        Call<ResponseBody> favCall=getAPIClient().markFavUnfav(token,address_id);
+        ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(favCall);
+        connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
+            @Override
+            public void onWebServiceComplete(ResponseBody responseBody) {
+                try {
+                    JSONObject obj=new JSONObject(responseBody.string());
+                    boolean status = obj.getBoolean(SUCCESS);
+
+                    String message=obj.getString(MESSAGE);
+                    if (status) {
+                        String data = obj.getJSONObject(DATA).toString();
+                        FavouriteBean bean = getGsonBuilder().fromJson(data, FavouriteBean.class);
+                        bean.setMessage(message);
+                        callback.onRequestSuccess(bean);
+                    } else {
+                        callback.onRequestFailed(message);
+                    }
+
+                }catch (Exception e){
+                    callback.onRequestFailed(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onWebStatusFalse(String message) {
+                callback.onRequestFailed(message);
+            }
+
+
+        });
+    }
+
 }

@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,14 +37,20 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.bean.BaseBean;
+import com.hoffmans.rush.http.request.FavouriteRequest;
+import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.listners.OnitemClickListner;
 import com.hoffmans.rush.location.LocationData;
 import com.hoffmans.rush.location.LocationInterface;
+import com.hoffmans.rush.model.AddFavouriteBody;
 import com.hoffmans.rush.model.FetchAddressEvent;
 import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.Service;
 import com.hoffmans.rush.services.BuildAddressService;
+import com.hoffmans.rush.ui.activities.FavouriteActivity;
 import com.hoffmans.rush.ui.adapters.LoadAddressAdapter;
+import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.DateUtils;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Utils;
@@ -70,6 +77,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     private static final int  PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     private static final int REQUEST_LOCATION_PERMISSION=2;
     private static final int DESTINATION_SELECTED=1;
+    private static final int REQUEST_FAVOURITE=1008;
     private String TAG=SelectVechileFragment.class.getCanonicalName();
     private int clickedAddressPostion;
 
@@ -85,7 +93,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     private ImageView imageViewLoadMoreAddress;
     private TextView txtNow,txtReservation;
     private LocationData mLocationData;
-    private TextView txtEstimateCost;
+    private Button btnEstimateCost;
     private ImageView imgTypeCycle,imgTypeBike,imgTypeCar,imgTypeTruck;
     private GoogleMap mGoogleMap;
     private Location mCurrentLocation;
@@ -94,7 +102,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
 
     private GoogleApiClient mGoogleApiClient;
-    private Geocoder mGeocoder = new Geocoder(mActivity, Locale.getDefault());
+    private Geocoder mGeocoder;
 
 
 
@@ -126,7 +134,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
         mDateUtils=DateUtils.getInstance();
 
-
+        mGeocoder = new Geocoder(mActivity, Locale.getDefault());
         mGoogleApiClient = new GoogleApiClient
                 .Builder(mActivity)
                 .addApi(Places.GEO_DATA_API)
@@ -144,7 +152,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         imageViewLoadMoreAddress=(ImageView)view.findViewById(R.id.imgAddMoreAddress);
         txtNow                  =(TextView)view.findViewById(R.id.txtACNow);
         txtReservation          =(TextView)view.findViewById(R.id.txtACReserve);
-        txtEstimateCost         =(TextView)view.findViewById(R.id.txtEstimatePrice);
+        btnEstimateCost         =(Button) view.findViewById(R.id.btnEstimatePrice);
         recyclerView.setHasFixedSize(true);
         imgTypeCycle            =(ImageView)view.findViewById(R.id.imgTypeCycle);
         imgTypeBike             =(ImageView)view.findViewById(R.id.imgTypeBike);
@@ -165,7 +173,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         imageViewLoadMoreAddress.setOnClickListener(this);
         txtNow.setOnClickListener(this);
         txtReservation.setOnClickListener(this);
-        txtEstimateCost.setOnClickListener(this);
+        btnEstimateCost.setOnClickListener(this);
         imgTypeCar.setOnClickListener(this);
         imgTypeCycle.setOnClickListener(this);
         imgTypeTruck.setOnClickListener(this);
@@ -249,7 +257,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             case R.id.txtACReserve:
                 enableReservation();
                 break;
-            case R.id.txtEstimatePrice:
+            case R.id.btnEstimatePrice:
                 validateFields();
                 //Intent confirmSercviceIntet=new Intent(mActivity, ConfirmServiceActivity.class);
                // confirmSercviceIntet.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -442,11 +450,16 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
     @Override
     public void onfrequentAddressclicked(View view, int position) {
-
+        clickedAddressPostion=position;
+        Intent favIntent=new Intent(mActivity, FavouriteActivity.class);
+        favIntent.putExtra(Constants.KEY_IS_FAVOURITE_SELECTABLE,false);
+        startActivityForResult(favIntent,REQUEST_FAVOURITE);
     }
 
     @Override
     public void onFavoriteAddressclicked(View view, final int position) {
+        clickedAddressPostion=position;
+        // dialog to add to favourite
         try {
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mActivity);
             builder.setTitle(R.string.app_name)
@@ -458,12 +471,13 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                             dialog.dismiss();
                         }
                     })
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("Favourite", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                             PickDropAddress favouritePickDropAddress= listAddressData.get(position);
                             // Thread and Handler using Geocoder
+                            Progress.showprogress(mActivity,getString(R.string.str_marking_fav),false);
                             Thread thread = new Thread(new FindAddress(favouritePickDropAddress));
                             thread.start();
 
@@ -491,11 +505,25 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(mActivity, data);
                 mActivity.showSnackbar(status.getStatusMessage(),0);
-                } else if (resultCode == RESULT_CANCELED) {
                 }
+                else if (resultCode == RESULT_CANCELED) {
+                }
+        }else if(requestCode==REQUEST_FAVOURITE && resultCode==mActivity.RESULT_OK){
+            if(data!=null){
+                PickDropAddress favouriteSelectedAddress=data.getParcelableExtra("fav_data");
+                setFavouriteSelected(favouriteSelectedAddress,clickedAddressPostion);
+            }
         }
     }
 
+
+    private void setFavouriteSelected(PickDropAddress favouriteSelected,int position){
+        listAddressData.set(clickedAddressPostion,favouriteSelected);
+        addressAdapter.notifyDataSetChanged();
+        if(position==DESTINATION_SELECTED){
+            btnEstimateCost.setVisibility(View.VISIBLE);
+        }
+    }
 
     /**
      *
@@ -508,10 +536,11 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             pickDropAddress.setStreetAddress(place.getAddress().toString());
             pickDropAddress.setLatitude(place.getLatLng().latitude);
             pickDropAddress.setLongitude(place.getLatLng().longitude);
+            pickDropAddress.setAddress_label(place.getName().toString());
             listAddressData.set(position, pickDropAddress);
             addressAdapter.notifyDataSetChanged();
             if(position==DESTINATION_SELECTED){
-                txtEstimateCost.setVisibility(View.VISIBLE);
+                btnEstimateCost.setVisibility(View.VISIBLE);
             }
 
     }
@@ -606,15 +635,51 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 2: {
-
+                    Progress.dismissProgress();
+                    Toast.makeText(mActivity,"something went wrong",Toast.LENGTH_SHORT).show();
                     break;
                 }
                 case 1: {
+                    // geocoder is successfull
+                    PickDropAddress pickDropAddress=(PickDropAddress)msg.obj;
+                    if(pickDropAddress!=null){
+
+                        //call favourite api
+                        addToFavourite(pickDropAddress);
+                    }
+                    Log.e("ad",pickDropAddress.toString());
 
                     break;
                 }
             }
         }
+    }
+
+
+
+    private void addToFavourite(final PickDropAddress pickDropAddress){
+
+        AddFavouriteBody favouriteBody=new AddFavouriteBody();
+        favouriteBody.setAddress(pickDropAddress);
+        String token=appPreference.getUserDetails().getToken();
+        FavouriteRequest favouriteRequest=new FavouriteRequest();
+        favouriteRequest.addToFavourite(token, favouriteBody, new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                Progress.dismissProgress();
+                mActivity.showSnackbar(body.getMessage(),0);
+                // make changes to pickdropAddress
+                pickDropAddress.setFavorite(true);
+                listAddressData.set(clickedAddressPostion,pickDropAddress);
+                addressAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onRequestFailed(String message) {
+                mActivity.showSnackbar(message,0);
+                Progress.dismissProgress();
+            }
+        });
     }
     /**
      * FindAddress class responsible for find the data using Geocoder
@@ -629,9 +694,11 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
             mHandler.obtainMessage(0).sendToTarget();
             try {
-                List<Address> addresses = mGeocoder.getFromLocation(pickDropAddress.getLatitude(), pickDropAddress.getLongitude(), 1);
+                List<Address> addresses = mGeocoder.getFromLocation(pickDropAddress.getLatitude(), pickDropAddress.getLongitude(), 3);
                 if (addresses != null && addresses.size() > 0) {
-                    Address address = addresses.get(0);
+                    //Address address = addresses.get(0);
+                    Address address = addresses.get(1);
+                   // Address address2 = addresses.get(2);
                     String country = address.getCountryName();
                     String state = address.getAdminArea();
                     String city = address.getLocality();
@@ -640,7 +707,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                     pickDropAddress.setState(state);
 
                }
-                mHandler.obtainMessage(1).sendToTarget();
+                mHandler.obtainMessage(1,pickDropAddress).sendToTarget();
 
             } catch (Exception ignore) {
                 mHandler.obtainMessage(2).sendToTarget();

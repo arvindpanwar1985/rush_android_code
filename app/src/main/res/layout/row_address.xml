@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Frequently used Address"
         android:textSize="@dimen/sp_10"
-        android:padding="@dimen/dp_4"
+        android:padding="@dimen/dp_2"
         android:textColor="@android:color/white"
         android:textStyle="bold|italic"
         android:background="@drawable/bg_reservation_btn"/>
@@ -22,7 +22,7 @@
         android:layout_below="@+id/viewFrequentlyAddress"
         android:layout_marginTop="@dimen/dp_2"
         android:background="@drawable/address_text"
-        android:padding="@dimen/dp_4"
+        android:padding="@dimen/dp_2"
         android:layout_height="wrap_content">
     <TextView
         android:layout_width="wrap_content"
@@ -37,7 +37,7 @@
         android:textStyle="bold|italic"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/imgFav"
-        android:textSize="@dimen/sp_18"
+        android:textSize="@dimen/sp_14"
         />
 
     <ImageView

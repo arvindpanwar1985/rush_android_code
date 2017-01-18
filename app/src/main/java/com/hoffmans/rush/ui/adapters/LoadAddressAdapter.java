@@ -108,6 +108,7 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
             @Override
             public void onClick(View view) {
                 mItemClickListener.onitemclicked(view,position);
+
             }
         });
 
@@ -116,6 +117,7 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
             public void onClick(View view) {
 
                 mItemClickListener.onfrequentAddressclicked(view,position);
+
             }
         });
 

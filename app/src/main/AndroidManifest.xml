@@ -83,6 +83,9 @@
             android:name=".ui.activities.AddCardActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.activities.FavouriteActivity"
+            android:theme="@style/AppTheme" />
 
         <service
             android:name=".services.BuildAddressService"

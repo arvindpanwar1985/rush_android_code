@@ -6,5 +6,6 @@
     <color name="colorEdtBg">#d27872</color>
     <color name="civ_border">#6c2420</color>
     <color name="color_accept_reject">#e8503e</color>
+    <color name="color_custom_toast">#B63f33</color>
 
 </resources>

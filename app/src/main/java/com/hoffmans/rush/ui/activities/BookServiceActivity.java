@@ -172,6 +172,9 @@ public class BookServiceActivity extends BaseActivity
 
         } else if (id == R.id.nav_fav) {
 
+            Intent favIntent=new Intent(BookServiceActivity.this, FavouriteActivity.class);
+            favIntent.putExtra(Constants.KEY_IS_FAVOURITE_SELECTABLE,true);
+            startActivity(favIntent);
         }  else if (id == R.id.nav_logout) {
             appPreference.logoutUser();
             Intent loginIntent=new Intent(BookServiceActivity.this,LoginActivity.class);

@@ -2,7 +2,7 @@ package com.hoffmans.rush.bean;
 
 import com.hoffmans.rush.model.PickDropAddress;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by devesh on 18/1/17.
@@ -10,13 +10,13 @@ import java.util.List;
 
 public class FavouriteBean extends BaseBean {
 
-    private List<PickDropAddress> addresses;
+    private ArrayList<PickDropAddress> addresses;
 
-    public List<PickDropAddress> getAddresses() {
+    public ArrayList<PickDropAddress> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(List<PickDropAddress> addresses) {
+    public void setAddresses(ArrayList<PickDropAddress> addresses) {
         this.addresses = addresses;
     }
 }
