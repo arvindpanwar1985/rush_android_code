@@ -36,17 +36,18 @@
         android:textColor="@color/colorPrimary"
         android:textStyle="bold|italic"
         android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/addressIcon"
+        android:layout_toLeftOf="@+id/imgFav"
         android:textSize="@dimen/sp_18"
         />
 
     <ImageView
-        android:id="@+id/addressIcon"
+        android:id="@+id/imgFav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_2"
         android:layout_marginRight="@dimen/dp_7"
-        android:src="@drawable/address_icon"
+        android:padding="@dimen/dp_4"
+        android:src="@drawable/ic_favorite_border_24dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"/>
 </RelativeLayout>

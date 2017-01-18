@@ -1,5 +1,6 @@
 package com.hoffmans.rush.http;
 
+import com.hoffmans.rush.model.AddFavouriteBody;
 import com.hoffmans.rush.model.EstimateServiceParams;
 
 import java.util.HashMap;
@@ -68,5 +69,8 @@ public interface ApiInterface {
 
     @POST("/api/services/estimate_service")
     Call<ResponseBody> estimateService(@Header("Authorization")String authorization , @Body EstimateServiceParams estimateServiceParams);
+
+    @POST("/api/address/create_fav_address")
+    Call<ResponseBody> createfavoriteAddress(@Header("Authorization")String authorization , @Body AddFavouriteBody addFavouriteBody);
 
 }

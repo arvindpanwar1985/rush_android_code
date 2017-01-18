@@ -156,6 +156,11 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
+    public void onFavoriteAddressclicked(View view, int position) {
+
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==REQUEST_ADD_CARD && resultCode==mActivity.RESULT_OK){
            if(data!=null){

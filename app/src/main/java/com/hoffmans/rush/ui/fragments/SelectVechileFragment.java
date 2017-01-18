@@ -1,9 +1,14 @@
 package com.hoffmans.rush.ui.fragments;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -51,6 +56,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 import static android.app.Activity.RESULT_CANCELED;
 
@@ -65,6 +72,8 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     private static final int DESTINATION_SELECTED=1;
     private String TAG=SelectVechileFragment.class.getCanonicalName();
     private int clickedAddressPostion;
+
+    private UiHandler mHandler=new UiHandler();
 
 
     private String mParam1;
@@ -85,7 +94,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
 
     private GoogleApiClient mGoogleApiClient;
-    // = new Geocoder(mActivity, Locale.getDefault());
+    private Geocoder mGeocoder = new Geocoder(mActivity, Locale.getDefault());
 
 
 
@@ -431,12 +440,41 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         }
     }
 
-
-
     @Override
     public void onfrequentAddressclicked(View view, int position) {
 
     }
+
+    @Override
+    public void onFavoriteAddressclicked(View view, final int position) {
+        try {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mActivity);
+            builder.setTitle(R.string.app_name)
+                    .setMessage(R.string.str_fav_message)
+                    .setCancelable(false)
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            PickDropAddress favouritePickDropAddress= listAddressData.get(position);
+                            // Thread and Handler using Geocoder
+                            Thread thread = new Thread(new FindAddress(favouritePickDropAddress));
+                            thread.start();
+
+                        }
+                    }).create().show();
+        }catch (Exception e){
+
+        }
+    }
+
+
 
 
     @Override
@@ -562,9 +600,53 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     }
 
 
+    // Handler to handle message based on thread communication
+    private class UiHandler extends Handler{
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 2: {
 
+                    break;
+                }
+                case 1: {
 
+                    break;
+                }
+            }
+        }
+    }
+    /**
+     * FindAddress class responsible for find the data using Geocoder
+     */
+    private class FindAddress implements Runnable{
+        PickDropAddress pickDropAddress;
+        FindAddress(PickDropAddress pickDropAddress){
+            this.pickDropAddress=pickDropAddress;
+        }
+        @Override
+        public void run() {
 
+            mHandler.obtainMessage(0).sendToTarget();
+            try {
+                List<Address> addresses = mGeocoder.getFromLocation(pickDropAddress.getLatitude(), pickDropAddress.getLongitude(), 1);
+                if (addresses != null && addresses.size() > 0) {
+                    Address address = addresses.get(0);
+                    String country = address.getCountryName();
+                    String state = address.getAdminArea();
+                    String city = address.getLocality();
+                    pickDropAddress.setCity(city);
+                    pickDropAddress.setCountry(country);
+                    pickDropAddress.setState(state);
+
+               }
+                mHandler.obtainMessage(1).sendToTarget();
+
+            } catch (Exception ignore) {
+                mHandler.obtainMessage(2).sendToTarget();
+            }
+        }
+    }
 
 
 

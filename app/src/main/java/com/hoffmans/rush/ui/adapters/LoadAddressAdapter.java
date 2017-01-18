@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hoffmans.rush.R;
@@ -33,11 +34,13 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
         // each data item is just a string in this case
 
         TextView txtAddress,txtviewFrequentlyAddress;
+        ImageView imgFav;
 
         public ViewHolder(View v) {
             super(v);
-            txtAddress=(TextView)v.findViewById(R.id.txtAddress);
-            txtviewFrequentlyAddress=(TextView)v.findViewById(R.id.viewFrequentlyAddress);
+            txtAddress               =(TextView)v.findViewById(R.id.txtAddress);
+            imgFav                   =(ImageView)v.findViewById(R.id.imgFav);
+            txtviewFrequentlyAddress =(TextView)v.findViewById(R.id.viewFrequentlyAddress);
             v.setOnClickListener(this);
 
         }
@@ -86,6 +89,19 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
         if(!TextUtils.isEmpty(address.getStreetAddress())){
             //update address
             holder.txtAddress.setText(address.getStreetAddress());
+            holder.imgFav.setVisibility(View.VISIBLE);
+
+            holder.imgFav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mItemClickListener.onFavoriteAddressclicked(view,position);
+                }
+            });
+        }else{
+            holder.imgFav.setVisibility(View.INVISIBLE);
+            if(address.isFavorite()){
+
+            }
         }
 
         holder.txtAddress.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +118,8 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
                 mItemClickListener.onfrequentAddressclicked(view,position);
             }
         });
+
+
 
     }
 

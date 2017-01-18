@@ -89,4 +89,5 @@
     <string name="str_make_order">Realizar pedido</string>
     <string name="str_value_estimate">Estimated value</string>
     <string name="str_value_time">Estimated Time</string>
+    <string name="str_fav_message">¿Estás seguro de que quieres marcar esta dirección en Favoritos?</string>
 </resources>
