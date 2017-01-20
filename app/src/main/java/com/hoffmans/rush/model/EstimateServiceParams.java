@@ -7,4 +7,12 @@ package com.hoffmans.rush.model;
 public class EstimateServiceParams {
 
     private Service service;
+
+    public Service getService() {
+        return service;
+    }
+
+    public void setService(Service service) {
+        this.service = service;
+    }
 }

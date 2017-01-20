@@ -1,4 +1,30 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+    dependencies {
+        // to see latest version available:
+        // https://maven.fabric.io/public/io/fabric/tools/gradle/maven-metadata.xml
+        classpath 'io.fabric.tools:gradle:1.22.0'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+dependencies {
+    // to see latest version available:
+    // https://maven.fabric.io/public/com/crashlytics/sdk/android/crashlytics/maven-metadata.xml
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+        transitive = true
+    }
+}
+
+
+
+
 
 android {
     compileSdkVersion 24
@@ -28,8 +54,6 @@ dependencies {
 
     // JSON Converter
 
-
-    compile 'com.google.firebase:firebase-messaging:10.0.1'
     compile 'com.google.firebase:firebase-messaging:10.0.1'
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:appcompat-v7:24.2.1'
@@ -51,5 +75,9 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.wdullaer:materialdatetimepicker:3.1.0'
     testCompile 'junit:junit:4.12'
+
+
 }
 apply plugin: 'com.google.gms.google-services'
+
+

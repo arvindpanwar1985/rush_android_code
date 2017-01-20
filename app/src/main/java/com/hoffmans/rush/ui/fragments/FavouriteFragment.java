@@ -18,6 +18,7 @@ import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.listners.OnitemClickListner;
 import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.ui.adapters.FavouriteAdapter;
+import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 
 import java.util.ArrayList;
@@ -46,7 +47,6 @@ public class FavouriteFragment extends BaseFragment implements OnitemClickListne
         FavouriteFragment fragment = new FavouriteFragment();
         Bundle args = new Bundle();
         args.putBoolean(ARG_PARAM1, param1);
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,7 +56,6 @@ public class FavouriteFragment extends BaseFragment implements OnitemClickListne
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             showIcon = getArguments().getBoolean(ARG_PARAM1);
-
         }
     }
 
@@ -117,6 +116,9 @@ public class FavouriteFragment extends BaseFragment implements OnitemClickListne
                 Progress.dismissProgress();
                 //mActivity.hideProgress();
                 mActivity.showSnackbar(message,0);
+                if(message.equals(Constants.KEY_AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
             }
         });
     }
@@ -174,13 +176,15 @@ public class FavouriteFragment extends BaseFragment implements OnitemClickListne
 
                     txtNOFav.setVisibility(View.VISIBLE);
                 }
-
             }
 
             @Override
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
                 mActivity.showSnackbar(message,0);
+                if(message.equals(Constants.KEY_AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
             }
         });
     }

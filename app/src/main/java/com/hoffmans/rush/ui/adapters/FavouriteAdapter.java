@@ -1,6 +1,7 @@
 package com.hoffmans.rush.ui.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,7 +95,11 @@ public class FavouriteAdapter  extends RecyclerView.Adapter<FavouriteAdapter.Vie
         }else{
             holder.bottomLine.setVisibility(View.GONE);
         }
-
+        if(pickDropAddress.isFavorite()){
+            holder.imgFav.setBackground(ContextCompat.getDrawable(mContext,R.drawable.ic_favorite_24dp));
+        }else{
+            holder.imgFav.setBackground(ContextCompat.getDrawable(mContext,R.drawable.ic_favorite_border_24dp));
+        }
         holder.imgFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
+        android:name=".utils.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -64,12 +65,12 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme" />
 
-        <service android:name=".notification.MyFirebaseInstanceIDService">
+        <service android:name=".MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".notification.MyFirebaseMessagingService">
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -87,9 +88,31 @@
             android:name=".ui.activities.FavouriteActivity"
             android:theme="@style/AppTheme" />
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="8289dfd973f4aaa834841dbf59783f25b2f7b3bd" />
+
         <service
             android:name=".services.BuildAddressService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.activities.PlaceAutocomplete"
+            android:label="@string/title_activity_place_autocomplete"
+            android:theme="@style/AppTheme">
+
+           <!-- <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".ui.activities.PlaceAutocomplete" />
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />-->
+
+        </activity>
     </application>
 
 </manifest>

@@ -45,6 +45,7 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.bean.CurrencyBean;
@@ -101,10 +102,11 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     private String  mCurrentPhotoPath;
     private Currency selectedCurrency;
     private int idGoogleApiclient;
+    private String notificationToken;
     private RelativeLayout topView;
     private View view;
     private List<Currency> currencyList =new ArrayList<>();
-    Fragment fragment;
+    private Fragment fragment;
     private Uri photoURI;
 
 
@@ -123,6 +125,12 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
              initListeners();
              getAllCurrency();
              setRetainInstance(true);
+
+             notificationToken =appPreference.getNoticficationToken();
+             if(TextUtils.isEmpty(notificationToken)){
+                 notificationToken= FirebaseInstanceId.getInstance().getToken();
+                 appPreference.setNotificationToken(notificationToken);
+             }
          }
 
         return view;
@@ -131,7 +139,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     protected void initViews(View view) {
-
         edtname=(EditText)view.findViewById(R.id.frEdtname);
         edtEmail=(EditText)view.findViewById(R.id.frEdtEmail);
         edtphone=(EditText)view.findViewById(R.id.frEdtPhone);
@@ -204,9 +211,8 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                                 String socialId = object.getString(Constants.FBCONTANTS.FB_ID);
                                 String imageUrl = Constants.FBCONTANTS.FB_IMG_URL+socialId+"/picture?type=large";
 
-                                socialLogin(Constants.FB_PROVIDER,first_name,last_name,email,socialId,imageUrl,"adf-dad-fad98097",Constants.DEVICE_TYPE,Utils.getTimeZone());
-                                //UpdateAccountFragment fragment=UpdateAccountFragment.newInstance("");
-                                //mActivity.replaceFragment(fragment,0,false);
+                                socialLogin(Constants.FB_PROVIDER,first_name,last_name,email,socialId,imageUrl,notificationToken,Constants.DEVICE_TYPE,Utils.getTimeZone());
+
                             }
 
                         } catch (JSONException e) {

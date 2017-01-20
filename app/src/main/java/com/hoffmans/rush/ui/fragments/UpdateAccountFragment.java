@@ -28,6 +28,7 @@ import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.model.Currency;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
+import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Validation;
 
@@ -222,6 +223,9 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
             @Override
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
+                if(message.equals(Constants.KEY_AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
                 mActivity.showSnackbar(message,Toast.LENGTH_LONG);
             }
         });
@@ -277,6 +281,9 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
             public void onRequestFailed(String message) {
                 mActivity.showSnackbar(message,0);
                 Progress.dismissProgress();
+                if(message.equals(Constants.KEY_AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
             }
         });
     }

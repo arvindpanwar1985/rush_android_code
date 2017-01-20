@@ -105,5 +105,12 @@ public class AppPreference {
         mEditor.clear().commit();
     }
 
+    public void setNotificationToken(String token){
+        mEditor.putString(PrefConstant.KEY_NOTIFICATION_TOKEN,token).commit();
+    }
+
+    public String getNoticficationToken(){
+        return mPref.getString(PrefConstant.KEY_NOTIFICATION_TOKEN,"");
+    }
 
 }

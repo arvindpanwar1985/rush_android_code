@@ -20,6 +20,7 @@ import com.hoffmans.rush.model.CardData;
 import com.hoffmans.rush.ui.activities.AddCardActivity;
 import com.hoffmans.rush.ui.activities.ConfirmServiceActivity;
 import com.hoffmans.rush.ui.adapters.CardListAdapter;
+import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 
 import java.util.ArrayList;
@@ -128,6 +129,9 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
                 mActivity.showSnackbar(message,0);
+                if(message.equals(Constants.KEY_AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
             }
         });
     }
@@ -164,9 +168,12 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==REQUEST_ADD_CARD && resultCode==mActivity.RESULT_OK){
            if(data!=null){
-               CardData newlyAddedCard=data.getParcelableExtra(AddCardActivity.KEY_CARD_DATA);
-               cardDataList.add(newlyAddedCard);
-               adapter.notifyDataSetChanged();
+
+               cardDataList.clear();
+
+               ArrayList<CardData> cards=data.getParcelableArrayListExtra(AddCardActivity.KEY_CARD_DATA);
+               adapter=new CardListAdapter(mActivity,cards,this);
+               recyclerCardList.setAdapter(adapter);
                mActivity.showSnackbar("Card added Successfully.",0);
            }
         }

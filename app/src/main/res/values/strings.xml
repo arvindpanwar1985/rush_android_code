@@ -73,7 +73,7 @@
     <string name="str_menu_logout">Sign Out</string>
     <string name="str_select_currency">Please Select currency</string>
 
-    <string name="progress_loading">Loading..</string>
+
     <string name="str_link_card">Please link a card to your account.</string>
 
     <string name="str_no_changes">No change selected</string>
@@ -94,6 +94,11 @@
     <string name="str_value_time">Hora prevista</string>
     <string name="str_fav_message">Are you sure ,you want to mark this address to Favourite?</string>
     <string name="str_marking_fav">Marking Favourite..</string>
+
+
+    <string name="progress_loading">Loading..</string>
+    <string name="progress_estimate">Estimating Cost..</string>
+    <string name="title_activity_place_autocomplete">PlaceAutocomplete</string>
 
 
 </resources>

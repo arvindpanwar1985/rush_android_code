@@ -77,12 +77,23 @@ public class BuildAddressService extends IntentService {
               for(int i=0;i<data.size();i++) {
                   PickDropAddress pickDropAddress=data.get(i);
                   try {
-                      List<Address> addresses = mGeocoder.getFromLocation(pickDropAddress.getLatitude(), pickDropAddress.getLongitude(), 1);
+                      List<Address> addresses = mGeocoder.getFromLocation(pickDropAddress.getLatitude(), pickDropAddress.getLongitude(), 3);
+
                       if (addresses != null && addresses.size() > 0) {
-                          Address address = addresses.get(0);
+                          Address address = addresses.get(1);
+                          Address address_2 = addresses.get(2);
                           String country = address.getCountryName();
+                          if(country==null){
+                              country=address_2.getCountryName();
+                          }
                           String state = address.getAdminArea();
+                          if(state==null){
+                              state=address_2.getAdminArea();
+                          }
                           String city = address.getLocality();
+                          if(city==null){
+                              city=address_2.getLocality();
+                          }
                           pickDropAddress.setCity(city);
                           pickDropAddress.setCountry(country);
                           pickDropAddress.setState(state);
@@ -91,7 +102,7 @@ public class BuildAddressService extends IntentService {
                           }else{
                               multipleDrops.add(pickDropAddress);
                           }
-                          Log.e("data", addresses.get(0).getLocality() + " " + addresses.get(0).getCountryName() + " " + addresses.get(0).getAdminArea());
+                          Log.e("data", "city :"+city + " country: " + country + " state: " + state);
                       }
                   }catch (Exception e){
 

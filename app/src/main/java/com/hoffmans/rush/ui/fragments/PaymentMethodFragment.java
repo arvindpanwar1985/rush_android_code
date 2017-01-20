@@ -26,6 +26,7 @@ import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.ui.activities.LoginActivity;
 import com.hoffmans.rush.utils.AppPreference;
+import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
@@ -264,6 +265,9 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
                 mActivity.showSnackbar(message,0);
+                if(message.equals(Constants.KEY_AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
             }
         });
     }

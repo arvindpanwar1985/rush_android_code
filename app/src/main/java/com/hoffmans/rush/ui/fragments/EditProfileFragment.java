@@ -554,6 +554,9 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
                 mActivity.showSnackbar(message,0);
+                if(message.equals(Constants.KEY_AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
             }
         });
     }
@@ -595,6 +598,9 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
                 mActivity.showSnackbar(message,0);
+                if(message.equals(Constants.KEY_AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
             }
         });
     }

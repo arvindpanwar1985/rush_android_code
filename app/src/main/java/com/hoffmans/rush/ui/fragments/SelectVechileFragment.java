@@ -38,22 +38,27 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
+import com.hoffmans.rush.bean.ServiceBean;
 import com.hoffmans.rush.http.request.FavouriteRequest;
+import com.hoffmans.rush.http.request.ServiceRequest;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.listners.OnitemClickListner;
 import com.hoffmans.rush.location.LocationData;
 import com.hoffmans.rush.location.LocationInterface;
 import com.hoffmans.rush.model.AddFavouriteBody;
+import com.hoffmans.rush.model.CardData;
+import com.hoffmans.rush.model.Estimate;
+import com.hoffmans.rush.model.EstimateServiceParams;
 import com.hoffmans.rush.model.FetchAddressEvent;
 import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.Service;
 import com.hoffmans.rush.services.BuildAddressService;
+import com.hoffmans.rush.ui.activities.ConfirmServiceActivity;
 import com.hoffmans.rush.ui.activities.FavouriteActivity;
 import com.hoffmans.rush.ui.adapters.LoadAddressAdapter;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.DateUtils;
 import com.hoffmans.rush.utils.Progress;
-import com.hoffmans.rush.utils.Utils;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
@@ -99,7 +104,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     private Location mCurrentLocation;
     private boolean isVehicleSelected;
     private DateUtils mDateUtils;
-
+    private String futureDataTime;
 
     private GoogleApiClient mGoogleApiClient;
     private Geocoder mGeocoder;
@@ -282,6 +287,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
     private void validateFields(){
 
+
         if(listAddressData==null){
             return;
         }
@@ -297,6 +303,11 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         }
         if(!isVehicleSelected && getVechileType()==-1){
             mActivity.showSnackbar("Please select vehicle",0);
+            return;
+        }
+        if(txtReservation.isSelected() && TextUtils.isEmpty(futureDataTime)){
+            //mActivity.showSnackbar("SEle");
+            mActivity.showSnackbar("Please select reservation date ",0);
             return;
         }
 
@@ -319,10 +330,18 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             DateUtils dateUtils=DateUtils.getInstance();
             Service service =event.getService();
             service.setVehicle_type_id(getVechileType());
-            if(dateUtils.getUtcDateTime()!=null){
-             service.setDate(dateUtils.getUtcDateTime());
-            }
 
+            if(txtReservation.isSelected()){
+                service.setDate(futureDataTime);
+            }else {
+                if (dateUtils.getUtcDateTime() != null) {
+                    Log.e("date", dateUtils.getUtcDateTime());
+                    service.setDate(dateUtils.getUtcDateTime());
+                }
+            }
+            EstimateServiceParams estimateParams=new EstimateServiceParams();
+            estimateParams.setService(service);
+            estimateService(estimateParams);
         }
     }
 
@@ -353,6 +372,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             txtReservation.setBackground(ContextCompat.getDrawable(mActivity,R.drawable.bg_reservation_btn));
             txtReservation.setTextColor(ContextCompat.getColor(mActivity,android.R.color.white));
             txtNow.setSelected(true);
+            txtReservation.setSelected(false);
         }
 
     }
@@ -364,9 +384,8 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             txtNow.setBackground(ContextCompat.getDrawable(mActivity,R.drawable.bg_reservation_btn));
             txtNow.setTextColor(ContextCompat.getColor(mActivity,android.R.color.white));
             txtReservation.setSelected(true);
-            showDatePicker();
-
-        }
+            txtNow.setSelected(false);
+        }showDatePicker();
     }
 
 
@@ -446,6 +465,8 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         } catch (GooglePlayServicesNotAvailableException e) {
 
         }
+        //Intent intent =new Intent(mActivity, com.hoffmans.rush.ui.activities.PlaceAutocomplete.class);
+       // startActivity(intent);
     }
 
     @Override
@@ -496,7 +517,11 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == mActivity.RESULT_OK) {
                 try {
+
+
                     Place place = PlaceAutocomplete.getPlace(mActivity, data);
+
+
                     Log.i(TAG, "Place: " + place.getName()+ ""+place.getAddress());
                     setAddress(place, clickedAddressPostion);
                 }catch (Exception e){
@@ -559,7 +584,14 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                 now.get(Calendar.YEAR),
                 now.get(Calendar.MONTH),
                 now.get(Calendar.DAY_OF_MONTH)
+
         );
+        // set minimum date for future booking Reservation.
+        Calendar nextDaycalendar = Calendar.getInstance();
+        nextDaycalendar.add(Calendar.DATE, 1);
+        dpd.setMinDate(nextDaycalendar);
+
+
         dpd.setTitle("Select date");
         dpd.show(mActivity.getFragmentManager(), "Datepickerdialog");
     }
@@ -574,8 +606,11 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
 
                         Log.e("dateTime",date+" "+hourOfDay+":"+minute+":"+second);
-                        String dateTime=date+"T"+hourOfDay+":"+minute+":"+second+"Z";
-                        Utils.showAlertDialog(mActivity,mDateUtils.getUtcDateTime(dateTime));
+                        String dateTime=date+" "+hourOfDay+":"+minute+":"+second;
+                        if(mDateUtils.getUtcDateTime(dateTime)!=null){
+                            //set future scheduled date
+                            futureDataTime=mDateUtils.getUtcDateTime(dateTime);
+                        }
                     }
                 },
                 now.get(Calendar.HOUR_OF_DAY),
@@ -584,6 +619,48 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         );
         dpd.show(mActivity.getFragmentManager(), "Datepickerdialog");
     }
+
+
+
+
+
+    private void estimateService(final EstimateServiceParams estimateServiceParams){
+        Progress.showprogress(mActivity,getString(R.string.progress_estimate),false);
+        String token=appPreference.getUserDetails().getToken();
+        ServiceRequest serviceRequest=new ServiceRequest();
+        serviceRequest.estimateService(token, estimateServiceParams, new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                Progress.dismissProgress();
+                try {
+                    ServiceBean serviceBean = (ServiceBean) body;
+                    Estimate estimate = serviceBean.getEstimate();
+                    CardData defaultCardData = serviceBean.getDefault_card();
+                    Intent confirmServiceIntent=new Intent(mActivity, ConfirmServiceActivity.class);
+                    confirmServiceIntent.putExtra(Constants.KEY_ESTIMATE_DATA,estimate);
+                    confirmServiceIntent.putExtra(Constants.KEY_CARD_DATA,defaultCardData);
+                    confirmServiceIntent.putExtra(Constants.KEY_PARAM_DATA,estimateServiceParams.getService());
+                    startActivity(confirmServiceIntent);
+                }catch (NullPointerException e){
+
+                }
+            }
+
+            @Override
+            public void onRequestFailed(String message) {
+
+                Progress.dismissProgress();
+                mActivity.showSnackbar(message,0);
+                if(message.equals(Constants.KEY_AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
+            }
+        });
+
+    }
+
+
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         mActivity.showSnackbar(connectionResult.getErrorMessage(),0);
@@ -678,6 +755,9 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             public void onRequestFailed(String message) {
                 mActivity.showSnackbar(message,0);
                 Progress.dismissProgress();
+                if(message.equals(Constants.KEY_AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
             }
         });
     }

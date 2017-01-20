@@ -93,7 +93,7 @@ public class DateUtils {
     /**
      * get year from date
      * @param date
-     * @return the year
+     * @return the yeardateFormat
      */
     public int getYearFromDate(Date date) {
         Calendar cal = Calendar.getInstance();
@@ -148,14 +148,15 @@ public class DateUtils {
 
     public String getUtcDateTime(String dateString) {
         Date convertedDate = null;
-        SimpleDateFormat dateFormat=null;
+        SimpleDateFormat dateFormatUtc=null;
         try {
-            dateFormat = new SimpleDateFormat(GMT_FORMAT);
-            TimeZone utcZone = TimeZone.getTimeZone("GMT");
-            dateFormat.setTimeZone(utcZone);
+
+            SimpleDateFormat dateFormat=new SimpleDateFormat(DEFAULT_FORMAT);
             convertedDate = dateFormat.parse(dateString);
-            //eturn  convertedDate.toString();
-            return dateFormat.format(convertedDate);
+            dateFormatUtc = new SimpleDateFormat(GMT_FORMAT);
+            TimeZone utcZone = TimeZone.getTimeZone("UTC");
+            dateFormatUtc.setTimeZone(utcZone);
+            return dateFormatUtc.format(convertedDate);
         }  catch (Exception e) {
             e.printStackTrace();
             return  null;

@@ -1,4 +1,4 @@
-package com.hoffmans.rush.notification;
+package com.hoffmans.rush;
 
 import android.util.Log;
 

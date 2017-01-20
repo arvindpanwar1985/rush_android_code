@@ -27,10 +27,13 @@ import com.hoffmans.rush.listners.BrainTreeHandler;
 import com.hoffmans.rush.model.Card;
 import com.hoffmans.rush.model.CardData;
 import com.hoffmans.rush.ui.activities.AddCardActivity;
+import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
 import com.hoffmans.rush.widgets.MonthYearPicker;
+
+import java.util.ArrayList;
 
 
 public class AddCardFragment extends BaseFragment implements View.OnClickListener ,BrainTreeHandler {
@@ -246,9 +249,10 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
                 Progress.dismissProgress();
                 CardListBean cardListBean=(CardListBean)body;
                 if(cardListBean.getCards().size()!=0){
-                    CardData newCardData=cardListBean.getCards().get(0);
+                    ArrayList<CardData> cardDataList=cardListBean.getCards();
+                    //CardData newCardData=cardListBean.getCards().get(0);
                     Intent intent=new Intent();
-                    intent.putExtra(AddCardActivity.KEY_CARD_DATA,newCardData);
+                    intent.putParcelableArrayListExtra(AddCardActivity.KEY_CARD_DATA,cardDataList);
                     getActivity().setResult(Activity.RESULT_OK,intent);
                     mActivity.finish();
 
@@ -260,6 +264,9 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
                 mActivity.showSnackbar(message,0);
+                if(message.equals(Constants.KEY_AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
             }
         });
     }

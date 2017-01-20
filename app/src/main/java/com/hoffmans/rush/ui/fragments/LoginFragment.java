@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.bean.UserBean;
@@ -35,6 +36,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     private TextView txtCreateAccount,txtForgotPassword;
     private Button btnLogin;
     private EditText edtEmail,edtPassword;
+    private String notificationToken;
     public LoginFragment(){
 
     }
@@ -46,6 +48,11 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
         mActivity.hideToolbar();
         initViews(loginView);
         initListeners();
+        notificationToken =appPreference.getNoticficationToken();
+        if(TextUtils.isEmpty(notificationToken)){
+            notificationToken= FirebaseInstanceId.getInstance().getToken();
+            appPreference.setNotificationToken(notificationToken);
+        }
         return loginView;
     }
 
@@ -57,9 +64,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
         edtPassword=(EditText)view.findViewById(com.hoffmans.rush.R.id.flPassword);
         edtEmail=(EditText)view.findViewById(com.hoffmans.rush.R.id.flUsername);
 
-
-
-    }
+       }
 
     @Override
     protected void initListeners() {

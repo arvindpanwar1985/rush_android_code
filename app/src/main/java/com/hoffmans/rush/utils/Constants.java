@@ -27,6 +27,10 @@ public class Constants {
     public static final String KEY_PASSWORD_CONFIRMATION="user[password_confirmation]";
     public static final String KEY_IS_CARD_SELECTABLE="is_card_selectable";
     public static final String KEY_IS_FAVOURITE_SELECTABLE="is_fav_selectable";
+    public static final String KEY_ESTIMATE_DATA="estimate_data";
+    public static final String KEY_CARD_DATA="card_data";
+    public static final String KEY_PARAM_DATA="param_data";
+    public static final String KEY_AUTH_ERROR="Authorization header not valid";
 
 
 
