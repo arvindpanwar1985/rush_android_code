@@ -6,17 +6,21 @@ import android.os.Parcelable;
 import java.util.List;
 
 /**
- * Created by devesh on 16/1/17.
+ * Created by devesh on 24/1/17.
  */
 
-public class Service implements Parcelable {
+public class ConfirmService  implements Parcelable {
 
 
     private String date;
     private int vehicle_type_id;
-
+    private VechileDetail vehicle_details;
     private PickDropAddress pick_address;
     private List<PickDropAddress> drop_addresses;
+    private TransactionDetails transactionDetails;
+    private DateTime date_time;
+
+
 
 
     public int getVehicle_type_id() {
@@ -53,9 +57,28 @@ public class Service implements Parcelable {
         this.date = date;
     }
 
+    public VechileDetail getVehicle_details() {
+        return vehicle_details;
+    }
 
+    public void setVehicle_details(VechileDetail vehicle_details) {
+        this.vehicle_details = vehicle_details;
+    }
 
-    public Service() {
+    public TransactionDetails getTransactionDetails() {
+        return transactionDetails;
+    }
+
+    public void setTransactionDetails(TransactionDetails transactionDetails) {
+        this.transactionDetails = transactionDetails;
+    }
+
+    public DateTime getDate_time() {
+        return date_time;
+    }
+
+    public void setDate_time(DateTime date_time) {
+        this.date_time = date_time;
     }
 
     @Override
@@ -73,7 +96,7 @@ public class Service implements Parcelable {
 
     }
 
-    protected Service(Parcel in) {
+    protected ConfirmService(Parcel in) {
         this.date = in.readString();
         this.vehicle_type_id = in.readInt();
 
@@ -93,4 +116,6 @@ public class Service implements Parcelable {
             return new Service[size];
         }
     };
+
+
 }

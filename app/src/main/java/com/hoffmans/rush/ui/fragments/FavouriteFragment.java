@@ -116,7 +116,7 @@ public class FavouriteFragment extends BaseFragment implements OnitemClickListne
                 Progress.dismissProgress();
                 //mActivity.hideProgress();
                 mActivity.showSnackbar(message,0);
-                if(message.equals(Constants.KEY_AUTH_ERROR)){
+                if(message.equals(Constants.AUTH_ERROR)){
                     mActivity.logOutUser();
                 }
             }
@@ -182,7 +182,7 @@ public class FavouriteFragment extends BaseFragment implements OnitemClickListne
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
                 mActivity.showSnackbar(message,0);
-                if(message.equals(Constants.KEY_AUTH_ERROR)){
+                if(message.equals(Constants.AUTH_ERROR)){
                     mActivity.logOutUser();
                 }
             }

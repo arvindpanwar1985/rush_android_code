@@ -1,26 +1,37 @@
 package com.hoffmans.rush.ui.fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.bean.BaseBean;
+import com.hoffmans.rush.bean.ConfirmServiceBean;
+import com.hoffmans.rush.http.request.ServiceRequest;
+import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.model.CardData;
+import com.hoffmans.rush.model.ConfirmService;
 import com.hoffmans.rush.model.Estimate;
+import com.hoffmans.rush.model.EstimateServiceParams;
 import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.Service;
 import com.hoffmans.rush.ui.activities.CardListActivity;
 import com.hoffmans.rush.ui.activities.ConfirmServiceActivity;
+import com.hoffmans.rush.ui.activities.ReceiptActivity;
 import com.hoffmans.rush.ui.adapters.LoadAddressAdapter;
 import com.hoffmans.rush.utils.Constants;
+import com.hoffmans.rush.utils.Progress;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,11 +45,12 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
     private CardData mSelectedCard;
     private ImageView imgCardType;
     private TextView txtCardData,txtCurrency,txtAmount,txtEstimatedTime;
-
+    private int mTransactionId;
     private Estimate mesTimatedData;
     private CardData defaultCardData;
     private Service mServiceParams;
     private RecyclerView recyclerView;
+    private Button   btnMakeOrder;
     private LoadAddressAdapter addressAdapter;
     private List<PickDropAddress>listAddressData=new ArrayList<>();
 
@@ -55,12 +67,13 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
      * @return A new instance of fragment ConfirmServiceFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ConfirmServiceFragment newInstance(Estimate param1, CardData param2, Service param3) {
+    public static ConfirmServiceFragment newInstance(Estimate param1, CardData param2, Service param3,int transID) {
         ConfirmServiceFragment fragment = new ConfirmServiceFragment();
         Bundle args = new Bundle();
         args.putParcelable(Constants.KEY_ESTIMATE_DATA, param1);
         args.putParcelable(Constants.KEY_CARD_DATA, param2);
         args.putParcelable(Constants.KEY_PARAM_DATA, param3);
+        args.putInt(Constants.KEY_TRANSACTION_ID, transID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,6 +86,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
             mesTimatedData =getArguments().getParcelable(Constants.KEY_ESTIMATE_DATA);
             defaultCardData=getArguments().getParcelable(Constants.KEY_CARD_DATA);
             mServiceParams =getArguments().getParcelable(Constants.KEY_PARAM_DATA);
+            mTransactionId =getArguments().getInt(Constants.KEY_TRANSACTION_ID);
         }
 
     }
@@ -116,6 +130,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
         txtCurrency=(TextView)view.findViewById(R.id.txtCurrency);
         txtAmount=(TextView)view.findViewById(R.id.txtAmount);
         txtEstimatedTime=(TextView)view.findViewById(R.id.txtEstimatedTime);
+        btnMakeOrder=(Button)view.findViewById(R.id.btnMakeOrder);
         try {
             setEstimatedPrice();
             setEstimatedTime();
@@ -124,17 +139,57 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
         }catch (NullPointerException e){
 
         }
-
-
-
-
-
     }
 
     @Override
     protected void initListeners() {
 
         viewCardDetails.setOnClickListener(this);
+        btnMakeOrder.setOnClickListener(this);
+    }
+
+
+
+    private void validateFields(){
+
+        if(defaultCardData==null && TextUtils.isEmpty(defaultCardData.getToken())){
+            mActivity.showSnackbar("Please select card",0);
+            return;
+        }
+        buildApiparams();
+
+    }
+
+    private void buildApiparams(){
+        if(mServiceParams!=null){
+            EstimateServiceParams estimateServiceParams=new EstimateServiceParams();
+            estimateServiceParams.setTransaction_id(mTransactionId);
+            if(defaultCardData!=null) {
+                estimateServiceParams.setPayment_method_token(defaultCardData.getToken());
+                estimateServiceParams.setService(mServiceParams);
+                //prompt user for dialog to show actual payment amount and card with which he pays for order
+                showPaymentAlert(getPaymentMessage(),estimateServiceParams);
+            }else{
+                mActivity.showSnackbar("Select card",0);
+                return;
+            }
+        }
+    }
+
+    /**
+     *
+     * @return the message while payment.
+     */
+    private String getPaymentMessage(){
+        StringBuilder stringMessage=new StringBuilder("Are you sure you want to pay ");
+        stringMessage.append(mesTimatedData.getSymbol())
+                .append(mesTimatedData.getApproxAmount())
+                .append(" ")
+                .append("using card ************"+defaultCardData.getLast4())
+                .append("?");
+
+        return stringMessage.toString();
+
     }
 
 
@@ -175,6 +230,45 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
             recyclerView.setAdapter(addressAdapter);
         }
     }
+
+
+    /**
+     * api call for confirm order
+     * @param estimateServiceParams confirm service params
+     */
+    private void confirmService(EstimateServiceParams estimateServiceParams){
+        Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
+        ServiceRequest serviceRequest=new ServiceRequest();
+        String token=appPreference.getUserDetails().getToken();
+        serviceRequest.confirmService(token, estimateServiceParams, new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                Progress.dismissProgress();
+                ConfirmServiceBean confirmServiceBean=(ConfirmServiceBean)body;
+                if(confirmServiceBean.getService()!=null){
+                    ConfirmService service=confirmServiceBean.getService();
+                    //TODO show receipt
+                    Intent receiptIntent=new Intent(mActivity, ReceiptActivity.class);
+                    receiptIntent.putExtra(Constants.KEY_DATA_DATE_TIME,service.getDate_time());
+                    receiptIntent.putExtra(Constants.KEY_DATA_TRANSACTION,service.getTransactionDetails());
+                    startActivity(receiptIntent);
+                    // finish confirm service
+                    mActivity.finish();
+                }
+
+            }
+
+            @Override
+            public void onRequestFailed(String message) {
+
+                Progress.dismissProgress();
+                mActivity.showSnackbar(message,0);
+            }
+        });
+
+    }
+
+
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -183,6 +277,9 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
                 cardListIntent.putExtra(Constants.KEY_IS_CARD_SELECTABLE,true);
                 startActivityForResult(cardListIntent,REQUEST_SELECT_CARD);
 
+                break;
+            case R.id.btnMakeOrder:
+                validateFields();
                 break;
         }
     }
@@ -194,6 +291,40 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
                 CardData selectedCard=data.getParcelableExtra(ConfirmServiceActivity.KEY_CARD_DATA);
                 onCardSelected(selectedCard);
             }
+        }
+    }
+
+    /**
+     *
+     * @param message message on dialog
+     * @param confirmServiceParams params for confirm service param.
+     */
+    private void showPaymentAlert(String message, final  EstimateServiceParams confirmServiceParams){
+        try {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mActivity);
+            builder.setTitle("Confirm Order.")
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.dismiss();
+                            if(confirmServiceParams!=null){
+
+                            }
+                        }
+                    })
+                    .setPositiveButton("Pay Now", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            confirmService(confirmServiceParams);
+
+
+                        }
+                    }).create().show();
+        }catch (Exception e){
+
         }
     }
 }

@@ -265,7 +265,7 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
                 mActivity.showSnackbar(message,0);
-                if(message.equals(Constants.KEY_AUTH_ERROR)){
+                if(message.equals(Constants.AUTH_ERROR)){
                     mActivity.logOutUser();
                 }
             }

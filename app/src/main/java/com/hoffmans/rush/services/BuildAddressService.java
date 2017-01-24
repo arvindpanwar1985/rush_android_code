@@ -79,17 +79,18 @@ public class BuildAddressService extends IntentService {
                   try {
                       List<Address> addresses = mGeocoder.getFromLocation(pickDropAddress.getLatitude(), pickDropAddress.getLongitude(), 3);
 
+
                       if (addresses != null && addresses.size() > 0) {
                           Address address = addresses.get(1);
-                          Address address_2 = addresses.get(2);
+                          Address address_2 = addresses.get(0);
                           String country = address.getCountryName();
                           if(country==null){
                               country=address_2.getCountryName();
                           }
-                          String state = address.getAdminArea();
-                          if(state==null){
-                              state=address_2.getAdminArea();
-                          }
+                          String state = "San José Province";
+                         /* if(state==null) {
+                              state = address_2.getAdminArea();
+                          }*/
                           String city = address.getLocality();
                           if(city==null){
                               city=address_2.getLocality();

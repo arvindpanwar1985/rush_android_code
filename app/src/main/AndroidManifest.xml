@@ -101,7 +101,8 @@
             android:label="@string/title_activity_place_autocomplete"
             android:theme="@style/AppTheme">
 
-           <!-- <intent-filter>
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
 
@@ -110,9 +111,11 @@
                 android:value=".ui.activities.PlaceAutocomplete" />
             <meta-data
                 android:name="android.app.searchable"
-                android:resource="@xml/searchable" />-->
+                android:resource="@xml/searchable" />
+            -->
 
         </activity>
+        <activity android:name=".ui.activities.ReceiptActivity"></activity>
     </application>
 
 </manifest>

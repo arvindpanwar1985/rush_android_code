@@ -11,6 +11,7 @@ public class ServiceBean extends BaseBean {
 
     private Estimate estimate;
     private CardData default_card;
+    private int  transaction_id;
 
     public Estimate getEstimate() {
         return estimate;
@@ -26,5 +27,13 @@ public class ServiceBean extends BaseBean {
 
     public void setDefault_card(CardData default_card) {
         this.default_card = default_card;
+    }
+
+    public int getTransaction_id() {
+        return transaction_id;
+    }
+
+    public void setTransaction_id(int transaction_id) {
+        this.transaction_id = transaction_id;
     }
 }

@@ -391,16 +391,16 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
     private  int getVechileType(){
         if(imgTypeCar.isSelected()){
-            return 2;
+            return 3;
         }
         if(imgTypeBike.isSelected()){
-            return 1;
+            return 2;
         }
         if(imgTypeCycle.isSelected()){
-            return 0;
+            return 1;
         }
         if(imgTypeTruck.isSelected()){
-            return 3;
+            return 4;
         }
         return  -1;
     }
@@ -639,6 +639,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                     Intent confirmServiceIntent=new Intent(mActivity, ConfirmServiceActivity.class);
                     confirmServiceIntent.putExtra(Constants.KEY_ESTIMATE_DATA,estimate);
                     confirmServiceIntent.putExtra(Constants.KEY_CARD_DATA,defaultCardData);
+                    confirmServiceIntent.putExtra(Constants.KEY_TRANSACTION_ID,serviceBean.getTransaction_id());
                     confirmServiceIntent.putExtra(Constants.KEY_PARAM_DATA,estimateServiceParams.getService());
                     startActivity(confirmServiceIntent);
                 }catch (NullPointerException e){
@@ -648,10 +649,9 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
             @Override
             public void onRequestFailed(String message) {
-
                 Progress.dismissProgress();
                 mActivity.showSnackbar(message,0);
-                if(message.equals(Constants.KEY_AUTH_ERROR)){
+                if(message.equals(Constants.AUTH_ERROR)){
                     mActivity.logOutUser();
                 }
             }
@@ -720,19 +720,14 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                     // geocoder is successfull
                     PickDropAddress pickDropAddress=(PickDropAddress)msg.obj;
                     if(pickDropAddress!=null){
-
                         //call favourite api
                         addToFavourite(pickDropAddress);
                     }
-                    Log.e("ad",pickDropAddress.toString());
-
                     break;
                 }
             }
         }
     }
-
-
 
     private void addToFavourite(final PickDropAddress pickDropAddress){
 
@@ -755,7 +750,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             public void onRequestFailed(String message) {
                 mActivity.showSnackbar(message,0);
                 Progress.dismissProgress();
-                if(message.equals(Constants.KEY_AUTH_ERROR)){
+                if(message.equals(Constants.AUTH_ERROR)){
                     mActivity.logOutUser();
                 }
             }
@@ -785,7 +780,6 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                     pickDropAddress.setCity(city);
                     pickDropAddress.setCountry(country);
                     pickDropAddress.setState(state);
-
                }
                 mHandler.obtainMessage(1,pickDropAddress).sendToTarget();
 

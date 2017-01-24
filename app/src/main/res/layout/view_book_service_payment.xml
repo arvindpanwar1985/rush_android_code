@@ -28,7 +28,7 @@
                 android:textColor="@android:color/white"
                 android:textStyle="bold|italic"
                 android:textSize="@dimen/sp_18"
-                android:text="C$"/>
+                android:text=""/>
 
             <TextView
                 android:id="@+id/txtAmount"
@@ -39,7 +39,7 @@
                 android:textColor="@android:color/white"
                 android:textStyle="bold|italic"
                 android:textSize="@dimen/sp_18"
-                android:text="300"/>
+                android:text=""/>
 
 
             <TextView
@@ -71,7 +71,7 @@
                 android:textColor="@android:color/white"
                 android:textStyle="bold|italic"
                 android:textSize="@dimen/sp_18"
-                android:text="Time"/>
+                />
 
 
 
@@ -119,7 +119,7 @@
             android:textSize="@dimen/sp_16"
             android:layout_marginLeft="@dimen/dp_7"
             android:layout_marginRight="@dimen/dp_4"
-            android:text="PERSONAL *********4567"
+            android:text=""
             android:layout_toLeftOf="@+id/imgArrow"/>
 
         <ImageView
@@ -143,6 +143,7 @@
 
         <Button
             android:layout_width="match_parent"
+            android:id="@+id/btnMakeOrder"
             android:layout_marginLeft="@dimen/dp_40"
             android:layout_marginRight="@dimen/dp_40"
             android:text="@string/str_make_order"

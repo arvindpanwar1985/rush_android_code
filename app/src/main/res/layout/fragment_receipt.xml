@@ -1,0 +1,183 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@drawable/bg_app"
+    tools:context="com.hoffmans.rush.ui.fragments.ReceiptFragment">
+
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:id="@+id/txtOrderComp"
+        android:layout_height="wrap_content"
+        android:text="Order Complete"
+        android:layout_marginTop="@dimen/dp_30"
+        android:textSize="@dimen/sp_22"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"
+        android:textStyle="bold|italic"/>
+
+
+    <TextView
+        android:id="@+id/driverTxt"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/txtOrderComp"
+        android:layout_marginTop="@dimen/dp_5"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/sp_15"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold|italic"
+        android:layout_height="wrap_content"
+        android:text="Driver :Kanue reaves"/>
+
+
+    <TextView
+        android:id="@+id/txtShortly"
+        android:layout_width="wrap_content"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_below="@+id/driverTxt"
+        android:textSize="@dimen/sp_15"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold|italic"
+        android:layout_height="wrap_content"
+        android:text="Your driver will reach you shortly."/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_margin="@dimen/dp_10"
+        android:layout_centerVertical="true"
+        android:weightSum="1"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_receipt"
+        >
+        <LinearLayout
+            android:layout_width="0sp"
+            android:layout_height="match_parent"
+            android:layout_weight=".4"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/reTxtDate"
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_16"
+                android:textStyle="bold|italic"
+                android:layout_height="wrap_content"
+                android:text="17 Jan 2017"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_16"
+                android:layout_marginTop="@dimen/dp_20"
+                android:textStyle="bold|italic"
+                android:layout_height="wrap_content"
+                android:text="Pick Address"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_16"
+                android:layout_marginTop="@dimen/dp_20"
+                android:textStyle="bold|italic"
+                android:layout_height="wrap_content"
+                android:text="Amount"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_16"
+                android:layout_marginTop="@dimen/dp_20"
+                android:textStyle="bold|italic"
+                android:layout_height="wrap_content"
+                android:text="Transaction ID"/>
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_16"
+                android:layout_marginTop="@dimen/dp_20"
+                android:textStyle="bold|italic"
+                android:layout_height="wrap_content"
+                android:text="Authorized"/>
+            </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0sp"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_height="match_parent"
+            android:layout_weight=".6"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/reTxtTime"
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_16"
+                android:textStyle="bold|italic"
+                android:layout_height="wrap_content"
+                android:text="10:33"/>
+
+            <TextView
+                android:id="@+id/reTxtPickAddress"
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_16"
+                android:layout_marginTop="@dimen/dp_20"
+                android:textStyle="bold|italic"
+                android:layout_height="wrap_content"
+                android:text="Pick Address"/>
+
+            <TextView
+                android:id="@+id/reTxtAmount"
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_16"
+                android:layout_marginTop="@dimen/dp_20"
+                android:textStyle="bold|italic"
+                android:layout_height="wrap_content"
+                android:text="Amount"/>
+
+
+            <TextView
+                android:id="@+id/reTxtTransactionId"
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_16"
+                android:layout_marginTop="@dimen/dp_20"
+                android:textStyle="bold|italic"
+                android:layout_height="wrap_content"
+                android:text="Transaction ID"/>
+
+
+
+            <TextView
+                android:id="@+id/reTxtAuthorised"
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_16"
+                android:layout_marginTop="@dimen/dp_20"
+                android:textStyle="bold|italic"
+                android:layout_height="wrap_content"
+                android:text="Authorized"/>
+        </LinearLayout>
+
+
+        </LinearLayout>
+
+</RelativeLayout>

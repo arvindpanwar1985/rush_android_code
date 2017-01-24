@@ -13,14 +13,14 @@ import com.hoffmans.rush.listners.BrainTreeHandler;
 import com.hoffmans.rush.ui.fragments.LoginFragment;
 import com.hoffmans.rush.ui.fragments.PaymentMethodFragment;
 import com.hoffmans.rush.ui.fragments.UpdateAccountFragment;
+import com.hoffmans.rush.utils.Constants;
+import com.hoffmans.rush.utils.Utils;
 
 /**
  * Created by devesh on 19/12/16.
  */
 
 public class LoginActivity extends BaseActivity implements PaymentMethodNonceCreatedListener, BraintreeErrorListener {
-
-
 
     private BrainTreeHandler brainTreeHandler;
 
@@ -33,6 +33,9 @@ public class LoginActivity extends BaseActivity implements PaymentMethodNonceCre
         hideToolbar();
         Fragment fragment=new LoginFragment();
         replaceFragment(fragment,R.id.content_login);
+        if(getIntent().getBooleanExtra(Constants.KEY_AUTH_ERROR,false)){
+            Utils.showAlertDialog(getApplicationContext(),"Authentication error,Please login Again.");
+        }
     }
 
     @Override

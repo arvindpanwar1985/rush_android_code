@@ -168,6 +168,9 @@ public class BookServiceActivity extends BaseActivity
 
         else if (id == R.id.nav_record) {
 
+            Intent recIntent=new Intent(BookServiceActivity.this, ReceiptActivity.class);
+            recIntent.putExtra(Constants.KEY_IS_FAVOURITE_SELECTABLE,true);
+            startActivity(recIntent);
         } else if (id == R.id.nav_scheduled) {
 
         } else if (id == R.id.nav_fav) {

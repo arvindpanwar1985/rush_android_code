@@ -144,8 +144,6 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
         }
     }
 
-
-
     private void validateFields(){
         // Store values at the time of the login attempt.
         String email = edtEmail.getText().toString().trim();
@@ -223,7 +221,7 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
             @Override
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
-                if(message.equals(Constants.KEY_AUTH_ERROR)){
+                if(message.equals(Constants.AUTH_ERROR)){
                     mActivity.logOutUser();
                 }
                 mActivity.showSnackbar(message,Toast.LENGTH_LONG);
@@ -281,15 +279,12 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
             public void onRequestFailed(String message) {
                 mActivity.showSnackbar(message,0);
                 Progress.dismissProgress();
-                if(message.equals(Constants.KEY_AUTH_ERROR)){
+                if(message.equals(Constants.AUTH_ERROR)){
                     mActivity.logOutUser();
                 }
             }
         });
     }
-
-
-
     private  void setSpinnerListner(){
         spinnerCurrency.setOnItemSelectedListener(this);
     }
@@ -306,6 +301,5 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-
     }
 }

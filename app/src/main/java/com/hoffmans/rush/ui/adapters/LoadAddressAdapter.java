@@ -94,7 +94,11 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
             holder.imgFav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mItemClickListener.onFavoriteAddressclicked(view,position);
+                    if (mItemClickListener != null) {
+                        mItemClickListener.onFavoriteAddressclicked(view,position);
+                        //mItemClickListener.onitemclicked(v,getPosition());
+                    }
+
                 }
             });
         }else{
@@ -107,7 +111,11 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
         holder.txtAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mItemClickListener.onitemclicked(view,position);
+                if (mItemClickListener != null) {
+                    mItemClickListener.onitemclicked(view,position);
+                    //mItemClickListener.onitemclicked(v,getPosition());
+                }
+
 
             }
         });
@@ -115,8 +123,11 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
         holder.txtviewFrequentlyAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (mItemClickListener != null) {
+                    mItemClickListener.onfrequentAddressclicked(view,position);
+                    //mItemClickListener.onitemclicked(v,getPosition());
+                }
 
-                mItemClickListener.onfrequentAddressclicked(view,position);
 
             }
         });

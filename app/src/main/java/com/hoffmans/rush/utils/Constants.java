@@ -29,8 +29,13 @@ public class Constants {
     public static final String KEY_IS_FAVOURITE_SELECTABLE="is_fav_selectable";
     public static final String KEY_ESTIMATE_DATA="estimate_data";
     public static final String KEY_CARD_DATA="card_data";
+    public static final String KEY_TRANSACTION_ID="transaction_id";
     public static final String KEY_PARAM_DATA="param_data";
-    public static final String KEY_AUTH_ERROR="Authorization header not valid";
+    public static final String AUTH_ERROR="Authorization header not valid";
+    public static final String KEY_AUTH_ERROR="auth_error";
+    public static final String KEY_DATA_DATE_TIME="date_time";
+    public static final String KEY_DATA_TRANSACTION="transaction_data";
+
 
 
 

@@ -36,6 +36,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.utils.AppPreference;
+import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.DateUtils;
 
 import java.text.SimpleDateFormat;
@@ -427,6 +428,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
         AppPreference preference =AppPreference.newInstance(BaseActivity.this);
         preference.logoutUser();
         Intent intent =new Intent(BaseActivity.this,LoginActivity.class);
+        intent.putExtra(Constants.KEY_AUTH_ERROR,true);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }

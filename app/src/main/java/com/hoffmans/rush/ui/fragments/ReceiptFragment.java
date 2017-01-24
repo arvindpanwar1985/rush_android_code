@@ -1,0 +1,103 @@
+package com.hoffmans.rush.ui.fragments;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.hoffmans.rush.R;
+import com.hoffmans.rush.model.DateTime;
+import com.hoffmans.rush.model.TransactionDetails;
+import com.hoffmans.rush.utils.Constants;
+
+
+public class ReceiptFragment extends BaseFragment {
+
+    private DateTime date_time;
+    private TransactionDetails transactionDetails;
+    private TextView txtDate,txtTime,txtAmount,txtTransactionId,txtAuthorized,txtPickAddress;
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+
+
+
+
+    public ReceiptFragment() {
+        // Required empty public constructor
+    }
+
+
+
+    public static ReceiptFragment newInstance(DateTime dateTime, TransactionDetails details) {
+        ReceiptFragment fragment = new ReceiptFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(Constants.KEY_DATA_DATE_TIME, dateTime);
+        args.putParcelable(Constants.KEY_DATA_TRANSACTION,details);
+
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            date_time=getArguments().getParcelable(Constants.KEY_DATA_DATE_TIME);
+            transactionDetails=getArguments().getParcelable(Constants.KEY_DATA_TRANSACTION);
+
+        }
+    }
+
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view=inflater.inflate(R.layout.fragment_receipt, container, false);
+        initViews(view);
+        initListeners();
+        return view;
+    }
+
+
+
+    @Override
+    protected void initViews(View view) {
+
+        txtDate          =(TextView)view.findViewById(R.id.reTxtDate);
+        txtTime          =(TextView)view.findViewById(R.id.reTxtTime);
+        txtAmount        =(TextView)view.findViewById(R.id.reTxtAmount);
+        txtPickAddress   =(TextView)view.findViewById(R.id.reTxtPickAddress);
+        txtTransactionId =(TextView)view.findViewById(R.id.reTxtTransactionId);
+        txtAuthorized    =(TextView)view.findViewById(R.id.reTxtAuthorised);
+        txtTime    =(TextView)view.findViewById(R.id.reTxtTime);
+
+        try{setData();}catch (NullPointerException e){};
+
+
+    }
+
+    @Override
+    protected void initListeners() {
+
+    }
+
+
+    private void setData() throws NullPointerException{
+        if(transactionDetails!=null){
+            txtTransactionId.setText(transactionDetails.getPaymentTransactionId());
+            txtAuthorized.setText(transactionDetails.getStatus());
+            txtAmount.setText(transactionDetails.getAmount());
+
+        }
+        if(date_time!=null){
+            txtDate.setText(date_time.getDate());
+            txtTime.setText(date_time.getTime());
+        }
+    }
+
+
+}
