@@ -18,7 +18,7 @@ import java.util.List;
  * Created by devesh on 6/1/17.
  */
 
-public class CurrencyAdapter extends ArrayAdapter<Currency> {
+public class  CurrencyAdapter extends ArrayAdapter<Currency> {
 
     private List<Currency>mList;
     private Context mContext;

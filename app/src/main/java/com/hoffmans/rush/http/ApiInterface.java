@@ -19,6 +19,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
+import retrofit2.http.QueryMap;
 
 /**
  * Created by devesh on 23/12/16.
@@ -82,5 +83,9 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("/api/address/mark_favorite_unfavorite")
     Call<ResponseBody> markFavUnfav(@Header("Authorization")String authorization,@Field("address_id") String password);
+
+
+    @GET("/api/services/my_services")
+    Call<ResponseBody> getRecords(@Header("Authorization")String authorization,@QueryMap(encoded = true) Map<String, String> params);
 
 }

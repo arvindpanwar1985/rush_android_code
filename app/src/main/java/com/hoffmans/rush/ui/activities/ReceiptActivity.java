@@ -13,7 +13,7 @@ public class ReceiptActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getLayoutInflater().inflate(R.layout.activity_receipt, getParentView());
+        getLayoutInflater().inflate(R.layout.activity_record, getParentView());
         initToolBar("Receipt",true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_black);
         DateTime dateTime=getIntent().getParcelableExtra(Constants.KEY_DATA_DATE_TIME);

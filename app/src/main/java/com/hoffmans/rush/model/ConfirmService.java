@@ -19,6 +19,7 @@ public class ConfirmService  implements Parcelable {
     private List<PickDropAddress> drop_addresses;
     private TransactionDetails transactionDetails;
     private DateTime date_time;
+    private Estimate estimate ;
 
 
 
@@ -117,5 +118,11 @@ public class ConfirmService  implements Parcelable {
         }
     };
 
+    public Estimate getEstimate() {
+        return estimate;
+    }
 
+    public void setEstimate(Estimate estimate) {
+        this.estimate = estimate;
+    }
 }

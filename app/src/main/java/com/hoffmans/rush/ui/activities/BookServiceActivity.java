@@ -24,6 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class BookServiceActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
 
+    private static final String KEY_IS_RECORD="isRecord";
     private LinearLayout edtprofileLinear;
     private TextView headerTxtName,headerTxtEmail,headerTxtPhone;
     private CircleImageView headerImgProfile;
@@ -168,11 +169,14 @@ public class BookServiceActivity extends BaseActivity
 
         else if (id == R.id.nav_record) {
 
-            Intent recIntent=new Intent(BookServiceActivity.this, ReceiptActivity.class);
-            recIntent.putExtra(Constants.KEY_IS_FAVOURITE_SELECTABLE,true);
+            Intent recIntent=new Intent(BookServiceActivity.this, RecordActivity.class);
+            recIntent.putExtra(KEY_IS_RECORD,true);
             startActivity(recIntent);
         } else if (id == R.id.nav_scheduled) {
 
+            Intent recIntent=new Intent(BookServiceActivity.this, RecordActivity.class);
+            recIntent.putExtra(KEY_IS_RECORD,false);
+            startActivity(recIntent);
         } else if (id == R.id.nav_fav) {
 
             Intent favIntent=new Intent(BookServiceActivity.this, FavouriteActivity.class);

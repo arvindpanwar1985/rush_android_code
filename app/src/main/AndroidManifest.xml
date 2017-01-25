@@ -87,6 +87,10 @@
         <activity
             android:name=".ui.activities.FavouriteActivity"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.activities.RecordActivity"
+            android:theme="@style/AppTheme" />
+
 
         <meta-data
             android:name="io.fabric.ApiKey"

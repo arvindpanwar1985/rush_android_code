@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:background="@color/colorPrimaryDark">
+
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginLeft="@dimen/dp_10"
+           android:layout_marginRight="@dimen/dp_10"
+           android:orientation="vertical">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:id="@+id/mapImage"/>
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_2"
+            android:paddingRight="@dimen/dp_2"
+            android:paddingBottom="@dimen/dp_5"
+            android:paddingTop="@dimen/dp_5"
+            android:layout_below="@+id/mapImage"
+            android:background="@android:color/white"
+            android:layout_gravity="center">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgDriver"
+                android:src="@drawable/default_profile_photo"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"/>
+
+
+            <TextView
+                android:id="@+id/txtdriverName"
+                android:textSize="@dimen/sp_17"
+                android:layout_toRightOf="@+id/imgDriver"
+                android:layout_marginLeft="@dimen/dp_7"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="italic|bold"
+                android:text="Raam Laal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+
+            <TextView
+                android:id="@+id/txtdateTime"
+                android:textSize="@dimen/sp_17"
+                android:layout_toRightOf="@+id/txtdriverName"
+                android:layout_marginLeft="@dimen/dp_7"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="italic|bold"
+                android:text="Jan 2017 4:45am"
+                android:layout_toLeftOf="@+id/txtAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+               />
+
+            <TextView
+                android:id="@+id/txtAmount"
+                android:textSize="@dimen/sp_17"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="italic|bold"
+                android:text="C$ 400"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"/>
+
+
+
+            <TextView
+                android:id="@+id/txtvechileName"
+                android:textSize="@dimen/sp_15"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="italic|bold"
+                android:text="i20"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginLeft="@dimen/dp_7"
+                android:layout_below="@+id/txtdriverName"
+                android:layout_toRightOf="@+id/imgDriver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+
+
+            </RelativeLayout>
+           </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/dp_20"
+        android:id="@+id/viewCardBottomLine"
+        android:layout_height="1dp"
+        android:layout_marginBottom="@dimen/dp_7"
+        android:background="@android:color/white"/>
+
+</LinearLayout>
