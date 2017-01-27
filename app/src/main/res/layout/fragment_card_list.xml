@@ -44,7 +44,11 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginRight="@dimen/dp_4"
         android:id="@+id/imgAddCard"
+        android:padding="@dimen/dp_7"
+        android:background="@drawable/add_vcard"
         android:layout_gravity="end"/>
 
 

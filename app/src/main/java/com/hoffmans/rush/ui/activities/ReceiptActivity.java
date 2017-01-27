@@ -13,12 +13,13 @@ public class ReceiptActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getLayoutInflater().inflate(R.layout.activity_record, getParentView());
+        getLayoutInflater().inflate(R.layout.activity_receipt, getParentView());
         initToolBar("Receipt",true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_black);
         DateTime dateTime=getIntent().getParcelableExtra(Constants.KEY_DATA_DATE_TIME);
+        String street_address=getIntent().getStringExtra(Constants.KEY_PICK_ADDRESS);
         TransactionDetails transactionDetails=getIntent().getParcelableExtra(Constants.KEY_DATA_TRANSACTION);
-        ReceiptFragment fragment=ReceiptFragment.newInstance(dateTime,transactionDetails);
+        ReceiptFragment fragment=ReceiptFragment.newInstance(dateTime,transactionDetails,street_address);
         replaceFragment(fragment,R.id.contentReceipt,true);
     }
 

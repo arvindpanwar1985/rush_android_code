@@ -16,6 +16,7 @@ public class ReceiptFragment extends BaseFragment {
 
     private DateTime date_time;
     private TransactionDetails transactionDetails;
+    private String mStreetAddress;
     private TextView txtDate,txtTime,txtAmount,txtTransactionId,txtAuthorized,txtPickAddress;
 
     // TODO: Rename and change types of parameters
@@ -30,11 +31,12 @@ public class ReceiptFragment extends BaseFragment {
 
 
 
-    public static ReceiptFragment newInstance(DateTime dateTime, TransactionDetails details) {
+    public static ReceiptFragment newInstance(DateTime dateTime, TransactionDetails details,String street_address) {
         ReceiptFragment fragment = new ReceiptFragment();
         Bundle args = new Bundle();
         args.putParcelable(Constants.KEY_DATA_DATE_TIME, dateTime);
         args.putParcelable(Constants.KEY_DATA_TRANSACTION,details);
+        args.putString(Constants.KEY_PICK_ADDRESS,street_address);
 
         fragment.setArguments(args);
         return fragment;
@@ -46,7 +48,7 @@ public class ReceiptFragment extends BaseFragment {
         if (getArguments() != null) {
             date_time=getArguments().getParcelable(Constants.KEY_DATA_DATE_TIME);
             transactionDetails=getArguments().getParcelable(Constants.KEY_DATA_TRANSACTION);
-
+            mStreetAddress=getArguments().getString(Constants.KEY_PICK_ADDRESS);
         }
     }
 
@@ -90,13 +92,14 @@ public class ReceiptFragment extends BaseFragment {
         if(transactionDetails!=null){
             txtTransactionId.setText(transactionDetails.getPaymentTransactionId());
             txtAuthorized.setText(transactionDetails.getStatus());
-            txtAmount.setText(transactionDetails.getAmount());
+            txtAmount.setText( transactionDetails.getSymbol()+" "+transactionDetails.getAmount());
 
         }
         if(date_time!=null){
             txtDate.setText(date_time.getDate());
             txtTime.setText(date_time.getTime());
         }
+        txtPickAddress.setText(mStreetAddress);
     }
 
 

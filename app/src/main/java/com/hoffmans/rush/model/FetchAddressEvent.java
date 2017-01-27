@@ -6,8 +6,7 @@ package com.hoffmans.rush.model;
 
 public class FetchAddressEvent {
     private boolean sucess;
-    private Service service;
-
+    private String state,city,country,type;
     public boolean isSucess() {
         return sucess;
     }
@@ -16,11 +15,35 @@ public class FetchAddressEvent {
         this.sucess = sucess;
     }
 
-    public Service getService() {
-        return service;
+    public String getState() {
+        return state;
     }
 
-    public void setService(Service service) {
-        this.service = service;
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

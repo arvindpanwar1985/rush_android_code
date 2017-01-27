@@ -46,6 +46,8 @@ public class TransactionDetails implements Parcelable {
     @Expose
     private String updatedAt;
 
+    private String symbol;
+
 
 
     public Integer getId() {
@@ -136,6 +138,17 @@ public class TransactionDetails implements Parcelable {
         this.updatedAt = updatedAt;
     }
 
+    public TransactionDetails() {
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -154,9 +167,7 @@ public class TransactionDetails implements Parcelable {
         dest.writeString(this.transactionDate);
         dest.writeString(this.createdAt);
         dest.writeString(this.updatedAt);
-    }
-
-    public TransactionDetails() {
+        dest.writeString(this.symbol);
     }
 
     protected TransactionDetails(Parcel in) {
@@ -171,9 +182,10 @@ public class TransactionDetails implements Parcelable {
         this.transactionDate = in.readString();
         this.createdAt = in.readString();
         this.updatedAt = in.readString();
+        this.symbol = in.readString();
     }
 
-    public static final Parcelable.Creator<TransactionDetails> CREATOR = new Parcelable.Creator<TransactionDetails>() {
+    public static final Creator<TransactionDetails> CREATOR = new Creator<TransactionDetails>() {
         @Override
         public TransactionDetails createFromParcel(Parcel source) {
             return new TransactionDetails(source);

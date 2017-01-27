@@ -27,6 +27,7 @@ import java.util.List;
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder> {
 
 
+    private static final String STATIC_MAP_URL="http://maps.google.com/maps/api/staticmap?center=";
     private List<Record> recordDataList;
     private Context mContext;
     private int height ,widht;
@@ -103,7 +104,6 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         try{
             if(estimate.getApproxConvertedAmount()!=null){
                 holder.txtAmount.setText(estimate.getApproxConvertedAmount().toString());
-
             }
             if(dateTime.getDate()!=null &&dateTime.getTime()!=null){
                 holder.txtDateTime.setText(dateTime.getDate()+" "+dateTime.getTime());
@@ -113,14 +113,11 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             }
 
             if(record.getDriver_details().getPicUrl()!=null) {
-            Glide.with(mContext).load(record.getDriver_details().getPicUrl()).into(holder.imgdriver);
+             Glide.with(mContext).load(record.getDriver_details().getPicUrl()).into(holder.imgdriver);
             }
         }catch (NullPointerException e){
 
         }
-
-
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -134,7 +131,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
     private String getImageMap(PickDropAddress pickDropAddress){
         if(pickDropAddress!=null) {
-            return "http://maps.google.com/maps/api/staticmap?center=" + pickDropAddress.getLatitude()+ "," + pickDropAddress.getLongitude() + "&zoom=16&size="+widht+"x"+height+"&sensor=false";
+            return STATIC_MAP_URL+ pickDropAddress.getLatitude()+ "," + pickDropAddress.getLongitude() + "&zoom=18&size="+widht+"x"+height+"&sensor=false";
         }
         return null;
     }

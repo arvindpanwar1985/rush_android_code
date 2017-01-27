@@ -86,6 +86,8 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
             holder.txtAddress.setHint(mContext.getString(R.string.str_hint_end));
         }
         final  PickDropAddress address=addressdata.get(position);
+
+
         if(!TextUtils.isEmpty(address.getStreetAddress())){
             //update address
             holder.txtAddress.setText(address.getStreetAddress());
@@ -131,6 +133,11 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
 
             }
         });
+
+        if(mItemClickListener==null){
+            holder.txtviewFrequentlyAddress.setVisibility(View.GONE);
+            holder.imgFav.setVisibility(View.GONE);
+        }
 
 
 

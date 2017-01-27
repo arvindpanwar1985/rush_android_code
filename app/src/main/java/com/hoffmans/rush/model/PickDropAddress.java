@@ -38,6 +38,8 @@ public class PickDropAddress implements Parcelable {
     private int id;
     private int user_id;
 
+
+
     public String getStreetAddress() {
         return streetAddress;
     }
@@ -122,6 +124,8 @@ public class PickDropAddress implements Parcelable {
     public PickDropAddress() {
     }
 
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -139,6 +143,7 @@ public class PickDropAddress implements Parcelable {
         dest.writeString(this.address_label);
         dest.writeInt(this.id);
         dest.writeInt(this.user_id);
+
     }
 
     protected PickDropAddress(Parcel in) {
@@ -152,6 +157,7 @@ public class PickDropAddress implements Parcelable {
         this.address_label = in.readString();
         this.id = in.readInt();
         this.user_id = in.readInt();
+
     }
 
     public static final Creator<PickDropAddress> CREATOR = new Creator<PickDropAddress>() {

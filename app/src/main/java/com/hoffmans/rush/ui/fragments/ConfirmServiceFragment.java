@@ -247,10 +247,12 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
                 ConfirmServiceBean confirmServiceBean=(ConfirmServiceBean)body;
                 if(confirmServiceBean.getService()!=null){
                     ConfirmService service=confirmServiceBean.getService();
-                    //TODO show receipt
+
                     Intent receiptIntent=new Intent(mActivity, ReceiptActivity.class);
                     receiptIntent.putExtra(Constants.KEY_DATA_DATE_TIME,service.getDate_time());
+                    receiptIntent.putExtra(Constants.KEY_PICK_ADDRESS,service.getPick_address().getStreetAddress());
                     receiptIntent.putExtra(Constants.KEY_DATA_TRANSACTION,service.getTransactionDetails());
+
                     startActivity(receiptIntent);
                     // finish confirm service
                     mActivity.finish();

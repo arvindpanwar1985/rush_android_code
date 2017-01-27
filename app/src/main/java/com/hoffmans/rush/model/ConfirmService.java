@@ -15,7 +15,7 @@ public class ConfirmService  implements Parcelable {
     private String date;
     private int vehicle_type_id;
     private VechileDetail vehicle_details;
-    private PickDropAddress pick_address;
+    private PickDropAddress pick_up;
     private List<PickDropAddress> drop_addresses;
     private TransactionDetails transactionDetails;
     private DateTime date_time;
@@ -33,11 +33,11 @@ public class ConfirmService  implements Parcelable {
     }
 
     public PickDropAddress getPick_address() {
-        return pick_address;
+        return pick_up;
     }
 
     public void setPick_address(PickDropAddress pick_address) {
-        this.pick_address = pick_address;
+        this.pick_up = pick_address;
     }
 
     public List<PickDropAddress> getDrop_addresses() {
@@ -92,7 +92,7 @@ public class ConfirmService  implements Parcelable {
         dest.writeString(this.date);
         dest.writeInt(this.vehicle_type_id);
 
-        dest.writeParcelable(this.pick_address, flags);
+        dest.writeParcelable(this.pick_up, flags);
         dest.writeTypedList(this.drop_addresses);
 
     }
@@ -101,7 +101,7 @@ public class ConfirmService  implements Parcelable {
         this.date = in.readString();
         this.vehicle_type_id = in.readInt();
 
-        this.pick_address = in.readParcelable(PickDropAddress.class.getClassLoader());
+        this.pick_up = in.readParcelable(PickDropAddress.class.getClassLoader());
         this.drop_addresses = in.createTypedArrayList(PickDropAddress.CREATOR);
 
     }

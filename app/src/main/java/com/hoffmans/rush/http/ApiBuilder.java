@@ -25,21 +25,24 @@ public class ApiBuilder {
 
     public  static ApiInterface  createApiBuilder(){
         setLogInterCeptor();
-        if(retrofit!=null){
-            apiInterface=retrofit.create(ApiInterface.class);
-            return apiInterface;
-        }else{
-            retrofit = new Retrofit.Builder().baseUrl(ApiConfig.getdevBaseUrl())
-                    // set the okhttpclient and add default connect and read timepouts
-                    .client(okHttpClient.connectTimeout(45,TimeUnit.SECONDS).readTimeout(45,TimeUnit.SECONDS).build())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            apiInterface=retrofit.create(ApiInterface.class);
-            return apiInterface;
-        }
+         if(retrofit!=null){
+             return apiInterface=retrofit.create(ApiInterface.class);
+         }else {
+             retrofit = new Retrofit.Builder().baseUrl(ApiConfig.getBaseUrl())
+                     // set the okhttpclient and add default connect and read timepouts
+                     .client(okHttpClient.connectTimeout(45, TimeUnit.SECONDS).readTimeout(45, TimeUnit.SECONDS).build())
+                     .addConverterFactory(GsonConverterFactory.create())
+                     .build();
+             apiInterface = retrofit.create(ApiInterface.class);
+             return apiInterface;
+         }
 
 
     }
+
+
+
+
 
 
     /**
@@ -60,16 +63,22 @@ public class ApiBuilder {
 
         if(retrofit!=null){
             return retrofit;
-        }else{
-            return new Retrofit.Builder().baseUrl(ApiConfig.getdevBaseUrl())
+        }else {
+            return new Retrofit.Builder().baseUrl(ApiConfig.getBaseUrl())
                     // set the okhttpclient and add default connect and read timepouts
-                    .client(okHttpClient.connectTimeout(45,TimeUnit.SECONDS).readTimeout(45,TimeUnit.SECONDS).build())
+                    .client(okHttpClient.connectTimeout(45, TimeUnit.SECONDS).readTimeout(45, TimeUnit.SECONDS).build())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-            // Create an instance of our GitHub API interface.
         }
+            // Create an instance of our GitHub API interface.
+
 
     }
+
+
+
+
+
 }
 
 

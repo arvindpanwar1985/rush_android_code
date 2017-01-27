@@ -31,7 +31,6 @@ import static com.hoffmans.rush.ui.activities.AddCardActivity.REQUEST_ADD_CARD;
 public class CardListFragment extends BaseFragment implements View.OnClickListener,OnitemClickListner.OnFrequentAddressClicked {
 
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private boolean isCardSelectable;
     private String mParam2;
     private View view;
@@ -51,7 +50,6 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
         CardListFragment fragment = new CardListFragment();
         Bundle args = new Bundle();
         args.putBoolean(ARG_PARAM1, param1);
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,7 +59,6 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             isCardSelectable = getArguments().getBoolean(ARG_PARAM1);
-
         }
     }
 
@@ -76,8 +73,6 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
         }
         return view;
     }
-
-
 
 
 
@@ -168,9 +163,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==REQUEST_ADD_CARD && resultCode==mActivity.RESULT_OK){
            if(data!=null){
-
                cardDataList.clear();
-
                ArrayList<CardData> cards=data.getParcelableArrayListExtra(AddCardActivity.KEY_CARD_DATA);
                adapter=new CardListAdapter(mActivity,cards,this);
                recyclerCardList.setAdapter(adapter);

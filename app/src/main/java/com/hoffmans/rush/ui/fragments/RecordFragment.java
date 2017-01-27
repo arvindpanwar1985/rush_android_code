@@ -18,6 +18,7 @@ import com.hoffmans.rush.http.request.ServiceRequest;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.model.Record;
 import com.hoffmans.rush.ui.adapters.RecordAdapter;
+import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.widgets.EndlessRecyclerViewScrollListener;
 
@@ -28,21 +29,24 @@ import java.util.List;
 public class RecordFragment extends BaseFragment {
 
 
-   private static final String KEY_IS_RECORD="isRecord";
-   private static final String KEY_PAGE="page";
-   private static final String KEY_STATE="state";
-   private static final String KEY_PER_PAGE="perpage";
+   private static final String KEY_IS_RECORD      ="isRecord";
+   private static final String KEY_PAGE           ="page";
+   private static final String KEY_STATE          ="state";
+   private static final String KEY_PER_PAGE       ="perpage";
+   private static final String STATE_PENDING      ="pending";
+   private static final String STATE_COMPLETED    ="completed";
+   private static final String DEFAULT_ITEMS      ="5";
 
-    private boolean isRecord;
-    private RecyclerView recyclerView;
-    private LinearLayout linearProgress;
-    private RecordAdapter mAdapter;
-    private EndlessRecyclerViewScrollListener scrollListener;
-    private LinearLayoutManager linearLayoutManager;
-    private int records_count,currentListSize;
-    private int page=1;
-    private List<Record> recordList;
-    private ProgressBar progressBar;
+   private boolean isRecord;
+   private RecyclerView recyclerView;
+   private LinearLayout linearProgress;
+   private RecordAdapter mAdapter;
+   private EndlessRecyclerViewScrollListener scrollListener;
+   private LinearLayoutManager linearLayoutManager;
+   private int records_count,currentListSize;
+   private int page=1;
+   private List<Record> recordList;
+   private ProgressBar progressBar;
 
 
 
@@ -63,11 +67,12 @@ public class RecordFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+
             isRecord=getArguments().getBoolean(KEY_IS_RECORD);
             if(isRecord){
-                mActivity.initToolBar("Records",true,true);
+                mActivity.initToolBar(getString(R.string.str_record),true,true);
             }else{
-                mActivity.initToolBar("Scheduled",true,true);
+                mActivity.initToolBar(getString(R.string.str_scheduled),true,true);
             }
         }
     }
@@ -79,7 +84,7 @@ public class RecordFragment extends BaseFragment {
         View view=inflater.inflate(R.layout.fragment_record, container, false);
         initViews(view);
         initListeners();
-        getRecordData(buildParams(String.valueOf(page),"5"));
+        getRecordData(buildParams(String.valueOf(page),DEFAULT_ITEMS));
         return view;
     }
 
@@ -111,7 +116,7 @@ public class RecordFragment extends BaseFragment {
                 // Add whatever code is needed to append new items to the bottom of the list
                 if(currentListSize!=records_count){
                     linearProgress.setVisibility(View.VISIBLE);
-                    loadmoreItems(buildParams(String.valueOf(page),"5"));
+                    loadmoreItems(buildParams(String.valueOf(page),DEFAULT_ITEMS));
                 }
             }
         };
@@ -120,13 +125,19 @@ public class RecordFragment extends BaseFragment {
     }
 
 
+    /**
+     *
+     * @param page page number to laod
+     * @param perpage items per page
+     * @return Hashmap params for api call
+     */
     private HashMap<String ,String> buildParams(String page,String perpage){
         HashMap<String,String> params=new HashMap<>();
         params.put(KEY_PAGE,page);
         params.put(KEY_PER_PAGE,perpage);
-        params.put(KEY_STATE,"completed");
+        params.put(KEY_STATE,STATE_COMPLETED);
         if(!isRecord){
-            params.put(KEY_STATE,"pending");
+            params.put(KEY_STATE,STATE_PENDING);
         }
         return params;
     }
@@ -158,12 +169,20 @@ public class RecordFragment extends BaseFragment {
             public void onRequestFailed(String message) {
 
                     Progress.dismissProgress();
+                Progress.dismissProgress();
+                if(message.equals(Constants.AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
 
             }
         });
     }
 
 
+    /**
+     * load more data on endless scrolling
+     * @param params
+     */
     private  void loadmoreItems(HashMap<String,String> params){
         ServiceRequest request=new ServiceRequest();
         request.getRecords(appPreference.getUserDetails().getToken(), params, new ApiCallback() {
@@ -184,10 +203,12 @@ public class RecordFragment extends BaseFragment {
 
             @Override
             public void onRequestFailed(String message) {
-
-
                 mActivity.showSnackbar(message,0);
                 linearProgress.setVisibility(View.GONE);
+                Progress.dismissProgress();
+                if(message.equals(Constants.AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
 
             }
         });

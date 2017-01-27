@@ -88,4 +88,8 @@ public interface ApiInterface {
     @GET("/api/services/my_services")
     Call<ResponseBody> getRecords(@Header("Authorization")String authorization,@QueryMap(encoded = true) Map<String, String> params);
 
+
+    @GET("/maps/api/geocode/json")
+    Call<ResponseBody> getPlacesDetails(@QueryMap(encoded = true) Map<String, String> params);
+
 }

@@ -99,6 +99,8 @@
     <string name="progress_loading">Loading..</string>
     <string name="progress_estimate">Estimating Cost..</string>
     <string name="title_activity_place_autocomplete">PlaceAutocomplete</string>
+    <string name="str_record">Records</string>
+    <string name="str_scheduled">Scheduled</string>
 
 
 </resources>

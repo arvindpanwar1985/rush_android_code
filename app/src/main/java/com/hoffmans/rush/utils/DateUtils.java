@@ -134,8 +134,6 @@ public class DateUtils {
         SimpleDateFormat dateFormat=null;
         try {
             dateFormat = new SimpleDateFormat(GMT_FORMAT);
-            TimeZone utcZone = TimeZone.getTimeZone("UTC");
-            dateFormat.setTimeZone(utcZone);
             Date date=new Date();
             return dateFormat.format(date);
         }  catch (Exception e) {
