@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Geocoder;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -97,12 +98,10 @@ public class BuildAddressService extends IntentService {
             getPlaceDetails(lat,lng);
         }else{
             fetchAddressEvent.setSucess(false);
+            fetchAddressEvent.setMessage("Unable to find location.");
             EventBus.getDefault().post(fetchAddressEvent);
         }
     }
-
-
-
 
     private void getPlaceDetails(double lat, double lng){
 
@@ -138,14 +137,17 @@ public class BuildAddressService extends IntentService {
                             fetchAddressEvent.setCountry(country);
                             fetchAddressEvent.setState(state);
                             fetchAddressEvent.setSucess(true);
+                            Log.e("place data","Country :"+country+" state: "+state+" city :"+city);
                             EventBus.getDefault().post(fetchAddressEvent);
                         }
                     } catch (Exception e) {
                         fetchAddressEvent.setSucess(false);
+                        fetchAddressEvent.setMessage("Unable to find Geocode data.");
                         EventBus.getDefault().post(fetchAddressEvent);
                     }
                 }else{
                     fetchAddressEvent.setSucess(false);
+                    fetchAddressEvent.setMessage("Unable to find Geocode data.");
                     EventBus.getDefault().post(fetchAddressEvent);
                 }
 
@@ -154,12 +156,12 @@ public class BuildAddressService extends IntentService {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 fetchAddressEvent.setSucess(false);
+                fetchAddressEvent.setMessage(t.getMessage());
                 EventBus.getDefault().post(fetchAddressEvent);
             }
         });
 
     }
-
 
     private ApiInterface getApiInterface(){
 
@@ -178,6 +180,7 @@ public class BuildAddressService extends IntentService {
             return apiInterface;
         }
     }
+
 
     @Override
     public void onDestroy() {

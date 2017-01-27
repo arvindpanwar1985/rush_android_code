@@ -52,6 +52,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
     private RecyclerView recyclerView;
     private Button   btnMakeOrder;
     private LoadAddressAdapter addressAdapter;
+    private boolean isServiceConfirmed;
     private List<PickDropAddress>listAddressData=new ArrayList<>();
 
     public ConfirmServiceFragment() {
@@ -246,8 +247,8 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
                 Progress.dismissProgress();
                 ConfirmServiceBean confirmServiceBean=(ConfirmServiceBean)body;
                 if(confirmServiceBean.getService()!=null){
+                    isServiceConfirmed=true;
                     ConfirmService service=confirmServiceBean.getService();
-
                     Intent receiptIntent=new Intent(mActivity, ReceiptActivity.class);
                     receiptIntent.putExtra(Constants.KEY_DATA_DATE_TIME,service.getDate_time());
                     receiptIntent.putExtra(Constants.KEY_PICK_ADDRESS,service.getPick_address().getStreetAddress());
@@ -329,4 +330,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
 
         }
     }
+
+
+
 }

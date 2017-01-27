@@ -1,6 +1,7 @@
 package com.hoffmans.rush.ui.fragments;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,8 +41,6 @@ public class FavouriteFragment extends BaseFragment implements OnitemClickListne
     public FavouriteFragment() {
         // Required empty public constructor
     }
-
-
 
     public static FavouriteFragment newInstance(boolean param1) {
         FavouriteFragment fragment = new FavouriteFragment();
@@ -151,12 +150,39 @@ public class FavouriteFragment extends BaseFragment implements OnitemClickListne
     public void onFavoriteAddressclicked(View view, int position) {
         if(addressArrayList!=null){
             PickDropAddress pickDropAddress=addressArrayList.get(position);
-            unmarkFavourite(String.valueOf(pickDropAddress.getId()));
+            showDialog(pickDropAddress);
         }
 
 
     }
 
+
+    private void showDialog(final PickDropAddress pickDropAddress){
+
+        try {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mActivity);
+            builder.setTitle(R.string.app_name)
+                    .setMessage(R.string.str_fav_remove)
+                    .setCancelable(false)
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            unmarkFavourite(pickDropAddress.getId()+"");
+
+
+                        }
+                    }).create().show();
+        }catch (Exception e){
+
+        }
+    }
 
     private  void unmarkFavourite(String address_id){
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
@@ -181,6 +207,8 @@ public class FavouriteFragment extends BaseFragment implements OnitemClickListne
             @Override
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
+                recyclerView.setVisibility(View.GONE);
+                txtNOFav.setVisibility(View.VISIBLE);
                 mActivity.showSnackbar(message,0);
                 if(message.equals(Constants.AUTH_ERROR)){
                     mActivity.logOutUser();

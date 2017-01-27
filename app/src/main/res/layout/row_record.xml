@@ -38,9 +38,10 @@
 
             <TextView
                 android:id="@+id/txtdriverName"
-                android:textSize="@dimen/sp_17"
+                android:textSize="@dimen/sp_14"
                 android:layout_toRightOf="@+id/imgDriver"
                 android:layout_marginLeft="@dimen/dp_7"
+                android:layout_centerVertical="true"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="italic|bold"
                 android:text="Raam Laal"
@@ -51,11 +52,13 @@
 
             <TextView
                 android:id="@+id/txtdateTime"
-                android:textSize="@dimen/sp_17"
+                android:textSize="@dimen/sp_14"
                 android:layout_toRightOf="@+id/txtdriverName"
-                android:layout_marginLeft="@dimen/dp_7"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_marginRight="@dimen/dp_5"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="italic|bold"
+                android:layout_centerVertical="true"
                 android:text="Jan 2017 4:45am"
                 android:layout_toLeftOf="@+id/txtAmount"
                 android:layout_width="wrap_content"
@@ -64,9 +67,10 @@
 
             <TextView
                 android:id="@+id/txtAmount"
-                android:textSize="@dimen/sp_17"
+                android:textSize="@dimen/sp_15"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="italic|bold"
+                android:layout_centerVertical="true"
                 android:text="C$ 400"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -80,6 +84,7 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="italic|bold"
                 android:text="i20"
+                android:visibility="gone"
                 android:layout_marginTop="@dimen/dp_5"
                 android:layout_marginLeft="@dimen/dp_7"
                 android:layout_below="@+id/txtdriverName"

@@ -1,5 +1,6 @@
 package com.hoffmans.rush.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.hoffmans.rush.R;
@@ -36,5 +37,12 @@ public class ReceiptActivity extends BaseActivity {
     @Override
     protected void initManagers() {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent newEstimateIntent=new Intent(ReceiptActivity.this,BookServiceActivity.class);
+        newEstimateIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(newEstimateIntent);
     }
 }

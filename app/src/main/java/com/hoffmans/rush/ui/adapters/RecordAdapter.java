@@ -103,7 +103,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         }
         try{
             if(estimate.getApproxConvertedAmount()!=null){
-                holder.txtAmount.setText(estimate.getApproxConvertedAmount().toString());
+                holder.txtAmount.setText(estimate.getSymbol()+estimate.getApproxConvertedAmount().toString());
             }
             if(dateTime.getDate()!=null &&dateTime.getTime()!=null){
                 holder.txtDateTime.setText(dateTime.getDate()+" "+dateTime.getTime());

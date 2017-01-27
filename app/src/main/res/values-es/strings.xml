@@ -90,6 +90,7 @@
     <string name="str_value_estimate">Estimated value</string>
     <string name="str_value_time">Estimated Time</string>
     <string name="str_fav_message">¿Estás seguro de que quieres marcar esta dirección en Favoritos?</string>
+    <string name="str_fav_remove">¿Seguro que quieres eliminar esta dirección de Favorito?</string>
     <string name="str_record">Archivos</string>
     <string name="str_scheduled">Programado</string>
 </resources>

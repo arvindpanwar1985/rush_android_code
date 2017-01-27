@@ -168,7 +168,7 @@ public class RecordFragment extends BaseFragment {
             @Override
             public void onRequestFailed(String message) {
 
-                    Progress.dismissProgress();
+                mActivity.showSnackbar(message,0);
                 Progress.dismissProgress();
                 if(message.equals(Constants.AUTH_ERROR)){
                     mActivity.logOutUser();
