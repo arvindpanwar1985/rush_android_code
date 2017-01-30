@@ -76,8 +76,6 @@ public abstract class BaseFragment extends Fragment {
      */
     protected abstract void initListeners();
 
-
-
     //addmarker
     protected Marker addlocationMarker(LatLng latLng, int marker, GoogleMap mMap){
         if(marker==0){
@@ -87,7 +85,6 @@ public abstract class BaseFragment extends Fragment {
 
         }
     }
-
     @Override
     public void onStop() {
         super.onStop();

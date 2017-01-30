@@ -559,6 +559,10 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     }
 
 
+    /**
+     * show date picker
+     */
+
     private void showDatePicker(){
         Calendar now = Calendar.getInstance();
         DatePickerDialog dpd = DatePickerDialog.newInstance(
@@ -585,7 +589,10 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     }
 
 
-
+    /**
+     * show time picker
+     * @param date date selected from date picker
+     */
     private void showTimePicker(final String date){
         Calendar now = Calendar.getInstance();
         TimePickerDialog dpd = TimePickerDialog.newInstance(

@@ -24,6 +24,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
 
     private ArrayList<CardData> cardDataList;
     private Context mContext;
+    private boolean showDelete;
     private OnitemClickListner.OnFrequentAddressClicked mItemClickListener;
 
     // Provide a reference to the views for each data item
@@ -33,7 +34,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
         // each data item is just a string in this case
 
 
-        ImageView imgCardType;
+        ImageView imgCardType,imgDleteCard;
         TextView  txtCardnumber,txtCardtype;
         View bottomLine;
 
@@ -43,6 +44,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
             txtCardnumber=(TextView)v.findViewById(R.id.txtCardNumber);
             txtCardtype=(TextView)v.findViewById(R.id.txtCardType);
             bottomLine   =(View)v.findViewById(R.id.viewCardBottomLine);
+            imgDleteCard =(ImageView)v.findViewById(R.id.imgDelteCard);
             v.setOnClickListener(this);
 
         }
@@ -58,10 +60,11 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public CardListAdapter(Context context, ArrayList<CardData> cardData, OnitemClickListner.OnFrequentAddressClicked listner) {
+    public CardListAdapter(Context context, ArrayList<CardData> cardData, OnitemClickListner.OnFrequentAddressClicked listner,boolean showDelete) {
         cardDataList=cardData;
         mContext=context;
         mItemClickListener = listner;
+        this.showDelete=showDelete;
 
     }
 
@@ -95,7 +98,24 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
         }catch (NullPointerException e){
 
         }
+        if(!showDelete){
+            holder.imgDleteCard.setVisibility(View.INVISIBLE);
+        }else{
+            if(cardData.getDefault()){
+                holder.imgDleteCard.setVisibility(View.INVISIBLE);
+            }else{
+                holder.imgDleteCard.setVisibility(View.VISIBLE);
+            }
+        }
 
+        holder.imgDleteCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mItemClickListener!=null){
+                    mItemClickListener.onfrequentAddressclicked(view,position);
+                }
+            }
+        });
 
     }
 

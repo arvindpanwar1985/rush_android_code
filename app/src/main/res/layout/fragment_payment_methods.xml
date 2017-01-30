@@ -49,7 +49,7 @@
         android:layout_marginRight="@dimen/dp_20"
         android:hint="@string/str_Number"
         android:inputType="number|textNoSuggestions"
-        android:maxLength="17"
+        android:maxLength="16"
         android:padding="@dimen/dp_7"
         android:layout_marginTop="@dimen/dp_10"
         style="@style/AppTheme.Input"/>

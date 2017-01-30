@@ -46,7 +46,7 @@ import java.util.GregorianCalendar;
  * Created by devesh on 19/12/16.
  */
 public abstract  class BaseActivity extends AppCompatActivity {
-    private FrameLayout activityContent = null;
+    protected FrameLayout activityContent = null;
     private Toolbar mToolbar = null;
     private int mLayoutId = 0;
     public static Toast toast;

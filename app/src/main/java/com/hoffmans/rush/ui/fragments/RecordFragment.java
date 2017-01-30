@@ -164,7 +164,6 @@ public class RecordFragment extends BaseFragment {
 
                 }
             }
-
             @Override
             public void onRequestFailed(String message) {
 
@@ -177,7 +176,6 @@ public class RecordFragment extends BaseFragment {
             }
         });
     }
-
 
     /**
      * load more data on endless scrolling
@@ -203,13 +201,12 @@ public class RecordFragment extends BaseFragment {
 
             @Override
             public void onRequestFailed(String message) {
-                mActivity.showSnackbar(message,0);
-                linearProgress.setVisibility(View.GONE);
-                Progress.dismissProgress();
-                if(message.equals(Constants.AUTH_ERROR)){
+                 mActivity.showSnackbar(message,0);
+                 linearProgress.setVisibility(View.GONE);
+                 Progress.dismissProgress();
+                 if(message.equals(Constants.AUTH_ERROR)){
                     mActivity.logOutUser();
-                }
-
+                 }
             }
         });
     }

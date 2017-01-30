@@ -173,8 +173,7 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
     }
 
 
-
-    private void validateCardDetails(){
+        private void validateCardDetails(){
         Card card=getCreditCard();
         if(card!=null){
             if (!Validation.isValidCreditCard(card.getCardNumber())) {
@@ -192,7 +191,6 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
                 mActivity.showSnackbar(getString(R.string.str_empty_expiry), 0);
                 return;
             }
-
 
             if (card.getCardCvv().length()<3 || card.getCardCvv().length()>4) {
                 // Utils.showToast(mActivity, "Invalid Cvv.");
@@ -220,6 +218,7 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
         if(mBraintreeFragment!=null) {
             com.braintreepayments.api.Card.tokenize(mBraintreeFragment, cardBuilder);
         }else{
+            Progress.dismissProgress();
             mActivity.showSnackbar("Error in initailizing Braintree",0);
         }
     }
@@ -255,7 +254,6 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
                     intent.putParcelableArrayListExtra(AddCardActivity.KEY_CARD_DATA,cardDataList);
                     getActivity().setResult(Activity.RESULT_OK,intent);
                     mActivity.finish();
-
                 }
 
             }

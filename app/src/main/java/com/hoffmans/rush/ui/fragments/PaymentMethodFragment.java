@@ -58,8 +58,6 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
     }
 
 
-
-
     public static PaymentMethodFragment newInstance(User user) {
         PaymentMethodFragment fragment = new PaymentMethodFragment();
         Bundle args = new Bundle();
@@ -67,7 +65,6 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
         fragment.setArguments(args);
         return fragment;
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -152,7 +149,6 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
                     }
                 },null);
                 monthYearPicker.show();
-
                 break;
             case R.id.topLinearPayment:
                  Utils.hideKeyboard(mActivity);
@@ -228,10 +224,10 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
         if(mBraintreeFragment!=null) {
             com.braintreepayments.api.Card.tokenize(mBraintreeFragment, cardBuilder);
         }else{
+            Progress.dismissProgress();
             mActivity.showSnackbar("Error in initailizing Braintree",0);
         }
        }
-
 
     @Override
     public void onError(Exception error) {
@@ -246,7 +242,6 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
         }
 
     }
-
     private void addPaymentMethod(String nounce){
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         PaymentRequest paymentRequest=new PaymentRequest();

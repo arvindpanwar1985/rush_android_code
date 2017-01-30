@@ -132,8 +132,8 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void setCardAdapter(ArrayList<CardData> cardDataList ){
-
-        adapter=new CardListAdapter(mActivity,cardDataList,this);
+        boolean showDelete=(isCardSelectable)?false:true;
+        adapter=new CardListAdapter(mActivity,cardDataList,this,showDelete);
         recyclerCardList.setAdapter(adapter);
     }
 
@@ -152,11 +152,15 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onfrequentAddressclicked(View view, int position) {
 
+        if(cardDataList!=null && !isCardSelectable){
+            //to do show popup
+
+        }
     }
 
     @Override
     public void onFavoriteAddressclicked(View view, int position) {
-
+       // clic
     }
 
     @Override
@@ -165,7 +169,8 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
            if(data!=null){
                cardDataList.clear();
                ArrayList<CardData> cards=data.getParcelableArrayListExtra(AddCardActivity.KEY_CARD_DATA);
-               adapter=new CardListAdapter(mActivity,cards,this);
+               boolean showDelete=(isCardSelectable)?false:true;
+               adapter=new CardListAdapter(mActivity,cards,this,showDelete);
                recyclerCardList.setAdapter(adapter);
                mActivity.showSnackbar("Card added Successfully.",0);
            }
