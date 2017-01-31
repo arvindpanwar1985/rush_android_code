@@ -9,8 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.hoffmans.rush.R;
-import com.hoffmans.rush.listners.OnitemClickListner;
+import com.hoffmans.rush.listners.OnCardClicked;
 import com.hoffmans.rush.model.CardData;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
     private ArrayList<CardData> cardDataList;
     private Context mContext;
     private boolean showDelete;
-    private OnitemClickListner.OnFrequentAddressClicked mItemClickListener;
+    private OnCardClicked mItemClickListener;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -36,15 +35,16 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
 
         ImageView imgCardType,imgDleteCard;
         TextView  txtCardnumber,txtCardtype;
-        View bottomLine;
+        View bottomLine,viewDeafultCard;
 
         public ViewHolder(View v) {
             super(v);
-            imgCardType  =(ImageView)v.findViewById(R.id.imgCardType);
-            txtCardnumber=(TextView)v.findViewById(R.id.txtCardNumber);
-            txtCardtype=(TextView)v.findViewById(R.id.txtCardType);
-            bottomLine   =(View)v.findViewById(R.id.viewCardBottomLine);
-            imgDleteCard =(ImageView)v.findViewById(R.id.imgDelteCard);
+            imgCardType  =(ImageView)v.findViewById(com.hoffmans.rush.R.id.imgCardType);
+            txtCardnumber=(TextView)v.findViewById(com.hoffmans.rush.R.id.txtCardNumber);
+            txtCardtype=(TextView)v.findViewById(com.hoffmans.rush.R.id.txtCardType);
+            bottomLine   =(View)v.findViewById(com.hoffmans.rush.R.id.viewCardBottomLine);
+            viewDeafultCard=(View)v.findViewById(com.hoffmans.rush.R.id.viewDefaultCArd);
+            imgDleteCard =(ImageView)v.findViewById(com.hoffmans.rush.R.id.imgDelteCard);
             v.setOnClickListener(this);
 
         }
@@ -53,14 +53,18 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
         public void onClick(View v) {
 
             if (mItemClickListener != null) {
-
-                mItemClickListener.onitemclicked(v,getPosition());
+               if(!showDelete) {
+                    mItemClickListener.oncardSelected(v, getPosition());
+                }//omly allow user to delete if card list is greater than 1
+                else if(getItemCount()>1 && !cardDataList.get(getPosition()).getDefault()) {
+                    mItemClickListener.onitemclicked(v,getPosition());
+                }
             }
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public CardListAdapter(Context context, ArrayList<CardData> cardData, OnitemClickListner.OnFrequentAddressClicked listner,boolean showDelete) {
+    public CardListAdapter(Context context, ArrayList<CardData> cardData, OnCardClicked listner, boolean showDelete) {
         cardDataList=cardData;
         mContext=context;
         mItemClickListener = listner;
@@ -74,7 +78,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
                                                             int viewType) {
         // create a new view
         View v = LayoutInflater.from(mContext)
-                .inflate(R.layout.row_card, parent, false);
+                .inflate(com.hoffmans.rush.R.layout.row_card, parent, false);
         // set the view's size, margins, paddings and layout parameters
 
         CardListAdapter.ViewHolder vh = new CardListAdapter.ViewHolder(v);
@@ -91,6 +95,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
             holder.bottomLine.setVisibility(View.GONE);
         }
         final CardData cardData=cardDataList.get(position);
+
         try {
             holder.txtCardnumber.setText("************" + cardData.getLast4());
             Glide.with(mContext).load(cardData.getImageUrl()).into(holder.imgCardType);
@@ -98,21 +103,29 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
         }catch (NullPointerException e){
 
         }
+
         if(!showDelete){
             holder.imgDleteCard.setVisibility(View.INVISIBLE);
+            holder.viewDeafultCard.setVisibility(View.GONE);
         }else{
             if(cardData.getDefault()){
-                holder.imgDleteCard.setVisibility(View.INVISIBLE);
+
+                holder.viewDeafultCard.setVisibility(View.VISIBLE);
             }else{
-                holder.imgDleteCard.setVisibility(View.VISIBLE);
+                holder.viewDeafultCard.setVisibility(View.INVISIBLE);
             }
+            if(getItemCount()==1){
+                holder.imgDleteCard.setVisibility(View.INVISIBLE);
+            }
+
         }
 
         holder.imgDleteCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(mItemClickListener!=null){
-                    mItemClickListener.onfrequentAddressclicked(view,position);
+                    //frequent address clicked i.e delete the current card
+                    mItemClickListener.onCardDelet(view,position);
                 }
             }
         });

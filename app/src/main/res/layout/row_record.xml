@@ -18,7 +18,6 @@
             android:scaleType="fitXY"
             android:id="@+id/mapImage"/>
         <RelativeLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dp_2"
@@ -27,7 +26,7 @@
             android:paddingTop="@dimen/dp_5"
             android:layout_below="@+id/mapImage"
             android:background="@android:color/white"
-            android:layout_gravity="center">
+            >
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgDriver"
@@ -41,10 +40,10 @@
                 android:textSize="@dimen/sp_14"
                 android:layout_toRightOf="@+id/imgDriver"
                 android:layout_marginLeft="@dimen/dp_7"
-                android:layout_centerVertical="true"
+
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="italic|bold"
-                android:text="Raam Laal"
+                android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />
@@ -58,8 +57,8 @@
                 android:layout_marginRight="@dimen/dp_5"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="italic|bold"
-                android:layout_centerVertical="true"
-                android:text="Jan 2017 4:45am"
+
+                android:text=""
                 android:layout_toLeftOf="@+id/txtAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,25 +69,24 @@
                 android:textSize="@dimen/sp_15"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="italic|bold"
-                android:layout_centerVertical="true"
-                android:text="C$ 400"
+
+                android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"/>
 
 
 
-            <TextView
-                android:id="@+id/txtvechileName"
+           <TextView
+                android:id="@+id/txtStreetAddress"
                 android:textSize="@dimen/sp_15"
                 android:textColor="@color/colorPrimaryDark"
-                android:textStyle="italic|bold"
-                android:text="i20"
-                android:visibility="gone"
-                android:layout_marginTop="@dimen/dp_5"
-                android:layout_marginLeft="@dimen/dp_7"
-                android:layout_below="@+id/txtdriverName"
+                android:textStyle="italic"
                 android:layout_toRightOf="@+id/imgDriver"
+                android:layout_marginTop="@dimen/dp_4"
+                android:layout_below="@+id/txtdateTime"
+                android:layout_marginLeft="@dimen/dp_7"
+                android:layout_marginRight="@dimen/dp_10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />

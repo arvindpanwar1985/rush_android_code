@@ -11,6 +11,15 @@
         android:layout_above="@+id/linearLoadMore"
         android:id="@+id/listRecords"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtNoRecords"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:text="No records found."
+        android:textColor="@android:color/white"
+        android:textStyle="bold|italic"/>
 
     <LinearLayout
         android:id="@+id/linearLoadMore"

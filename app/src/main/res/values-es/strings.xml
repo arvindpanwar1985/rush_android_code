@@ -94,5 +94,6 @@
     <string name="str_record">Archivos</string>
     <string name="str_scheduled">Programado</string>
     <string name="str_delete_Card">¿Estás seguro de que quieres eliminar esta tarjeta?</string>
+    <string name="str_default_Card">¿Estás seguro de que quieres marcar esta tarjeta por defecto?</string>
     <string name="str_another_des">Añadir otro destino</string>
 </resources>

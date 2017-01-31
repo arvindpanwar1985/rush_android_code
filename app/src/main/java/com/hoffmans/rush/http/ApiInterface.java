@@ -95,4 +95,10 @@ public interface ApiInterface {
     @GET("/api/creditcard/delete_card")
     Call<ResponseBody> deleteCard(@Header("Authorization")String authorization,@QueryMap(encoded = true) Map<String, String> params);
 
+    @FormUrlEncoded
+    @POST("/api/creditcard/default_card")
+    Call<ResponseBody> defaultCard(@Header("Authorization")String authorization,@Field("payment_method_token") String payment_method_Token);
+
+
+
 }

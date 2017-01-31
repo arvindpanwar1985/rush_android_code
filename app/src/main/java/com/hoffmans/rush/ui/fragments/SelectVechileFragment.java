@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -68,6 +69,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import static android.app.Activity.RESULT_CANCELED;
 
 
@@ -101,6 +104,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     private boolean isVehicleSelected;
     private DateUtils mDateUtils;
     private String futureDataTime;
+    private CircleImageView imageAcceptReject;
 
     private GoogleApiClient mGoogleApiClient;
     private Geocoder mGeocoder;
@@ -124,6 +128,16 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         return fragment;
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(appPreference.getUserDetails().getPic_url()!=null){
+            Glide.with(mActivity).load(appPreference.getUserDetails().getPic_url()).into(imageAcceptReject);
+        }
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,6 +160,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
     }
 
+
     @Override
     protected void initViews(View view) {
 
@@ -159,11 +174,13 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         imgTypeBike             =(ImageView)view.findViewById(R.id.imgTypeBike);
         imgTypeCar              =(ImageView)view.findViewById(R.id.imgTypeCar);
         imgTypeTruck            =(ImageView)view.findViewById(R.id.imgTypeTruck);
-
+        imageAcceptReject       =(CircleImageView)view.findViewById(R.id.imgAcceptreject);
         LinearLayoutManager llm = new LinearLayoutManager(mActivity);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
         txtNow.setSelected(true);
+
+
 
 
 
@@ -209,8 +226,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             addressAdapter=new LoadAddressAdapter(mActivity,listAddressData,this);
             recyclerView.setAdapter(addressAdapter);
             checkPermission();
-        }
-        return view;
+        }return view;
     }
 
 
@@ -724,7 +740,6 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         }
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -734,8 +749,6 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             mGoogleApiClient.disconnect();
         }
     }
-
-
 
 
     private void addToFavourite(final PickDropAddress pickDropAddress){
@@ -765,8 +778,6 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             }
         });
     }
-
-
 
 
 }

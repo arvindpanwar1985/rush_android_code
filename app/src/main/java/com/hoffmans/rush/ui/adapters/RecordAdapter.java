@@ -31,6 +31,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     private List<Record> recordDataList;
     private Context mContext;
     private int height ,widht;
+    private boolean isRecord;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -41,7 +42,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
         ImageView imgdriver;
         ImageView imgeMap;
-        TextView txtDriverName,txtDateTime,txtAmount,txtVechileName;
+        TextView txtDriverName,txtDateTime,txtAmount,txtVechileName,txtStreetAddress;
         View bottomLine;
 
         public ViewHolder(View v) {
@@ -50,9 +51,10 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             txtDriverName=(TextView)v.findViewById(R.id.txtdriverName);
             txtDateTime=(TextView)v.findViewById(R.id.txtdateTime);
             txtAmount=(TextView)v.findViewById(R.id.txtAmount);
-            txtVechileName=(TextView)v.findViewById(R.id.txtvechileName);
+            //txtVechileName=(TextView)v.findViewById(R.id.txtvechileName);
             imgeMap=(ImageView) v.findViewById(R.id.mapImage);
             bottomLine   =(View)v.findViewById(R.id.viewCardBottomLine);
+            txtStreetAddress=(TextView)v.findViewById(R.id.txtStreetAddress);
             v.setOnClickListener(this);
 
         }
@@ -65,10 +67,10 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RecordAdapter(Context context, List<Record> favData) {
+    public RecordAdapter(Context context, List<Record> favData,boolean isRecord) {
         recordDataList=favData;
         mContext=context;
-
+        this.isRecord=isRecord;
         DisplayMetrics displaymetrics = new DisplayMetrics();
         ((Activity)mContext).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
          height = displaymetrics.heightPixels/5;
@@ -115,9 +117,14 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             if(record.getDriver_details().getPicUrl()!=null) {
              Glide.with(mContext).load(record.getDriver_details().getPicUrl()).into(holder.imgdriver);
             }
+
+            if(!isRecord && record.getPick_up()!=null){
+                holder.txtStreetAddress.setText(record.getPick_up().getStreetAddress());
+            }
         }catch (NullPointerException e){
 
         }
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)

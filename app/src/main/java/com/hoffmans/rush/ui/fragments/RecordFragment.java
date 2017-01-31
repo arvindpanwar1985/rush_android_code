@@ -152,17 +152,18 @@ public class RecordFragment extends BaseFragment {
             public void onRequestSuccess(BaseBean body) {
 
                  Progress.dismissProgress();
-
                  RecordBean recordBean=(RecordBean)body;
                  records_count=recordBean.getTotal_items();
                  if(recordBean.getRecords().size()!=0){
                     recordList=recordBean.getRecords();
-                    mAdapter=new RecordAdapter(mActivity,recordList);
+                    mAdapter=new RecordAdapter(mActivity,recordList,isRecord);
                     recyclerView.setAdapter(mAdapter);
                     currentListSize=recordList.size();
                     page++;
 
-                }
+                }else{
+
+                     }
             }
             @Override
             public void onRequestFailed(String message) {
