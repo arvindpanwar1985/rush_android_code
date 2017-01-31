@@ -48,6 +48,8 @@ public class TransactionDetails implements Parcelable {
 
     private String symbol;
 
+    private String converted_amount;
+
 
 
     public Integer getId() {
@@ -149,6 +151,14 @@ public class TransactionDetails implements Parcelable {
         this.symbol = symbol;
     }
 
+    public String getConverted_amount() {
+        return converted_amount;
+    }
+
+    public void setConverted_amount(String converted_amount) {
+        this.converted_amount = converted_amount;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -168,6 +178,7 @@ public class TransactionDetails implements Parcelable {
         dest.writeString(this.createdAt);
         dest.writeString(this.updatedAt);
         dest.writeString(this.symbol);
+        dest.writeString(this.converted_amount);
     }
 
     protected TransactionDetails(Parcel in) {
@@ -183,6 +194,7 @@ public class TransactionDetails implements Parcelable {
         this.createdAt = in.readString();
         this.updatedAt = in.readString();
         this.symbol = in.readString();
+        this.converted_amount = in.readString();
     }
 
     public static final Creator<TransactionDetails> CREATOR = new Creator<TransactionDetails>() {

@@ -7,6 +7,8 @@ import com.hoffmans.rush.listners.BaseListener;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -66,6 +68,43 @@ public class PaymentRequest extends BaseRequest {
 
         Call<ResponseBody> listCardCall=getAPIClient().getCardList(authToken);
         ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(listCardCall);
+        connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
+            @Override
+            public void onWebServiceComplete(ResponseBody responseBody) {
+                try {
+                    String message="";
+                    JSONObject obj=new JSONObject(responseBody.string());
+                    boolean status = obj.getBoolean(SUCCESS);
+                    if(obj.has(MESSAGE)){
+                        message=obj.getString(MESSAGE);
+                    }
+                    if (status) {
+                        String data = obj.getJSONObject(DATA).toString();
+                        CardListBean bean = getGsonBuilder().fromJson(data, CardListBean.class);
+                        bean.setMessage(message);
+                        callback.onRequestSuccess(bean);
+                    } else {
+                        callback.onRequestFailed(message);
+                    }
+
+                }catch (Exception e){
+                    callback.onRequestFailed(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onWebStatusFalse(String message) {
+                callback.onRequestFailed(message);
+            }
+
+
+        });
+    }
+
+
+    public void deleteCard(String header, HashMap<String ,String> params,final ApiCallback callback){
+        Call<ResponseBody> deleteCardCall=getAPIClient().deleteCard(header,params);
+        ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(deleteCardCall);
         connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
             @Override
             public void onWebServiceComplete(ResponseBody responseBody) {

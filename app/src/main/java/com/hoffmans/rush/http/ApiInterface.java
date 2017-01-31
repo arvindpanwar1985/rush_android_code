@@ -92,4 +92,7 @@ public interface ApiInterface {
     @GET("/maps/api/geocode/json")
     Call<ResponseBody> getPlacesDetails(@QueryMap(encoded = true) Map<String, String> params);
 
+    @GET("/api/creditcard/delete_card")
+    Call<ResponseBody> deleteCard(@Header("Authorization")String authorization,@QueryMap(encoded = true) Map<String, String> params);
+
 }

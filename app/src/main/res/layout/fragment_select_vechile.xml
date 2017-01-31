@@ -33,13 +33,20 @@
                 android:id="@+id/addressRecycler"/>
             </LinearLayout>
 
-        <ImageView
+       <!-- <ImageView
             android:id="@+id/imgAddMoreAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/add_more_address"
             android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/dp_3"/>
+            android:layout_margin="@dimen/dp_3"/>-->
+        <include
+            android:id="@+id/viewAddMoreAddress"
+            android:layout_width="wrap_content"
+            android:layout_margin="@dimen/dp_3"
+            android:layout_gravity="bottom|end"
+            android:layout_height="wrap_content"
+            layout="@layout/add_destination"/>
 
         </FrameLayout>
 

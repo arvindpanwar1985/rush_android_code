@@ -92,7 +92,7 @@ public class ReceiptFragment extends BaseFragment {
         if(transactionDetails!=null){
             txtTransactionId.setText(transactionDetails.getPaymentTransactionId());
             txtAuthorized.setText(transactionDetails.getStatus());
-            txtAmount.setText( transactionDetails.getSymbol()+" "+transactionDetails.getAmount());
+            txtAmount.setText( transactionDetails.getSymbol()+" "+transactionDetails.getConverted_amount());
 
         }
         if(date_time!=null){

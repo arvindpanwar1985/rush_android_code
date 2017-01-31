@@ -91,7 +91,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     private View view;
     private RecyclerView recyclerView;
     private LoadAddressAdapter addressAdapter;
-    private ImageView imageViewLoadMoreAddress;
+    private View imageViewLoadMoreAddress;
     private TextView txtNow,txtReservation;
     private LocationData mLocationData;
     private Button btnEstimateCost;
@@ -150,7 +150,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     protected void initViews(View view) {
 
         recyclerView            =(RecyclerView)view.findViewById(R.id.addressRecycler);
-        imageViewLoadMoreAddress=(ImageView)view.findViewById(R.id.imgAddMoreAddress);
+        imageViewLoadMoreAddress=(View)view.findViewById(R.id.viewAddMoreAddress);
         txtNow                  =(TextView)view.findViewById(R.id.txtACNow);
         txtReservation          =(TextView)view.findViewById(R.id.txtACReserve);
         btnEstimateCost         =(Button) view.findViewById(R.id.btnEstimatePrice);
@@ -244,7 +244,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.imgAddMoreAddress:
+            case R.id.viewAddMoreAddress:
                 if(listAddressData.size()!=4){
                     PickDropAddress newDetination=new PickDropAddress();
                     newDetination.setStreetAddress("");
@@ -627,7 +627,9 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         dropAddressList.clear();
         for(int i=1;i<listAddressData.size();i++){
             PickDropAddress dropAddress=listAddressData.get(i);
-            dropAddressList.add(dropAddress);
+            if(!TextUtils.isEmpty(dropAddress.getStreetAddress())) {
+                dropAddressList.add(dropAddress);
+            }
         }
         DateUtils dateUtils=DateUtils.getInstance();
         Service service =new Service();

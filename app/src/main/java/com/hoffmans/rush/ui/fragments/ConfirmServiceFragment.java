@@ -184,7 +184,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
     private String getPaymentMessage(){
         StringBuilder stringMessage=new StringBuilder("Are you sure you want to pay ");
         stringMessage.append(mesTimatedData.getSymbol())
-                .append(mesTimatedData.getApproxAmount())
+                .append(mesTimatedData.getApproxConvertedAmount())
                 .append(" ")
                 .append("using card ************"+defaultCardData.getLast4())
                 .append("?");

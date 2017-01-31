@@ -93,4 +93,6 @@
     <string name="str_fav_remove">¿Seguro que quieres eliminar esta dirección de Favorito?</string>
     <string name="str_record">Archivos</string>
     <string name="str_scheduled">Programado</string>
+    <string name="str_delete_Card">¿Estás seguro de que quieres eliminar esta tarjeta?</string>
+    <string name="str_another_des">Añadir otro destino</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.hoffmans.rush.ui.fragments;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +25,7 @@ import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.hoffmans.rush.ui.activities.AddCardActivity.REQUEST_ADD_CARD;
 
@@ -31,6 +33,7 @@ import static com.hoffmans.rush.ui.activities.AddCardActivity.REQUEST_ADD_CARD;
 public class CardListFragment extends BaseFragment implements View.OnClickListener,OnitemClickListner.OnFrequentAddressClicked {
 
     private static final String ARG_PARAM1 = "param1";
+    private static final String KEY_PAYMENT_METHOD_TOKEN="payment_method_token";
     private boolean isCardSelectable;
     private String mParam2;
     private View view;
@@ -152,17 +155,83 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onfrequentAddressclicked(View view, int position) {
 
-        if(cardDataList!=null && !isCardSelectable){
-            //to do show popup
-
+        if(cardDataList!=null &&!isCardSelectable){
+            CardData cardData=cardDataList.get(position);
+            showDialog(cardData.getToken());
         }
     }
 
     @Override
     public void onFavoriteAddressclicked(View view, int position) {
-       // clic
+
+
     }
 
+
+    /**
+     * popup for deleting a card
+     */
+    private void showDialog(final String payment_token){
+        try {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mActivity);
+            builder.setTitle(R.string.app_name)
+                    .setMessage(R.string.str_delete_Card)
+                    .setCancelable(false)
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.dismiss();
+
+                        }
+                    })
+                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            deleteCard(payment_token);
+                        }
+
+                    }).create().show();
+        }catch (Exception e){
+
+        }
+    }
+
+
+    /**
+     * delete the selected card
+     * @param token token linked to card added previously
+     */
+    private void deleteCard(String token){
+        HashMap<String ,String> params=new HashMap<>();
+        params.put(KEY_PAYMENT_METHOD_TOKEN,token);
+        Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
+        PaymentRequest deleteCardRequest=new PaymentRequest();
+        deleteCardRequest.deleteCard(appPreference.getUserDetails().getToken(), params, new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                Progress.dismissProgress();
+                CardListBean cardListBean=(CardListBean)body;
+                if(cardListBean.getCards().size()>0){
+                    cardDataList.clear();
+                    cardDataList.addAll(cardListBean.getCards());
+                    if(adapter!=null){
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            }
+
+            @Override
+            public void onRequestFailed(String message) {
+
+                mActivity.showSnackbar(message,0);
+                Progress.dismissProgress();
+                if(message.equals(Constants.AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
+            }
+        });
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==REQUEST_ADD_CARD && resultCode==mActivity.RESULT_OK){
@@ -170,7 +239,9 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
                cardDataList.clear();
                ArrayList<CardData> cards=data.getParcelableArrayListExtra(AddCardActivity.KEY_CARD_DATA);
                boolean showDelete=(isCardSelectable)?false:true;
-               adapter=new CardListAdapter(mActivity,cards,this,showDelete);
+               cardDataList.clear();
+               cardDataList.addAll(cards);
+               adapter=new CardListAdapter(mActivity,cardDataList,this,showDelete);
                recyclerCardList.setAdapter(adapter);
                mActivity.showSnackbar("Card added Successfully.",0);
            }
