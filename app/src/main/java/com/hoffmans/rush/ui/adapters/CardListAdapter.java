@@ -55,7 +55,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
             if (mItemClickListener != null) {
                if(!showDelete) {
                     mItemClickListener.oncardSelected(v, getPosition());
-                }//omly allow user to delete if card list is greater than 1
+                }//only allow user to delete card if card list is greater than 1
                 else if(getItemCount()>1 && !cardDataList.get(getPosition()).getDefault()) {
                     mItemClickListener.onitemclicked(v,getPosition());
                 }
@@ -104,7 +104,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
 
         }
 
-        if(!showDelete){
+        if(!showDelete){//hide delete icon
             holder.imgDleteCard.setVisibility(View.INVISIBLE);
             holder.viewDeafultCard.setVisibility(View.GONE);
         }else{

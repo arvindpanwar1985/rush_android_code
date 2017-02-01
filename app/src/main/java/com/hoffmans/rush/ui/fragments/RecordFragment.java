@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
@@ -47,6 +48,7 @@ public class RecordFragment extends BaseFragment {
    private int page=1;
    private List<Record> recordList;
    private ProgressBar progressBar;
+   private TextView txtNoRecords;
 
 
 
@@ -100,6 +102,7 @@ public class RecordFragment extends BaseFragment {
         linearProgress=(LinearLayout)view.findViewById(R.id.linearLoadMore);
         progressBar =(ProgressBar)view.findViewById(R.id.progressLoadMore);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        txtNoRecords=(TextView)view.findViewById(R.id.txtNoRecords);
 
 
     }
@@ -144,8 +147,9 @@ public class RecordFragment extends BaseFragment {
 
     private void getRecordData(HashMap<String,String> params){
 
-        Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
 
+        Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
+        txtNoRecords.setVisibility(View.GONE);
         ServiceRequest request=new ServiceRequest();
         request.getRecords(appPreference.getUserDetails().getToken(), params, new ApiCallback() {
             @Override
@@ -154,16 +158,15 @@ public class RecordFragment extends BaseFragment {
                  Progress.dismissProgress();
                  RecordBean recordBean=(RecordBean)body;
                  records_count=recordBean.getTotal_items();
-                 if(recordBean.getRecords().size()!=0){
+                 if(records_count!=0 &&recordBean.getRecords().size()!=0){
                     recordList=recordBean.getRecords();
                     mAdapter=new RecordAdapter(mActivity,recordList,isRecord);
                     recyclerView.setAdapter(mAdapter);
                     currentListSize=recordList.size();
                     page++;
-
-                }else{
-
-                     }
+                  }else{
+                     txtNoRecords.setVisibility(View.VISIBLE);
+                 }
             }
             @Override
             public void onRequestFailed(String message) {

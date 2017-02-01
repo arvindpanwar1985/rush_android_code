@@ -68,7 +68,7 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.6.0'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.braintreepayments.api:braintree:2.+'
-    compile 'com.braintreepayments.api:drop-in:2.+'
+
     compile 'com.braintreepayments.gateway:braintree-java:2.53.0'
     compile 'com.facebook.android:facebook-android-sdk:4.+'
     compile 'id.zelory:compressor:1.0.4'
@@ -79,14 +79,6 @@ dependencies {
 
 }
 apply plugin: 'com.google.gms.google-services'
-dependencies {
-    compile 'com.android.support:support-v4:24.+'
-}
-dependencies {
-    compile 'com.android.support:support-v4:24.+'
-}
-dependencies {
-    compile 'com.android.support:support-v4:24.+'
-}
+
 
 

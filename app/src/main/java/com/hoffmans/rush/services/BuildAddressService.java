@@ -3,7 +3,6 @@ package com.hoffmans.rush.services;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Geocoder;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -18,7 +17,6 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -38,14 +36,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class BuildAddressService extends IntentService {
 
-    private Geocoder mGeocoder;
-    private static  final String PLACE_BASE_URL="http://maps.googleapis.com/";
-    private static  final String KEY_LAT="lat";
-    private static  final String KEY_LNG="lng";
+
+    private static  final String PLACE_BASE_URL="https://maps.googleapis.com/";
+    private static  final String KEY_API_KEY="key";
+
     private static  final String KEY_STATUS="status";
-    private static  final String KEY_LATLNG="latlng";
     private static  final String KEY_OK="OK";
-    private static  final String KEY_RESULTS="results";
+    private static  final String KEY_PLACE_ID="placeid";
+    private static  final String KEY_RESULT="result";
     private static  final String TYPE_COUNTRY="country";
     private static  final String TYPE_LOCALITY="locality";
     private static  final String TYPE_ADMIN_AREA="administrative_area_level_1";
@@ -61,52 +59,51 @@ public class BuildAddressService extends IntentService {
     }
 
 
-    public static void buildAddresses(Context context, double latitude,double longitude) {
+
+
+    public static void buildAddresses(Context context, String placeId) {
         Intent intent = new Intent(context, BuildAddressService.class);
         intent.setAction(ACTION_BUILD_ADDRESS);
-        intent.putExtra(KEY_LAT,latitude);
-        intent.putExtra(KEY_LNG,longitude);
-
+        intent.putExtra(KEY_PLACE_ID,placeId);
         context.startService(intent);
     }
 
 
 
-    @Override
+
+
+
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
-            mGeocoder = new Geocoder(this, Locale.getDefault());
+
             final String action = intent.getAction();
             if (ACTION_BUILD_ADDRESS.equals(action)) {
-                final double lat=intent.getDoubleExtra(KEY_LAT,0.0);
-                final double lng=intent.getDoubleExtra(KEY_LNG,0.0);
-                handleActionFoo(lat,lng);
+                final String plcaeId=intent.getStringExtra(KEY_PLACE_ID);
+
+                handleActionFoo(plcaeId);
             }
         }
     }
+
 
     /**
      * Handle action Foo in the provided background thread with the provided
      * parameters.
      */
-    private void handleActionFoo(double lat,double lng) {
+    private void handleActionFoo(String placeId) {
 
 
-        //Service service =new Service();
-        //List<PickDropAddress> multipleDrops=new ArrayList<>();
-        if (lat != 0.0 && lng != 0.0) {
-            getPlaceDetails(lat,lng);
-        }else{
-            fetchAddressEvent.setSucess(false);
-            fetchAddressEvent.setMessage("Unable to find location.");
-            EventBus.getDefault().post(fetchAddressEvent);
-        }
+        getPlaceDetails(placeId);
+
     }
 
-    private void getPlaceDetails(double lat, double lng){
+
+
+    private void getPlaceDetails(String placeId){
 
         HashMap<String,String> hashMap=new HashMap<>();
-        hashMap.put(KEY_LATLNG,lat+","+lng);
+        hashMap.put(KEY_PLACE_ID,placeId);
+        hashMap.put(KEY_API_KEY,"AIzaSyDeE8mZavwOAHWE4Up3WtM6-L7NClaffvY");
         getApiInterface().getPlacesDetails(hashMap).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -116,7 +113,7 @@ public class BuildAddressService extends IntentService {
                         String res = responseBody.string();
                         JSONObject object = new JSONObject(res);
                         if (object.getString(KEY_STATUS).equals(KEY_OK)) {
-                            JSONObject json = (JSONObject) object.getJSONArray(KEY_RESULTS).get(0);
+                            JSONObject json = object.getJSONObject(KEY_RESULT);
                             PlacesData placesData = gson.fromJson(json.toString(), PlacesData.class);
                             List<AddressComponent> addressComponentList = placesData.getAddressComponents();
                             String country = "", state = "", city = "";
@@ -138,6 +135,10 @@ public class BuildAddressService extends IntentService {
                             fetchAddressEvent.setState(state);
                             fetchAddressEvent.setSucess(true);
                             Log.e("place data","Country :"+country+" state: "+state+" city :"+city);
+                            EventBus.getDefault().post(fetchAddressEvent);
+                        }else{
+                            fetchAddressEvent.setSucess(false);
+                            fetchAddressEvent.setMessage("Unable to find Geocode data.");
                             EventBus.getDefault().post(fetchAddressEvent);
                         }
                     } catch (Exception e) {

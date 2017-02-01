@@ -34,7 +34,7 @@
     <string name="error_empty_password">La contraseña no puede estar vacía.</string>
     <string name="error_empty_Mobile">El número de móvil no puede estar vacío.</string>
     <string name="error_title_invalid_email">Email inválido</string>
-    <string name="error_title_invalid_password">Contraseña invalida</string>
+    <string name="error_title_invalid_password">La contraseña debe tener un mínimo de 6 caracteres.</string>
     <string name="error_title_invalid_Mobile">Numero de celular invalido</string>
     <string name="error_title_invalid_profile">Imagen de perfil no válida</string>
     <string name="error_title_invalid_card">Tarjeta no valida</string>

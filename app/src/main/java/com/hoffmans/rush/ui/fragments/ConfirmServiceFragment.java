@@ -52,22 +52,13 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
     private RecyclerView recyclerView;
     private Button   btnMakeOrder;
     private LoadAddressAdapter addressAdapter;
-    private boolean isServiceConfirmed;
     private List<PickDropAddress>listAddressData=new ArrayList<>();
 
     public ConfirmServiceFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ConfirmServiceFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static ConfirmServiceFragment newInstance(Estimate param1, CardData param2, Service param3,int transID) {
         ConfirmServiceFragment fragment = new ConfirmServiceFragment();
         Bundle args = new Bundle();
@@ -247,7 +238,6 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
                 Progress.dismissProgress();
                 ConfirmServiceBean confirmServiceBean=(ConfirmServiceBean)body;
                 if(confirmServiceBean.getService()!=null){
-                    isServiceConfirmed=true;
                     ConfirmService service=confirmServiceBean.getService();
                     Intent receiptIntent=new Intent(mActivity, ReceiptActivity.class);
                     receiptIntent.putExtra(Constants.KEY_DATA_DATE_TIME,service.getDate_time());
@@ -286,7 +276,6 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
                 break;
         }
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==REQUEST_SELECT_CARD && resultCode==mActivity.RESULT_OK){
@@ -330,7 +319,4 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
 
         }
     }
-
-
-
 }

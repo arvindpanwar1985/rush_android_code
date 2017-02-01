@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="@dimen/dp_3"
 
     android:background="@drawable/bg_accept_reject">
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imgAcceptreject"
+     android:id="@+id/imgAcceptreject"
      android:layout_width="@dimen/dp_40"
      android:layout_height="@dimen/dp_40"
+     app:civ_border_color="@color/civ_border"
      android:src="@drawable/default_profile_photo"
      />
 

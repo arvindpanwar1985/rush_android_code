@@ -570,7 +570,8 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             if(position==DESTINATION_SELECTED){
                 btnEstimateCost.setVisibility(View.VISIBLE);
             }
-        BuildAddressService.buildAddresses(mActivity,pickDropAddress.getLatitude(),pickDropAddress.getLongitude());
+        //build address using place id .................
+       BuildAddressService.buildAddresses(mActivity,place.getId());
 
     }
 

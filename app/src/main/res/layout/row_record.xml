@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimaryDark">
 
 
@@ -32,6 +32,7 @@
                 android:id="@+id/imgDriver"
                 android:src="@drawable/default_profile_photo"
                 android:layout_width="@dimen/dp_40"
+                app:civ_border_color="@color/civ_border"
                 android:layout_height="@dimen/dp_40"/>
 
 

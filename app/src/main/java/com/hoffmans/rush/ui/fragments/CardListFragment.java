@@ -106,6 +106,9 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
     }
 
 
+    /**
+     * get the  saved card list
+     */
     private void getCarList(){
         Progress.showprogress(mActivity,"Loading cards..",false);
         String authToken=appPreference.getUserDetails().getToken();
@@ -300,8 +303,6 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
             }
         });
     }
-
-
 
 
     @Override

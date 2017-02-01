@@ -34,7 +34,7 @@
     <string name="error_empty_password">Password cannot be empty.</string>
     <string name="error_empty_Mobile">Mobile number cannot be empty.</string>
     <string name="error_title_invalid_email">Invalid Email</string>
-    <string name="error_title_invalid_password">Password must have minimum 8 characters.</string>
+    <string name="error_title_invalid_password">Password must have minimum 6 characters.</string>
     <string name="error_title_invalid_Mobile">Invalid Mobile Number</string>
     <string name="error_title_invalid_profile">Invalid Profile Pic</string>
     <string name="error_title_invalid_card">Invalid Card </string>
@@ -106,6 +106,8 @@
     <string name="str_scheduled">Scheduled</string>
 
     <string name="str_another_des">Add another destination</string>
+
+    <string name="str_pay_now">Pay Now</string>
 
 
 </resources>
