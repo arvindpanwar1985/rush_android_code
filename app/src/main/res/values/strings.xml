@@ -85,13 +85,13 @@
     <string name="str_reservation">Reservation</string>
     <string name="str_now">Now</string>
 
-    <string name="str_hint_start">Indicates starting point</string>
+    <string name="str_hint_start">Indicate starting point</string>
 
-    <string name="str_hint_end">Indicates ending point</string>
+    <string name="str_hint_end">Indicate ending point</string>
 
     <string name="str_make_order">Make an order</string>
-    <string name="str_value_estimate">Valor estimado</string>
-    <string name="str_value_time">Hora prevista</string>
+    <string name="str_value_estimate">Estimated Cost</string>
+    <string name="str_value_time">Estimated Time</string>
     <string name="str_fav_message">Are you sure ,you want to mark this address to Favourite?</string>
     <string name="str_delete_Card">Are you sure ,you want to delete this card?</string>
     <string name="str_fav_remove">Are you sure ,you want to remove this address from Favourite?</string>
@@ -108,6 +108,14 @@
     <string name="str_another_des">Add another destination</string>
 
     <string name="str_pay_now">Pay Now</string>
+    <string name="str_cancel">Cancel</string>
+    <string name="str_ok">Ok</string>
+    <string name="str_delete">Delete</string>
+    <string name="str_fav">Favourite</string>
+    <string name="str_mark_default">Mark Default</string>
+
+    <string name="str_favourites">FAVOURITES</string>
+    <string name="str_estimate_cost">Estimate Cost</string>
 
 
 </resources>

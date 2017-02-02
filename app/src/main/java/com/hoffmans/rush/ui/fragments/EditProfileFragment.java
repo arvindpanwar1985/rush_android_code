@@ -130,8 +130,8 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         View editProfileView=inflater.inflate(R.layout.fragment_edit_profile,container,false);
         initViews(editProfileView);
         initListeners();
-        setProfile(appPreference.getUserDetails());
-        getAllCurrency();
+        getProfile();
+
         return editProfileView;
     }
 
@@ -175,6 +175,35 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
 
     }
 
+
+
+    private void getProfile(){
+
+        Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
+        UserRequest request=new UserRequest();
+        request.getProfile(appPreference.getUserDetails().getToken(), new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                Progress.dismissProgress();
+
+                UserBean userBean=(UserBean)body;
+                if(userBean.getUser()!=null) {
+                    setProfile(userBean.getUser());
+                    getAllCurrency();
+                }
+            }
+
+            @Override
+            public void onRequestFailed(String message) {
+                Progress.dismissProgress();
+                mActivity.showSnackbar(message,0);
+                if(message.equals(Constants.AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
+
+            }
+        });
+    }
 
     @Override
     public void onClick(View view) {
@@ -236,6 +265,9 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
 
         if(!TextUtils.isEmpty(user.getPic_url()))
         Glide.with(mActivity).load(user.getPic_url()).into(imgProfilePic);
+
+        appPreference.updateUserProfile(user);
+
 
     }
 

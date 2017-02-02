@@ -181,9 +181,6 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         txtNow.setSelected(true);
 
 
-
-
-
     }
 
     @Override
@@ -492,13 +489,13 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             builder.setTitle(R.string.app_name)
                     .setMessage(R.string.str_fav_message)
                     .setCancelable(false)
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
                             dialog.dismiss();
                         }
                     })
-                    .setPositiveButton("Favourite", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(getString(R.string.str_fav), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -655,10 +652,12 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         service.setDrop_addresses(dropAddressList);
         if(txtReservation.isSelected()){
             service.setDate(futureDataTime);
+            service.setDate_time(futureDataTime);
         }else {
             if (dateUtils.getUtcDateTime() != null) {
                 Log.e("date", dateUtils.getUtcDateTime());
                 service.setDate(dateUtils.getUtcDateTime());
+                service.setDate_time(dateUtils.getUtcDateTime());
            }
         }
         EstimateServiceParams estimateParams=new EstimateServiceParams();

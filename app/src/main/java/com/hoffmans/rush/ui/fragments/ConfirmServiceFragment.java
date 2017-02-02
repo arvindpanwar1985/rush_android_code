@@ -200,7 +200,6 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
         }
     }
 
-
     private void setDefaultCarData()throws NullPointerException{
         mSelectedCard=defaultCardData;
         if(mSelectedCard!=null){
@@ -213,7 +212,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
         }
     }
 
-    private void setPickDropUi()throws NullPointerException{
+   private void setPickDropUi()throws NullPointerException{
         listAddressData.clear();
         listAddressData.add(mServiceParams.getPick_address());
         listAddressData.addAll(mServiceParams.getDrop_addresses());
@@ -297,7 +296,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
             builder.setTitle("Confirm Order.")
                     .setMessage(message)
                     .setCancelable(false)
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
                             dialog.dismiss();
@@ -306,7 +305,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
                             }
                         }
                     })
-                    .setPositiveButton("Pay Now", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(getString(R.string.str_pay_now), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();

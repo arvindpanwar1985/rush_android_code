@@ -61,6 +61,8 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             isCardSelectable = getArguments().getBoolean(ARG_PARAM1);
+
+
         }
     }
 
@@ -68,6 +70,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if(view==null) {
+            mActivity.initToolBar("",true,false);
             view = inflater.inflate(R.layout.fragment_card_list, container, false);
             initViews(view);
             initListeners();
@@ -182,14 +185,14 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
             builder.setTitle(R.string.app_name)
                     .setMessage(R.string.str_delete_Card)
                     .setCancelable(false)
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
                             dialog.dismiss();
 
                         }
                     })
-                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(getString(R.string.str_delete), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -213,14 +216,14 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
             builder.setTitle(R.string.app_name)
                     .setMessage(R.string.str_default_Card)
                     .setCancelable(false)
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
                             dialog.dismiss();
 
                         }
                     })
-                    .setPositiveButton("Mark Default", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(getString(R.string.str_mark_default), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -303,7 +306,6 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
             }
         });
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

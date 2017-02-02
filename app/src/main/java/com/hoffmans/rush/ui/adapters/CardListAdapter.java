@@ -97,7 +97,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
         final CardData cardData=cardDataList.get(position);
 
         try {
-            holder.txtCardnumber.setText("************" + cardData.getLast4());
+            holder.txtCardnumber.setText("********" + cardData.getLast4());
             Glide.with(mContext).load(cardData.getImageUrl()).into(holder.imgCardType);
             holder.txtCardtype.setText(cardData.getCardType());
         }catch (NullPointerException e){

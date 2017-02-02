@@ -14,6 +14,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookAuthorizationException;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
@@ -23,20 +37,34 @@ import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.ui.activities.ForgotPassActivity;
+import com.hoffmans.rush.ui.activities.LoginActivity;
+import com.hoffmans.rush.utils.Constants;
+import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+
+import static android.app.Activity.RESULT_OK;
+import static com.hoffmans.rush.ui.activities.LoginActivity.REQUEST_GOOGLE_SIGNIN;
 
 /**
  * Created by devesh on 19/12/16.
  */
 
-public class LoginFragment extends BaseFragment implements View.OnClickListener {
+public class LoginFragment extends BaseFragment implements View.OnClickListener,FacebookCallback<LoginResult> {
 
     private View loginView;
     private TextView txtCreateAccount,txtForgotPassword;
     private Button btnLogin;
     private EditText edtEmail,edtPassword;
+    private Button btnFb,btnGoogle;
     private String notificationToken;
+    private CallbackManager callbackManager;
+
     public LoginFragment(){
 
     }
@@ -47,12 +75,15 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
         mActivity.initToolBar("",false);
         mActivity.hideToolbar();
         initViews(loginView);
+        FacebookSdk.sdkInitialize(mActivity.getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
         initListeners();
         notificationToken =appPreference.getNoticficationToken();
         if(TextUtils.isEmpty(notificationToken)){
             notificationToken= FirebaseInstanceId.getInstance().getToken();
             appPreference.setNotificationToken(notificationToken);
         }
+
         return loginView;
     }
 
@@ -63,6 +94,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
         btnLogin=(Button)view.findViewById(com.hoffmans.rush.R.id.flBtnLogin);
         edtPassword=(EditText)view.findViewById(com.hoffmans.rush.R.id.flPassword);
         edtEmail=(EditText)view.findViewById(com.hoffmans.rush.R.id.flUsername);
+        btnFb=(Button)view.findViewById(R.id.frBtnFacebook);
+        btnGoogle=(Button)view.findViewById(R.id.frBtnGoogle);
 
        }
 
@@ -71,6 +104,9 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
      txtCreateAccount.setOnClickListener(this);
      txtForgotPassword.setOnClickListener(this);
      btnLogin.setOnClickListener(this);
+     btnFb.setOnClickListener(this);
+     btnGoogle.setOnClickListener(this);
+     LoginManager.getInstance().registerCallback(callbackManager, this);
     }
 
     @Override
@@ -87,6 +123,14 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
                 break;
             case com.hoffmans.rush.R.id.flBtnLogin:
                 validateFields();
+                break;
+
+            case R.id.frBtnFacebook:
+                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
+                break;
+            case R.id.frBtnGoogle:
+                mActivity.idGoogleApiclient++;
+                googleSignIn();
                 break;
         }
     }
@@ -114,12 +158,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
             mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.error_empty_password), Toast.LENGTH_SHORT);
             return;
         }
-        // Check for a valid password, if the user entered one.
-      /*  if (TextUtils.isEmpty(password) || !Validation.isValidPassword(password)) {
-            mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.error_title_invalid_password), Toast.LENGTH_SHORT);
-
-            return;
-        }*/
 
         if (TextUtils.isEmpty(password) ) {
             mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.error_title_invalid_password), Toast.LENGTH_SHORT);
@@ -181,6 +219,111 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     }
 
 
+    /**
+     * graph api caller to get user detail from Facebook account.
+     */
+    private void callGraphRequestFb(String accessToken) {
+        final GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(
+                            JSONObject object,
+                            GraphResponse response) {
+                        try {
+                            if(object!=null) {
+                                String first_name = object.getString(Constants.FBCONTANTS.FB_FIRST_NAME) ;
+                                String last_name  = object.getString(Constants.FBCONTANTS.FB_LAST_NAME);
+                                String email = "";
+                                if (object.has(Constants.FBCONTANTS.FB_EMAIL)) {
+                                    email = object.getString(Constants.FBCONTANTS.FB_EMAIL);
+                                }
+                                String socialId = object.getString(Constants.FBCONTANTS.FB_ID);
+                                String imageUrl = Constants.FBCONTANTS.FB_IMG_URL+socialId+"/picture?type=large";
+
+                                // socialLogin(Constants.FB_PROVIDER,first_name,last_name,email,socialId,imageUrl,notificationToken,Constants.DEVICE_TYPE,Utils.getTimeZone());
+                                socialLogin(socialId,first_name,last_name,email,Constants.FB_PROVIDER,imageUrl,notificationToken,Constants.DEVICE_TYPE,Utils.getTimeZone());
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }catch (Exception e){
+
+                        }
+                    }
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,first_name,last_name,email");
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
+
+
+    /**
+     * login via google and facebook
+     * @param provider facebook/google
+     * @param first_name
+     * @param last_name
+     * @param email
+     * @param socialId  facebook_id/google_id
+     * @param picUrl pic_url in case of fb
+     */
+    private void socialLogin(String socialId, String first_name, String last_name,String email, String provider, String picUrl, String uuid,String type,String timezone){
+        Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
+        LoginRequest loginRequest=new LoginRequest();
+        loginRequest.loginViaSocialNetwork(socialId, first_name, last_name, email, provider, picUrl, uuid,type,timezone,new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                Progress.dismissProgress();
+                UserBean userBean=(UserBean)body;
+                User user=userBean.getUser();
+                handleUserRegistrationCases(user);
+            }
+
+            @Override
+            public void onRequestFailed(String message) {
+                Progress.dismissProgress();
+                mActivity.showSnackbar(message,Toast.LENGTH_LONG);
+            }
+        });
+    }
+
+
+
+
+    private void handleUserRegistrationCases(User user){
+
+        if(!user.is_email_verified()){
+            UpdateAccountFragment fragment=UpdateAccountFragment.newInstance(user.getEmail(),user.getPhone(),user.getToken(),user.is_email_verified());
+            mActivity.replaceFragment(fragment,0,true);
+        }
+        else{
+            if(!user.is_card_verfied()){
+                PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance(user);
+                replaceFragment(paymentMethodFragment,true);
+            }else{
+                appPreference.saveUser(user);
+                appPreference.setUserLogin(true);
+                Intent bookServiceIntent=new Intent(mActivity, BookServiceActivity.class);
+                bookServiceIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(bookServiceIntent);
+
+            }
+        }
+    }
+
+
+    /**
+     * sign in through google
+     */
+    private void googleSignIn(){
+        GoogleApiClient googleApiClient=(mActivity.getGoogleApiClient()==null)?mActivity.setGoogleSignInOptions(mActivity.idGoogleApiclient):mActivity.getGoogleApiClient();
+        if(googleApiClient!=null) {
+            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+            startActivityForResult(signInIntent, LoginActivity.REQUEST_GOOGLE_SIGNIN);
+        }
+    }
+
     public void showAlertDialog(String message) {
         try {
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mActivity);
@@ -200,4 +343,59 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     }
 
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode ==REQUEST_GOOGLE_SIGNIN && resultCode == RESULT_OK){
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }else if(FacebookSdk.isFacebookRequestCode(requestCode)){
+            try {
+                callbackManager.onActivityResult(requestCode, resultCode, data);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    /**
+     *
+     * @param result Result from google + login
+     */
+    private void handleSignInResult(GoogleSignInResult result) {
+
+        if (result.isSuccess()) {
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
+            String googleId=acct.getId();
+            String email=acct.getEmail();
+            String name =acct.getDisplayName();
+            socialLogin(googleId,name,"",email,Constants.GOOGLE_PROVIDER,"",notificationToken,Constants.DEVICE_TYPE,Utils.getTimeZone());
+
+        }
+    }
+
+
+    @Override
+    public void onSuccess(LoginResult loginResult) {
+        String accessToken=loginResult.getAccessToken().getToken();
+        callGraphRequestFb(accessToken);
+    }
+
+    @Override
+    public void onCancel() {
+
+    }
+
+    @Override
+    public void onError(FacebookException error) {
+        mActivity.showSnackbar(error.getMessage(),0);
+        if (error instanceof FacebookAuthorizationException) {
+            if (AccessToken.getCurrentAccessToken() != null) {
+                LoginManager.getInstance().logOut();
+            }
+        }
+    }
 }

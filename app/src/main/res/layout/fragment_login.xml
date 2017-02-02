@@ -18,6 +18,7 @@
         android:id="@+id/flUsername"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_40"
+        android:imeOptions="actionDone"
         android:drawableLeft="@drawable/user_icon"
         android:hint="@string/hint_user"
         android:inputType="textEmailAddress|textNoSuggestions"
@@ -33,6 +34,7 @@
         android:drawableLeft="@drawable/password_icon"
         android:inputType="textWebPassword|textNoSuggestions"
         android:layout_marginTop="@dimen/dp_20"
+        android:imeOptions="actionDone"
         android:layout_marginLeft="@dimen/dp_40"
         android:layout_marginRight="@dimen/dp_40"
         android:layout_below="@+id/flUsername"
@@ -48,6 +50,32 @@
           android:layout_marginRight="@dimen/dp_40"
           android:layout_below="@+id/flPassword"
           style="@style/AppTheme.Button"/>
+
+
+    <Button
+        android:id="@+id/frBtnFacebook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_40"
+        android:layout_marginBottom="@dimen/dp_20"
+        android:layout_alignParentLeft="true"
+
+        android:layout_below="@+id/flBtnLogin"
+        android:background="@drawable/fb_bg"/>
+
+    <Button
+        android:id="@+id/frBtnGoogle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:layout_marginRight="@dimen/dp_40"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/frBtnFacebook"
+        android:layout_below="@+id/flBtnLogin"
+        android:background="@drawable/google_bg"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

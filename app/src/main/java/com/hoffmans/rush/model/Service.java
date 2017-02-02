@@ -12,7 +12,8 @@ import java.util.List;
 public class Service implements Parcelable {
 
 
-    private String date;
+    private String date_time;
+    private String Date_time;
     private int vehicle_type_id;
 
     private PickDropAddress pick_address;
@@ -46,16 +47,24 @@ public class Service implements Parcelable {
 
 
     public String getDate() {
-        return date;
+        return date_time;
     }
 
     public void setDate(String date) {
-        this.date = date;
+        this.date_time = date;
     }
 
 
 
     public Service() {
+    }
+
+    public String getDate_time() {
+        return Date_time;
+    }
+
+    public void setDate_time(String date_time) {
+        Date_time = date_time;
     }
 
     @Override
@@ -65,21 +74,19 @@ public class Service implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.date);
+        dest.writeString(this.date_time);
+        dest.writeString(this.Date_time);
         dest.writeInt(this.vehicle_type_id);
-
         dest.writeParcelable(this.pick_address, flags);
         dest.writeTypedList(this.drop_addresses);
-
     }
 
     protected Service(Parcel in) {
-        this.date = in.readString();
+        this.date_time = in.readString();
+        this.Date_time = in.readString();
         this.vehicle_type_id = in.readInt();
-
         this.pick_address = in.readParcelable(PickDropAddress.class.getClassLoader());
         this.drop_addresses = in.createTypedArrayList(PickDropAddress.CREATOR);
-
     }
 
     public static final Creator<Service> CREATOR = new Creator<Service>() {

@@ -57,6 +57,7 @@ import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.model.Currency;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
+import com.hoffmans.rush.ui.activities.LoginActivity;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Utils;
@@ -82,6 +83,10 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
+import static com.hoffmans.rush.ui.activities.LoginActivity.CAMERA_PIC_REQUEST;
+import static com.hoffmans.rush.ui.activities.LoginActivity.GALLERY_PIC_REQUEST;
+import static com.hoffmans.rush.ui.activities.LoginActivity.IMAGE_REQUEST_PERMISSION;
+import static com.hoffmans.rush.ui.activities.LoginActivity.REQUEST_GOOGLE_SIGNIN;
 
 /**
  * Created by devesh on 19/12/16.
@@ -94,14 +99,11 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     private Button btnRegister,btnFb,btnGoogle;
     private CircleImageView imgProfilePic;
     private Spinner spinnerCurrency;
-    private static final int IMAGE_REQUEST_PERMISSION=100;
-    private static final int CAMERA_PIC_REQUEST    = 101;
-    private static final int GALLERY_PIC_REQUEST   = 102;
-    private static final int REQUEST_GOOGLE_SIGNIN = 8;
+
     private CallbackManager callbackManager;
     private String  mCurrentPhotoPath;
     private Currency selectedCurrency;
-    private int idGoogleApiclient;
+
     private String notificationToken;
     private RelativeLayout topView;
     private View view;
@@ -120,6 +122,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
              mActivity.hideToolbar();
              view = inflater.inflate(R.layout.fragment_register, container, false);
              FacebookSdk.sdkInitialize(mActivity.getApplicationContext());
+
              callbackManager = CallbackManager.Factory.create();
              initViews(view);
              initListeners();
@@ -176,7 +179,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
                 break;
             case R.id.frBtnGoogle:
-                idGoogleApiclient++;
+                mActivity.idGoogleApiclient++;
                 googleSignIn();
                 break;
             case R.id.frImgProfile:
@@ -211,7 +214,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                                 String socialId = object.getString(Constants.FBCONTANTS.FB_ID);
                                 String imageUrl = Constants.FBCONTANTS.FB_IMG_URL+socialId+"/picture?type=large";
 
-                                socialLogin(Constants.FB_PROVIDER,first_name,last_name,email,socialId,imageUrl,notificationToken,Constants.DEVICE_TYPE,Utils.getTimeZone());
+                                socialLogin(socialId,first_name,last_name,email,Constants.FB_PROVIDER,imageUrl,notificationToken,Constants.DEVICE_TYPE,Utils.getTimeZone());
 
                             }
 
@@ -233,10 +236,10 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
      * sign in through google
      */
     private void googleSignIn(){
-           GoogleApiClient googleApiClient=(mActivity.getGoogleApiClient()==null)?mActivity.setGoogleSignInOptions(idGoogleApiclient):mActivity.getGoogleApiClient();
+           GoogleApiClient googleApiClient=(mActivity.getGoogleApiClient()==null)?mActivity.setGoogleSignInOptions(mActivity.idGoogleApiclient):mActivity.getGoogleApiClient();
             if(googleApiClient!=null) {
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-                startActivityForResult(signInIntent, REQUEST_GOOGLE_SIGNIN);
+                startActivityForResult(signInIntent, LoginActivity.REQUEST_GOOGLE_SIGNIN);
             }
     }
 
@@ -320,7 +323,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                         FILE_PROVIDER,
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, CAMERA_PIC_REQUEST);
+                startActivityForResult(takePictureIntent, LoginActivity.CAMERA_PIC_REQUEST);
             }
         }
     }
@@ -503,8 +506,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             requestBodyMap.put(Constants.KEY_PHONE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),phoneNo));
             requestBodyMap.put(Constants.KEY_NAME, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),fullname));
             requestBodyMap.put(Constants.KEY_TIME_ZONE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),Utils.getTimeZone()));
-            //TODO add the original notification token
-            requestBodyMap.put(Constants.KEY_UDID, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),"adddf -dadf -adsfasd-d8773"));
+            requestBodyMap.put(Constants.KEY_UDID, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),notificationToken));
             requestBodyMap.put(Constants.KEY_TYPE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),Constants.DEVICE_TYPE));
             requestBodyMap.put(Constants.KEY_CURRENCY, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),selectedCurrency.getId().toString()));
 
@@ -542,13 +544,13 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
      * @param first_name
      * @param last_name
      * @param email
-     * @param uid  facebook_id/google_id
+     * @param socialId  facebook_id/google_id
      * @param picUrl pic_url in case of fb
      */
-    private void socialLogin(String provider,String first_name,String last_name,String email,String uid,String picUrl,String uuid,String type,String timezone){
+    private void socialLogin(String socialId, String first_name, String last_name,String email, String provider, String picUrl, String uuid,String type,String timezone){
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         LoginRequest loginRequest=new LoginRequest();
-        loginRequest.loginViaSocialNetwork(uid, first_name, last_name, email, provider, picUrl, uuid,type,timezone,new ApiCallback() {
+        loginRequest.loginViaSocialNetwork(socialId, first_name, last_name, email, provider, picUrl, uuid,type,timezone,new ApiCallback() {
             @Override
             public void onRequestSuccess(BaseBean body) {
                 Progress.dismissProgress();
@@ -564,8 +566,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             }
         });
     }
-
-
 
 
     private void handleUserRegistrationCases(User user){
@@ -678,7 +678,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             String googleId=acct.getId();
             String email=acct.getEmail();
             String name =acct.getDisplayName();
-            socialLogin(Constants.GOOGLE_PROVIDER,name,email,null,googleId,"","asd-dad-dad-45f4","ANDROID",Utils.getTimeZone());
+            socialLogin(googleId,name,"",email,Constants.GOOGLE_PROVIDER,"",notificationToken,Constants.DEVICE_TYPE,Utils.getTimeZone());
         }
     }
 

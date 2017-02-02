@@ -87,8 +87,9 @@
     <string name="str_hint_end">indica punto de destino</string>
 
     <string name="str_make_order">Realizar pedido</string>
-    <string name="str_value_estimate">Estimated value</string>
-    <string name="str_value_time">Estimated Time</string>
+    <string name="str_value_estimate">Valor estimado</string>
+    <string name="str_value_time">Hora prevista</string>
+
     <string name="str_fav_message">¿Estás seguro de que quieres marcar esta dirección en Favoritos?</string>
     <string name="str_fav_remove">¿Seguro que quieres eliminar esta dirección de Favorito?</string>
     <string name="str_record">Archivos</string>
@@ -96,4 +97,15 @@
     <string name="str_delete_Card">¿Estás seguro de que quieres eliminar esta tarjeta?</string>
     <string name="str_default_Card">¿Estás seguro de que quieres marcar esta tarjeta por defecto?</string>
     <string name="str_another_des">Añadir otro destino</string>
+
+    <string name="str_pay_now">Pague ahora</string>
+    <string name="str_cancel">Cancelar</string>
+    <string name="str_ok">De acuerdo</string>
+    <string name="str_delete">Borrar</string>
+    <string name="str_fav">favorito</string>
+    <string name="str_mark_default">Marca predeterminada</string>
+
+    <string name="str_favourites">FAVORITOS</string>
+
+    <string name="str_estimate_cost">Costo estimado</string>
 </resources>

@@ -26,6 +26,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
  */
 public class LocationData implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+
     private Context _context;
     private Location latKnowLocation;
     private GoogleApiClient mGoogleApiClient;
@@ -96,10 +97,8 @@ public class LocationData implements GoogleApiClient.ConnectionCallbacks, Google
 
 
 
-
     @Override
     public void onConnected(Bundle bundle) {
-
         try {
             latKnowLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (latKnowLocation != null) {

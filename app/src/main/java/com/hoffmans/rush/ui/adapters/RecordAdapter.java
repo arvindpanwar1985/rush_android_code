@@ -110,18 +110,18 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             if(dateTime.getDate()!=null &&dateTime.getTime()!=null){
                 holder.txtDateTime.setText(dateTime.getDate()+" "+dateTime.getTime());
             }
+            if(!isRecord && record.getPick_up()!=null){
+                holder.txtStreetAddress.setText(record.getPick_up().getStreetAddress());
+            }
+            if(record.getDriver_details().getPicUrl()!=null) {
+                Glide.with(mContext).load(record.getDriver_details().getPicUrl()).into(holder.imgdriver);
+            }
             if(driverDetail.getName()!=null){
                 holder.txtDriverName.setText(driverDetail.getName());
             }
 
-            if(record.getDriver_details().getPicUrl()!=null) {
-             Glide.with(mContext).load(record.getDriver_details().getPicUrl()).into(holder.imgdriver);
-            }
 
-            if(!isRecord && record.getPick_up()!=null){
-                holder.txtStreetAddress.setText(record.getPick_up().getStreetAddress());
-            }
-        }catch (NullPointerException e){
+        }catch (Exception e){
 
         }
 

@@ -24,6 +24,11 @@ public class LoginActivity extends BaseActivity implements PaymentMethodNonceCre
 
     private BrainTreeHandler brainTreeHandler;
 
+    public  static final int IMAGE_REQUEST_PERMISSION=100;
+    public static final int CAMERA_PIC_REQUEST    = 101;
+    public static final int GALLERY_PIC_REQUEST   = 102;
+    public static final int REQUEST_GOOGLE_SIGNIN = 8;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

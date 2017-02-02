@@ -45,9 +45,10 @@ public class RecordFragment extends BaseFragment {
    private EndlessRecyclerViewScrollListener scrollListener;
    private LinearLayoutManager linearLayoutManager;
    private int records_count,currentListSize;
-   private int page=1;
+
    private List<Record> recordList;
    private ProgressBar progressBar;
+
    private TextView txtNoRecords;
 
 
@@ -86,7 +87,7 @@ public class RecordFragment extends BaseFragment {
         View view=inflater.inflate(R.layout.fragment_record, container, false);
         initViews(view);
         initListeners();
-        getRecordData(buildParams(String.valueOf(page),DEFAULT_ITEMS));
+        getRecordData(buildParams(String.valueOf(1),DEFAULT_ITEMS));
         return view;
     }
 
@@ -119,7 +120,7 @@ public class RecordFragment extends BaseFragment {
                 // Add whatever code is needed to append new items to the bottom of the list
                 if(currentListSize!=records_count){
                     linearProgress.setVisibility(View.VISIBLE);
-                    loadmoreItems(buildParams(String.valueOf(page),DEFAULT_ITEMS));
+                    loadmoreItems(buildParams(String.valueOf(page+1),DEFAULT_ITEMS));
                 }
             }
         };
@@ -154,7 +155,6 @@ public class RecordFragment extends BaseFragment {
         request.getRecords(appPreference.getUserDetails().getToken(), params, new ApiCallback() {
             @Override
             public void onRequestSuccess(BaseBean body) {
-
                  Progress.dismissProgress();
                  RecordBean recordBean=(RecordBean)body;
                  records_count=recordBean.getTotal_items();
@@ -163,7 +163,7 @@ public class RecordFragment extends BaseFragment {
                     mAdapter=new RecordAdapter(mActivity,recordList,isRecord);
                     recyclerView.setAdapter(mAdapter);
                     currentListSize=recordList.size();
-                    page++;
+
                   }else{
                      txtNoRecords.setVisibility(View.VISIBLE);
                  }
@@ -194,13 +194,12 @@ public class RecordFragment extends BaseFragment {
                 RecordBean recordBean=(RecordBean)body;
                 records_count=recordBean.getTotal_items();
                 if(recordBean.getRecords().size()!=0){
-                    recordList.addAll(recordBean.getRecords());
-                    currentListSize=recordList.size();
-                    page++;
-                    if(mAdapter!=null){
-                        mAdapter.notifyDataSetChanged();
-                    }
-                }
+                        recordList.addAll(recordBean.getRecords());
+                        currentListSize=recordList.size();
+                        if(mAdapter!=null){
+                            mAdapter.notifyDataSetChanged();
+                        }
+                  }
             }
 
             @Override

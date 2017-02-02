@@ -48,6 +48,7 @@ import java.util.GregorianCalendar;
 public abstract  class BaseActivity extends AppCompatActivity {
     protected FrameLayout activityContent = null;
     private Toolbar mToolbar = null;
+    public int idGoogleApiclient;
     private int mLayoutId = 0;
     public static Toast toast;
     private int mActionBarSize,statusBarHeight;

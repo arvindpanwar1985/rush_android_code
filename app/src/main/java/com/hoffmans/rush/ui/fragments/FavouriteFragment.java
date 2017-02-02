@@ -35,9 +35,6 @@ public class FavouriteFragment extends BaseFragment implements OnitemClickListne
     private TextView txtNOFav;
     private ArrayList<PickDropAddress> addressArrayList;
 
-
-
-
     public FavouriteFragment() {
         // Required empty public constructor
     }
@@ -58,10 +55,11 @@ public class FavouriteFragment extends BaseFragment implements OnitemClickListne
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mActivity.initToolBar("FAVOURITES",true);
+        mActivity.initToolBar(getString(R.string.str_favourites),true);
         View view=inflater.inflate(R.layout.fragment_favourite, container, false);
         // Inflate the layout for this fragment
         initViews(view);
@@ -164,13 +162,13 @@ public class FavouriteFragment extends BaseFragment implements OnitemClickListne
             builder.setTitle(R.string.app_name)
                     .setMessage(R.string.str_fav_remove)
                     .setCancelable(false)
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
                             dialog.dismiss();
                         }
                     })
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(getString(R.string.str_ok), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
