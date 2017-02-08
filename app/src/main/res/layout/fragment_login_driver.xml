@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg">
+
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_60"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/login_logo"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:id="@+id/flUsername"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_40"
+        android:imeOptions="actionDone"
+        android:drawableLeft="@drawable/user_icon"
+        android:hint="@string/hint_user"
+        android:inputType="textEmailAddress|textNoSuggestions"
+        android:layout_marginRight="@dimen/dp_40"
+        android:layout_centerInParent="true"
+        style="@style/AppTheme.Input.Login"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:id="@+id/flPassword"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint_password"
+        android:drawableLeft="@drawable/password_icon"
+        android:inputType="textWebPassword|textNoSuggestions"
+        android:layout_marginTop="@dimen/dp_20"
+        android:imeOptions="actionDone"
+        android:layout_marginLeft="@dimen/dp_40"
+        android:layout_marginRight="@dimen/dp_40"
+        android:layout_below="@+id/flUsername"
+        style="@style/AppTheme.Input.Login"/>
+
+    <Button
+        android:id="@+id/flBtnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginLeft="@dimen/dp_40"
+        android:text="@string/str_login"
+        android:layout_marginRight="@dimen/dp_40"
+        android:layout_below="@+id/flPassword"
+        style="@style/AppTheme.Button"/>
+
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/flForgotPass"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:text="@string/str_has_forgotPass"
+            android:textColor="@android:color/white"
+            android:textStyle="bold|italic"
+            android:textSize="@dimen/sp_16"/>
+
+
+</RelativeLayout>
