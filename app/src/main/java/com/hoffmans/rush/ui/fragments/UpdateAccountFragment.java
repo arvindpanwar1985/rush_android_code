@@ -49,7 +49,7 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
     private static final String ARG_PARAM4 = "param4";
 
     private String mEmail,mPhone,token;
-    private boolean isEmailVerified;
+
     private EditText edtEmail,edtPhone,edtcc;
     private Button btnSave;
     private static  final String KEY_EMAIL="email";
@@ -76,13 +76,13 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
      * @return A new instance of fragment UpdateAccountFragment.
      */
 
-    public static UpdateAccountFragment newInstance(String email,String phone,String token,boolean isEmailVerified) {
+    public static UpdateAccountFragment newInstance(String email,String phone,String token) {
         UpdateAccountFragment fragment = new UpdateAccountFragment();
         Bundle args = new Bundle();
         args.putString( ARG_PARAM1, email);
         args.putString( ARG_PARAM2, phone);
         args.putString( ARG_PARAM3, token);
-        args.putBoolean(ARG_PARAM4,isEmailVerified);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -94,7 +94,7 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
             mEmail = getArguments().getString(ARG_PARAM1);
             mPhone = getArguments().getString(ARG_PARAM2);
             token  = getArguments().getString(ARG_PARAM3);
-            isEmailVerified=getArguments().getBoolean(ARG_PARAM4);
+
 
         }
     }
@@ -121,11 +121,14 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
         edtcc=(EditText)view.findViewById(R.id.fuEdtCC);
         btnSave =(Button)view.findViewById(R.id.fuSaveDetails);
         spinnerCurrency=(Spinner)view.findViewById(R.id.spinnerCurrency);
-
-        if(isEmailVerified){
-            edtEmail.setEnabled(false);
+        if(mEmail!=null &&!TextUtils.isEmpty(mEmail)){
+            edtEmail.setText(mEmail);
+           //user will not able to change the email
+           edtEmail.setEnabled(false);
+        }else{
+            edtEmail.setEnabled(true);
         }
-        edtEmail.setText(mEmail);
+
 
     }
 
@@ -195,7 +198,7 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
 
     }
 
-    private  void updateUser(JsonObject object,String token){
+    private  void updateUser(JsonObject object, final String token){
         Progress.showprogress(mActivity,"Updating Account..",false);
         UserRequest userRequest=new UserRequest();
         userRequest.updateUser(object,token, new ApiCallback() {
@@ -204,6 +207,7 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
                 Progress.dismissProgress();
                 UserBean bean=(UserBean)body;
                 User user=bean.getUser();
+                user.setToken(token);
                 if(!user.is_email_verified()){
                     showAlertDialog(getString(R.string.str_verify_text));
                 }else if(user.getPhone()!=null && !user.is_card_verfied()){

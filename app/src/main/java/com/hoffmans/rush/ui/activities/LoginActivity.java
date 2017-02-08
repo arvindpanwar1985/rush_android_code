@@ -25,9 +25,11 @@ public class LoginActivity extends BaseActivity implements PaymentMethodNonceCre
     private BrainTreeHandler brainTreeHandler;
 
     public  static final int IMAGE_REQUEST_PERMISSION=100;
-    public static final int CAMERA_PIC_REQUEST    = 101;
-    public static final int GALLERY_PIC_REQUEST   = 102;
-    public static final int REQUEST_GOOGLE_SIGNIN = 8;
+    public  static final int CAMERA_PIC_REQUEST    = 101;
+    public  static final int GALLERY_PIC_REQUEST   = 102;
+    public  static final int REQUEST_GOOGLE_SIGNIN = 8;
+    public  static final String STATUS_PENDING ="pending";
+    public  static final String STATUS_ACTIVE ="active";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,10 +99,8 @@ public class LoginActivity extends BaseActivity implements PaymentMethodNonceCre
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-
-
     public void setBrainTreeHandler(BrainTreeHandler handler){
         this.brainTreeHandler=handler;
     }
+
 }

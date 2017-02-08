@@ -569,22 +569,21 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
 
     private void handleUserRegistrationCases(User user){
-
-        if(!user.is_email_verified()){
-            UpdateAccountFragment fragment=UpdateAccountFragment.newInstance(user.getEmail(),user.getPhone(),user.getToken(),user.is_email_verified());
-            mActivity.replaceFragment(fragment,0,true);
-        }
-       else{
-            if(!user.is_card_verfied()){
-                PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance(user);
-                replaceFragment(paymentMethodFragment,true);
+        if(user!=null) {
+            if(user.getStatus()!=null && user.getStatus().equals(LoginActivity.STATUS_ACTIVE)){
+                appPreference.saveUser(user);
+                appPreference.setUserLogin(true);
+                Intent bookServiceIntent = new Intent(mActivity, BookServiceActivity.class);
+                bookServiceIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(bookServiceIntent);
+            }else if(user.getPhone()==null || !user.is_email_verified()) {
+                UpdateAccountFragment fragment = UpdateAccountFragment.newInstance(user.getEmail(), user.getPhone(), user.getToken());
+                mActivity.replaceFragment(fragment, 0, true);
             }else{
-                  appPreference.saveUser(user);
-                  appPreference.setUserLogin(true);
-                  Intent bookServiceIntent=new Intent(mActivity, BookServiceActivity.class);
-                  bookServiceIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                  startActivity(bookServiceIntent);
-
+                if (!user.is_card_verfied()) {
+                    PaymentMethodFragment paymentMethodFragment = PaymentMethodFragment.newInstance(user);
+                    replaceFragment(paymentMethodFragment, true);
+                }
             }
         }
     }

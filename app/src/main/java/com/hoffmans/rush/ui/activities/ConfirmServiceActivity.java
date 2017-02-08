@@ -21,7 +21,7 @@ public class ConfirmServiceActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_confirm_service, getParentView());
-        initToolBar(" ",true);
+        initToolBar(getString(R.string.str_menu_order),true);
         if(getIntent()!=null) {
             try {
                 Estimate estimate = getIntent().getParcelableExtra(Constants.KEY_ESTIMATE_DATA);

@@ -42,7 +42,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
 
     private RelativeLayout viewCardDetails;
     private static final int REQUEST_SELECT_CARD=108;
-    private CardData mSelectedCard;
+
     private ImageView imgCardType;
     private TextView txtCardData,txtCurrency,txtAmount,txtEstimatedTime;
     private int mTransactionId;
@@ -96,11 +96,11 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
 
 
     private void onCardSelected(CardData selectedCard){
-        mSelectedCard=selectedCard;
+        defaultCardData=selectedCard;
         if(selectedCard!=null){
             try{
-                txtCardData.setText("***********"+selectedCard.getLast4());
-                Glide.with(mActivity).load(selectedCard.getImageUrl()).into(imgCardType);
+                txtCardData.setText("***********"+defaultCardData.getLast4());
+                Glide.with(mActivity).load(defaultCardData.getImageUrl()).into(imgCardType);
             }catch (NullPointerException e){
 
             }
@@ -201,11 +201,11 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
     }
 
     private void setDefaultCarData()throws NullPointerException{
-        mSelectedCard=defaultCardData;
-        if(mSelectedCard!=null){
+
+        if(defaultCardData!=null){
             try{
-                txtCardData.setText("***********"+mSelectedCard.getLast4());
-                Glide.with(mActivity).load(mSelectedCard.getImageUrl()).into(imgCardType);
+                txtCardData.setText("***********"+defaultCardData.getLast4());
+                Glide.with(mActivity).load(defaultCardData.getImageUrl()).into(imgCardType);
             }catch (NullPointerException e){
 
             }

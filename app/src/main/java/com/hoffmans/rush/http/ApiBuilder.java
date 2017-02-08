@@ -17,11 +17,8 @@ public class ApiBuilder {
     public static Retrofit retrofit;
     static ApiInterface apiInterface;
 
-
-
     private static OkHttpClient.Builder okHttpClient =
             new OkHttpClient.Builder();
-
 
     public  static ApiInterface  createApiBuilder(){
         setLogInterCeptor();
@@ -39,11 +36,6 @@ public class ApiBuilder {
 
 
     }
-
-
-
-
-
 
     /**
      * set log interceptor for logging the network response
