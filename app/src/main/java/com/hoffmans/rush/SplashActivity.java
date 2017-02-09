@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.ui.activities.LoginActivity;
+import com.hoffmans.rush.ui.driver.fragments.LoginFragment;
 import com.hoffmans.rush.utils.AppPreference;
 
 public class SplashActivity extends AppCompatActivity {
@@ -30,12 +31,10 @@ public class SplashActivity extends AppCompatActivity {
     * initialize Runnable and Handler to proceed the splash activity functionality.
     */
     private void initHandler() {
-
-
         mRunnable = new Runnable() {
             @Override
             public void run() {
-                if(appPreference.isUserLogin()){
+                if(appPreference.isUserLogin() && appPreference.getUserDetails().getRole().equals(LoginFragment.ROLE_CUST)){
                     Intent bookServiceIntent=new Intent(SplashActivity.this, BookServiceActivity.class);
                     bookServiceIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(bookServiceIntent);

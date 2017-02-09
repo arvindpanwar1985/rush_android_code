@@ -38,6 +38,7 @@ import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.ui.activities.ForgotPassActivity;
 import com.hoffmans.rush.ui.activities.LoginActivity;
+import com.hoffmans.rush.ui.driver.activities.DriverLoginActivity;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Utils;
@@ -58,13 +59,12 @@ import static com.hoffmans.rush.ui.activities.LoginActivity.REQUEST_GOOGLE_SIGNI
 public class LoginFragment extends BaseFragment implements View.OnClickListener,FacebookCallback<LoginResult> {
 
     private View loginView;
-    private TextView txtCreateAccount,txtForgotPassword;
+    private TextView txtCreateAccount,txtForgotPassword,txtLoginAsDriver;
     private Button btnLogin;
     private EditText edtEmail,edtPassword;
     private Button btnFb,btnGoogle;
     private String notificationToken;
     private CallbackManager callbackManager;
-
     public LoginFragment(){
 
     }
@@ -96,6 +96,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         edtEmail=(EditText)view.findViewById(com.hoffmans.rush.R.id.flUsername);
         btnFb=(Button)view.findViewById(R.id.frBtnFacebook);
         btnGoogle=(Button)view.findViewById(R.id.frBtnGoogle);
+        txtLoginAsDriver=(TextView)view.findViewById(com.hoffmans.rush.R.id.txtLoginDriver);
 
        }
 
@@ -107,6 +108,16 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
      btnFb.setOnClickListener(this);
      btnGoogle.setOnClickListener(this);
      LoginManager.getInstance().registerCallback(callbackManager, this);
+
+
+        txtLoginAsDriver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent driverLogin=new Intent(mActivity, DriverLoginActivity.class);
+                driverLogin.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(driverLogin);
+            }
+        });
     }
 
     @Override
@@ -142,30 +153,23 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         // Store values at the time of the login attempt.
         String email = edtEmail.getText().toString().trim();
         String password = edtPassword.getText().toString().trim();
-
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.error_empty_email), Toast.LENGTH_SHORT);
             return;
-
         } else if (!Validation.isValidEmail(email)) {
             mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.error_title_invalid_email), Toast.LENGTH_SHORT);
             return;
-
         }
-
         if (TextUtils.isEmpty(password.trim())) {
             mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.error_empty_password), Toast.LENGTH_SHORT);
             return;
         }
-
         if (TextUtils.isEmpty(password) ) {
             mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.error_title_invalid_password), Toast.LENGTH_SHORT);
-
             return;
         }
         proceedToLogin(email,password);
-
     }
 
     /**

@@ -141,11 +141,26 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
     }
 
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.viewCardDetails:
+                Intent cardListIntent=new Intent(mActivity, CardListActivity.class);
+                cardListIntent.putExtra(Constants.KEY_IS_CARD_SELECTABLE,true);
+                startActivityForResult(cardListIntent,REQUEST_SELECT_CARD);
+
+                break;
+            case R.id.btnMakeOrder:
+                validateFields();
+                break;
+        }
+    }
+
 
     private void validateFields(){
 
         if(defaultCardData==null && TextUtils.isEmpty(defaultCardData.getToken())){
-            mActivity.showSnackbar("Please select card",0);
+            mActivity.showSnackbar(getString(R.string.str_select_card),0);
             return;
         }
         buildApiparams();
@@ -162,7 +177,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
                 //prompt user for dialog to show actual payment amount and card with which he pays for order
                 showPaymentAlert(getPaymentMessage(),estimateServiceParams);
             }else{
-                mActivity.showSnackbar("Select card",0);
+                mActivity.showSnackbar(getString(R.string.str_select_card),0);
                 return;
             }
         }
@@ -211,6 +226,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
             }
         }
     }
+
 
    private void setPickDropUi()throws NullPointerException{
         listAddressData.clear();
@@ -261,20 +277,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
     }
 
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.viewCardDetails:
-                Intent cardListIntent=new Intent(mActivity, CardListActivity.class);
-                cardListIntent.putExtra(Constants.KEY_IS_CARD_SELECTABLE,true);
-                startActivityForResult(cardListIntent,REQUEST_SELECT_CARD);
 
-                break;
-            case R.id.btnMakeOrder:
-                validateFields();
-                break;
-        }
-    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==REQUEST_SELECT_CARD && resultCode==mActivity.RESULT_OK){
@@ -293,7 +296,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
     private void showPaymentAlert(String message, final  EstimateServiceParams confirmServiceParams){
         try {
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mActivity);
-            builder.setTitle("Confirm Order.")
+            builder.setTitle(getString(R.string.str_confirm_order))
                     .setMessage(message)
                     .setCancelable(false)
                     .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {

@@ -116,6 +116,11 @@
 
     <string name="str_favourites">FAVOURITES</string>
     <string name="str_estimate_cost">Estimate Cost</string>
+    <string name="str_select_card">Please select card</string>
+    <string name="str_confirm_order">Confirm Order</string>
+    <string name="str_permission_denied">Permission denied.</string>
+
+    <string name="str_internet_error"></string>
 
 
 </resources>

@@ -1,6 +1,7 @@
 package com.hoffmans.rush.ui.driver.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -11,8 +12,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hoffmans.rush.R;
+import com.hoffmans.rush.bean.BaseBean;
+import com.hoffmans.rush.bean.UserBean;
+import com.hoffmans.rush.http.request.LoginRequest;
+import com.hoffmans.rush.listners.ApiCallback;
+import com.hoffmans.rush.model.User;
+import com.hoffmans.rush.ui.activities.ForgotPassActivity;
 import com.hoffmans.rush.ui.fragments.BaseFragment;
+import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
 
 /**
@@ -27,9 +34,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     private TextView txtForgotPassword;
     private Button btnLogin;
     private EditText edtEmail,edtPassword;
-
-
-
+    public static final String ROLE_CUST   ="Customer";
+    public static final String ROLE_DRIVER ="Driver";
 
     public LoginFragment() {
         // Required empty public constructor
@@ -53,7 +59,9 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_login_driver, container, false);
+        mActivity.initToolBar("",false);
+        mActivity.hideToolbar();
+        View view= inflater.inflate(com.hoffmans.rush.R.layout.fragment_login_driver, container, false);
         initViews(view);
         initListeners();
         return view;
@@ -69,23 +77,31 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
         btnLogin=(Button)view.findViewById(com.hoffmans.rush.R.id.flBtnLogin);
         edtPassword=(EditText)view.findViewById(com.hoffmans.rush.R.id.flPassword);
         edtEmail=(EditText)view.findViewById(com.hoffmans.rush.R.id.flUsername);
+
     }
 
     @Override
     protected void initListeners() {
 
         btnLogin.setOnClickListener(this);
+        txtForgotPassword.setOnClickListener(this);
+
+
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.flBtnLogin:
+            case com.hoffmans.rush.R.id.flBtnLogin:
                 validateFields();
+                break;
+            case com.hoffmans.rush.R.id.flForgotPass:
+                Intent forgotPassIntent=new Intent(mActivity, ForgotPassActivity.class);
+                forgotPassIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(forgotPassIntent);
                 break;
         }
     }
-
 
 
     /**
@@ -130,7 +146,40 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
      */
     private void proceedToLogin(String email,String password){
 
-
+        //Progress.showprogress(mActivity,"Loading..",false);
+        mActivity.showProgress();
+        LoginRequest loginRequest =new LoginRequest();
+        loginRequest.loginUser(email, password, new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                //Progress.dismissProgress();
+                mActivity.hideProgress();
+                UserBean bean=(UserBean)body;
+                User user=bean.getUser();
+                if(user!=null && user.getRole()!=null){
+                    if(user.getRole().equals(ROLE_DRIVER)){
+                        handleLoginResult(user);
+                    }else{
+                        mActivity.showSnackbar("Invalid Credentials",0);
+                    }
+                }
+            }
+            @Override
+            public void onRequestFailed(String message) {
+                mActivity.hideProgress();
+                //Progress.dismissProgress();
+                Utils.showAlertDialog(mActivity,message);
+            }
+        });
 
     }
+
+
+    private void handleLoginResult(User user){
+            appPreference.saveUser(user);
+            appPreference.setUserLogin(true);
+
+    }
+
+
 }

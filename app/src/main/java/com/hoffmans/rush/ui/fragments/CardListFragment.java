@@ -32,26 +32,22 @@ import static com.hoffmans.rush.ui.activities.AddCardActivity.REQUEST_ADD_CARD;
 
 public class CardListFragment extends BaseFragment implements View.OnClickListener,OnCardClicked {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String KEY_PAYMENT_METHOD_TOKEN="payment_method_token";
+    private static final String ARG_CARD_SELECTABLE      ="is_card_selectable";
+    private static final String KEY_PAYMENT_METHOD_TOKEN ="payment_method_token";
     private boolean isCardSelectable;
     private View view;
     private ArrayList<CardData> cardDataList;
     private RecyclerView recyclerCardList;
     private ImageButton btnAddCard;
     private CardListAdapter adapter;
-
-
-
     public CardListFragment() {
         // Required empty public constructor
     }
 
-
-    public static CardListFragment newInstance(boolean param1, String param2) {
+    public static CardListFragment newInstance(boolean isCardSelectable, String param2) {
         CardListFragment fragment = new CardListFragment();
         Bundle args = new Bundle();
-        args.putBoolean(ARG_PARAM1, param1);
+        args.putBoolean(ARG_CARD_SELECTABLE, isCardSelectable);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,7 +56,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            isCardSelectable = getArguments().getBoolean(ARG_PARAM1);
+            isCardSelectable = getArguments().getBoolean(ARG_CARD_SELECTABLE);
 
 
         }
@@ -127,7 +123,6 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
 
                 }
             }
-
             @Override
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
@@ -236,7 +231,6 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
-
     /**
      * delete the selected card
      * @param token token linked to card added previously
@@ -306,6 +300,8 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
             }
         });
     }
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -14,7 +14,8 @@ import retrofit2.Response;
  */
 
 public class ConnectionManager {
-    static ConnectionManager mConnectionManger;
+    private static final String STR_NO_CONNECTION ="Trouble reaching to server,No internet connection.";
+    private static ConnectionManager mConnectionManger;
     private Call<ResponseBody> enqueueCall;
 
     public static ConnectionManager getConnectionInstance(Call<ResponseBody> call) {
@@ -28,7 +29,6 @@ public class ConnectionManager {
         }
 
     }
-
 
     public void setEnqueueCall(Call<ResponseBody> mCall) {
         this.enqueueCall = mCall;
@@ -51,7 +51,7 @@ public class ConnectionManager {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 if(t instanceof IOException){
-                    mListener.onWebStatusFalse("Trouble reaching to server,No internet connection.");
+                    mListener.onWebStatusFalse(ConnectionManager.STR_NO_CONNECTION);
                     return;
                 }
                 mListener.onWebStatusFalse(t.getMessage());

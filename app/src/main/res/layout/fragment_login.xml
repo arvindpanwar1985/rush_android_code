@@ -7,11 +7,23 @@
 
 
     <ImageView
+        android:id="@+id/imgLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_60"
         android:layout_centerHorizontal="true"
         android:src="@drawable/login_logo"/>
+
+    <TextView
+        android:id="@+id/txtLoginDriver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login as Driver"
+        android:gravity="center"
+        android:layout_margin="@dimen/dp_30"
+        android:padding="@dimen/dp_10"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@+id/imgLogo"/>
 
     <EditText
         android:layout_width="match_parent"

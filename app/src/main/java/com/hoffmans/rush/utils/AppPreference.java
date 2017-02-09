@@ -47,6 +47,7 @@ public class AppPreference {
         mEditor.putString(PrefConstant.KEY_PHONE,user.getPhone());
         mEditor.putInt(PrefConstant.KEY_CURRENCY_ID, user.getCurrency_symbol_id());
         mEditor.putString(PrefConstant.KEY_bt_token,user.getBt_token());
+        mEditor.putString(PrefConstant.KEY_ROLE,user.getRole());
         if(user.getPic_url()!=null){
             mEditor.putString(PrefConstant.KEY_PIC,user.getPic_url());
         }
@@ -54,7 +55,6 @@ public class AppPreference {
         if(null!=user.getProvider()){
             mEditor.putBoolean(PrefConstant.IS_SOCIAL_PROVIDER,true);
         }
-
         mEditor.commit();
     }
 
@@ -69,6 +69,7 @@ public class AppPreference {
         user.setBt_token(mPref.getString(PrefConstant.KEY_bt_token,""));
         user.setCurrency_symbol_id(mPref.getInt(PrefConstant.KEY_CURRENCY_ID,0));
         user.setSocialProvider(mPref.getBoolean(PrefConstant.IS_SOCIAL_PROVIDER,false));
+        user.setRole(mPref.getString(PrefConstant.KEY_ROLE,""));
         return  user;
 
     }

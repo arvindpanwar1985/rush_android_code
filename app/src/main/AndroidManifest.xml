@@ -93,7 +93,6 @@
             android:name=".ui.activities.RecordActivity"
             android:theme="@style/AppTheme" />
 
-
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="8289dfd973f4aaa834841dbf59783f25b2f7b3bd" />
@@ -105,9 +104,12 @@
         <activity
             android:name=".ui.activities.PlaceAutocomplete"
             android:label="@string/title_activity_place_autocomplete"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.driver.activities.DriverLoginActivity"
+            android:theme="@style/AppTheme" />
 
-            <!--
+        <!--
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -118,10 +120,14 @@
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
-            -->
+        -->
 
-        </activity>
-        <activity android:name=".ui.activities.ReceiptActivity"></activity>
+        <activity android:name=".ui.activities.ReceiptActivity" />
+
+        <service
+            android:name=".services.TrackingService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

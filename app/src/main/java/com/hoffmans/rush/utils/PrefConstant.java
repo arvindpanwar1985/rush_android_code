@@ -8,7 +8,7 @@ public class PrefConstant {
 
     public static String KEY_EMAIL   ="email";
     public static String KEY_FNAME   ="fname";
-    public static String KEY_LNAME   ="lname";
+    public static String KEY_ROLE    ="role";
     public static String KEY_PIC     ="pic";
     public static String KEY_PHONE   ="phone";
     public static String KEY_token   ="token";
