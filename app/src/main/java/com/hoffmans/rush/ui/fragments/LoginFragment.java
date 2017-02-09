@@ -84,6 +84,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
             appPreference.setNotificationToken(notificationToken);
         }
 
+
         return loginView;
     }
 
@@ -204,14 +205,12 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
 
     private void handleLoginResult(User user){
 
-       // PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance(user.getBt_token(),"");
-        //replaceFragment(paymentMethodFragment,true);
+
        if(!user.is_email_verified()){
           showAlertDialog(getString(R.string.str_verify_text));
         }else if(!user.is_card_verfied()){
             PaymentMethodFragment paymentMethodFragment=PaymentMethodFragment.newInstance(user);
             replaceFragment(paymentMethodFragment,true);
-
         }else{
             appPreference.saveUser(user);
             appPreference.setUserLogin(true);
@@ -221,7 +220,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         }
 
     }
-
 
     /**
      * graph api caller to get user detail from Facebook account.
@@ -308,7 +306,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                 UpdateAccountFragment fragment = UpdateAccountFragment.newInstance(user.getEmail(), user.getPhone(), user.getToken());
                 mActivity.replaceFragment(fragment, 0, true);
             }else{
-                    if (!user.is_card_verfied()) {
+                if (!user.is_card_verfied()) {
                         PaymentMethodFragment paymentMethodFragment = PaymentMethodFragment.newInstance(user);
                         replaceFragment(paymentMethodFragment, true);
                     }

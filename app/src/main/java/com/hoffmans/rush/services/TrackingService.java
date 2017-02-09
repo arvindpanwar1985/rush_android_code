@@ -9,6 +9,8 @@ import android.util.Log;
 import com.hoffmans.rush.location.LocationInterface;
 import com.hoffmans.rush.location.LocationUpdate;
 
+
+
 public class TrackingService extends Service implements LocationInterface {
     private LocationUpdate locationUpdate = null;
 
@@ -19,14 +21,14 @@ public class TrackingService extends Service implements LocationInterface {
     public void onCreate() {
         super.onCreate();
         locationUpdate = LocationUpdate.getInstance();
-        locationUpdate.startLocationUpdate(this, this, "",0);
+        locationUpdate.startLocationUpdate(this, this);
    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(locationUpdate==null){
             locationUpdate = LocationUpdate.getInstance();
-            locationUpdate.startLocationUpdate(this, this,"", 3000);
+            locationUpdate.startLocationUpdate(this, this);
         }
         return START_STICKY;
 
@@ -48,7 +50,7 @@ public class TrackingService extends Service implements LocationInterface {
 
     @Override
     public void onLocation(Location location) {
-        Log.v("location",location.getLatitude()+":"+location.getLongitude());
+       // Log.v("location",location.getLatitude()+":"+location.getLongitude());
     }
 
     @Override

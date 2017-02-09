@@ -29,18 +29,14 @@ import com.hoffmans.rush.utils.Validation;
  */
 public class LoginFragment extends BaseFragment implements View.OnClickListener {
 
-
-
     private TextView txtForgotPassword;
     private Button btnLogin;
     private EditText edtEmail,edtPassword;
     public static final String ROLE_CUST   ="Customer";
     public static final String ROLE_DRIVER ="Driver";
-
     public LoginFragment() {
         // Required empty public constructor
     }
-
 
     public static LoginFragment newInstance() {
         LoginFragment fragment = new LoginFragment();
@@ -52,7 +48,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
         super.onCreate(savedInstanceState);
 
     }
-
 
 
     @Override
@@ -82,11 +77,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 
     @Override
     protected void initListeners() {
-
         btnLogin.setOnClickListener(this);
         txtForgotPassword.setOnClickListener(this);
-
-
     }
 
     @Override
@@ -178,6 +170,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     private void handleLoginResult(User user){
             appPreference.saveUser(user);
             appPreference.setUserLogin(true);
+        //TODO:- Launch driver MainActivity
 
     }
 
