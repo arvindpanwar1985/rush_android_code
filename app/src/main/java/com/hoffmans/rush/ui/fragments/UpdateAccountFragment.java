@@ -14,7 +14,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
@@ -31,6 +33,8 @@ import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Validation;
+import com.mukesh.countrypicker.fragments.CountryPicker;
+import com.mukesh.countrypicker.interfaces.CountryPickerListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,13 +54,16 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
 
     private String mEmail,mPhone,token;
 
-    private EditText edtEmail,edtPhone,edtcc;
+    private EditText edtEmail,edtPhone;
     private Button btnSave;
     private static  final String KEY_EMAIL="email";
     private static  final String KEY_PHONE="phone";
     private static  final String KEY_CURRENCY ="currency_symbol_id";
 
-
+    private ImageView imgFlag;
+    private TextView txtCountryCode;
+    private View viewSelectCountryPicker;
+    private CountryPicker countryPicker;
     private Spinner spinnerCurrency;
     private Currency selectedCurrency;
     private List<Currency> currencyList =new ArrayList<>();
@@ -118,9 +125,12 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
 
         edtEmail=(EditText)view.findViewById(R.id.fuEdtEmail);
         edtPhone=(EditText)view.findViewById(R.id.fuEdtPhone);
-        edtcc=(EditText)view.findViewById(R.id.fuEdtCC);
+        //edtcc=(EditText)view.findViewById(R.id.fuEdtCC);
         btnSave =(Button)view.findViewById(R.id.fuSaveDetails);
         spinnerCurrency=(Spinner)view.findViewById(R.id.spinnerCurrency);
+        viewSelectCountryPicker=(View)view.findViewById(R.id.viewCountryCode);
+        imgFlag=(ImageView)view.findViewById(R.id.imgFlag);
+        txtCountryCode=(TextView)view.findViewById(R.id.txtCountryCode);
         if(mEmail!=null &&!TextUtils.isEmpty(mEmail)){
             edtEmail.setText(mEmail);
            //user will not able to change the email
@@ -136,6 +146,7 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
     protected void initListeners() {
 
         btnSave.setOnClickListener(this);
+        viewSelectCountryPicker.setOnClickListener(this);
     }
 
     @Override
@@ -144,6 +155,22 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
             case R.id.fuSaveDetails:
                 validateFields();
                 break;
+            case R.id.viewCountryCode:
+                countryPicker = CountryPicker.newInstance("Select Country");
+                countryPicker.show(mActivity.getSupportFragmentManager(), "COUNTRY_PICKER");
+                countryPicker.setListener(new CountryPickerListener() {
+                    @Override
+                    public void onSelectCountry(String name, String code, String dialCode, int flagDrawableResID) {
+
+                        if(flagDrawableResID!=0){imgFlag.setImageResource(flagDrawableResID);}
+                        if(dialCode!=null) {
+                            txtCountryCode.setText(dialCode);
+                        }
+                        countryPicker.dismiss();
+                        countryPicker=null;
+                    }
+                });
+                break;
         }
     }
 
@@ -151,7 +178,7 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
         // Store values at the time of the login attempt.
         String email = edtEmail.getText().toString().trim();
         String number=edtPhone.getText().toString().trim();
-        String cc=edtcc.getText().toString().trim();
+        String cc=txtCountryCode.getText().toString();//edtcc.getText().toString().trim();
         String phoneNo=cc+number;
         // Check for a valid email address.
 

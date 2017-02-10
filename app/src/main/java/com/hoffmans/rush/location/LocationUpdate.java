@@ -46,23 +46,17 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
     private  WebSocket webSocket;
     private okhttp3.OkHttpClient client;
     private Location newLocation;
-
-
-
     private PendingResult<LocationSettingsResult> result;
     private LocationSettingsRequest.Builder builder;
-
     private LocationUpdate(){
 
     }
-
     public static LocationUpdate getInstance(){
         if(mLocationUpdate ==null){
             mLocationUpdate =new LocationUpdate();
         }
         return mLocationUpdate;
     }
-
     public void startLocationUpdate(Context context, LocationInterface locationInterface){
         // Create an instance of GoogleAPIClient.
         this.mContext=context;
@@ -154,8 +148,6 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
 
     }
 
-
-
     private void initWebsocket() {
         client = new okhttp3.OkHttpClient();
         //Request request = new Request.Builder().url("ws://echo.websocket.org").build();
@@ -163,9 +155,6 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
         okhttp3.Request request= new okhttp3.Request.Builder().url("ws://echo.websocket.org").build();
         listener = new EchoWebSocketListener();
         webSocket= client.newWebSocket(request, listener);
-
-
-
     }
     private void updateOnSocket(Location location){
         if(location!=null) {
@@ -179,8 +168,6 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
             }
         }
     }
-
-
 
     @Override
     public void onLocationChanged(Location location) {
@@ -202,8 +189,6 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
         if (mLocationListener != null) {
             mLocationListener.onLocationFailed();
         }
-
-
     }
 
     /**

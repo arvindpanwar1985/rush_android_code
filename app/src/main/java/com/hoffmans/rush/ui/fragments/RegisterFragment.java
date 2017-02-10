@@ -27,8 +27,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -62,6 +64,8 @@ import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
+import com.mukesh.countrypicker.fragments.CountryPicker;
+import com.mukesh.countrypicker.interfaces.CountryPickerListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -99,17 +103,19 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     private Button btnRegister,btnFb,btnGoogle;
     private CircleImageView imgProfilePic;
     private Spinner spinnerCurrency;
-
+    private ImageView imgFlag;
+    private TextView txtCountryCode;
     private CallbackManager callbackManager;
     private String  mCurrentPhotoPath;
     private Currency selectedCurrency;
 
     private String notificationToken;
     private RelativeLayout topView;
-    private View view;
+    private View view,viewSelectCountryPicker;
     private List<Currency> currencyList =new ArrayList<>();
     private Fragment fragment;
     private Uri photoURI;
+    private CountryPicker countryPicker;
 
 
     @Nullable
@@ -145,7 +151,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         edtname=(EditText)view.findViewById(R.id.frEdtname);
         edtEmail=(EditText)view.findViewById(R.id.frEdtEmail);
         edtphone=(EditText)view.findViewById(R.id.frEdtPhone);
-        edtcc=(EditText)view.findViewById(R.id.frEdtCC);
+       // edtcc=(EditText)view.findViewById(R.id.frEdtCC);
         edtPassword=(EditText)view.findViewById(R.id.frEdtPassword);
         edtConfirmPassword=(EditText)view.findViewById(R.id.frEdtConfirmPassword);
         btnRegister=(Button)view.findViewById(R.id.frBtnCreateAccount);
@@ -154,6 +160,9 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         imgProfilePic=(CircleImageView)view.findViewById(R.id.frImgProfile);
         spinnerCurrency=(Spinner)view.findViewById(R.id.spinnerCurrency);
         topView =(RelativeLayout)view.findViewById(R.id.topRegistration);
+        viewSelectCountryPicker=(View)view.findViewById(R.id.viewCountryCode);
+        imgFlag=(ImageView)view.findViewById(R.id.imgFlag);
+        txtCountryCode=(TextView)view.findViewById(R.id.txtCountryCode);
     }
 
     @Override
@@ -163,6 +172,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         btnGoogle.setOnClickListener(this);
         imgProfilePic.setOnClickListener(this);
         topView.setOnClickListener(this);
+        viewSelectCountryPicker.setOnClickListener(this);
         LoginManager.getInstance().registerCallback(callbackManager, this);
 
 
@@ -187,6 +197,22 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.topRegistration:
                 Utils.hideKeyboard(mActivity);
+                break;
+            case R.id.viewCountryCode:
+                countryPicker = CountryPicker.newInstance("Select Country");
+                countryPicker.show(mActivity.getSupportFragmentManager(), "COUNTRY_PICKER");
+                countryPicker.setListener(new CountryPickerListener() {
+                    @Override
+                    public void onSelectCountry(String name, String code, String dialCode, int flagDrawableResID) {
+
+                        if(flagDrawableResID!=0){imgFlag.setImageResource(flagDrawableResID);}
+                        if(dialCode!=null) {
+                            txtCountryCode.setText(dialCode);
+                        }
+                        countryPicker.dismiss();
+                        countryPicker=null;
+                    }
+                });
                 break;
         }
 
@@ -213,9 +239,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                                 }
                                 String socialId = object.getString(Constants.FBCONTANTS.FB_ID);
                                 String imageUrl = Constants.FBCONTANTS.FB_IMG_URL+socialId+"/picture?type=large";
-
                                 socialLogin(socialId,first_name,last_name,email,Constants.FB_PROVIDER,imageUrl,notificationToken,Constants.DEVICE_TYPE,Utils.getTimeZone());
-
                             }
 
                         } catch (JSONException e) {
@@ -427,7 +451,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         String confirmpassword = edtConfirmPassword.getText().toString().trim();
         String fullname=edtname.getText().toString().trim();
         String number=edtphone.getText().toString().trim();
-        String countrycode=edtcc.getText().toString().trim();
+        String countrycode=txtCountryCode.getText().toString();//"";//edtcc.getText().toString().trim();
         String phoneNo=countrycode+number;
         // Check for a valid email address.
         if(TextUtils.isEmpty(fullname)){

@@ -103,7 +103,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
      * @param param2 Parameter 2.
      * @return A new instance of fragment EditProfileFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static EditProfileFragment newInstance(String param1, String param2) {
         EditProfileFragment fragment = new EditProfileFragment();
         Bundle args = new Bundle();

@@ -83,8 +83,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
             notificationToken= FirebaseInstanceId.getInstance().getToken();
             appPreference.setNotificationToken(notificationToken);
         }
-
-
         return loginView;
     }
 
@@ -187,10 +185,15 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
             @Override
             public void onRequestSuccess(BaseBean body) {
                 //Progress.dismissProgress();
+                mActivity.hideProgress();
                 UserBean bean=(UserBean)body;
                 User user=bean.getUser();
-                handleLoginResult(user);
-                mActivity.hideProgress();
+                if(user!=null && user.getRole()!=null &&user.getRole().equals(com.hoffmans.rush.ui.driver.fragments.LoginFragment.ROLE_CUST)) {
+                    handleLoginResult(user);
+                }else{
+                    mActivity.showSnackbar("Invalid credentials",0);
+                }
+
             }
 
             @Override

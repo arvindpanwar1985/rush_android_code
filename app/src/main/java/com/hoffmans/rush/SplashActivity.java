@@ -26,7 +26,6 @@ public class SplashActivity extends AppCompatActivity {
 
         initHandler();
     }
-
     /*
     * initialize Runnable and Handler to proceed the splash activity functionality.
     */

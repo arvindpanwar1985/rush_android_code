@@ -29,6 +29,7 @@ import com.hoffmans.rush.utils.Validation;
  */
 public class LoginFragment extends BaseFragment implements View.OnClickListener {
 
+    private String TAG=LoginFragment.class.getCanonicalName();
     private TextView txtForgotPassword;
     private Button btnLogin;
     private EditText edtEmail,edtPassword;
@@ -59,6 +60,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
         View view= inflater.inflate(com.hoffmans.rush.R.layout.fragment_login_driver, container, false);
         initViews(view);
         initListeners();
+
+
         return view;
     }
 
