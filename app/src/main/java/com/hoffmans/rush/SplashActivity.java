@@ -7,7 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
-import com.hoffmans.rush.ui.activities.LoginActivity;
+import com.hoffmans.rush.ui.activities.MainActivity;
+import com.hoffmans.rush.ui.driver.activities.DriverNavigationActivity;
 import com.hoffmans.rush.ui.driver.fragments.LoginFragment;
 import com.hoffmans.rush.utils.AppPreference;
 
@@ -37,8 +38,13 @@ public class SplashActivity extends AppCompatActivity {
                     Intent bookServiceIntent=new Intent(SplashActivity.this, BookServiceActivity.class);
                     bookServiceIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(bookServiceIntent);
-                }else {
-                    callActivity();
+                }else if(appPreference.isUserLogin() && appPreference.getUserDetails().getRole().equals(LoginFragment.ROLE_DRIVER)){
+                    Intent intent=new Intent(SplashActivity.this, DriverNavigationActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+               else{
+                 callActivity();
                 }
             }
         };
@@ -51,7 +57,7 @@ public class SplashActivity extends AppCompatActivity {
      * call activity from handler
      */
     private void callActivity() {
-        Intent loginIntent=new Intent(this, LoginActivity.class);
+        Intent loginIntent=new Intent(this, MainActivity.class);
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(loginIntent);
         this.finish();

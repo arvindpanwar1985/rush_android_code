@@ -108,4 +108,8 @@
     <string name="str_favourites">FAVORITOS</string>
 
     <string name="str_estimate_cost">Costo estimado</string>
+
+    /****************************************************************Drivers String.************\
+    <string name="login_as_user">Iniciar como usuario</string>
+    <string name="login_as_driver">Iniciar como Mensajaro</string>
 </resources>

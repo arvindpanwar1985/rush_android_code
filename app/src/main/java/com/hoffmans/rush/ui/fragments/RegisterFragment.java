@@ -95,9 +95,7 @@ import static com.hoffmans.rush.ui.activities.LoginActivity.REQUEST_GOOGLE_SIGNI
 /**
  * Created by devesh on 19/12/16.
  */
-
 public class RegisterFragment extends BaseFragment implements View.OnClickListener,FacebookCallback<LoginResult>,AdapterView.OnItemSelectedListener {
-
     private static final String FILE_PROVIDER="com.example.android.fileprovider";
     private EditText edtname,edtEmail,edtphone,edtPassword,edtConfirmPassword,edtcc;
     private Button btnRegister,btnFb,btnGoogle;
@@ -108,7 +106,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     private CallbackManager callbackManager;
     private String  mCurrentPhotoPath;
     private Currency selectedCurrency;
-
     private String notificationToken;
     private RelativeLayout topView;
     private View view,viewSelectCountryPicker;
@@ -116,25 +113,19 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     private Fragment fragment;
     private Uri photoURI;
     private CountryPicker countryPicker;
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
          if(view==null) {
              fragment = this;
-             mActivity.initToolBar("", false);
-             mActivity.hideToolbar();
+             mActivity.initToolBar("", true,false);
              view = inflater.inflate(R.layout.fragment_register, container, false);
              FacebookSdk.sdkInitialize(mActivity.getApplicationContext());
-
              callbackManager = CallbackManager.Factory.create();
              initViews(view);
              initListeners();
              getAllCurrency();
              setRetainInstance(true);
-
              notificationToken =appPreference.getNoticficationToken();
              if(TextUtils.isEmpty(notificationToken)){
                  notificationToken= FirebaseInstanceId.getInstance().getToken();
@@ -204,7 +195,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 countryPicker.setListener(new CountryPickerListener() {
                     @Override
                     public void onSelectCountry(String name, String code, String dialCode, int flagDrawableResID) {
-
                         if(flagDrawableResID!=0){imgFlag.setImageResource(flagDrawableResID);}
                         if(dialCode!=null) {
                             txtCountryCode.setText(dialCode);
@@ -429,7 +419,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
                 case 0:
                     bitmap1=bitmap;
-
                     break;
             }
             return  bitmap1;
@@ -523,7 +512,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 imageFileBody = MultipartBody.Part.createFormData(Constants.KEY_PIC, fileToUpload.getName(), requestBody);
                 // call api to create new account
             }
-
             Map<String,RequestBody> requestBodyMap=new HashMap<>();
             requestBodyMap.put(Constants.KEY_EMAIL, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),email));
             requestBodyMap.put(Constants.KEY_PASSWORD, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),password));
@@ -533,7 +521,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             requestBodyMap.put(Constants.KEY_UDID, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),notificationToken));
             requestBodyMap.put(Constants.KEY_TYPE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),Constants.DEVICE_TYPE));
             requestBodyMap.put(Constants.KEY_CURRENCY, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),selectedCurrency.getId().toString()));
-
             createAccount(requestBodyMap,imageFileBody);
         }catch (Exception e){
 

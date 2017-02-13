@@ -145,8 +145,10 @@ public abstract  class BaseActivity extends AppCompatActivity {
     public void initToolBar(String title, boolean isHomeEnable,boolean showLogo) {
         mToolbar.setVisibility(View.VISIBLE);
         titleTxt.setText(title);
-
-        imgLogo.setVisibility(View.VISIBLE);
+        if(showLogo){
+        imgLogo.setVisibility(View.VISIBLE);}else{
+            imgLogo.setVisibility(View.INVISIBLE);
+        }
         setSupportActionBar(mToolbar);
         setHomeEnabled(isHomeEnable);
 

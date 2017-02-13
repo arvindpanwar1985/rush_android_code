@@ -24,6 +24,7 @@
         android:padding="@dimen/dp_10"
         android:textStyle="bold|italic"
         android:textSize="@dimen/sp_16"
+        android:visibility="gone"
         android:textColor="@android:color/white"
         android:background="#73000000"
         android:layout_below="@+id/imgLogo"/>
@@ -33,12 +34,13 @@
         android:id="@+id/flUsername"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_40"
+        android:layout_marginTop="@dimen/dp_50"
         android:imeOptions="actionDone"
         android:drawableLeft="@drawable/user_icon"
         android:hint="@string/hint_user"
         android:inputType="textEmailAddress|textNoSuggestions"
         android:layout_marginRight="@dimen/dp_40"
-        android:layout_centerInParent="true"
+        android:layout_below="@+id/imgLogo"
         style="@style/AppTheme.Input.Login"/>
 
     <EditText

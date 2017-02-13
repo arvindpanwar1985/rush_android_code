@@ -51,15 +51,12 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_PARAM3 = "param3";
     private static final String ARG_PARAM4 = "param4";
-
     private String mEmail,mPhone,token;
-
     private EditText edtEmail,edtPhone;
     private Button btnSave;
     private static  final String KEY_EMAIL="email";
     private static  final String KEY_PHONE="phone";
     private static  final String KEY_CURRENCY ="currency_symbol_id";
-
     private ImageView imgFlag;
     private TextView txtCountryCode;
     private View viewSelectCountryPicker;
@@ -67,8 +64,6 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
     private Spinner spinnerCurrency;
     private Currency selectedCurrency;
     private List<Currency> currencyList =new ArrayList<>();
-
-
 
     public UpdateAccountFragment() {
         // Required empty public constructor
@@ -101,8 +96,6 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
             mEmail = getArguments().getString(ARG_PARAM1);
             mPhone = getArguments().getString(ARG_PARAM2);
             token  = getArguments().getString(ARG_PARAM3);
-
-
         }
     }
 
@@ -138,8 +131,6 @@ public class UpdateAccountFragment extends BaseFragment implements View.OnClickL
         }else{
             edtEmail.setEnabled(true);
         }
-
-
     }
 
     @Override

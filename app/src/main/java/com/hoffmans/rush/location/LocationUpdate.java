@@ -61,7 +61,6 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
         // Create an instance of GoogleAPIClient.
         this.mContext=context;
         this.mLocationListener=locationInterface;
-
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(context)
                     .addConnectionCallbacks(this)
@@ -83,7 +82,6 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
         mLocationRequest.setSmallestDisplacement(DISPLACEMENT);// set displacement in meters ,user must move this distance to get location update
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY); //initialize the builder and add location request paramenter like HIGH Aurracy
         startLocationUpdates();
-
         // show the builder to enable location
         builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(mLocationRequest);
@@ -92,7 +90,6 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
         // Then check whether current location settings are satisfied:
         result = LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
         callbacksResults();
-
     }
 
 

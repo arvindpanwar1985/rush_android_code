@@ -90,6 +90,9 @@ apply plugin: 'com.google.gms.google-services'
 dependencies {
     compile 'com.android.support:support-v4:24.+'
 }
+dependencies {
+    compile 'com.android.support:support-v4:24.+'
+}
 
 
 

@@ -38,7 +38,6 @@ import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.ui.activities.ForgotPassActivity;
 import com.hoffmans.rush.ui.activities.LoginActivity;
-import com.hoffmans.rush.ui.driver.activities.DriverLoginActivity;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Utils;
@@ -59,7 +58,7 @@ import static com.hoffmans.rush.ui.activities.LoginActivity.REQUEST_GOOGLE_SIGNI
 public class LoginFragment extends BaseFragment implements View.OnClickListener,FacebookCallback<LoginResult> {
 
     private View loginView;
-    private TextView txtCreateAccount,txtForgotPassword,txtLoginAsDriver;
+    private TextView txtCreateAccount,txtForgotPassword;
     private Button btnLogin;
     private EditText edtEmail,edtPassword;
     private Button btnFb,btnGoogle;
@@ -72,8 +71,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         loginView=inflater.inflate(com.hoffmans.rush.R.layout.fragment_login,container,false);
-        mActivity.initToolBar("",false);
-        mActivity.hideToolbar();
+        mActivity.initToolBar("", true,false);
         initViews(loginView);
         FacebookSdk.sdkInitialize(mActivity.getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
@@ -95,7 +93,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         edtEmail=(EditText)view.findViewById(com.hoffmans.rush.R.id.flUsername);
         btnFb=(Button)view.findViewById(R.id.frBtnFacebook);
         btnGoogle=(Button)view.findViewById(R.id.frBtnGoogle);
-        txtLoginAsDriver=(TextView)view.findViewById(com.hoffmans.rush.R.id.txtLoginDriver);
+
 
        }
 
@@ -108,15 +106,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
      btnGoogle.setOnClickListener(this);
      LoginManager.getInstance().registerCallback(callbackManager, this);
 
-
-        txtLoginAsDriver.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent driverLogin=new Intent(mActivity, DriverLoginActivity.class);
-                driverLogin.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(driverLogin);
-            }
-        });
     }
 
     @Override

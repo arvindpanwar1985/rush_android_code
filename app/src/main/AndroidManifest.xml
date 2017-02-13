@@ -109,6 +109,15 @@
             android:name=".ui.driver.activities.DriverLoginActivity"
             android:theme="@style/AppTheme" />
 
+        <activity
+            android:name=".ui.activities.MainActivity"
+            android:theme="@style/AppTheme" />
+
+
+        <activity
+            android:name=".ui.driver.activities.DriverNavigationActivity"
+            android:theme="@style/AppTheme"/>
+
         <!--
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />

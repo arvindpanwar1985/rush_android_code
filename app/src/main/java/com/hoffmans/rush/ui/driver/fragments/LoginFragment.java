@@ -18,6 +18,7 @@ import com.hoffmans.rush.http.request.LoginRequest;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.ForgotPassActivity;
+import com.hoffmans.rush.ui.driver.activities.DriverNavigationActivity;
 import com.hoffmans.rush.ui.fragments.BaseFragment;
 import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
@@ -55,8 +56,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mActivity.initToolBar("",false);
-        mActivity.hideToolbar();
+        mActivity.initToolBar("",true,false);
         View view= inflater.inflate(com.hoffmans.rush.R.layout.fragment_login_driver, container, false);
         initViews(view);
         initListeners();
@@ -173,7 +173,9 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     private void handleLoginResult(User user){
             appPreference.saveUser(user);
             appPreference.setUserLogin(true);
-        //TODO:- Launch driver MainActivity
+            Intent driverMainIntent=new Intent(mActivity, DriverNavigationActivity.class);
+            driverMainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(driverMainIntent);
 
     }
 

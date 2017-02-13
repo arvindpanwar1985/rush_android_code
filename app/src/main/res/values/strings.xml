@@ -123,4 +123,8 @@
     <string name="str_internet_error"></string>
 
 
+    /****************************************************************Drivers String.************\
+    <string name="login_as_user">Start as user</string>
+    <string name="login_as_driver">Start as messenger</string>
+
 </resources>
