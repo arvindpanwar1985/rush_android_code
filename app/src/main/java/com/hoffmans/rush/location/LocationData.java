@@ -77,12 +77,13 @@ public class LocationData implements GoogleApiClient.ConnectionCallbacks, Google
                 final LocationSettingsStates state = result.getLocationSettingsStates();
                 switch (status.getStatusCode()) {
                     case LocationSettingsStatusCodes.SUCCESS:
+
                          break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                         // Location settings are not satisfied. But could be fixed by showing the user
                         // a dialog.
                        try {
-                            status.startResolutionForResult((Activity) _context,REQUEST_CHECK_SETTINGS);
+                         status.startResolutionForResult((Activity)_context,REQUEST_CHECK_SETTINGS);
                         } catch (IntentSender.SendIntentException e) {
                             e.printStackTrace();
                         }
@@ -139,6 +140,16 @@ public class LocationData implements GoogleApiClient.ConnectionCallbacks, Google
 
         mGoogleApiClient.disconnect();
         mGoogleApiClient = null;
+    }
+
+
+    public Location getLatKnowLocation() {
+        try {
+            latKnowLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+         }catch (SecurityException e){
+           return null;
+        }
+        return latKnowLocation;
     }
 
 

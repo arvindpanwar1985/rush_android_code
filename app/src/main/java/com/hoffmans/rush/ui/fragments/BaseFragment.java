@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
 import android.view.View;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -79,8 +80,10 @@ public abstract class BaseFragment extends Fragment {
     //addmarker
     protected Marker addlocationMarker(LatLng latLng, int marker, GoogleMap mMap){
         if(marker==0){
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
             return   mMap.addMarker(new MarkerOptions().position(latLng).draggable(false));
         }else {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
             return  mMap.addMarker(new MarkerOptions().position(latLng).draggable(false).icon(BitmapDescriptorFactory.fromResource(marker)));
 
         }

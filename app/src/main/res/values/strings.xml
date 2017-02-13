@@ -126,5 +126,7 @@
     /****************************************************************Drivers String.************\
     <string name="login_as_user">Start as user</string>
     <string name="login_as_driver">Start as messenger</string>
+    <string name="in_service">In Service</string>
+    <string name="out_service">Out of  Service</string>
 
 </resources>

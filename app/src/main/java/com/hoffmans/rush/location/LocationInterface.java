@@ -8,4 +8,5 @@ import android.location.Location;
 public interface LocationInterface {
      void onLocation(Location location);
      void onLocationFailed();
+
 }

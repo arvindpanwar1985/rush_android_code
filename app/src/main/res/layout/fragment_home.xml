@@ -15,5 +15,12 @@
             class="com.google.android.gms.maps.SupportMapFragment"
             />
 
+          <include
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:gravity="top"
+              android:layout_marginLeft="@dimen/dp_7"
+              android:layout_marginTop="@dimen/dp_10"
+              layout="@layout/layout_update_status"/>
       </FrameLayout>
 </RelativeLayout>

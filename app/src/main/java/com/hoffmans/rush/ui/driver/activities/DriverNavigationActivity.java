@@ -1,5 +1,6 @@
 package com.hoffmans.rush.ui.driver.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,8 +14,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.location.LocationData;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.BaseActivity;
+import com.hoffmans.rush.ui.activities.MainActivity;
 import com.hoffmans.rush.ui.driver.fragments.HomeFragment;
 import com.hoffmans.rush.utils.AppPreference;
 
@@ -34,6 +37,7 @@ public class DriverNavigationActivity extends BaseActivity
     private AppPreference appPreference;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle mDrawerToggle;
+    private HomeFragment fragment;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +48,7 @@ public class DriverNavigationActivity extends BaseActivity
         initManagers();
         initViews();
         initListeners();
-        HomeFragment fragment=HomeFragment.newInstance("","");
+        fragment=HomeFragment.newInstance("","");
         replaceFragment(fragment,R.id.driver_navigation_content,true);
     }
 
@@ -157,6 +161,13 @@ public class DriverNavigationActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        if (id == R.id.nav_logout) {
+            appPreference.logoutUser();
+            Intent loginIntent=new Intent(DriverNavigationActivity.this,MainActivity.class);
+            loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(loginIntent);
+            this.finish();
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -170,6 +181,16 @@ public class DriverNavigationActivity extends BaseActivity
                     drawer.closeDrawer(GravityCompat.START);
                 }
               break;
+        }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == LocationData.REQUEST_CHECK_SETTINGS){
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }else {
+         super.onActivityResult(requestCode, resultCode, data);
         }
     }
 }

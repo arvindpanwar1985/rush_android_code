@@ -186,7 +186,7 @@ public class BookServiceActivity extends BaseActivity
             startActivity(favIntent);
         }  else if (id == R.id.nav_logout) {
             appPreference.logoutUser();
-            Intent loginIntent=new Intent(BookServiceActivity.this,LoginActivity.class);
+            Intent loginIntent=new Intent(BookServiceActivity.this,MainActivity.class);
             loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(loginIntent);
             this.finish();
