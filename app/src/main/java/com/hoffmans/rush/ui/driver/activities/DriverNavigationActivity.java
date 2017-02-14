@@ -30,7 +30,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class DriverNavigationActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
 
-
     private LinearLayout edtprofileLinear;
     private TextView headerTxtName,headerTxtEmail,headerTxtPhone;
     private CircleImageView headerImgProfile;
@@ -38,10 +37,11 @@ public class DriverNavigationActivity extends BaseActivity
     private DrawerLayout drawer;
     private ActionBarDrawerToggle mDrawerToggle;
     private HomeFragment fragment;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getLayoutInflater().inflate(R.layout.activity_driver_drawer, getParentView());
         initToolBar("",true,true);
         appPreference=AppPreference.newInstance(this);
@@ -72,7 +72,6 @@ public class DriverNavigationActivity extends BaseActivity
 
     @Override
     protected void initViews() {
-
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this, drawer,  R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
@@ -98,11 +97,6 @@ public class DriverNavigationActivity extends BaseActivity
         mDrawerToggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        /*int width = getResources().getDisplayMetrics().widthPixels*60/100;
-        DrawerLayout.LayoutParams params = (android.support.v4.widget.DrawerLayout.LayoutParams) navigationView.getLayoutParams();
-        params.width = width;
-        navigationView.setLayoutParams(params);*/
         View navHeader=navigationView.getHeaderView(0);
         initheaderView(navHeader);
 
@@ -145,9 +139,6 @@ public class DriverNavigationActivity extends BaseActivity
                 }
                 return true;
         }
-
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -156,17 +147,18 @@ public class DriverNavigationActivity extends BaseActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
-
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.nav_logout) {
             appPreference.logoutUser();
             Intent loginIntent=new Intent(DriverNavigationActivity.this,MainActivity.class);
             loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(loginIntent);
             this.finish();
+        }
+        else if(id==R.id.nav_home){
+             HomeFragment fragment=HomeFragment.newInstance("","");
+             replaceFragment(fragment,R.id.driver_navigation_content,true);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -180,11 +172,12 @@ public class DriverNavigationActivity extends BaseActivity
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawer(GravityCompat.START);
                 }
+                Intent edtProfileIntent=new Intent(DriverNavigationActivity.this,DriverEditprofileActivity.class);
+                edtProfileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(edtProfileIntent);
               break;
         }
     }
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == LocationData.REQUEST_CHECK_SETTINGS){
@@ -193,4 +186,6 @@ public class DriverNavigationActivity extends BaseActivity
          super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+
 }

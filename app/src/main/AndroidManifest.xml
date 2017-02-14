@@ -117,6 +117,9 @@
         <activity
             android:name=".ui.driver.activities.DriverNavigationActivity"
             android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".ui.driver.activities.DriverEditprofileActivity"
+            android:theme="@style/AppTheme"/>
 
         <!--
             <intent-filter>

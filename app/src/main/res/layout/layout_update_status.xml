@@ -14,6 +14,7 @@
         android:layout_height="@dimen/dp_40"
         android:layout_gravity="center"
         app:civ_border_color="@color/civ_border"
+        app:civ_border_width="@dimen/dp_2"
         android:src="@drawable/default_profile_photo"
         />
 

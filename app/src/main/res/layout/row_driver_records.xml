@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_row"
+        android:paddingLeft="@dimen/dp_20"
+        android:paddingRight="@dimen/dp_20"
+        android:paddingTop="@dimen/dp_7"
+        android:paddingBottom="@dimen/dp_7">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/imgProfile"
+            android:layout_width="@dimen/dp_70"
+            android:layout_height="@dimen/dp_70"
+            app:civ_border_width="2dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/default_profile_photo"
+            app:civ_border_color="@color/civ_border"/>
+
+         <RelativeLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginLeft="@dimen/dp_4"
+             android:layout_marginRight="@dimen/dp_4"
+             android:layout_toRightOf="@+id/imgProfile">
+
+
+             <TextView
+                 android:id="@+id/txtNamePhone"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textColor="@color/colorPrimary"
+                 android:textStyle="bold|italic"
+                 android:textSize="@dimen/sp_14"
+                 android:layout_alignParentTop="true"
+                 android:text=".Yasir Hammed  .+91812652593"/>
+             <TextView
+                 android:id="@+id/txtSource"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textColor="@color/colorPrimary"
+                 android:textStyle="normal|italic"
+                 android:textSize="@dimen/sp_12"
+                 android:layout_marginRight="@dimen/dp_2"
+                 android:layout_alignParentLeft="true"
+                 android:layout_below="@+id/txtNamePhone"
+                 android:layout_toLeftOf="@+id/viewPriceEstimated"
+                 android:text="@string/str_collect"/>
+
+
+             <TextView
+                 android:id="@+id/txtdestination"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textColor="@color/colorPrimary"
+                 android:textStyle="normal|italic"
+                 android:textSize="@dimen/sp_12"
+                 android:layout_marginRight="@dimen/dp_2"
+                 android:layout_marginTop="@dimen/dp_10"
+                 android:layout_alignParentLeft="true"
+                 android:layout_below="@+id/txtSource"
+                 android:layout_toLeftOf="@+id/viewPriceEstimated"
+                 android:text="@string/str_deliver"/>
+
+             <include
+                 android:id="@+id/viewPriceEstimated"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_below="@+id/txtNamePhone"
+                 android:layout_centerVertical="true"
+                 android:layout_alignParentRight="true"
+                 layout="@layout/layout_price_estimated"/>
+
+
+
+
+        </RelativeLayout>
+        </RelativeLayout>
+
+</RelativeLayout>

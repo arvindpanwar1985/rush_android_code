@@ -2,6 +2,7 @@ package com.hoffmans.rush.ui.driver.fragments;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -23,16 +25,12 @@ import com.hoffmans.rush.location.LocationData;
 import com.hoffmans.rush.location.LocationInterface;
 import com.hoffmans.rush.ui.fragments.BaseFragment;
 
-/**
- * A simple {@link com.hoffmans.rush.ui.fragments.BaseFragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import de.hdodenhof.circleimageview.CircleImageView;
+
+
+
 public class HomeFragment extends BaseFragment implements LocationInterface ,OnMapReadyCallback,View.OnClickListener{
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final int REQUEST_LOCATION_PERMISSION=2;
@@ -40,13 +38,9 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
     private GoogleMap mGoogleMap;
     private LocationData mLocationData;
     private TextView txtInservice,txtOutOfService;
-
-    // TODO: Rename and change types of parameters
+    private CircleImageView imageAcceptReject;
     private String mParam1;
     private String mParam2;
-
-
-
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -69,6 +63,17 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
         return fragment;
     }
 
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // set image of user
+        if(appPreference.getUserDetails().getPic_url()!=null){
+            Glide.with(mActivity).load(appPreference.getUserDetails().getPic_url()).into(imageAcceptReject);
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,14 +94,12 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
         return view;
     }
 
-
-
     @Override
     protected void initViews(View view) {
-
         txtInservice             =(TextView)view.findViewById(R.id.txtInService);
         txtOutOfService          =(TextView)view.findViewById(R.id.txtOutOfservice);
         txtInservice.setSelected(true);
+        imageAcceptReject        =(CircleImageView)view.findViewById(R.id.imgAcceptreject);
     }
 
     @Override
@@ -104,8 +107,6 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
         txtInservice.setOnClickListener(this);
         txtOutOfService.setOnClickListener(this);
     }
-
-
 
 
     @Override
@@ -131,7 +132,10 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
             txtOutOfService.setTextColor(ContextCompat.getColor(mActivity,android.R.color.white));
             txtInservice.setSelected(true);
             txtOutOfService.setSelected(false);
+            String message="Are you sure you are In service?";
+            showStatusDialog(message ,true);
         }
+
 
     }
 
@@ -143,9 +147,36 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
             txtInservice.setTextColor(ContextCompat.getColor(mActivity,android.R.color.white));
             txtOutOfService.setSelected(true);
             txtInservice.setSelected(false);
+            String message="Are you sure you are Out of service?";
+            showStatusDialog(message,false);
         }
     }
 
+
+
+    private void showStatusDialog(String message,boolean inService){
+        try {
+            String positiveButtonText=(inService)?getString(R.string.in_service):getString(R.string.out_service);
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mActivity);
+            builder.setTitle(R.string.app_name)
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).create().show();
+        }catch (Exception e){
+
+        }
+    }
     /**
      * check the permission
      */
@@ -154,7 +185,6 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
         if(mActivity.isPermissionGranted(arrPermission)){
            mLocationData=new LocationData(mActivity,this);
            initMap();
-
         }else {
             requestPermissions(arrPermission, REQUEST_LOCATION_PERMISSION);
         }
@@ -230,7 +260,6 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
                     }
                     case Activity.RESULT_CANCELED:
                     {
-
                         mActivity.finish();
                         // The user was asked to change settings, but chose not to
                         break;

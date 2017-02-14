@@ -114,4 +114,8 @@
     <string name="login_as_driver">Iniciar como Mensajaro</string>
     <string name="in_service">En Servicio</string>
     <string name="out_service">Fuera de Servicio</string>
+
+    <string name="str_collect">Recoger</string>
+    <string name="str_deliver">Entregar</string>
+    <string name="estimated_price">Precio estimado</string>
 </resources>
