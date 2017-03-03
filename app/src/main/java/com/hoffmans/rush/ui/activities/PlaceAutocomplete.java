@@ -26,9 +26,15 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.ui.adapters.PlaceAutocompleteAdapter;
 
+/**
+ * The type Place autocomplete.
+ */
 public class PlaceAutocomplete extends AppCompatActivity  implements GoogleApiClient.OnConnectionFailedListener {
 
 
+    /**
+     * The M google api client.
+     */
     protected GoogleApiClient mGoogleApiClient;
 
     private PlaceAutocompleteAdapter mAdapter;

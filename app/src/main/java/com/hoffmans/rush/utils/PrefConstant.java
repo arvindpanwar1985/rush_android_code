@@ -10,6 +10,7 @@ public class PrefConstant {
     public static String KEY_FNAME   ="fname";
     public static String KEY_ROLE    ="role";
     public static String KEY_PIC     ="pic";
+    public static String KEY_ID     ="id";
     public static String KEY_PHONE   ="phone";
     public static String KEY_token   ="token";
     public static String KEY_bt_token="bt_token";

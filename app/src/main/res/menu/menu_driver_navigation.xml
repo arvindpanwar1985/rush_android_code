@@ -8,6 +8,11 @@
         android:title="Home" />
 
     <item
+        android:id="@+id/nav_Upcoming"
+        android:icon="@drawable/ic_record"
+        android:title="Upcoming" />
+
+    <item
         android:id="@+id/nav_logout"
         android:icon="@drawable/ic_logout"
         android:title="@string/str_menu_logout" />

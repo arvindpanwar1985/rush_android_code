@@ -13,7 +13,7 @@ import retrofit2.Response;
  * Created by devesh on 23/12/16.
  */
 
-public class ConnectionManager {
+public class ConnectionManager  {
     private static final String STR_NO_CONNECTION ="Trouble reaching to server,No internet connection.";
     private static ConnectionManager mConnectionManger;
     private Call<ResponseBody> enqueueCall;
@@ -26,13 +26,14 @@ public class ConnectionManager {
         } else{
             mConnectionManger.setEnqueueCall(call);
             return mConnectionManger;
-        }
-
     }
+   }
 
-    public void setEnqueueCall(Call<ResponseBody> mCall) {
+    private void setEnqueueCall(Call<ResponseBody> mCall) {
+
         this.enqueueCall = mCall;
     }
+
 
     public void callApi(final BaseListener.OnWebServiceCompleteListener mListener){
         this.enqueueCall.enqueue(new Callback<ResponseBody>() {
@@ -47,7 +48,6 @@ public class ConnectionManager {
                 }
 
             }
-
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 if(t instanceof IOException){

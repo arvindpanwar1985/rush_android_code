@@ -25,6 +25,9 @@ import com.hoffmans.rush.utils.Progress;
 import java.util.ArrayList;
 
 
+/**
+ * The type Favourite fragment.
+ */
 public class FavouriteFragment extends BaseFragment implements OnitemClickListner.OnFrequentAddressClicked {
 
     private static final String ARG_PARAM1 = "param1";
@@ -35,10 +38,19 @@ public class FavouriteFragment extends BaseFragment implements OnitemClickListne
     private TextView txtNOFav;
     private ArrayList<PickDropAddress> addressArrayList;
 
+    /**
+     * Instantiates a new Favourite fragment.
+     */
     public FavouriteFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * New instance favourite fragment.
+     *
+     * @param param1 the param 1
+     * @return the favourite fragment
+     */
     public static FavouriteFragment newInstance(boolean param1) {
         FavouriteFragment fragment = new FavouriteFragment();
         Bundle args = new Bundle();
@@ -181,6 +193,21 @@ public class FavouriteFragment extends BaseFragment implements OnitemClickListne
 
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private  void unmarkFavourite(String address_id){
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);

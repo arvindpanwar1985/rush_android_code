@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+    android:background="@drawable/bg_notification">
+
+
+    <ImageView
+        android:id="@+id/img_circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/notification_circle"
+        android:layout_alignParentLeft="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_toRightOf="@+id/img_circle"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold|italic"
+        android:textSize="@dimen/sp_12"
+        android:layout_marginRight="@dimen/dp_20"
+        android:text="Have you received request?"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

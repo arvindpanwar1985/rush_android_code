@@ -12,6 +12,9 @@ import com.hoffmans.rush.model.TransactionDetails;
 import com.hoffmans.rush.utils.Constants;
 
 
+/**
+ * The type Receipt fragment.
+ */
 public class ReceiptFragment extends BaseFragment {
 
     private DateTime date_time;
@@ -23,14 +26,22 @@ public class ReceiptFragment extends BaseFragment {
     private String mParam1;
 
 
-
-
+    /**
+     * Instantiates a new Receipt fragment.
+     */
     public ReceiptFragment() {
         // Required empty public constructor
     }
 
 
-
+    /**
+     * New instance receipt fragment.
+     *
+     * @param dateTime       the date time
+     * @param details        the details
+     * @param street_address the street address
+     * @return the receipt fragment
+     */
     public static ReceiptFragment newInstance(DateTime dateTime, TransactionDetails details,String street_address) {
         ReceiptFragment fragment = new ReceiptFragment();
         Bundle args = new Bundle();

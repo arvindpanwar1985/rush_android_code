@@ -35,6 +35,7 @@ import com.hoffmans.rush.bean.UserBean;
 import com.hoffmans.rush.http.request.LoginRequest;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.model.User;
+import com.hoffmans.rush.services.TrackingService;
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.ui.activities.ForgotPassActivity;
 import com.hoffmans.rush.ui.activities.LoginActivity;
@@ -78,8 +79,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         initListeners();
         notificationToken =appPreference.getNoticficationToken();
         if(TextUtils.isEmpty(notificationToken)){
-            notificationToken= FirebaseInstanceId.getInstance().getToken();
-            appPreference.setNotificationToken(notificationToken);
+           notificationToken= FirebaseInstanceId.getInstance().getToken();
+           appPreference.setNotificationToken(notificationToken);
         }
         return loginView;
     }
@@ -93,8 +94,9 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         edtEmail=(EditText)view.findViewById(com.hoffmans.rush.R.id.flUsername);
         btnFb=(Button)view.findViewById(R.id.frBtnFacebook);
         btnGoogle=(Button)view.findViewById(R.id.frBtnGoogle);
-
-
+        Intent serviceIntent=new Intent(mActivity, TrackingService.class);
+        mActivity.startService(serviceIntent);
+ 
        }
 
     @Override
@@ -393,5 +395,11 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                 LoginManager.getInstance().logOut();
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mActivity.stopService(new Intent(mActivity,TrackingService.class));
     }
 }

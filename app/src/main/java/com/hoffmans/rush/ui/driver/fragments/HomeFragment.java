@@ -8,9 +8,12 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,16 +24,23 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.bean.BaseBean;
+import com.hoffmans.rush.bean.UserBean;
+import com.hoffmans.rush.http.request.UserRequest;
+import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.location.LocationData;
 import com.hoffmans.rush.location.LocationInterface;
+import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.fragments.BaseFragment;
+import com.hoffmans.rush.utils.Progress;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-
 public class HomeFragment extends BaseFragment implements LocationInterface ,OnMapReadyCallback,View.OnClickListener{
 
+    private static final String DRIVER_STATUS_ACTIVE="active";
+    private static final String DRIVER_STATUS_INACTIVE="inactive";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final int REQUEST_LOCATION_PERMISSION=2;
@@ -41,6 +51,8 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
     private CircleImageView imageAcceptReject;
     private String mParam1;
     private String mParam2;
+    private View view;
+    private RelativeLayout includedNotificationView;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -62,7 +74,6 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
         fragment.setArguments(args);
         return fragment;
     }
-
 
 
     @Override
@@ -87,19 +98,23 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_home, container, false);
+        view= inflater.inflate(R.layout.fragment_home, container, false);
         initViews(view);
         initListeners();
         checkPermission();
+        showDriverDetails();
         return view;
     }
 
     @Override
     protected void initViews(View view) {
-        txtInservice             =(TextView)view.findViewById(R.id.txtInService);
-        txtOutOfService          =(TextView)view.findViewById(R.id.txtOutOfservice);
+        txtInservice                =(TextView)view.findViewById(R.id.txtInService);
+        txtOutOfService             =(TextView)view.findViewById(R.id.txtOutOfservice);
+        imageAcceptReject           =(CircleImageView)view.findViewById(R.id.imgAcceptreject);
+        includedNotificationView    =(RelativeLayout)view.findViewById(R.id.notificationBar);
+        ( (FrameLayout.LayoutParams) includedNotificationView.getLayoutParams () ).gravity = Gravity.BOTTOM | Gravity.LEFT;
+
         txtInservice.setSelected(true);
-        imageAcceptReject        =(CircleImageView)view.findViewById(R.id.imgAcceptreject);
     }
 
     @Override
@@ -113,17 +128,17 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.txtInService:
-                enableInService();
+                enableInService(true);
                 break;
             case R.id.txtOutOfservice:
-                enableOutOfservice();
+                enableOutOfservice(true);
                 break;
         }
     }
 
 
 
-    private void enableInService(){
+    private void enableInService(boolean showDialog){
 
         if(txtOutOfService.isSelected()){
             txtInservice.setBackground(ContextCompat.getDrawable(mActivity,R.drawable.in_service));
@@ -132,14 +147,15 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
             txtOutOfService.setTextColor(ContextCompat.getColor(mActivity,android.R.color.white));
             txtInservice.setSelected(true);
             txtOutOfService.setSelected(false);
-            String message="Are you sure you are In service?";
-            showStatusDialog(message ,true);
+            if(showDialog) {
+                String message = "Are you sure you are In service?";
+                showStatusDialog(message, true);
+            }
+
         }
-
-
     }
 
-    private void enableOutOfservice(){
+    private void enableOutOfservice(boolean showDialog){
         if(txtInservice.isSelected()){
             txtOutOfService.setBackground(ContextCompat.getDrawable(mActivity,R.drawable.in_service));
             txtOutOfService.setTextColor(ContextCompat.getColor(mActivity,R.color.colorPrimaryDark));
@@ -147,30 +163,108 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
             txtInservice.setTextColor(ContextCompat.getColor(mActivity,android.R.color.white));
             txtOutOfService.setSelected(true);
             txtInservice.setSelected(false);
-            String message="Are you sure you are Out of service?";
-            showStatusDialog(message,false);
+            if(showDialog) {
+                String message = "Are you sure you are Out of service?";
+                showStatusDialog(message, false);
+            }
         }
     }
 
 
+    /**
+     * api call to update driver status
+     * @param status status active/inactive
+     */
+   private  void setDriverStaus(final String status){
+       Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
+       UserRequest userRequest=new UserRequest();
+       String token=appPreference.getUserDetails().getToken();
+       userRequest.updateDriverStatus(token, status, new ApiCallback() {
+           @Override
+           public void onRequestSuccess(BaseBean body) {
+               Progress.dismissProgress();
+               if(status.equals(DRIVER_STATUS_ACTIVE)){
+                   enableInService(false);
+               }else if(status.equals(DRIVER_STATUS_INACTIVE)){
+                   enableOutOfservice(false);
+               }
+           }
 
-    private void showStatusDialog(String message,boolean inService){
+           @Override
+           public void onRequestFailed(String message) {
+               Progress.dismissProgress();
+               mActivity.showSnackbar(message,Toast.LENGTH_LONG);
+           }
+       });
+   }
+
+
+    /**
+     * set the driver status to active
+     */
+    private void showDriverDetails(){
+
+        Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
+        UserRequest userRequest=new UserRequest();
+        String token=appPreference.getUserDetails().getToken();
+        int id=appPreference.getUserDetails().getId();
+        if(id!=0) {
+            String url = "/api/user/" + String.valueOf(id);
+            userRequest.driverShow(token, url, new ApiCallback() {
+                @Override
+                public void onRequestSuccess(BaseBean body) {
+                    Progress.dismissProgress();
+                    UserBean bean = (UserBean) body;
+                    User user = bean.getUser();
+                    if (user != null) {
+                        if (user.getStatus().equals(DRIVER_STATUS_ACTIVE)) {
+                            txtInservice.setSelected(false);
+                            txtOutOfService.setSelected(true);
+                            enableInService(false);
+                        } else if (user.getStatus().equals(DRIVER_STATUS_INACTIVE)) {
+                            txtInservice.setSelected(true);
+                            txtOutOfService.setSelected(false);
+                            enableOutOfservice(false);
+                        }
+                    }
+                }
+
+                @Override
+                public void onRequestFailed(String message) {
+                    Progress.dismissProgress();
+                    mActivity.showSnackbar(message, Toast.LENGTH_LONG);
+                }
+            });
+        }
+    }
+
+    private void showStatusDialog(String message, final boolean inService){
         try {
             String positiveButtonText=(inService)?getString(R.string.in_service):getString(R.string.out_service);
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mActivity);
             builder.setTitle(R.string.app_name)
                     .setMessage(message)
                     .setCancelable(false)
-                    .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
+                    .setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
+                            String status=(inService)?DRIVER_STATUS_ACTIVE:DRIVER_STATUS_INACTIVE;
+                            setDriverStaus(status);
                             dialog.dismiss();
                         }
                     })
-                    .setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            if(inService){
+                                enableOutOfservice(false);
+                            }else{
+                                enableInService(false);
+                            }
                             dialog.dismiss();
+
+
+
                         }
                     }).create().show();
         }catch (Exception e){
@@ -244,7 +338,7 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
                 {
                     case Activity.RESULT_OK:
                     {
-                        Snackbar.make(getView(),"Location not found ",Snackbar.LENGTH_LONG)
+                        Snackbar.make(view,"Location not found ",Snackbar.LENGTH_LONG)
                                 .setAction("Try again", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -269,11 +363,11 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
                 break;
         }
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         mLocationData.disconnect();
-
     }
 
 

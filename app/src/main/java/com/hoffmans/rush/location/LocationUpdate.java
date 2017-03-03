@@ -34,7 +34,6 @@ import static com.hoffmans.rush.location.LocationUpdate.EchoWebSocketListener.NO
  * Created by devesh on 11/12/15.
  */
 public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
-
     private static final long INTERVAL      =15000;
     private static final int DISPLACEMENT   =25;
     private static LocationUpdate mLocationUpdate =null;
@@ -51,6 +50,8 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
     private LocationUpdate(){
 
     }
+
+
     public static LocationUpdate getInstance(){
         if(mLocationUpdate ==null){
             mLocationUpdate =new LocationUpdate();
@@ -149,9 +150,10 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
         client = new okhttp3.OkHttpClient();
         //Request request = new Request.Builder().url("ws://echo.websocket.org").build();
         //TODO add the IP and port
-        okhttp3.Request request= new okhttp3.Request.Builder().url("ws://echo.websocket.org").build();
+        okhttp3.Request request= new okhttp3.Request.Builder().url("ws://192.168.3.226:8080/").build();
         listener = new EchoWebSocketListener();
         webSocket= client.newWebSocket(request, listener);
+
     }
     private void updateOnSocket(Location location){
         if(location!=null) {
@@ -253,6 +255,4 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
         }
 
     }
-
-
 }

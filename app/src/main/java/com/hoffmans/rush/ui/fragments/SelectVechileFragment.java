@@ -298,9 +298,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             return;
         }
          estimateService(buildEstimateServiceParams());
-
     }
-
 
     /**
      *
@@ -432,7 +430,6 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             imgTypeBike.setSelected(false);
             imgTypeCycle.setSelected(false);
         }
-
     }
 
     @Override
@@ -562,7 +559,6 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     /**
      * show date picker
      */
-
     private void showDatePicker(){
         Calendar now = Calendar.getInstance();
         DatePickerDialog dpd = DatePickerDialog.newInstance(

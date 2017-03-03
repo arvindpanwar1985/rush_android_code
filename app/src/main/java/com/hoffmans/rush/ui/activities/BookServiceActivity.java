@@ -21,6 +21,9 @@ import com.hoffmans.rush.utils.Constants;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * The type Book service activity.
+ */
 public class BookServiceActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
 

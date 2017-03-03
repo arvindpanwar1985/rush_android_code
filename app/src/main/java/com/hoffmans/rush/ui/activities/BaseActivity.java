@@ -73,13 +73,9 @@ public abstract  class BaseActivity extends AppCompatActivity {
         setContentView(R.layout.actvity_base);
         initUI();
 
-
     }
 
-
-
     private void initUI(){
-
         progressBar=(ProgressBar)findViewById(R.id.progressBar);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         progressRelative=(RelativeLayout)findViewById(R.id.progressRelative);

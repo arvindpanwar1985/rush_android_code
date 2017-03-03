@@ -69,13 +69,10 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 
     @Override
     protected void initViews(View view) {
-
-
         txtForgotPassword=(TextView) view.findViewById(com.hoffmans.rush.R.id.flForgotPass);
         btnLogin=(Button)view.findViewById(com.hoffmans.rush.R.id.flBtnLogin);
         edtPassword=(EditText)view.findViewById(com.hoffmans.rush.R.id.flPassword);
         edtEmail=(EditText)view.findViewById(com.hoffmans.rush.R.id.flUsername);
-
     }
 
     @Override
@@ -176,8 +173,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
             Intent driverMainIntent=new Intent(mActivity, DriverNavigationActivity.class);
             driverMainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(driverMainIntent);
-
-    }
-
+      }
 
 }

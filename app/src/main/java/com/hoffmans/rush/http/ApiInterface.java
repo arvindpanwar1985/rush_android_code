@@ -20,6 +20,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.QueryMap;
+import retrofit2.http.Url;
 
 /**
  * Created by devesh on 23/12/16.
@@ -103,6 +104,13 @@ public interface ApiInterface {
 
     @GET("/api/user/profile")
     Call<ResponseBody> getProfile(@Header("Authorization")String authorization);
+
+    @FormUrlEncoded
+    @POST("/api/drivers/update_driver_status")
+    Call<ResponseBody> updateStatus(@Header("Authorization")String auth,@Field("status") String status);
+
+    @GET
+    Call<ResponseBody> driverShow(@Header("Authorization")String auth,@Url String url);
 
 
 

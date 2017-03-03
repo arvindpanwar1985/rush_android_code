@@ -1,5 +1,4 @@
 package com.hoffmans.rush.http;
-
 import com.hoffmans.rush.utils.ApiConfig;
 
 import java.util.concurrent.TimeUnit;
@@ -8,7 +7,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
 /**
  * Created by LOGAN on 5/1/2016.
  */
@@ -21,7 +19,7 @@ public class ApiBuilder {
             new OkHttpClient.Builder();
 
     public  static ApiInterface  createApiBuilder(){
-        setLogInterCeptor();
+
          if(retrofit!=null){
              return apiInterface=retrofit.create(ApiInterface.class);
          }else {
@@ -31,28 +29,24 @@ public class ApiBuilder {
                      .addConverterFactory(GsonConverterFactory.create())
                      .build();
              apiInterface = retrofit.create(ApiInterface.class);
+             setLogInterCeptor();
              return apiInterface;
          }
-
-
     }
-
     /**
      * set log interceptor for logging the network response
      */
-
     private static  void setLogInterCeptor(){
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         okHttpClient.addInterceptor(interceptor).build();
     }
-
     /**
      *
      * @return Retrofit Instance
      */
     public static Retrofit getRetrofitInstance(){
-
+        setLogInterCeptor();
         if(retrofit!=null){
             return retrofit;
         }else {
@@ -62,16 +56,6 @@ public class ApiBuilder {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
-            // Create an instance of our GitHub API interface.
-
-
+      // Create an instance of our GitHub API interface.
     }
-
-
-
-
-
 }
-
-
-

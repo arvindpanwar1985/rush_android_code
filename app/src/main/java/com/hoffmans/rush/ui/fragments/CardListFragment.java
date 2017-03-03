@@ -30,6 +30,9 @@ import java.util.HashMap;
 import static com.hoffmans.rush.ui.activities.AddCardActivity.REQUEST_ADD_CARD;
 
 
+/**
+ * The type Card list fragment.
+ */
 public class CardListFragment extends BaseFragment implements View.OnClickListener,OnCardClicked {
 
     private static final String ARG_CARD_SELECTABLE      ="is_card_selectable";
@@ -40,10 +43,21 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
     private RecyclerView recyclerCardList;
     private ImageButton btnAddCard;
     private CardListAdapter adapter;
+
+    /**
+     * Instantiates a new Card list fragment.
+     */
     public CardListFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * New instance card list fragment.
+     *
+     * @param isCardSelectable the is card selectable
+     * @param param2           the param 2
+     * @return the card list fragment
+     */
     public static CardListFragment newInstance(boolean isCardSelectable, String param2) {
         CardListFragment fragment = new CardListFragment();
         Bundle args = new Bundle();

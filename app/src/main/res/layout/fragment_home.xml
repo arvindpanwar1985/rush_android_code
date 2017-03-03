@@ -7,20 +7,35 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/linearVehicle">
+        >
         <fragment
             android:id="@+id/map_fragment"
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             class="com.google.android.gms.maps.SupportMapFragment"
             />
 
-          <include
+
+
+         <include
+              android:id="@+id/incStatusbar"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:gravity="top"
+              android:gravity="bottom"
               android:layout_marginLeft="@dimen/dp_7"
               android:layout_marginTop="@dimen/dp_10"
               layout="@layout/layout_update_status"/>
-      </FrameLayout>
+
+
+      <include
+          android:id="@+id/notificationBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_7"
+            android:gravity="bottom"
+            android:layout_marginBottom="@dimen/dp_30"
+            layout="@layout/view_notification"/>
+    </FrameLayout>
+
 </RelativeLayout>

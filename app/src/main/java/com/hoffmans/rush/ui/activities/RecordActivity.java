@@ -10,7 +10,7 @@ import com.hoffmans.rush.ui.fragments.RecordFragment;
  * Created by devesh on 24/1/17.
  */
 
-public class RecordActivity extends BaseActivity {
+public class RecordActivity extends BaseActivity   {
 
     private static final String KEY_IS_RECORD="isRecord";
 
