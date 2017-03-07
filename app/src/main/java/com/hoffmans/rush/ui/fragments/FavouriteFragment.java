@@ -152,7 +152,7 @@ public class FavouriteFragment extends BaseFragment implements OnitemClickListne
 
     @Override
     public void onfrequentAddressclicked(View view, int position) {
-
+        //unused
 
     }
 
@@ -164,6 +164,11 @@ public class FavouriteFragment extends BaseFragment implements OnitemClickListne
         }
 
 
+    }
+
+    @Override
+    public void onCloseButtomClicked(View view, int postion) {
+        //unused
     }
 
 

@@ -55,6 +55,7 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
 
 
     public static AddCardFragment newInstance(String btToken) {
+
         AddCardFragment fragment = new AddCardFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, btToken);
@@ -83,7 +84,7 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mActivity.initToolBar("",true,false);
+        mActivity.initToolBar(getString(R.string.str_add_card),true,false);
         View view =inflater.inflate(R.layout.fragment_payment_methods, container, false);
         initViews(view);
         initListeners();

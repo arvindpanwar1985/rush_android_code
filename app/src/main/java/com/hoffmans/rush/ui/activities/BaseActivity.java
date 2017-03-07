@@ -3,6 +3,7 @@ package com.hoffmans.rush.ui.activities;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -41,11 +42,13 @@ import com.hoffmans.rush.utils.DateUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /**
  * Created by devesh on 19/12/16.
  */
 public abstract  class BaseActivity extends AppCompatActivity {
+
     protected FrameLayout activityContent = null;
     private Toolbar mToolbar = null;
     public int idGoogleApiclient;
@@ -64,7 +67,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //hide keyboard initially
-        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+       // getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         Rect rectangle = new Rect();
         Window window = getWindow();
@@ -292,13 +295,14 @@ public abstract  class BaseActivity extends AppCompatActivity {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_toast,
                 (ViewGroup) findViewById(R.id.toast_layout_root));
+        layout.setMinimumHeight(mActionBarSize);
         TextView textTitle = (TextView) layout.findViewById(R.id.text_error_title);
         textTitle.setText(message);
         if(toast!=null) {
             if(mToolbar!=null &&mToolbar.getVisibility()==View.GONE){
                 mActionBarSize=0;
             }
-            toast.setGravity(Gravity.TOP | Gravity.FILL_HORIZONTAL, 0, mActionBarSize);
+            toast.setGravity(Gravity.TOP | Gravity.FILL_HORIZONTAL, 0, 0);
             toast.setDuration(Toast.LENGTH_LONG);
             toast.setView(layout);
             toast.show();
@@ -356,6 +360,11 @@ public abstract  class BaseActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * set the google signin options
+     * @param value random integer value
+     * @return
+     */
     public GoogleApiClient  setGoogleSignInOptions(int value){
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -368,7 +377,9 @@ public abstract  class BaseActivity extends AppCompatActivity {
 
     public GoogleApiClient getGoogleApiClient(){
         return mGoogleApiClient;
+
     }
+
     public GoogleApiClient setGoogleApiClient(GoogleSignInOptions gso ,int value){
 
         return new GoogleApiClient.Builder(this)
@@ -421,8 +432,9 @@ public abstract  class BaseActivity extends AppCompatActivity {
     }
 
 
-
-
+    /**
+     * logout user from app
+     */
     public void logOutUser(){
         AppPreference preference =AppPreference.newInstance(BaseActivity.this);
         preference.logoutUser();
@@ -432,9 +444,34 @@ public abstract  class BaseActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * chanhe the app locale
+      * @param languageToLoad name of language to load
+     */
+   public void changeLanguage(String languageToLoad){
+       Locale locale = new Locale(languageToLoad);
+       Locale.setDefault(locale);
+       Configuration config = new Configuration();
+       config.locale = locale;
+       getBaseContext().getResources().updateConfiguration(config,
+               getBaseContext().getResources().getDisplayMetrics());
+   }
 
 
+    /**
+     *
+     * @param className frgment to be searched
+     * @return is fragment attached
+     */
+    public boolean isFragmentOpened(String className){
 
+        int backCount=getSupportFragmentManager().getBackStackEntryCount();
+        if (!getSupportFragmentManager().getBackStackEntryAt(backCount - 1).getName().equals(className)){
+
+            return false;
+        }
+        return true;
+    }
 
 
 

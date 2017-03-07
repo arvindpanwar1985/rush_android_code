@@ -6,7 +6,7 @@
     android:paddingTop="@dimen/dp_10"
     android:paddingBottom="@dimen/dp_10"
     android:elevation="3dp"
-    android:background="@color/color_custom_toast" >
+    android:background="@color/colorPrimary" >
     <TextView android:id="@+id/text_error_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

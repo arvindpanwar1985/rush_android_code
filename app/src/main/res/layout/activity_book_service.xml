@@ -14,12 +14,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@drawable/menu_bg"
+        android:background="@color/color_drawer_top"
+
         android:fitsSystemWindows="true"
         app:itemTextColor="@android:color/white"
         app:headerLayout="@layout/nav_header_book_service"
@@ -27,11 +29,12 @@
         app:menu="@menu/activity_book_service_drawer" >
 
 
-        <!--<LinearLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@color/colorPrimaryDark"
+            android:layout_marginTop="@dimen/dp_4"
+            android:background="@drawable/menu_head"
             android:clickable="true"
             android:orientation="vertical">
 
@@ -41,13 +44,15 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginRight="@dimen/dp_25"
                 android:src="@drawable/white_arrow"/>
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="60dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/logo_rush"/>
 
-        </LinearLayout>-->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_10"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/logo_signup"/>
+
+        </LinearLayout>
     </android.support.design.widget.NavigationView>
 
 

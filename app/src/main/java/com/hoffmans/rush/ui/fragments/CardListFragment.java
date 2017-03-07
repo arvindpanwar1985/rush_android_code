@@ -148,6 +148,10 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
         });
     }
 
+    /**
+     * set adapter for cardList
+     * @param cardDataList
+     */
     private void setCardAdapter(ArrayList<CardData> cardDataList ){
         boolean showDelete=(isCardSelectable)?false:true;
         adapter=new CardListAdapter(mActivity,cardDataList,this,showDelete);

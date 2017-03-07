@@ -13,6 +13,7 @@ public interface OnitemClickListner {
          void onitemclicked(View view, int position);
          void onfrequentAddressclicked(View view, int position);
          void onFavoriteAddressclicked(View view, int position);
+         void onCloseButtomClicked(View view ,int postion);
 
     }
 

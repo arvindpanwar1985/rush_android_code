@@ -100,14 +100,13 @@ public class BookServiceActivity extends BaseActivity
         params.width = width;
         navigationView.setLayoutParams(params);*/
         View navHeader=navigationView.getHeaderView(0);
-        initheaderView(navHeader);
+        initHeaderView(navHeader);
 
 
 
 
 
     }
-
     @Override
     protected void initListeners() {
 
@@ -115,8 +114,12 @@ public class BookServiceActivity extends BaseActivity
 
     }
 
+    /**
+     * initialize header
+     * @param navHeader headerView
+     */
 
-    private void initheaderView(View navHeader){
+     private void initHeaderView(View navHeader){
         edtprofileLinear=(LinearLayout) navHeader.findViewById(R.id.linearHeaderEdit);
         headerTxtEmail=(TextView)navHeader.findViewById(R.id.headerTxtEmail);
         headerTxtPhone=(TextView)navHeader.findViewById(R.id.headerTxtPhone);
@@ -146,9 +149,6 @@ public class BookServiceActivity extends BaseActivity
                 }
                 return true;
            }
-
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -161,41 +161,50 @@ public class BookServiceActivity extends BaseActivity
 
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if (id == R.id.nav_order) {
-           SelectVechileFragment selectVechileFragment= SelectVechileFragment.newInstance("","");
-           replaceFragment(selectVechileFragment,R.id.activity_navigation_content,true);
-        }else if(id==R.id.nav_pay){
-            Intent cardListIntent=new Intent(BookServiceActivity.this, CardListActivity.class);
-            cardListIntent.putExtra(Constants.KEY_IS_CARD_SELECTABLE,false);
-            startActivity(cardListIntent);
-
-        }
-
-        else if (id == R.id.nav_record) {
-
-            Intent recIntent=new Intent(BookServiceActivity.this, RecordActivity.class);
-            recIntent.putExtra(KEY_IS_RECORD,true);
-            startActivity(recIntent);
-        } else if (id == R.id.nav_scheduled) {
-
-            Intent recIntent=new Intent(BookServiceActivity.this, RecordActivity.class);
-            recIntent.putExtra(KEY_IS_RECORD,false);
-            startActivity(recIntent);
-        } else if (id == R.id.nav_fav) {
-
-            Intent favIntent=new Intent(BookServiceActivity.this, FavouriteActivity.class);
-            favIntent.putExtra(Constants.KEY_IS_FAVOURITE_SELECTABLE,true);
-            startActivity(favIntent);
-        }  else if (id == R.id.nav_logout) {
-            appPreference.logoutUser();
-            Intent loginIntent=new Intent(BookServiceActivity.this,MainActivity.class);
-            loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(loginIntent);
-            this.finish();
-        }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        switch (id){
+            case R.id.nav_order:
+                if(!isFragmentOpened(SelectVechileFragment.class.getCanonicalName())) {
+                    SelectVechileFragment selectVechileFragment = SelectVechileFragment.newInstance("", "");
+                    replaceFragment(selectVechileFragment, R.id.activity_navigation_content, true);
+                }else{
+                    drawer.closeDrawer(GravityCompat.START);
+                }
+                break;
+            case R.id.nav_pay:
+                Intent cardListIntent=new Intent(BookServiceActivity.this, CardListActivity.class);
+                cardListIntent.putExtra(Constants.KEY_IS_CARD_SELECTABLE,false);
+                startActivity(cardListIntent);
+                break;
+            case R.id.nav_record:
+                Intent recIntent=new Intent(BookServiceActivity.this, RecordActivity.class);
+                recIntent.putExtra(KEY_IS_RECORD,true);
+                startActivity(recIntent);
+                break;
+
+            case R.id.nav_scheduled:
+                Intent secIntent=new Intent(BookServiceActivity.this, RecordActivity.class);
+                secIntent.putExtra(KEY_IS_RECORD,false);
+                startActivity(secIntent);
+                break;
+            case R.id.nav_fav:
+                Intent favIntent=new Intent(BookServiceActivity.this, FavouriteActivity.class);
+                favIntent.putExtra(Constants.KEY_IS_FAVOURITE_SELECTABLE,true);
+                startActivity(favIntent);
+                break;
+            case R.id.nav_settings:
+                Intent settingsIntent=new Intent(BookServiceActivity.this, SettingActivity.class);
+                startActivity(settingsIntent);
+                break;
+            case R.id.nav_logout:
+                appPreference.logoutUser();
+                Intent loginIntent=new Intent(BookServiceActivity.this,MainActivity.class);
+                loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(loginIntent);
+                this.finish();
+                break;
+
+        }
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

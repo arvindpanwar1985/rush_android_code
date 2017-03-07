@@ -54,10 +54,10 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
 
             if (mItemClickListener != null) {
                if(!showDelete) {
-                    mItemClickListener.oncardSelected(v, getPosition());
+                    mItemClickListener.oncardSelected(v, getAdapterPosition());
                 }//only allow user to delete card if card list is greater than 1
-                else if(getItemCount()>1 && !cardDataList.get(getPosition()).getDefault()) {
-                    mItemClickListener.onitemclicked(v,getPosition());
+                else if(getItemCount()>1 && !cardDataList.get(getAdapterPosition()).getDefault()) {
+                    mItemClickListener.onitemclicked(v,getAdapterPosition());
                 }
             }
         }
@@ -109,12 +109,15 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
             holder.viewDeafultCard.setVisibility(View.GONE);
         }else{
             if(cardData.getDefault()){
-
+                //not able to delete default card
                 holder.viewDeafultCard.setVisibility(View.VISIBLE);
+                holder.imgDleteCard.setVisibility(View.INVISIBLE);
             }else{
                 holder.viewDeafultCard.setVisibility(View.INVISIBLE);
+                holder.imgDleteCard.setVisibility(View.VISIBLE);
             }
             if(getItemCount()==1){
+                //not able to delete single card.
                 holder.imgDleteCard.setVisibility(View.INVISIBLE);
             }
 

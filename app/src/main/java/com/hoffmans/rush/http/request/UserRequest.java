@@ -43,7 +43,6 @@ public class UserRequest extends BaseRequest {
                     String message=obj.getString(MESSAGE);
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
-
                         UserBean bean = getGsonBuilder().fromJson(data, UserBean.class);
                         bean.setMessage(message);
                         callback.onRequestSuccess(bean);

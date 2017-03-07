@@ -1,6 +1,7 @@
 package com.hoffmans.rush.ui.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import java.util.List;
 public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter.ViewHolder> {
 
 
+    private static final int START_POSITION=0;
     private List<PickDropAddress> addressdata;
     private Context mContext;
     private OnitemClickListner.OnFrequentAddressClicked mItemClickListener;
@@ -34,13 +36,14 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
         // each data item is just a string in this case
 
         TextView txtAddress,txtviewFrequentlyAddress;
-        ImageView imgFav;
+        ImageView imgFav,imgClose;
 
         public ViewHolder(View v) {
             super(v);
             txtAddress               =(TextView)v.findViewById(R.id.txtAddress);
             imgFav                   =(ImageView)v.findViewById(R.id.imgFav);
             txtviewFrequentlyAddress =(TextView)v.findViewById(R.id.viewFrequentlyAddress);
+            imgClose                 =(ImageView)v.findViewById(R.id.imgClose);
             v.setOnClickListener(this);
 
         }
@@ -88,8 +91,9 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
         final  PickDropAddress address=addressdata.get(position);
 
 
-        if(!TextUtils.isEmpty(address.getStreetAddress())){
+        if( !TextUtils.isEmpty(address.getStreetAddress())){
             //update address
+            showDelete(position,holder,false);
             holder.txtAddress.setText(address.getStreetAddress());
             holder.imgFav.setVisibility(View.VISIBLE);
 
@@ -97,17 +101,22 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
                 @Override
                 public void onClick(View view) {
                     if (mItemClickListener != null) {
+                        if(!address.isFavorite())
                         mItemClickListener.onFavoriteAddressclicked(view,position);
                         //mItemClickListener.onitemclicked(v,getPosition());
                     }
 
                 }
             });
+            if(address.isFavorite()){
+                holder.imgFav.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_favorite_24dp));
+            }else{
+               holder.imgFav.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_favorite_border_24dp));
+            }
         }else{
             holder.imgFav.setVisibility(View.INVISIBLE);
-            if(address.isFavorite()){
+            showDelete(position,holder,true);
 
-            }
         }
 
         holder.txtAddress.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +143,15 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
             }
         });
 
+        holder.imgClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mItemClickListener!=null){
+                    mItemClickListener.onCloseButtomClicked(view,position);
+                }
+            }
+        });
+
         if(mItemClickListener==null){
             holder.txtviewFrequentlyAddress.setVisibility(View.GONE);
             holder.imgFav.setVisibility(View.GONE);
@@ -143,6 +161,18 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
 
     }
 
+    /**
+     *
+     * @param position postion of view
+     * @param holder viewholder
+     * @param value show/hide
+     */
+    private void showDelete(int position,ViewHolder holder,boolean value){
+        if(position!=START_POSITION){
+            int visiblity=(value)?View.VISIBLE:View.GONE;
+            holder.imgClose.setVisibility(visiblity);
+        }
+    }
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {

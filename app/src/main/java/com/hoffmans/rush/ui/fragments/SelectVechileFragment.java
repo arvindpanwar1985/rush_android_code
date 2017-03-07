@@ -138,6 +138,9 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                 .addApi(Places.PLACE_DETECTION_API)
                 .addOnConnectionFailedListener(this)
                 .build();
+
+
+        mActivity.changeLanguage("en");
     }
 
     @Override
@@ -495,7 +498,21 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         }
     }
 
-
+    @Override
+    public void onCloseButtomClicked(View view, int postion) {
+        clickedAddressPostion=postion;
+        if(listAddressData!=null){
+            try {
+                PickDropAddress pickAddressToRemove = listAddressData.get(clickedAddressPostion);
+                listAddressData.remove(pickAddressToRemove);
+                if(addressAdapter!=null){
+                    addressAdapter.notifyDataSetChanged();
+                }
+            }catch (IndexOutOfBoundsException e){
+                Toast.makeText(mActivity,"something went wrong.",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
 
     @Override

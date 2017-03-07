@@ -9,5 +9,7 @@
     <color name="color_custom_toast">#B63f33</color>
     <color name="color_notify">#f08f82</color>
     <color name="color_notify_border">#98979c</color>
+    <color name="color_drawer_top">#E8503e</color>
+    <color name="color_drawer_bottom">#c44435</color>
 
 </resources>

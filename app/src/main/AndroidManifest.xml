@@ -24,7 +24,9 @@
         <!-- Needed only if your app targets Android 5.0 (API level 21) or higher. -->
         <uses-feature android:name="android.hardware.location.gps" />
 
-        <activity android:name=".SplashActivity">
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -92,6 +94,9 @@
         <activity
             android:name=".ui.activities.RecordActivity"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.activities.SettingActivity"
+            android:theme="@style/AppTheme" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -108,18 +113,15 @@
         <activity
             android:name=".ui.driver.activities.DriverLoginActivity"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".ui.activities.MainActivity"
             android:theme="@style/AppTheme" />
-
-
         <activity
             android:name=".ui.driver.activities.DriverNavigationActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.driver.activities.DriverEditprofileActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
 
         <!--
             <intent-filter>
@@ -139,7 +141,17 @@
         <service
             android:name=".services.TrackingService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <receiver android:name=".LocaleChangeReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".services.UpdateCurentLocation"
+            android:exported="false"></service>
     </application>
 
 </manifest>

@@ -148,19 +148,25 @@ public class DriverNavigationActivity extends BaseActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        if (id == R.id.nav_logout) {
-            appPreference.logoutUser();
-            Intent loginIntent=new Intent(DriverNavigationActivity.this,MainActivity.class);
-            loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(loginIntent);
-            this.finish();
-        }
-        else if(id==R.id.nav_home){
-             HomeFragment fragment=HomeFragment.newInstance("","");
-             replaceFragment(fragment,R.id.driver_navigation_content,true);
-        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.nav_logout:
+                appPreference.logoutUser();
+                Intent loginIntent = new Intent(DriverNavigationActivity.this, MainActivity.class);
+                loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(loginIntent);
+                this.finish();
+                break;
+            case R.id.nav_home:
+                if (!isFragmentOpened(HomeFragment.class.getCanonicalName())) {
+                    HomeFragment fragment = HomeFragment.newInstance("", "");
+                    replaceFragment(fragment, R.id.driver_navigation_content, true);
+                } else {
+                    drawer.closeDrawer(GravityCompat.START);
+                }
+                break;
+        }
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

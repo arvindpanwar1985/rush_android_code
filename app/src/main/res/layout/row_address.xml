@@ -11,18 +11,27 @@
         android:id="@+id/viewFrequentlyAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Frequently used Address"
+        android:text="@string/str_frequent_address"
         android:textSize="@dimen/sp_10"
-        android:padding="@dimen/dp_2"
+        android:padding="@dimen/dp_5"
         android:textColor="@android:color/white"
         android:textStyle="bold|italic"
         android:background="@drawable/bg_reservation_btn"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:id="@+id/imgClose"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_close_black"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_below="@+id/viewFrequentlyAddress"
-        android:layout_marginTop="@dimen/dp_2"
         android:background="@drawable/address_text"
-        android:padding="@dimen/dp_2"
+        android:paddingLeft="@dimen/dp_2"
+        android:paddingRight="@dimen/dp_2"
+        android:paddingBottom="@dimen/dp_2"
         android:layout_height="wrap_content">
     <TextView
         android:layout_width="wrap_content"
@@ -50,6 +59,7 @@
         android:src="@drawable/ic_favorite_border_24dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"/>
+
 </RelativeLayout>
 
 </RelativeLayout>

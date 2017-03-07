@@ -31,6 +31,7 @@ import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.location.LocationData;
 import com.hoffmans.rush.location.LocationInterface;
 import com.hoffmans.rush.model.User;
+import com.hoffmans.rush.services.UpdateCurentLocation;
 import com.hoffmans.rush.ui.fragments.BaseFragment;
 import com.hoffmans.rush.utils.Progress;
 
@@ -303,11 +304,17 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
             LatLng latLng=new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
             addlocationMarker(latLng,R.drawable.marker,mGoogleMap);
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+
+            //update the user location
+            String auth      =appPreference.getUserDetails().getToken();
+            String latitude  =String.valueOf(mCurrentLocation.getLatitude());
+            String longitude =String.valueOf(mCurrentLocation.getLongitude());
+            updateUserLocation(auth,latitude,longitude);
         }
     }
     @Override
     public void onLocationFailed() {
-
+        Toast.makeText(mActivity,"Failed to get lcoation!",Toast.LENGTH_SHORT).show();
     }
 
 
@@ -326,7 +333,16 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
     }
 
 
+    /**
+     * Intent service to update userLocation
+     * @param auth
+     * @param latitude
+     * @param longitude
+     */
+    private void updateUserLocation(String auth ,String latitude,String longitude){
 
+        UpdateCurentLocation.startLocationUpdate(mActivity,auth,latitude,longitude);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -336,9 +352,9 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
             case LocationData.REQUEST_CHECK_SETTINGS:
                 switch (resultCode)
                 {
-                    case Activity.RESULT_OK:
+                    case Activity.RESULT_OK://user press turn on location button in location setting dialog
                     {
-                        Snackbar.make(view,"Location not found ",Snackbar.LENGTH_LONG)
+                        Snackbar.make(view,"Location not found ", Snackbar.LENGTH_LONG)
                                 .setAction("Try again", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -347,15 +363,22 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
                                             mCurrentLocation=mLocationData.getLatKnowLocation();
                                             LatLng latLng=new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
                                             addlocationMarker(latLng,R.drawable.marker,mGoogleMap);
+
+                                            //update the user location
+                                            String auth      =appPreference.getUserDetails().getToken();
+                                            String latitude  =String.valueOf(mCurrentLocation.getLatitude());
+                                            String longitude =String.valueOf(mCurrentLocation.getLongitude());
+                                            updateUserLocation(auth,latitude,longitude);
                                         }
                                     }
-                                }).show();
+                                }).setDuration(6000)
+                                .show();
                         break;
                     }
                     case Activity.RESULT_CANCELED:
                     {
-                        mActivity.finish();
                         // The user was asked to change settings, but chose not to
+                        mActivity.finish();
                         break;
                     }
 
@@ -367,7 +390,12 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mLocationData.disconnect();
+        if(mLocationData!=null) {
+            mLocationData.disconnect();
+            mLocationData=null;
+        }
+
+
     }
 
 
