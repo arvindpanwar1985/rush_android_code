@@ -135,6 +135,8 @@
     <string name="str_collect">Collect</string>
     <string name="str_deliver">Deliver</string>
     <string name="estimated_price">Estimated Price</string>
+    <string name="title_activity_upcoming">UpcomingActivity</string>
+    <string name="geo_coding_key">AIzaSyBnCvbt86W9GGcNcOIzCPF2mkMauYRgA2o</string>
 
 
 </resources>

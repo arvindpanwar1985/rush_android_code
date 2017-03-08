@@ -24,7 +24,7 @@ import java.util.List;
 public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter.ViewHolder> {
 
 
-    private static final int START_POSITION=0;
+    private static final int START_POSITION_DESTINATION=1;
     private List<PickDropAddress> addressdata;
     private Context mContext;
     private OnitemClickListner.OnFrequentAddressClicked mItemClickListener;
@@ -89,8 +89,6 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
             holder.txtAddress.setHint(mContext.getString(R.string.str_hint_end));
         }
         final  PickDropAddress address=addressdata.get(position);
-
-
         if( !TextUtils.isEmpty(address.getStreetAddress())){
             //update address
             showDelete(position,holder,false);
@@ -168,7 +166,7 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
      * @param value show/hide
      */
     private void showDelete(int position,ViewHolder holder,boolean value){
-        if(position!=START_POSITION){
+        if(position>START_POSITION_DESTINATION){
             int visiblity=(value)?View.VISIBLE:View.GONE;
             holder.imgClose.setVisibility(visiblity);
         }

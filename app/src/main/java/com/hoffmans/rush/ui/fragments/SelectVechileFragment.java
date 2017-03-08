@@ -33,6 +33,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.bean.ServiceBean;
@@ -50,6 +51,7 @@ import com.hoffmans.rush.model.FetchAddressEvent;
 import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.Service;
 import com.hoffmans.rush.services.BuildAddressService;
+import com.hoffmans.rush.services.GeoCodingService;
 import com.hoffmans.rush.ui.activities.ConfirmServiceActivity;
 import com.hoffmans.rush.ui.activities.FavouriteActivity;
 import com.hoffmans.rush.ui.adapters.LoadAddressAdapter;
@@ -241,11 +243,17 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.viewAddMoreAddress:
-                if(listAddressData.size()!=4){
-                    PickDropAddress newDetination=new PickDropAddress();
-                    newDetination.setStreetAddress("");
-                    listAddressData.add(newDetination);
-                    addressAdapter.notifyDataSetChanged();
+                if(listAddressData!=null && listAddressData.size()!=4 ){
+                    int lastPostition=listAddressData.size()-1;
+                    PickDropAddress lastFilledDropAddress=listAddressData.get(lastPostition);
+                    if(lastFilledDropAddress!=null && !TextUtils.isEmpty(lastFilledDropAddress.getStreetAddress())) {
+                        PickDropAddress newDetination = new PickDropAddress();
+                        newDetination.setStreetAddress("");
+                        listAddressData.add(newDetination);
+                        addressAdapter.notifyDataSetChanged();
+                    }else{
+                        mActivity.showSnackbar("Please select destination",Toast.LENGTH_SHORT);
+                    }
                 }
                 break;
             case R.id.txtACNow:
@@ -316,7 +324,9 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                     pickDropAddress.setCountry(event.getCountry());
                     pickDropAddress.setState(event.getState());
                     pickDropAddress.setCity(event.getCity());
+                    pickDropAddress.setStreetAddress(event.getStreetAddress());
                     listAddressData.set(clickedAddressPostion, pickDropAddress);
+                    addressAdapter.notifyDataSetChanged();
                 } else {
                     PickDropAddress dropAddress = listAddressData.get(clickedAddressPostion);
                     dropAddress.setCountry(event.getCountry());
@@ -339,12 +349,54 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         }
         if(mCurrentLocation!=null){
             LatLng latLng=new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
-            addlocationMarker(latLng,R.drawable.marker,mGoogleMap);
-            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+            addlocationMArker(latLng,true);
         }
+
+        //set marker draglistener
+        mGoogleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {
+
+            }
+
+            @Override
+            public void onMarkerDrag(Marker marker) {
+
+                //mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                Log.e(TAG,"drag end");
+                //set update postion to source location
+                clickedAddressPostion=0;
+                Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
+                GeoCodingService.getInstance(mActivity,marker.getPosition());
+            }
+        });
+        //on current location clicked icon
+        mGoogleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+            @Override
+            public boolean onMyLocationButtonClick() {
+                if(mCurrentLocation!=null){
+                    mGoogleMap.clear();
+                    LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+                    addlocationMArker(latLng, true);
+                }
+                return false;
+            }
+        });
     }
 
-
+    /**
+     * add marker on map
+     * @param latLng
+     * @param draggable
+     */
+    private void addlocationMArker(LatLng latLng,boolean draggable){
+        addlocationMarker(latLng,R.drawable.marker,mGoogleMap,draggable);
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+    }
 
     private void enableNow(){
 
@@ -541,11 +593,15 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         }
     }
 
-
+    /**
+     * set address from favourite to list
+     * @param favouriteSelected FavouriteAddress
+     * @param position position
+     */
     private void setFavouriteSelected(PickDropAddress favouriteSelected,int position){
         listAddressData.set(clickedAddressPostion,favouriteSelected);
         addressAdapter.notifyDataSetChanged();
-        if(position==DESTINATION_SELECTED){
+        if(position>=DESTINATION_SELECTED){
             btnEstimateCost.setVisibility(View.VISIBLE);
         }
     }
@@ -564,11 +620,11 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             pickDropAddress.setAddress_label(place.getName().toString());
             listAddressData.set(position, pickDropAddress);
             addressAdapter.notifyDataSetChanged();
-            if(position==DESTINATION_SELECTED){
+            if(position>=DESTINATION_SELECTED){
                 btnEstimateCost.setVisibility(View.VISIBLE);
             }
         //build address using place id .................
-       BuildAddressService.buildAddresses(mActivity,place.getId());
+        BuildAddressService.buildAddresses(mActivity,place.getId());
 
     }
 
@@ -656,8 +712,9 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             //current order
             if (dateUtils.getUtcDateTime() != null) {
                 Log.e("date", dateUtils.getUtcDateTime());
-                service.setDate(dateUtils.getUtcDateTime());
-                service.setDate_time(dateUtils.getUtcDateTime());
+                //server will pick default time in case of current booking
+               // service.setDate(dateUtils.getUtcDateTime());
+               // service.setDate_time(dateUtils.getUtcDateTime());
            }
         }
         EstimateServiceParams estimateParams=new EstimateServiceParams();
@@ -719,6 +776,8 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     public void onLocation(Location location) {
      if(location!=null){
          mCurrentLocation=location;
+         LatLng latLng=new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
+         addlocationMArker(latLng,true);
      }
     }
 

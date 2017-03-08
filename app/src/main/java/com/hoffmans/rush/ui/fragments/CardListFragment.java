@@ -187,9 +187,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
-
-
-    /**
+   /**
      * popup for deleting a card
      */
     private void showDialog(final String payment_token){
@@ -217,7 +215,6 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
 
         }
     }
-
 
 
     /**
@@ -306,7 +303,6 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
                     }
                 }
             }
-
             @Override
             public void onRequestFailed(String message) {
 

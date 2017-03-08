@@ -151,6 +151,15 @@
 
         <service
             android:name=".services.UpdateCurentLocation"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.driver.activities.UpcomingActivity"
+            android:label="@string/title_activity_upcoming"
+            android:theme="@style/AppTheme" />
+
+        <service
+            android:name=".services.GeoCodingService"
             android:exported="false"></service>
     </application>
 

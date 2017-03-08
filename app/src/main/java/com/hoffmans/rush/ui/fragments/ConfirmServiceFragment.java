@@ -258,6 +258,10 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
                     receiptIntent.putExtra(Constants.KEY_DATA_DATE_TIME,service.getDate_time());
                     receiptIntent.putExtra(Constants.KEY_PICK_ADDRESS,service.getPick_address().getStreetAddress());
                     receiptIntent.putExtra(Constants.KEY_DATA_TRANSACTION,service.getTransactionDetails());
+                    if(service.getDrop_addresses().size()!=0){
+                        PickDropAddress dropAddress =service.getDrop_addresses().get(0);
+                        receiptIntent.putExtra(Constants.KEY_DROP_ADDRESS,dropAddress.getStreetAddress());
+                    }
 
                     startActivity(receiptIntent);
                     // finish confirm service

@@ -17,6 +17,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         Log.d(TAG, "From: " + remoteMessage.getFrom());
-        Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
+       // Map<String ,String> hashMap=remoteMessage.getData();
+      //  Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
     }
 }

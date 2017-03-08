@@ -46,6 +46,7 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
+
     protected void replaceFragment(Fragment fragment) {
         if(mActivity.getToast()!=null){
             mActivity.getToast().cancel();
@@ -78,13 +79,13 @@ public abstract class BaseFragment extends Fragment {
     protected abstract void initListeners();
 
     //addmarker
-    protected Marker addlocationMarker(LatLng latLng, int marker, GoogleMap mMap){
+    protected Marker addlocationMarker(LatLng latLng, int marker, GoogleMap mMap,boolean draggable){
         if(marker==0){
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
-            return   mMap.addMarker(new MarkerOptions().position(latLng).draggable(false));
+            return   mMap.addMarker(new MarkerOptions().position(latLng).draggable(draggable));
         }else {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
-            return  mMap.addMarker(new MarkerOptions().position(latLng).draggable(false).icon(BitmapDescriptorFactory.fromResource(marker)));
+            return  mMap.addMarker(new MarkerOptions().position(latLng).draggable(draggable).icon(BitmapDescriptorFactory.fromResource(marker)));
 
         }
     }

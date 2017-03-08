@@ -24,7 +24,7 @@
         android:layout_alignParentTop="true"
         android:visibility="gone"
         android:layout_alignParentRight="true"
-        android:src="@drawable/ic_close_black"/>
+        android:src="@drawable/ic_close_red"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_below="@+id/viewFrequentlyAddress"

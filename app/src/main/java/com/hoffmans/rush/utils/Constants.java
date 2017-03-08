@@ -35,6 +35,7 @@ public class Constants {
     public static final String KEY_AUTH_ERROR="auth_error";
     public static final String KEY_DATA_DATE_TIME="date_time";
     public static final String KEY_PICK_ADDRESS="pick_address";
+    public static final String KEY_DROP_ADDRESS="drop_address";
     public static final String KEY_DATA_TRANSACTION="transaction_data";
     public static final String IP="";
     public static final int PORT=3000;

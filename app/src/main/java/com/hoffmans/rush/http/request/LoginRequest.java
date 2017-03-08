@@ -16,8 +16,8 @@ import retrofit2.Call;
 
 public class LoginRequest extends BaseRequest {
 
-    public void loginUser(String username,String password, final ApiCallback callback){
-        Call<ResponseBody> loginCall=getAPIClient().login(username,password);
+    public void loginUser(String username,String password,String login_as,String uuid,String device_type,String timeZone ,final ApiCallback callback){
+        Call<ResponseBody> loginCall=getAPIClient().login(username,password,login_as,uuid,device_type,timeZone);
         ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(loginCall);
         connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
             @Override

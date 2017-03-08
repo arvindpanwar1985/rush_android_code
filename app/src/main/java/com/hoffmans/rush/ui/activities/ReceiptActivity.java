@@ -19,8 +19,9 @@ public class ReceiptActivity extends BaseActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_black);
         DateTime dateTime=getIntent().getParcelableExtra(Constants.KEY_DATA_DATE_TIME);
         String street_address=getIntent().getStringExtra(Constants.KEY_PICK_ADDRESS);
+        String drop_address=getIntent().getStringExtra(Constants.KEY_DROP_ADDRESS);
         TransactionDetails transactionDetails=getIntent().getParcelableExtra(Constants.KEY_DATA_TRANSACTION);
-        ReceiptFragment fragment=ReceiptFragment.newInstance(dateTime,transactionDetails,street_address);
+        ReceiptFragment fragment=ReceiptFragment.newInstance(dateTime,transactionDetails,street_address,drop_address);
         replaceFragment(fragment,R.id.contentReceipt,true);
     }
 

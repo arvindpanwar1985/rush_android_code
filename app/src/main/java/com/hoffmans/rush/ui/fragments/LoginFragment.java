@@ -59,6 +59,7 @@ import static com.hoffmans.rush.ui.activities.LoginActivity.REQUEST_GOOGLE_SIGNI
 public class LoginFragment extends BaseFragment implements View.OnClickListener,FacebookCallback<LoginResult> {
 
     private View loginView;
+    private final String login_as="user";
     private TextView txtCreateAccount,txtForgotPassword;
     private Button btnLogin;
     private EditText edtEmail,edtPassword;
@@ -169,10 +170,10 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
      */
     private void proceedToLogin(String email,String password){
 
-        //Progress.showprogress(mActivity,"Loading..",false);
+
         mActivity.showProgress();
         LoginRequest loginRequest =new LoginRequest();
-        loginRequest.loginUser(email, password, new ApiCallback() {
+        loginRequest.loginUser(email, password,login_as,notificationToken,Constants.DEVICE_TYPE,Utils.getTimeZone(), new ApiCallback() {
             @Override
             public void onRequestSuccess(BaseBean body) {
                 //Progress.dismissProgress();

@@ -6,7 +6,8 @@ package com.hoffmans.rush.model;
 
 public class FetchAddressEvent {
     private boolean sucess;
-    private String state,city,country,message;
+
+    private String state,city,country,message,streetAddress;
     public boolean isSucess() {
         return sucess;
     }
@@ -45,5 +46,13 @@ public class FetchAddressEvent {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
     }
 }

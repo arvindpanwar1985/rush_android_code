@@ -302,7 +302,7 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
         mCurrentLocation=location;
         if(mCurrentLocation!=null && mGoogleMap!=null){
             LatLng latLng=new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
-            addlocationMarker(latLng,R.drawable.marker,mGoogleMap);
+            addlocationMarker(latLng,R.drawable.marker,mGoogleMap,false);
             mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
 
             //update the user location
@@ -328,7 +328,7 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
         }
         if(mCurrentLocation!=null && mGoogleMap!=null){
             LatLng latLng=new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
-            addlocationMarker(latLng,R.drawable.marker,mGoogleMap);
+            addlocationMarker(latLng,R.drawable.marker,mGoogleMap,false);
          }
     }
 
@@ -362,7 +362,7 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
                                         if(mLocationData!=null&&mLocationData.getLatKnowLocation()!=null){
                                             mCurrentLocation=mLocationData.getLatKnowLocation();
                                             LatLng latLng=new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
-                                            addlocationMarker(latLng,R.drawable.marker,mGoogleMap);
+                                            addlocationMarker(latLng,R.drawable.marker,mGoogleMap,false);
 
                                             //update the user location
                                             String auth      =appPreference.getUserDetails().getToken();

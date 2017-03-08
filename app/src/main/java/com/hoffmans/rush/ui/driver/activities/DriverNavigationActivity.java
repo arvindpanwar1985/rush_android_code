@@ -166,6 +166,12 @@ public class DriverNavigationActivity extends BaseActivity
                     drawer.closeDrawer(GravityCompat.START);
                 }
                 break;
+
+            case R.id.nav_Upcoming:
+                Intent upcomingIntent = new Intent(DriverNavigationActivity.this, UpcomingActivity.class);
+                upcomingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(upcomingIntent);
+                break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

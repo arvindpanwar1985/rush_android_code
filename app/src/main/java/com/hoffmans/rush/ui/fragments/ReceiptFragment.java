@@ -19,8 +19,8 @@ public class ReceiptFragment extends BaseFragment {
 
     private DateTime date_time;
     private TransactionDetails transactionDetails;
-    private String mStreetAddress;
-    private TextView txtDate,txtTime,txtAmount,txtTransactionId,txtAuthorized,txtPickAddress;
+    private String mStreetAddress,mDropAddress;
+    private TextView txtDate,txtTime,txtAmount,txtTransactionId,txtAuthorized,txtPickAddress,txtDropAddress;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -42,12 +42,13 @@ public class ReceiptFragment extends BaseFragment {
      * @param street_address the street address
      * @return the receipt fragment
      */
-    public static ReceiptFragment newInstance(DateTime dateTime, TransactionDetails details,String street_address) {
+    public static ReceiptFragment newInstance(DateTime dateTime, TransactionDetails details,String street_address,String drop_address) {
         ReceiptFragment fragment = new ReceiptFragment();
         Bundle args = new Bundle();
         args.putParcelable(Constants.KEY_DATA_DATE_TIME, dateTime);
         args.putParcelable(Constants.KEY_DATA_TRANSACTION,details);
         args.putString(Constants.KEY_PICK_ADDRESS,street_address);
+        args.putString(Constants.KEY_DROP_ADDRESS,drop_address);
 
         fragment.setArguments(args);
         return fragment;
@@ -60,6 +61,7 @@ public class ReceiptFragment extends BaseFragment {
             date_time=getArguments().getParcelable(Constants.KEY_DATA_DATE_TIME);
             transactionDetails=getArguments().getParcelable(Constants.KEY_DATA_TRANSACTION);
             mStreetAddress=getArguments().getString(Constants.KEY_PICK_ADDRESS);
+            mDropAddress   =getArguments().getString(Constants.KEY_DROP_ADDRESS);
         }
     }
 
@@ -84,9 +86,10 @@ public class ReceiptFragment extends BaseFragment {
         txtTime          =(TextView)view.findViewById(R.id.reTxtTime);
         txtAmount        =(TextView)view.findViewById(R.id.reTxtAmount);
         txtPickAddress   =(TextView)view.findViewById(R.id.reTxtPickAddress);
+        txtDropAddress   =(TextView)view.findViewById(R.id.reTxtDropAddress);
         txtTransactionId =(TextView)view.findViewById(R.id.reTxtTransactionId);
         txtAuthorized    =(TextView)view.findViewById(R.id.reTxtAuthorised);
-        txtTime    =(TextView)view.findViewById(R.id.reTxtTime);
+        txtTime          =(TextView)view.findViewById(R.id.reTxtTime);
 
         try{setData();}catch (NullPointerException e){};
 
@@ -111,6 +114,7 @@ public class ReceiptFragment extends BaseFragment {
             txtTime.setText(date_time.getTime());
         }
         txtPickAddress.setText(mStreetAddress);
+        txtDropAddress.setText(mDropAddress);
     }
 
 

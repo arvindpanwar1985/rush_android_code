@@ -34,7 +34,7 @@ allprojects {
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.3"
+    buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "com.hoffmans.rush"
         minSdkVersion 16
@@ -89,6 +89,12 @@ dependencies {
 apply plugin: 'com.google.gms.google-services'
 dependencies {
     compile 'com.android.support:support-v4:24.+'
+}
+dependencies {
+    compile 'com.android.support:support-v4:24.+'
+}
+dependencies {
+    compile 'com.android.support.constraint:constraint-layout:+'
 }
 dependencies {
     compile 'com.android.support:support-v4:24.+'

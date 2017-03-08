@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.bean.UserBean;
 import com.hoffmans.rush.http.request.LoginRequest;
@@ -20,6 +21,7 @@ import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.ForgotPassActivity;
 import com.hoffmans.rush.ui.driver.activities.DriverNavigationActivity;
 import com.hoffmans.rush.ui.fragments.BaseFragment;
+import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
 
@@ -31,11 +33,13 @@ import com.hoffmans.rush.utils.Validation;
 public class LoginFragment extends BaseFragment implements View.OnClickListener {
 
     private String TAG=LoginFragment.class.getCanonicalName();
+    private final String login_as="messenger";
     private TextView txtForgotPassword;
     private Button btnLogin;
     private EditText edtEmail,edtPassword;
     public static final String ROLE_CUST   ="Customer";
     public static final String ROLE_DRIVER ="Driver";
+    private String notificationToken;
     public LoginFragment() {
         // Required empty public constructor
     }
@@ -60,6 +64,12 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
         View view= inflater.inflate(com.hoffmans.rush.R.layout.fragment_login_driver, container, false);
         initViews(view);
         initListeners();
+
+        notificationToken =appPreference.getNoticficationToken();
+        if(TextUtils.isEmpty(notificationToken)){
+            notificationToken= FirebaseInstanceId.getInstance().getToken();
+            appPreference.setNotificationToken(notificationToken);
+        }
 
 
         return view;
@@ -138,10 +148,9 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
      */
     private void proceedToLogin(String email,String password){
 
-        //Progress.showprogress(mActivity,"Loading..",false);
         mActivity.showProgress();
         LoginRequest loginRequest =new LoginRequest();
-        loginRequest.loginUser(email, password, new ApiCallback() {
+        loginRequest.loginUser(email, password,login_as,notificationToken, Constants.DEVICE_TYPE,Utils.getTimeZone(), new ApiCallback() {
             @Override
             public void onRequestSuccess(BaseBean body) {
                 //Progress.dismissProgress();

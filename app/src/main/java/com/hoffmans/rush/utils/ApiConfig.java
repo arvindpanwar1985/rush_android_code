@@ -6,12 +6,12 @@ package com.hoffmans.rush.utils;
 
 public class ApiConfig {
 
-
+    public static final String PLACE_BASE_URL="https://maps.googleapis.com/";
     private static final String BASE_URL = "http://35.161.140.168";
     public static String getBaseUrl(){
         return BASE_URL;
     }
-    public static final String DEV_BASE_URL="http://192.168.3.226:3000";
+    public static final String DEV_BASE_URL="http://192.168.3.94:3000";
     public static String getdevBaseUrl(){
         return DEV_BASE_URL;
     }

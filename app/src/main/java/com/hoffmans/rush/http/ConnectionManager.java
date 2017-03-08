@@ -14,7 +14,7 @@ import retrofit2.Response;
  */
 
 public class ConnectionManager  {
-    private static final String STR_NO_CONNECTION ="Trouble reaching to server,No internet connection.";
+    private static final String STR_NO_CONNECTION ="Trouble reaching  server,No internet connection.";
     private static ConnectionManager mConnectionManger;
     private Call<ResponseBody> enqueueCall;
 

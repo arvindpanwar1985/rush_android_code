@@ -30,19 +30,15 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("/auth/authenticate")
-    Call<ResponseBody> login(@Field("login") String email,@Field("password") String password);
+    Call<ResponseBody> login(@Field("login") String email,@Field("password") String password ,@Field("login_as")String login_as ,@Field("udid") String udid,@Field("device_type") String device_type ,@Field("time_zone")String time_zone);
 
     @FormUrlEncoded
     @POST("/api/user/oauthRegister")
     Call<ResponseBody> loginViaSocialNetwork(@Field("uid") String socialId,@Field("first_name") String password,@Field("last_name") String last_name,@Field("email") String email,@Field("provider") String provider,@Field("profile_url") String picture,@Field("uuid") String uuid,@Field("type") String type,@Field("time_zone") String time_zone);
 
-
     @Multipart
     @POST("/api/user/register")
     Call<ResponseBody> createUser(@PartMap() Map<String, RequestBody> requestBodyMap,@Part MultipartBody.Part file);
-
-
-
 
     @POST("/api/user/profile_update")
     Call<ResponseBody> updateUser(@Header("Authorization")String authorization ,@Body HashMap<String,Object> userdetail);
@@ -55,7 +51,6 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("/api/creditcard/addCard")
     Call<ResponseBody> addCreditCard(@Header("Authorization")String authorization,@Field("payment_method_nonce") String payment_method_nonce);
-
 
     @Multipart
     @POST("/api/user/profile_update")
@@ -94,7 +89,6 @@ public interface ApiInterface {
     Call<ResponseBody> getPlacesDetails(@QueryMap(encoded = true) Map<String, String> params);
 
 
-
     @GET("/api/creditcard/delete_card")
     Call<ResponseBody> deleteCard(@Header("Authorization")String authorization,@QueryMap(encoded = true) Map<String, String> params);
 
@@ -116,6 +110,12 @@ public interface ApiInterface {
     @POST("/api/drivers/update_driver_location")
     Call<ResponseBody> updateDriverLocation(@Header("Authorization")String auth,@Field("latitude")String latitude,@Field("longitude")String longitude);
 
+    @FormUrlEncoded
+    @POST("/api/drivers/service_status")
+    Call<ResponseBody> setServiceStatus(@Header("Authorization")String auth,@Field("service_id")String service_id,@Field("service_status")String service_status);
 
 
+
+    @GET("/maps/api/geocode/json")
+    Call<ResponseBody> getPlaceID(@QueryMap(encoded = true) Map<String, String> params);
 }

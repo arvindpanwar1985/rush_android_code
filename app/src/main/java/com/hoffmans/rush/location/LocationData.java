@@ -23,6 +23,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 /**
  * Created by devesh.bhandari on 4/28/2015.
+ * Class to find current location of user ,showing the alert dialog to trun on location whenever possible
  */
 public class LocationData implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -62,7 +63,6 @@ public class LocationData implements GoogleApiClient.ConnectionCallbacks, Google
        // Then check whether current location settings are satisfied:
         result = LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
         callbacksResults();
-
 
        }
 
@@ -142,7 +142,10 @@ public class LocationData implements GoogleApiClient.ConnectionCallbacks, Google
         mGoogleApiClient = null;
     }
 
-
+    /**
+     *
+      * @return last knowlocation of user
+     */
     public Location getLatKnowLocation() {
         try {
             latKnowLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
