@@ -38,19 +38,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class BuildAddressService extends IntentService {
 
-
-
-    private static  final String KEY_API_KEY="key";
-    private String MESSAGE="Unable to find Geocode data.";
-    private static  final String KEY_STATUS="status";
-    private static  final String KEY_OK="OK";
-    private static  final String KEY_PLACE_ID="placeid";
-    private static  final String KEY_RESULT="result";
-    private static  final String TYPE_COUNTRY="country";
-    private static  final String TYPE_LOCALITY="locality";
-    private static  final String KEY_FORMATTED_ADDRESS="formatted_address";
-    private static  final String TYPE_ADMIN_AREA="administrative_area_level_1";
-    private static  final String ACTION_BUILD_ADDRESS = "com.hoffmans.rush.services.action.BUILD_ADDRESS";
+    private static final String KEY_API_KEY                   ="key";
+    private static final String MESSAGE                       ="Unable to find Geocode data.";
+    private static final String KEY_STATUS                    ="status";
+    private static final String KEY_OK                        ="OK";
+    private static final String KEY_PLACE_ID                  ="placeid";
+    private static final String KEY_RESULT                    ="result";
+    private static final String TYPE_COUNTRY                  ="country";
+    private static final String TYPE_LOCALITY                 ="locality";
+    private static final String KEY_FORMATTED_ADDRESS         ="formatted_address";
+    private static final String TYPE_ADMIN_AREA               ="administrative_area_level_1";
+    private static final String ACTION_BUILD_ADDRESS          = "com.hoffmans.rush.services.action.BUILD_ADDRESS";
     private Gson gson=new GsonBuilder().create();
     private static Retrofit retrofit;
     private FetchAddressEvent fetchAddressEvent=new FetchAddressEvent();
@@ -76,15 +74,11 @@ public class BuildAddressService extends IntentService {
             }
         }
     }
-
-
     /**
      * Handle action Foo in the provided background thread with the provided
      * parameters.
      */
     private void handleActionFoo(String placeId) {
-
-
         getPlaceDetails(placeId);
 
     }
@@ -110,7 +104,6 @@ public class BuildAddressService extends IntentService {
                 }
 
             }
-
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 setFetchAddressstatus(t.getMessage(),false);

@@ -362,7 +362,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             @Override
             public void onMarkerDrag(Marker marker) {
 
-                //mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+                //
             }
 
             @Override
@@ -615,6 +615,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
             PickDropAddress pickDropAddress=listAddressData.get(position);
             pickDropAddress.setStreetAddress(place.getAddress().toString());
+            pickDropAddress.setFavorite(false);
             pickDropAddress.setLatitude(place.getLatLng().latitude);
             pickDropAddress.setLongitude(place.getLatLng().longitude);
             pickDropAddress.setAddress_label(place.getName().toString());

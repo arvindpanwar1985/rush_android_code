@@ -95,8 +95,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         edtEmail=(EditText)view.findViewById(com.hoffmans.rush.R.id.flUsername);
         btnFb=(Button)view.findViewById(R.id.frBtnFacebook);
         btnGoogle=(Button)view.findViewById(R.id.frBtnGoogle);
-        Intent serviceIntent=new Intent(mActivity, TrackingService.class);
-        mActivity.startService(serviceIntent);
+
  
        }
 

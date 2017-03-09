@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.hoffmans.rush.R;
-import com.hoffmans.rush.ui.driver.activities.DriverLoginActivity;
 
 /**
  * Created by devesh on 13/2/17.
@@ -47,9 +47,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btnDriver:
-                Intent driverIntent=new Intent(getApplicationContext(), DriverLoginActivity.class);
+                Toast.makeText(getApplicationContext(),"Under Development",Toast.LENGTH_SHORT).show();
+                /*Intent driverIntent=new Intent(getApplicationContext(), DriverLoginActivity.class);
                 driverIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(driverIntent);
+                startActivity(driverIntent);*/
                 break;
 
             case R.id.btnCustomer:

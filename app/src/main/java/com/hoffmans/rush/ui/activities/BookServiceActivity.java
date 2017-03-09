@@ -192,10 +192,10 @@ public class BookServiceActivity extends BaseActivity
                 favIntent.putExtra(Constants.KEY_IS_FAVOURITE_SELECTABLE,true);
                 startActivity(favIntent);
                 break;
-            case R.id.nav_settings:
+           /* case R.id.nav_settings:
                 Intent settingsIntent=new Intent(BookServiceActivity.this, SettingActivity.class);
                 startActivity(settingsIntent);
-                break;
+                break;*/
             case R.id.nav_logout:
                 appPreference.logoutUser();
                 Intent loginIntent=new Intent(BookServiceActivity.this,MainActivity.class);

@@ -160,7 +160,12 @@
 
         <service
             android:name=".services.GeoCodingService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.driver.activities.AcceptOrderActivity"
+            android:label="@string/title_activity_accept_order"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

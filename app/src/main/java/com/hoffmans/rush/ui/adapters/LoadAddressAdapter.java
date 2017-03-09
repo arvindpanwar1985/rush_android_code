@@ -91,7 +91,7 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
         final  PickDropAddress address=addressdata.get(position);
         if( !TextUtils.isEmpty(address.getStreetAddress())){
             //update address
-            showDelete(position,holder,false);
+            //showDelete(position,holder,false);
             holder.txtAddress.setText(address.getStreetAddress());
             holder.imgFav.setVisibility(View.VISIBLE);
 
@@ -113,10 +113,11 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
             }
         }else{
             holder.imgFav.setVisibility(View.INVISIBLE);
-            showDelete(position,holder,true);
-
+            //showDelete(position,holder,true);
+            holder.txtAddress.setText(address.getStreetAddress());
         }
 
+        showDelete(position,holder,true);
         holder.txtAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
