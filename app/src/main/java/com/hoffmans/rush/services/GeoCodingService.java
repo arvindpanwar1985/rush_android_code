@@ -42,7 +42,6 @@ public class GeoCodingService extends IntentService {
     private String MESSAGE="Unable to find Geocode data.";
     private static Retrofit retrofit;
     private FetchAddressEvent fetchAddressEvent=new FetchAddressEvent();
-
     private static final String EXTRA_LAT    = "lat";
     private static final String EXTRA_LNG    = "lng";
     private static final String KEY_LATLNG   = "latlng";
@@ -142,7 +141,7 @@ public class GeoCodingService extends IntentService {
                     String placeID=firstJsonObject.getString(KEY_PLACE_ID);
                     if(placeID!=null && !TextUtils.isEmpty(placeID)){
                         //call new intent service to get address component detail.
-                        BuildAddressService.buildAddresses(GeoCodingService.this,placeID);
+                        BuildAddressService.buildAddresses(GeoCodingService.this,placeID,true         );
                     }else{
                         setFetchAddressstatus(MESSAGE,false);
                     }

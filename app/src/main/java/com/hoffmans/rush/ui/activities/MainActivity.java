@@ -48,7 +48,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         switch (view.getId()){
             case R.id.btnDriver:
                 Toast.makeText(getApplicationContext(),"Under Development",Toast.LENGTH_SHORT).show();
-                /*Intent driverIntent=new Intent(getApplicationContext(), DriverLoginActivity.class);
+               /* Intent driverIntent=new Intent(getApplicationContext(), DriverLoginActivity.class);
                 driverIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(driverIntent);*/
                 break;

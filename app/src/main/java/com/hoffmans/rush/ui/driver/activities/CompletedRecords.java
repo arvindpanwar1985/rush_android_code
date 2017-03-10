@@ -4,20 +4,17 @@ import android.os.Bundle;
 
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.ui.activities.BaseActivity;
+import com.hoffmans.rush.ui.driver.fragments.CompletedRecordFragment;
 
-public class AcceptOrderActivity extends BaseActivity {
+
+public class CompletedRecords extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initToolBar("",false);
-        hideToolbar();
-        getLayoutInflater().inflate(R.layout.activity_accept_order,getParentView());
-        initViews();
-        initListeners();
-
-
-
+        getLayoutInflater().inflate(R.layout.activity_driver_completed_records,getParentView());
+        CompletedRecordFragment completedRecordFragment=CompletedRecordFragment.newInstance("","");
+        replaceFragment(completedRecordFragment,R.id.contentDriverRecords,true);
     }
 
     @Override

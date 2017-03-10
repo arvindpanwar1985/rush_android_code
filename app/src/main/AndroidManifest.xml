@@ -165,6 +165,10 @@
         <activity
             android:name=".ui.driver.activities.AcceptOrderActivity"
             android:label="@string/title_activity_accept_order"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.driver.activities.CompletedRecords"
+            android:label="@string/title_activity_completed_records"
             android:theme="@style/AppTheme"></activity>
     </application>
 

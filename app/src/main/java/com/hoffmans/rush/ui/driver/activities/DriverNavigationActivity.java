@@ -172,6 +172,11 @@ public class DriverNavigationActivity extends BaseActivity
                 upcomingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(upcomingIntent);
                 break;
+            case R.id.nav_record:
+                Intent recordIntent = new Intent(DriverNavigationActivity.this, CompletedRecords.class);
+                recordIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(recordIntent);
+                break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

@@ -5,9 +5,10 @@ package com.hoffmans.rush.model;
  */
 
 public class FetchAddressEvent {
-    private boolean sucess;
+    private boolean sucess,isDrag;
 
     private String state,city,country,message,streetAddress;
+    private double lat,lng;
     public boolean isSucess() {
         return sucess;
     }
@@ -32,6 +33,22 @@ public class FetchAddressEvent {
         this.city = city;
     }
 
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
+
     public String getCountry() {
         return country;
     }
@@ -54,5 +71,13 @@ public class FetchAddressEvent {
 
     public void setStreetAddress(String streetAddress) {
         this.streetAddress = streetAddress;
+    }
+
+    public boolean isDrag() {
+        return isDrag;
+    }
+
+    public void setDrag(boolean drag) {
+        isDrag = drag;
     }
 }

@@ -8,8 +8,11 @@ import android.widget.TextView;
 
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.model.DateTime;
+import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.TransactionDetails;
 import com.hoffmans.rush.utils.Constants;
+
+import java.util.ArrayList;
 
 
 /**
@@ -19,11 +22,9 @@ public class ReceiptFragment extends BaseFragment {
 
     private DateTime date_time;
     private TransactionDetails transactionDetails;
-    private String mStreetAddress,mDropAddress;
+    private String mStreetAddress;
+    private ArrayList<PickDropAddress> dropAddressArrayList;
     private TextView txtDate,txtTime,txtAmount,txtTransactionId,txtAuthorized,txtPickAddress,txtDropAddress;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
 
 
     /**
@@ -42,13 +43,13 @@ public class ReceiptFragment extends BaseFragment {
      * @param street_address the street address
      * @return the receipt fragment
      */
-    public static ReceiptFragment newInstance(DateTime dateTime, TransactionDetails details,String street_address,String drop_address) {
+    public static ReceiptFragment newInstance(DateTime dateTime, TransactionDetails details,String street_address,ArrayList<PickDropAddress> dropAddressArrayList) {
         ReceiptFragment fragment = new ReceiptFragment();
         Bundle args = new Bundle();
         args.putParcelable(Constants.KEY_DATA_DATE_TIME, dateTime);
         args.putParcelable(Constants.KEY_DATA_TRANSACTION,details);
         args.putString(Constants.KEY_PICK_ADDRESS,street_address);
-        args.putString(Constants.KEY_DROP_ADDRESS,drop_address);
+        args.putParcelableArrayList(Constants.KEY_DROP_ADDRESS,dropAddressArrayList);
 
         fragment.setArguments(args);
         return fragment;
@@ -61,7 +62,7 @@ public class ReceiptFragment extends BaseFragment {
             date_time=getArguments().getParcelable(Constants.KEY_DATA_DATE_TIME);
             transactionDetails=getArguments().getParcelable(Constants.KEY_DATA_TRANSACTION);
             mStreetAddress=getArguments().getString(Constants.KEY_PICK_ADDRESS);
-            mDropAddress   =getArguments().getString(Constants.KEY_DROP_ADDRESS);
+            dropAddressArrayList   =getArguments().getParcelableArrayList(Constants.KEY_DROP_ADDRESS);
         }
     }
 
@@ -114,7 +115,32 @@ public class ReceiptFragment extends BaseFragment {
             txtTime.setText(date_time.getTime());
         }
         txtPickAddress.setText(mStreetAddress);
-        txtDropAddress.setText(mDropAddress);
+        if(dropAddressArrayList.size()>1) {
+            setMultipleAddresses();
+        }else{
+            txtDropAddress.setText(dropAddressArrayList.get(0).getStreetAddress());
+        }
+
+    }
+
+    /**
+     * set multiple drop addresses
+     */
+    private void setMultipleAddresses(){
+        if(dropAddressArrayList!=null && dropAddressArrayList.size()>0){
+            StringBuilder dropAddressBuilder=null;
+            for(int i=0;i<dropAddressArrayList.size();i++){
+                PickDropAddress dropAddress=dropAddressArrayList.get(i);
+                int serialNumber=i+1;
+                if(i==0) {
+                    dropAddressBuilder = new StringBuilder().append(serialNumber).append(". ");
+                    dropAddressBuilder.append(dropAddress.getStreetAddress());
+                }else{
+                    dropAddressBuilder.append("\n").append(serialNumber).append(". ").append(dropAddress.getStreetAddress());
+                }
+            }
+            txtDropAddress.setText(dropAddressBuilder.toString());
+        }
     }
 
 

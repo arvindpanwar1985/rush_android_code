@@ -72,6 +72,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_CANCELED;
+import static com.hoffmans.rush.R.drawable.marker;
 
 
 public class SelectVechileFragment extends BaseFragment implements OnitemClickListner.OnFrequentAddressClicked,View.OnClickListener,GoogleApiClient.OnConnectionFailedListener,LocationInterface ,OnMapReadyCallback{
@@ -281,6 +282,21 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         }
     }
 
+    /**
+     *
+     * @return updated postion of source and destination
+     */
+    public int getUpdatedPosition() {
+        return clickedAddressPostion;
+    }
+
+    /**
+     * set updated position
+     * @param clickedAddressPostion
+     */
+    public void setUpdatedPosition(int clickedAddressPostion) {
+        this.clickedAddressPostion = clickedAddressPostion;
+    }
 
     /**
      * validate the inputs
@@ -293,6 +309,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         String destination=listAddressData.get(1).getStreetAddress();
         if(TextUtils.isEmpty(source)){
             mActivity.showSnackbar("Please select source",0);
+
             return;
         }
         if(TextUtils.isEmpty(destination)){
@@ -319,20 +336,30 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     public void onFetchAddressEvent(FetchAddressEvent event) {
         Progress.dismissProgress();
         if(event.isSucess()) {
-               if (clickedAddressPostion == 0) {
-                    PickDropAddress pickDropAddress = listAddressData.get(clickedAddressPostion);
+               if (getUpdatedPosition() == 0) {
+                    PickDropAddress pickDropAddress = listAddressData.get(getUpdatedPosition());
                     pickDropAddress.setCountry(event.getCountry());
                     pickDropAddress.setState(event.getState());
                     pickDropAddress.setCity(event.getCity());
+                    pickDropAddress.setLatitude(event.getLat());
+                    pickDropAddress.setLongitude(event.getLng());
                     pickDropAddress.setStreetAddress(event.getStreetAddress());
-                    listAddressData.set(clickedAddressPostion, pickDropAddress);
+                    listAddressData.set(getUpdatedPosition(), pickDropAddress);
                     addressAdapter.notifyDataSetChanged();
+                    LatLng sourceLatng=new LatLng(event.getLat(),event.getLng());
+                    //do nothing with marker when not dragged
+                    if(!event.isDrag()) {
+                        mGoogleMap.clear();
+                        addlocationMArker(sourceLatng, true);
+                    }
                 } else {
-                    PickDropAddress dropAddress = listAddressData.get(clickedAddressPostion);
+                    PickDropAddress dropAddress = listAddressData.get(getUpdatedPosition());
                     dropAddress.setCountry(event.getCountry());
                     dropAddress.setState(event.getState());
+                    dropAddress.setLatitude(event.getLat());
+                    dropAddress.setLongitude(event.getLng());
                     dropAddress.setCity(event.getCity());
-                    listAddressData.set(clickedAddressPostion, dropAddress);
+                    listAddressData.set(getUpdatedPosition(), dropAddress);
                 }
         }
     }
@@ -361,7 +388,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
             @Override
             public void onMarkerDrag(Marker marker) {
-
+                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
                 //
             }
 
@@ -369,7 +396,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             public void onMarkerDragEnd(Marker marker) {
                 Log.e(TAG,"drag end");
                 //set update postion to source location
-                clickedAddressPostion=0;
+                setUpdatedPosition(0);
                 Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
                 GeoCodingService.getInstance(mActivity,marker.getPosition());
             }
@@ -394,7 +421,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
      * @param draggable
      */
     private void addlocationMArker(LatLng latLng,boolean draggable){
-        addlocationMarker(latLng,R.drawable.marker,mGoogleMap,draggable);
+        addlocationMarker(latLng, marker,mGoogleMap,draggable);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
     }
 
@@ -490,7 +517,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     @Override
     public void onitemclicked(View view, int position) {
 
-       clickedAddressPostion=position;
+       setUpdatedPosition(position);
        try {
             Intent intent =
                     new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
@@ -512,7 +539,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
      */
     @Override
     public void onfrequentAddressclicked(View view, int position) {
-        clickedAddressPostion=position;
+        setUpdatedPosition(position);
         Intent favIntent=new Intent(mActivity, FavouriteActivity.class);
         favIntent.putExtra(Constants.KEY_IS_FAVOURITE_SELECTABLE,false);
         startActivityForResult(favIntent,REQUEST_FAVOURITE);
@@ -520,7 +547,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
     @Override
     public void onFavoriteAddressclicked(View view, final int position) {
-        clickedAddressPostion=position;
+        setUpdatedPosition(position);
         // dialog to add to favourite
         try {
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mActivity);
@@ -552,10 +579,10 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
     @Override
     public void onCloseButtomClicked(View view, int postion) {
-        clickedAddressPostion=postion;
+        setUpdatedPosition(postion);
         if(listAddressData!=null){
             try {
-                PickDropAddress pickAddressToRemove = listAddressData.get(clickedAddressPostion);
+                PickDropAddress pickAddressToRemove = listAddressData.get(getUpdatedPosition());
                 listAddressData.remove(pickAddressToRemove);
                 if(addressAdapter!=null){
                     addressAdapter.notifyDataSetChanged();
@@ -575,7 +602,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                 try {
                     Place place = PlaceAutocomplete.getPlace(mActivity, data);
                     Log.i(TAG, "Place: " + place.getName()+ ""+place.getAddress());
-                    setAddress(place, clickedAddressPostion);
+                    setAddress(place, getUpdatedPosition());
                 }catch (Exception e){
 
                 }
@@ -588,7 +615,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         }else if(requestCode==REQUEST_FAVOURITE && resultCode==mActivity.RESULT_OK){
             if(data!=null){
                 PickDropAddress favouriteSelectedAddress=data.getParcelableExtra("fav_data");
-                setFavouriteSelected(favouriteSelectedAddress,clickedAddressPostion);
+                setFavouriteSelected(favouriteSelectedAddress,getUpdatedPosition());
             }
         }
     }
@@ -599,10 +626,16 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
      * @param position position
      */
     private void setFavouriteSelected(PickDropAddress favouriteSelected,int position){
-        listAddressData.set(clickedAddressPostion,favouriteSelected);
+        listAddressData.set(getUpdatedPosition(),favouriteSelected);
         addressAdapter.notifyDataSetChanged();
         if(position>=DESTINATION_SELECTED){
             btnEstimateCost.setVisibility(View.VISIBLE);
+        }
+        // add marker
+        if(getUpdatedPosition()==0) {
+            mGoogleMap.clear();
+            LatLng favouriteLatLng = new LatLng(favouriteSelected.getLatitude(), favouriteSelected.getLongitude());
+            addlocationMArker(favouriteLatLng, true);
         }
     }
 
@@ -625,7 +658,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                 btnEstimateCost.setVisibility(View.VISIBLE);
             }
         //build address using place id .................
-        BuildAddressService.buildAddresses(mActivity,place.getId());
+           BuildAddressService.buildAddresses(mActivity,place.getId(),false);
 
     }
 
@@ -779,6 +812,13 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
          mCurrentLocation=location;
          LatLng latLng=new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
          addlocationMArker(latLng,true);
+
+         //set the source when we get the location first time
+         //set update postion to source location
+         setUpdatedPosition(0);
+         LatLng latLng1=new LatLng(location.getLatitude(),location.getLongitude());
+         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
+         GeoCodingService.getInstance(mActivity,latLng1);
      }
     }
 
@@ -832,7 +872,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                 mActivity.showSnackbar(body.getMessage(),0);
                 // make changes to pickdropAddress
                 pickDropAddress.setFavorite(true);
-                listAddressData.set(clickedAddressPostion,pickDropAddress);
+                listAddressData.set(getUpdatedPosition(),pickDropAddress);
                 addressAdapter.notifyDataSetChanged();
             }
 

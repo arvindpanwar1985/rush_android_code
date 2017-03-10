@@ -49,17 +49,29 @@ public class BuildAddressService extends IntentService {
     private static final String KEY_FORMATTED_ADDRESS         ="formatted_address";
     private static final String TYPE_ADMIN_AREA               ="administrative_area_level_1";
     private static final String ACTION_BUILD_ADDRESS          = "com.hoffmans.rush.services.action.BUILD_ADDRESS";
+    private static final String KEY_LOCATION                  ="location";
+    private static final String KEY_LAT                       ="lat";
+    private static final String KEY_LNG                       ="lng";
+    private static final String KEY_DRAG                      ="marker_drag";
     private Gson gson=new GsonBuilder().create();
     private static Retrofit retrofit;
     private FetchAddressEvent fetchAddressEvent=new FetchAddressEvent();
+    private boolean mIsDrag;
     public BuildAddressService() {
         super("BuildAddressService");
     }
 
-    public static void buildAddresses(Context context, String placeId) {
+    /**
+     *
+     * @param context
+     * @param placeId placeId of particular location
+     * @param isDraggable
+     */
+    public static void buildAddresses(Context context, String placeId,boolean isDraggable) {
         Intent intent = new Intent(context, BuildAddressService.class);
         intent.setAction(ACTION_BUILD_ADDRESS);
         intent.putExtra(KEY_PLACE_ID,placeId);
+        intent.putExtra(KEY_DRAG,isDraggable);
         context.startService(intent);
     }
 
@@ -69,7 +81,7 @@ public class BuildAddressService extends IntentService {
             final String action = intent.getAction();
             if (ACTION_BUILD_ADDRESS.equals(action)) {
                 final String plcaeId=intent.getStringExtra(KEY_PLACE_ID);
-
+                mIsDrag =intent.getBooleanExtra(KEY_DRAG,false);
                 handleActionFoo(plcaeId);
             }
         }
@@ -135,9 +147,15 @@ public class BuildAddressService extends IntentService {
                         }
                     }
                 }
+                JSONObject locationObject=json.getJSONObject("geometry").getJSONObject(KEY_LOCATION);
+                if(locationObject!=null) {
+                    fetchAddressEvent.setLat(locationObject.getDouble(KEY_LAT));
+                    fetchAddressEvent.setLng(locationObject.getDouble(KEY_LNG));
+                }
                 String formatted_Address=json.getString(KEY_FORMATTED_ADDRESS);
                 fetchAddressEvent.setStreetAddress(formatted_Address);
                 fetchAddressEvent.setCity(city);
+                fetchAddressEvent.setDrag(mIsDrag);
 
                 fetchAddressEvent.setCountry(country);
                 fetchAddressEvent.setState(state);
@@ -183,7 +201,6 @@ public class BuildAddressService extends IntentService {
             return apiInterface;
         }
     }
-
 
     @Override
     public void onDestroy() {
