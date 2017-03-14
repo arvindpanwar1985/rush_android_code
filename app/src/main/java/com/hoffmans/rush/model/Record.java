@@ -1,5 +1,7 @@
 package com.hoffmans.rush.model;
 
+import java.util.List;
+
 /**
  * Created by devesh on 24/1/17.
  */
@@ -11,6 +13,8 @@ public class Record {
  private Estimate estimate;
  private VechileDetail vehicle_details;
  private PickDropAddress pick_up;
+ private List<PickDropAddress>drop_down;
+    private CustomerDetail customer_details;
 
     public DateTime getDate_time() {
         return date_time;
@@ -50,5 +54,22 @@ public class Record {
 
     public void setPick_up(PickDropAddress pick_up) {
         this.pick_up = pick_up;
+    }
+
+    public List<PickDropAddress> getDrop_down() {
+        return drop_down;
+    }
+
+    public CustomerDetail getCustomer_details() {
+        return customer_details;
+    }
+
+    public void setCustomer_details(CustomerDetail customer_details) {
+        this.customer_details = customer_details;
+    }
+
+    public void setDrop_down(List<PickDropAddress> drop_down) {
+        this.drop_down = drop_down;
+
     }
 }

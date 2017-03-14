@@ -16,8 +16,6 @@
             class="com.google.android.gms.maps.SupportMapFragment"
             />
 
-
-
          <include
               android:id="@+id/incStatusbar"
               android:layout_width="wrap_content"
@@ -33,6 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_7"
+            android:visibility="gone"
             android:gravity="bottom"
             android:layout_marginBottom="@dimen/dp_30"
             layout="@layout/view_notification"/>

@@ -118,4 +118,12 @@ public class AppPreference {
         return mPref.getString(PrefConstant.KEY_NOTIFICATION_TOKEN,"");
     }
 
+    public void setPause(boolean isPause){
+        mPref.edit().putBoolean(PrefConstant.KEY_PAUSE_REUSME,isPause).commit();
+    }
+
+    public  boolean getPause(){
+        return mPref.getBoolean(PrefConstant.KEY_PAUSE_REUSME,false);
+    }
+
 }

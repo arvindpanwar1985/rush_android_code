@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,10 +33,17 @@ import com.hoffmans.rush.location.LocationData;
 import com.hoffmans.rush.location.LocationInterface;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.services.UpdateCurentLocation;
+import com.hoffmans.rush.ui.driver.activities.AcceptOrderActivity;
 import com.hoffmans.rush.ui.fragments.BaseFragment;
 import com.hoffmans.rush.utils.Progress;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static org.greenrobot.eventbus.util.ErrorDialogManager.KEY_MESSAGE;
 
 
 public class HomeFragment extends BaseFragment implements LocationInterface ,OnMapReadyCallback,View.OnClickListener{
@@ -44,6 +52,7 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
     private static final String DRIVER_STATUS_INACTIVE="inactive";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private  String KEY_SERVICE_ID   ="service_id";
     private static final int REQUEST_LOCATION_PERMISSION=2;
     private Location  mCurrentLocation;
     private GoogleMap mGoogleMap;
@@ -53,6 +62,7 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
     private String mParam1;
     private String mParam2;
     private View view;
+    private String mServiceId;
     private RelativeLayout includedNotificationView;
     public HomeFragment() {
         // Required empty public constructor
@@ -118,10 +128,27 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
         txtInservice.setSelected(true);
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        appPreference.setPause(false);
+        EventBus.getDefault().register(this);
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        appPreference.setPause(true);
+        EventBus.getDefault().unregister(this);
+    }
+
     @Override
     protected void initListeners() {
         txtInservice.setOnClickListener(this);
         txtOutOfService.setOnClickListener(this);
+        includedNotificationView.setOnClickListener(this);
     }
 
 
@@ -134,10 +161,29 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
             case R.id.txtOutOfservice:
                 enableOutOfservice(true);
                 break;
+            case R.id.notificationBar:
+                if(!TextUtils.isEmpty(mServiceId)){
+                    Intent acceptOrderIntent=new Intent(mActivity, AcceptOrderActivity.class);
+                    acceptOrderIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    acceptOrderIntent.putExtra(KEY_MESSAGE,"");
+                    acceptOrderIntent.putExtra(KEY_SERVICE_ID,mServiceId);
+                    startActivity(acceptOrderIntent);
+                }
+                break;
         }
     }
 
 
+    /**
+     * callback when notifcation received for new order
+     * @param serviceID
+     *
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNotificationRecevied(String serviceID) {
+        includedNotificationView.setVisibility(View.VISIBLE);
+        mServiceId=serviceID;
+    }
 
     private void enableInService(boolean showDialog){
 

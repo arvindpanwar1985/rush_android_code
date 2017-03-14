@@ -139,6 +139,8 @@
     <string name="geo_coding_key">AIzaSyBnCvbt86W9GGcNcOIzCPF2mkMauYRgA2o</string>
     <string name="title_activity_accept_order">AcceptOrderActivity</string>
     <string name="title_activity_completed_records">CompletedRecords</string>
+    <string name="str_source">Source</string>
+    <string name="str_dest">Destination</string>
 
 
 </resources>

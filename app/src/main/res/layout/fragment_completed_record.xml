@@ -1,13 +1,55 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_app"
     tools:context="com.hoffmans.rush.ui.driver.fragments.CompletedRecordFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_above="@+id/linearLoadMore"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_10"
+        android:id="@+id/recordList"/>
+    <TextView
+        android:id="@+id/txtNorecords"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:textSize="@dimen/sp_16"
+        android:textColor="@android:color/white"
+        android:textStyle="bold|italic"
+        android:text="No records found." />
+
+
+    <LinearLayout
+        android:id="@+id/linearLoadMore"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_4"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressLoadMore"
+            android:layout_gravity="center|center_horizontal"
+            android:layout_centerHorizontal="true"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textStyle="bold|italic"
+            android:textSize="@dimen/sp_14"
+            android:layout_gravity="center|center_horizontal"
+            android:text="Loading.."/>
+    </LinearLayout>
+
+</RelativeLayout>

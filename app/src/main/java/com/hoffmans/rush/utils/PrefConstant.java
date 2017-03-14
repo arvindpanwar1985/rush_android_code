@@ -18,4 +18,5 @@ public class PrefConstant {
     public static String IS_SOCIAL_PROVIDER  ="isSocialProvider";
     public static String KEY_CURRENCY_ID  ="currency_id";
     public static String KEY_NOTIFICATION_TOKEN="notification_token";
+    public static String KEY_PAUSE_REUSME="pause_resume";
 }

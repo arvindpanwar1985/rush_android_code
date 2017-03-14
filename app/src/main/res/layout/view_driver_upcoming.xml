@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:id="@+id/frame"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/transparent"
+    android:background="@drawable/bg_app"
     android:layout_height="wrap_content">
 
     <RelativeLayout
@@ -54,37 +54,37 @@
             android:layout_alignParentLeft="true"
             layout="@layout/layout_price_estimated"/>
 
-           <LinearLayout
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:orientation="vertical"
-               android:layout_alignTop="@+id/viewPriceEstimated"
-               android:layout_marginTop="@dimen/dp_3"
-               android:layout_below="@+id/txtARName"
-               android:layout_toRightOf="@+id/viewPriceEstimated"
-               android:layout_marginLeft="@dimen/dp_20">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignTop="@+id/viewPriceEstimated"
+            android:layout_marginTop="@dimen/dp_3"
+            android:layout_below="@+id/txtARName"
+            android:layout_toRightOf="@+id/viewPriceEstimated"
+            android:layout_marginLeft="@dimen/dp_20">
 
-               <TextView
-                   android:id="@+id/txtARSource"
-                   android:textColor="@color/colorPrimary"
-                   android:layout_width="wrap_content"
-                   android:text="Source: panama city panama"
-                   android:textStyle="italic"
-                   android:textSize="@dimen/sp_12"
-                   android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/txtARSource"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="wrap_content"
+                android:text="Source: panama city panama"
+                android:textStyle="italic"
+                android:textSize="@dimen/sp_12"
+                android:layout_height="wrap_content"/>
 
 
-               <TextView
-                   android:id="@+id/txtARDestination"
-                   android:textColor="@color/colorPrimary"
-                   android:layout_width="wrap_content"
-                   android:layout_marginTop="@dimen/dp_5"
-                   android:text="Destination: panama city panama"
-                   android:textStyle="italic"
-                   android:textSize="@dimen/sp_12"
-                   android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/txtARDestination"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/dp_5"
+                android:text="Destination: panama city panama"
+                android:textStyle="italic"
+                android:textSize="@dimen/sp_12"
+                android:layout_height="wrap_content"/>
 
-               </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -94,23 +94,23 @@
             android:layout_marginTop="@dimen/dp_20"
             android:gravity="center_horizontal">
             <Button
-                android:id="@+id/btnAccept"
+                android:id="@+id/btnStart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Accept"/>
+                android:text="Start"/>
 
 
             <Button
-                android:id="@+id/btnReject"
+                android:id="@+id/btnComplete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_10"
-                android:text="Reject"/>
-            </LinearLayout>
+                android:text="Complete"/>
+        </LinearLayout>
 
     </RelativeLayout>
 
-   <de.hdodenhof.circleimageview.CircleImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imgAcceptreject"
         android:layout_width="@dimen/dp_60"
         android:layout_height="@dimen/dp_60"

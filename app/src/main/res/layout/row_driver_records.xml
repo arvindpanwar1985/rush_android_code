@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark">
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:layout_marginBottom="@dimen/dp_7">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_row"
+        android:background="@drawable/bg_accept_order"
         android:paddingLeft="@dimen/dp_20"
         android:paddingRight="@dimen/dp_20"
         android:paddingTop="@dimen/dp_7"
@@ -39,7 +40,7 @@
                  android:textStyle="bold|italic"
                  android:textSize="@dimen/sp_14"
                  android:layout_alignParentTop="true"
-                 android:text=".Yasir Hammed  .+91812652593"/>
+                 android:text=""/>
              <TextView
                  android:id="@+id/txtSource"
                  android:layout_width="wrap_content"

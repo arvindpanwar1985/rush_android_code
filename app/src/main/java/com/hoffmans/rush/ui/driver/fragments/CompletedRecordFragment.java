@@ -3,12 +3,27 @@ package com.hoffmans.rush.ui.driver.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.bean.BaseBean;
+import com.hoffmans.rush.bean.RecordBean;
+import com.hoffmans.rush.http.request.ServiceRequest;
+import com.hoffmans.rush.listners.ApiCallback;
+import com.hoffmans.rush.model.Record;
 import com.hoffmans.rush.ui.fragments.BaseFragment;
+import com.hoffmans.rush.utils.Constants;
+import com.hoffmans.rush.utils.Progress;
+import com.hoffmans.rush.widgets.EndlessRecyclerViewScrollListener;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,11 +32,24 @@ import com.hoffmans.rush.ui.fragments.BaseFragment;
  */
 public class CompletedRecordFragment extends BaseFragment {
 
+    private static final String KEY_IS_RECORD      ="isRecord";
+    private static final String KEY_PAGE           ="page";
+    private static final String KEY_STATE          ="state";
+    private static final String KEY_PER_PAGE       ="perpage";
+    private static final String STATE_COMPLETED    ="completed";
+    private static final String DEFAULT_ITEMS      ="5";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private EndlessRecyclerViewScrollListener scrollListener;
+    private int records_count,currentListSize;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager linearLayoutManager;
     private String mParam1;
     private String mParam2;
+    private List<Record> recordList;
+    private TextView  txtNorecords;
+    private LinearLayout linearProgress;
+    private com.hoffmans.rush.ui.driver.adapters.RecordAdapter mAdapter;
 
 
     public CompletedRecordFragment() {
@@ -71,11 +99,116 @@ public class CompletedRecordFragment extends BaseFragment {
     @Override
     protected void initViews(View view) {
 
+        recyclerView=(RecyclerView)view.findViewById(R.id.recordList);
+        linearLayoutManager = new LinearLayoutManager(mActivity);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        txtNorecords =(TextView)view.findViewById(R.id.txtNorecords);
+        linearProgress=(LinearLayout)view.findViewById(R.id.linearLoadMore);
+        getRecordData(buildParams(String.valueOf(1),DEFAULT_ITEMS));
     }
 
     @Override
     protected void initListeners() {
 
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                if(currentListSize!=records_count){
+                    linearProgress.setVisibility(View.VISIBLE);
+                    loadmoreItems(buildParams(String.valueOf(page+1),DEFAULT_ITEMS));
+                }
+            }
+        };
+        // Adds the scroll listener to RecyclerView
+        recyclerView.addOnScrollListener(scrollListener);
+    }
+
+
+
+    /**
+     *
+     * @param page page number to laod
+     * @param perpage items per page
+     * @return Hashmap params for api call
+     */
+    private HashMap<String ,String> buildParams(String page, String perpage){
+        HashMap<String,String> params=new HashMap<>();
+        params.put(KEY_PAGE,page);
+        params.put(KEY_PER_PAGE,perpage);
+        params.put(KEY_STATE,STATE_COMPLETED);
+
+        return params;
+    }
+
+    private void getRecordData(HashMap<String,String> params){
+
+
+        Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
+        ServiceRequest request=new ServiceRequest();
+        request.getRecords(appPreference.getUserDetails().getToken(), params, new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                Progress.dismissProgress();
+                RecordBean recordBean=(RecordBean)body;
+                records_count=recordBean.getTotal_items();
+                if(records_count!=0 &&recordBean.getRecords().size()!=0){
+                    recordList=recordBean.getRecords();
+                    mAdapter=new com.hoffmans.rush.ui.driver.adapters.RecordAdapter(mActivity,recordList);
+                    recyclerView.setAdapter(mAdapter);
+                    currentListSize=recordList.size();
+
+                }else{
+                    txtNorecords.setVisibility(View.VISIBLE);
+                }
+            }
+            @Override
+            public void onRequestFailed(String message) {
+
+                mActivity.showSnackbar(message,0);
+                Progress.dismissProgress();
+                if(message.equals(Constants.AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
+
+            }
+        });
+    }
+
+
+    /**
+     * load more data on endless scrolling
+     * @param params
+     */
+    private  void loadmoreItems(HashMap<String,String> params){
+        ServiceRequest request=new ServiceRequest();
+        request.getRecords(appPreference.getUserDetails().getToken(), params, new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                linearProgress.setVisibility(View.GONE);
+                RecordBean recordBean=(RecordBean)body;
+                records_count=recordBean.getTotal_items();
+                if(recordBean.getRecords().size()!=0){
+                    recordList.addAll(recordBean.getRecords());
+                    currentListSize=recordList.size();
+                    if(mAdapter!=null){
+                        mAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+
+            @Override
+            public void onRequestFailed(String message) {
+               mActivity.showSnackbar(message,0);
+               linearProgress.setVisibility(View.GONE);
+                Progress.dismissProgress();
+                if(message.equals(Constants.AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
+            }
+        });
     }
 
 

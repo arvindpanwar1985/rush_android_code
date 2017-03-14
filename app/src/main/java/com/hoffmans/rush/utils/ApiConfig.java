@@ -11,7 +11,7 @@ public class ApiConfig {
     public static String getBaseUrl(){
         return BASE_URL;
     }
-    public static final String DEV_BASE_URL="http://192.168.3.94:3000";
+    public static final String DEV_BASE_URL="http://192.168.3.210:3000";
     public static String getdevBaseUrl(){
         return DEV_BASE_URL;
     }
