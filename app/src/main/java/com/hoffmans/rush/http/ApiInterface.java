@@ -106,6 +106,9 @@ public interface ApiInterface {
     @GET
     Call<ResponseBody> driverShow(@Header("Authorization")String auth,@Url String url);
 
+    @GET
+    Call<ResponseBody> getServiceStatus(@Header("Authorization")String auth,@Url String url);
+
     @FormUrlEncoded
     @POST("/api/drivers/update_driver_location")
     Call<ResponseBody> updateDriverLocation(@Header("Authorization")String auth,@Field("latitude")String latitude,@Field("longitude")String longitude);

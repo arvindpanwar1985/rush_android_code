@@ -27,6 +27,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class BookServiceActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
 
+    public static final int REQUEST_LOCATION_PERMISSION=2;
     private static final String KEY_IS_RECORD="isRecord";
     private LinearLayout edtprofileLinear;
     private TextView headerTxtName,headerTxtEmail,headerTxtPhone;
@@ -101,6 +102,8 @@ public class BookServiceActivity extends BaseActivity
         navigationView.setLayoutParams(params);*/
         View navHeader=navigationView.getHeaderView(0);
         initHeaderView(navHeader);
+
+
 
 
 
@@ -182,6 +185,12 @@ public class BookServiceActivity extends BaseActivity
                 startActivity(recIntent);
                 break;
 
+            case R.id.nav_editProfile:
+                Intent edtProfileIntent=new Intent(BookServiceActivity.this,EditProfileActivity.class);
+                edtProfileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(edtProfileIntent);
+                break;
+
             case R.id.nav_scheduled:
                 Intent secIntent=new Intent(BookServiceActivity.this, RecordActivity.class);
                 secIntent.putExtra(KEY_IS_RECORD,false);
@@ -213,13 +222,13 @@ public class BookServiceActivity extends BaseActivity
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.linearHeaderEdit:
-                if (drawer.isDrawerOpen(GravityCompat.START)) {
+              /*  if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawer(GravityCompat.START);
-                }
-                Intent edtProfileIntent=new Intent(BookServiceActivity.this,EditProfileActivity.class);
-                edtProfileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(edtProfileIntent);
+                }*/
+
                 break;
         }
     }
+
+
 }

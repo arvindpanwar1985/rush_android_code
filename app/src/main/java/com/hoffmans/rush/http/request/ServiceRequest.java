@@ -4,6 +4,7 @@ import com.hoffmans.rush.bean.ConfirmServiceBean;
 import com.hoffmans.rush.bean.MessageBean;
 import com.hoffmans.rush.bean.RecordBean;
 import com.hoffmans.rush.bean.ServiceBean;
+import com.hoffmans.rush.bean.ServiceDetailBean;
 import com.hoffmans.rush.http.ConnectionManager;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.listners.BaseListener;
@@ -170,6 +171,45 @@ public class ServiceRequest extends BaseRequest {
                         MessageBean messageBean=new MessageBean();
                         messageBean.setMessage(message);
                         apiCallback.onRequestSuccess(messageBean);
+                    } else {
+                        apiCallback.onRequestFailed(message);
+                    }
+
+                }catch (Exception e){
+                    apiCallback.onRequestFailed(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onWebStatusFalse(String message) {
+                apiCallback.onRequestFailed(message);
+            }
+        });
+    }
+
+    /**
+     * get the detail of service
+     * @param auth
+     * @param url
+     * @param apiCallback
+     */
+    public void getServiceStatus(String auth,String url ,final ApiCallback apiCallback){
+        Call<ResponseBody> call=getAPIClient().getServiceStatus(auth,url);
+        ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(call);
+        connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
+            @Override
+            public void onWebServiceComplete(ResponseBody responseBody) {
+                try {
+                    JSONObject obj=new JSONObject(responseBody.string());
+                    boolean status = obj.getBoolean(SUCCESS);
+
+                    String message=obj.getString(MESSAGE);
+                    if (status) {
+
+                        String data = obj.getJSONObject(DATA).toString();
+                        ServiceDetailBean bean = getGsonBuilder().fromJson(data, ServiceDetailBean.class);
+                        bean.setMessage(message);
+                        apiCallback.onRequestSuccess(bean);
                     } else {
                         apiCallback.onRequestFailed(message);
                     }

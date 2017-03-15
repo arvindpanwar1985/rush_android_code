@@ -81,8 +81,9 @@ public abstract class BaseFragment extends Fragment {
     //addmarker
     protected Marker addlocationMarker(LatLng latLng, int marker, GoogleMap mMap,boolean draggable){
         if(marker==0){
+            //only animate to position
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
-            return   mMap.addMarker(new MarkerOptions().position(latLng).draggable(draggable));
+            return   null;
         }else {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
             return  mMap.addMarker(new MarkerOptions().position(latLng).draggable(draggable).icon(BitmapDescriptorFactory.fromResource(marker)));

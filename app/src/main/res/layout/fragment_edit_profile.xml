@@ -283,19 +283,26 @@
                         android:src="@drawable/ic_phone"/>
 
 
+                    <include
+                        android:id="@+id/viewCountryCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:layout_gravity="center_vertical"
+                        layout="@layout/layout_country_codes"/>
 
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/fEPEdtPhone"
                         android:textSize="@dimen/sp_16"
-                        android:drawablePadding="@dimen/dp_3"
+
                         android:singleLine="true"
                         android:layout_gravity="center_vertical"
                         android:textColor="@android:color/white"
                         android:textColorHint="@android:color/white"
                         android:textStyle="bold|italic"
-                        android:paddingRight="@dimen/dp_2"
+                        android:layout_marginRight="@dimen/dp_7"
 
                         android:paddingBottom="@dimen/dp_3"
                         android:paddingLeft="@dimen/dp_6"

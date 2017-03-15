@@ -113,6 +113,8 @@
     <string name="str_edit_profile">Editar perfil</string>
     <string name="str_add_card">Agregar tarjeta</string>
     <string name="str_frequent_address">Dirección de uso frecuente</string>
+
+    <string name="str_receipt">Recibo</string>
     /****************************************************************Drivers String.************\
     <string name="login_as_user">Iniciar como usuario</string>
     <string name="login_as_driver">Iniciar como Mensajaro</string>

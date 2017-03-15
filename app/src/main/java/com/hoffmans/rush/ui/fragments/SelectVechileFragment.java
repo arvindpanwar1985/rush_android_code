@@ -52,6 +52,7 @@ import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.Service;
 import com.hoffmans.rush.services.BuildAddressService;
 import com.hoffmans.rush.services.GeoCodingService;
+import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.ui.activities.ConfirmServiceActivity;
 import com.hoffmans.rush.ui.activities.FavouriteActivity;
 import com.hoffmans.rush.ui.adapters.LoadAddressAdapter;
@@ -80,7 +81,6 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final int  PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
-    private static final int REQUEST_LOCATION_PERMISSION=2;
     private static final int DESTINATION_SELECTED=1;
     private static final int REQUEST_FAVOURITE=1008;
     private String TAG=SelectVechileFragment.class.getCanonicalName();
@@ -143,7 +143,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                 .build();
 
 
-        mActivity.changeLanguage("en");
+
     }
 
     @Override
@@ -236,7 +236,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             initMap();
 
         }else {
-            requestPermissions(arrPermission, REQUEST_LOCATION_PERMISSION);
+            requestPermissions(arrPermission, BookServiceActivity.REQUEST_LOCATION_PERMISSION);
         }
     }
 
@@ -833,7 +833,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode){
-            case REQUEST_LOCATION_PERMISSION:
+            case BookServiceActivity.REQUEST_LOCATION_PERMISSION:
                 if(mActivity.isPermissionGranted(grantResults)){
                     mLocationData=new LocationData(mActivity,this);
                     initMap();
@@ -851,6 +851,12 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.stopAutoManage(mActivity);
             mGoogleApiClient.disconnect();
+        }
+        if(mLocationData!=null){
+            mLocationData=null;
+        }
+        if(addressAdapter!=null){
+            addressAdapter=null;
         }
     }
 
@@ -886,6 +892,9 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             }
         });
     }
+
+
+
 
 
 }

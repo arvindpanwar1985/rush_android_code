@@ -75,12 +75,14 @@
             android:layout_gravity="center_vertical"
             android:textColor="@android:color/white"
             android:textStyle="normal"
+            android:visibility="gone"
             android:textSize="@dimen/sp_12"/>
 
            <ImageView
                android:layout_width="@dimen/dp_17"
                android:layout_height="@dimen/dp_17"
                android:gravity="center_vertical"
+               android:visibility="gone"
                android:layout_marginLeft="@dimen/dp_7"
                android:src="@drawable/edit_icon"/>
         </LinearLayout>

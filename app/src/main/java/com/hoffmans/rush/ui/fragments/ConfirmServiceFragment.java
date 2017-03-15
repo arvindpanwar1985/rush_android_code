@@ -1,8 +1,11 @@
 package com.hoffmans.rush.ui.fragments;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,19 +16,27 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.bean.ConfirmServiceBean;
 import com.hoffmans.rush.http.request.ServiceRequest;
 import com.hoffmans.rush.listners.ApiCallback;
+import com.hoffmans.rush.location.LocationData;
+import com.hoffmans.rush.location.LocationInterface;
 import com.hoffmans.rush.model.CardData;
 import com.hoffmans.rush.model.ConfirmService;
 import com.hoffmans.rush.model.Estimate;
 import com.hoffmans.rush.model.EstimateServiceParams;
 import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.Service;
+import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.ui.activities.CardListActivity;
 import com.hoffmans.rush.ui.activities.ConfirmServiceActivity;
 import com.hoffmans.rush.ui.activities.ReceiptActivity;
@@ -37,7 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ConfirmServiceFragment extends BaseFragment implements View.OnClickListener {
+public class ConfirmServiceFragment extends BaseFragment implements View.OnClickListener,LocationInterface ,OnMapReadyCallback{
 
 
     private RelativeLayout viewCardDetails;
@@ -52,6 +63,9 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
     private RecyclerView recyclerView;
     private Button   btnMakeOrder;
     private LoadAddressAdapter addressAdapter;
+    private LocationData mLocationData;
+    private GoogleMap mGoogleMap;
+    private Location mCurrentLocation;
     private List<PickDropAddress>listAddressData=new ArrayList<>();
 
     public ConfirmServiceFragment() {
@@ -131,6 +145,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
         }catch (NullPointerException e){
 
         }
+        checkPermission();
     }
 
     @Override
@@ -157,6 +172,32 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
     }
 
 
+
+    /**
+     * check the permission
+     */
+    private void checkPermission(){
+        String [] arrPermission=new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
+        if(mActivity.isPermissionGranted(arrPermission)){
+            mLocationData=new LocationData(mActivity,this);
+            initMap();
+          }else {
+            requestPermissions(arrPermission, BookServiceActivity.REQUEST_LOCATION_PERMISSION);
+        }
+    }
+
+
+    /**
+     * init the map fragment
+     */
+    private void initMap(){
+        SupportMapFragment mapFragment = ((SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map_fragment));
+        if(mapFragment!=null){
+            mapFragment.getMapAsync(this);
+        }else {
+            Toast.makeText(getActivity(),"Error in iniializing map",Toast.LENGTH_SHORT).show();
+        }
+    }
     private void validateFields(){
 
         if(defaultCardData==null && TextUtils.isEmpty(defaultCardData.getToken())){
@@ -323,6 +364,51 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
                     }).create().show();
         }catch (Exception e){
 
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case BookServiceActivity.REQUEST_LOCATION_PERMISSION:
+                if(mActivity.isPermissionGranted(grantResults)){
+                    mLocationData=new LocationData(mActivity,this);
+                    initMap();
+
+                }else{
+                    Toast.makeText(mActivity,getString(R.string.str_permission_denied),Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onLocation(Location location) {
+        if(location!=null){
+            mCurrentLocation=location;
+            LatLng latLng=new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
+            addlocationMarker(latLng,0,mGoogleMap,false);
+        }
+    }
+
+    @Override
+    public void onLocationFailed() {
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mGoogleMap=googleMap;
+        try {
+            mGoogleMap.setMyLocationEnabled(true);
+        }catch (SecurityException e){
+
+        }
+        if(mCurrentLocation!=null){
+            LatLng latLng=new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
+            addlocationMarker(latLng,0,mGoogleMap,false);
         }
     }
 }

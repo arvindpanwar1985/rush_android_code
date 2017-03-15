@@ -1,6 +1,10 @@
 package com.hoffmans.rush.ui.driver.activities;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -10,18 +14,24 @@ import android.widget.Toast;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.bean.MessageBean;
+import com.hoffmans.rush.bean.ServiceDetailBean;
 import com.hoffmans.rush.http.request.ServiceRequest;
 import com.hoffmans.rush.listners.ApiCallback;
+import com.hoffmans.rush.model.Estimate;
+import com.hoffmans.rush.model.PickDropAddress;
+import com.hoffmans.rush.model.ServiceData;
 import com.hoffmans.rush.ui.activities.BaseActivity;
 import com.hoffmans.rush.utils.AppPreference;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 
+import java.util.List;
+
 public class AcceptOrderActivity extends BaseActivity implements View.OnClickListener{
 
     private  String KEY_MESSAGE      ="message";
     private  String KEY_SERVICE_ID   ="service_id";
-
+    private  String NEW_LINE         ="\n";
     private static final String STATUS_ACCEPTED  = "accepted";
     private static final String STATUS_RUNNING   = "running";
     private static final String STATUS_PENDING   = "pending";
@@ -30,6 +40,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
     private Button btnAccept,btnReject;
     private String mSeriveId,mMessage;
     private ImageView imgClose;
+    private SpannableStringBuilder mBuilder=new SpannableStringBuilder();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +79,8 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
         mSeriveId=getIntent().getStringExtra(KEY_SERVICE_ID);
         mMessage=getIntent().getStringExtra(KEY_MESSAGE);
 
+        getServiceDetail(mSeriveId);
+
     }
 
     @Override
@@ -88,6 +101,94 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
     }
 
 
+    /**
+     * get detail of service
+     * @param serviceId
+     */
+
+    private void getServiceDetail(String serviceId){
+        Progress.showprogress(this,getString(R.string.progress_loading),false);
+        String url="/api/services/"+serviceId;
+        ServiceRequest serviceDetailRequest=new ServiceRequest();
+        AppPreference appPreference=AppPreference.newInstance(this);
+        serviceDetailRequest.getServiceStatus(appPreference.getUserDetails().getToken(), url, new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                Progress.dismissProgress();
+                ServiceDetailBean serviceDetailBean=(ServiceDetailBean)body;
+                if(serviceDetailBean.getService()!=null){
+                    ServiceData serviceData=serviceDetailBean.getService();
+                    Estimate estimate                  =serviceData.getEstimate();
+                    PickDropAddress pickAddress        =serviceData.getPicAddress();
+                    List<PickDropAddress>dropAddresses =serviceData.getDropAddressList();
+                    //populate the UI
+                    setData(estimate,pickAddress,dropAddresses);
+
+                }
+            }
+
+            @Override
+            public void onRequestFailed(String message) {
+
+                Progress.dismissProgress();
+                showSnackbar(message,0);
+                if(message.equals(Constants.AUTH_ERROR)){
+                    logOutUser();
+                }
+            }
+        });
+    }
+
+    /**
+     * populate the data
+     * @param estimate
+     * @param pickAddress
+     * @param dropAddressList
+     */
+    private void setData(Estimate estimate, PickDropAddress pickAddress, List<PickDropAddress> dropAddressList){
+
+        //TODO set name and phone number
+
+        //set estimate price
+        if(estimate!=null){
+            mtxtPriceEstimate.setText(estimate.getSymbol()+" "+estimate.getApproxConvertedAmount());
+        }
+        // set pickup address
+        if(pickAddress!=null){
+            mBuilder.clear();
+            String boldText=getString(R.string.str_collect)+": ";
+            getSpanableBuilder(boldText,ContextCompat.getColor(getApplicationContext(),R.color.civ_border));
+            String address=pickAddress.getStreetAddress();
+            SpannableStringBuilder builder=getSpanableBuilder(address,ContextCompat.getColor(getApplicationContext(),R.color.colorPrimary));
+            mtxtSource.setText(builder, TextView.BufferType.SPANNABLE);
+        }
+        //set drop address
+        if(dropAddressList!=null && dropAddressList.size()>0){
+            if(dropAddressList.size()==1){
+                //single destination order
+                PickDropAddress dropAddress=dropAddressList.get(0);
+                mBuilder.clear();
+                String start = getString(R.string.str_deliver)+": ";
+                getSpanableBuilder(start,ContextCompat.getColor(getApplicationContext(),R.color.civ_border));
+                String address=dropAddress.getStreetAddress();
+                SpannableStringBuilder builder=getSpanableBuilder(address,ContextCompat.getColor(getApplicationContext(),R.color.colorPrimary));
+                mtxtdestination.setText(builder, TextView.BufferType.SPANNABLE);
+
+            }else{
+                //multiple destination order
+                SpannableStringBuilder builder=null;
+                 mBuilder.clear();
+                // building multiple destination text
+                for(PickDropAddress dropAddress:dropAddressList){
+                    String start=getString(R.string.str_deliver)+": ";
+                    getSpanableBuilder(start,ContextCompat.getColor(getApplicationContext(),R.color.civ_border));
+                    String address=dropAddress.getStreetAddress()+NEW_LINE;
+                    builder=getSpanableBuilder(address,ContextCompat.getColor(getApplicationContext(),R.color.colorPrimary));
+                }
+                mtxtdestination.setText(builder, TextView.BufferType.SPANNABLE);
+            }
+        }
+    }
     /**
      * set the service status
      * @param serviceId id of service
@@ -122,5 +223,17 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
                 }
             }
         });
+    }
+
+    /**
+     *
+     * @param text text
+     * @param color color
+     * @return SpannableStringBuilder
+     */
+    private SpannableStringBuilder getSpanableBuilder(String text,int color){
+        SpannableString darkSpannable = new SpannableString(text);
+        darkSpannable.setSpan(new ForegroundColorSpan(color), 0, text.length(), 0);
+        return  mBuilder.append(darkSpannable);
     }
 }

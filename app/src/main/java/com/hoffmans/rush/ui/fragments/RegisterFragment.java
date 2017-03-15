@@ -192,6 +192,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             case R.id.viewCountryCode:
                 countryPicker = CountryPicker.newInstance("Select Country");
                 countryPicker.show(mActivity.getSupportFragmentManager(), "COUNTRY_PICKER");
+
                 countryPicker.setListener(new CountryPickerListener() {
                     @Override
                     public void onSelectCountry(String name, String code, String dialCode, int flagDrawableResID) {

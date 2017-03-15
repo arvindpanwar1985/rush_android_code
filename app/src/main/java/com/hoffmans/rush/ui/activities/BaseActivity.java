@@ -60,7 +60,9 @@ public abstract  class BaseActivity extends AppCompatActivity {
     private ImageView imgLogo;
     private ProgressBar progressBar;
     private RelativeLayout progressRelative;
+
     public boolean userIsInteracting;
+
 
 
     @Override
@@ -96,6 +98,11 @@ public abstract  class BaseActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         activityContent = (FrameLayout) this.findViewById(R.id.activity_content);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+
+
+
+
+
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -472,6 +479,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
         }
         return true;
     }
+
 
 
 
