@@ -677,7 +677,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
-
     /**
      *
      * @param result Result from google + login

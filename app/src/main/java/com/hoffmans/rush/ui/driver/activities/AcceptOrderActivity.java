@@ -11,12 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.bean.MessageBean;
 import com.hoffmans.rush.bean.ServiceDetailBean;
 import com.hoffmans.rush.http.request.ServiceRequest;
 import com.hoffmans.rush.listners.ApiCallback;
+import com.hoffmans.rush.model.CustomerDetail;
 import com.hoffmans.rush.model.Estimate;
 import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.ServiceData;
@@ -26,6 +28,8 @@ import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AcceptOrderActivity extends BaseActivity implements View.OnClickListener{
 
@@ -40,6 +44,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
     private Button btnAccept,btnReject;
     private String mSeriveId,mMessage;
     private ImageView imgClose;
+    private CircleImageView imgProfile;
     private SpannableStringBuilder mBuilder=new SpannableStringBuilder();
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
         btnAccept         = (Button)findViewById(R.id.btnAccept);
         btnReject         = (Button)findViewById(R.id.btnReject);
         imgClose          =(ImageView)findViewById(R.id.imgARClose);
+        imgProfile        =(CircleImageView)findViewById(R.id.imgAcceptreject);
     }
 
     @Override
@@ -105,7 +111,6 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
      * get detail of service
      * @param serviceId
      */
-
     private void getServiceDetail(String serviceId){
         Progress.showprogress(this,getString(R.string.progress_loading),false);
         String url="/api/services/"+serviceId;
@@ -121,8 +126,9 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
                     Estimate estimate                  =serviceData.getEstimate();
                     PickDropAddress pickAddress        =serviceData.getPicAddress();
                     List<PickDropAddress>dropAddresses =serviceData.getDropAddressList();
+                    CustomerDetail customerDetail      =serviceData.getCustomerDetail();
                     //populate the UI
-                    setData(estimate,pickAddress,dropAddresses);
+                    setData(estimate,pickAddress,dropAddresses,customerDetail);
 
                 }
             }
@@ -138,17 +144,22 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
             }
         });
     }
-
     /**
      * populate the data
      * @param estimate
      * @param pickAddress
      * @param dropAddressList
      */
-    private void setData(Estimate estimate, PickDropAddress pickAddress, List<PickDropAddress> dropAddressList){
+    private void setData(Estimate estimate, PickDropAddress pickAddress, List<PickDropAddress> dropAddressList, CustomerDetail customerDetail){
 
-        //TODO set name and phone number
-
+        //set customer detail
+        if(customerDetail!=null){
+            mTxtname.setText("."+customerDetail.getName()+".");
+            mtxtPhone.setText(customerDetail.getPhone());
+            if(customerDetail.getPicUrl()!=null){
+                Glide.with(getApplicationContext()).load(customerDetail.getPicUrl()).into(imgProfile);
+            }
+        }
         //set estimate price
         if(estimate!=null){
             mtxtPriceEstimate.setText(estimate.getSymbol()+" "+estimate.getApproxConvertedAmount());

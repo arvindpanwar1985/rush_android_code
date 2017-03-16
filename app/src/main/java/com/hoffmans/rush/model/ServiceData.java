@@ -51,6 +51,10 @@ public class ServiceData {
     @Expose
     private PickDropAddress picAddress;
 
+    @SerializedName("customer_details")
+    @Expose
+    private CustomerDetail customerDetail;
+
     public Integer getId() {
         return id;
     }
@@ -117,5 +121,9 @@ public class ServiceData {
 
     public PickDropAddress getPicAddress() {
         return picAddress;
+    }
+
+    public CustomerDetail getCustomerDetail() {
+        return customerDetail;
     }
 }

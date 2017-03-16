@@ -1,7 +1,6 @@
 package com.hoffmans.rush;
 
 import android.content.Intent;
-import android.text.TextUtils;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -9,10 +8,7 @@ import com.hoffmans.rush.ui.driver.activities.AcceptOrderActivity;
 import com.hoffmans.rush.utils.AppPreference;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Map;
 
 /**
  * Created by devesh on 29/12/16.
@@ -34,7 +30,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        mAppPreference=AppPreference.newInstance(this);
+        /*mAppPreference=AppPreference.newInstance(this);
         Map<String, String> params = remoteMessage.getData();
         if(remoteMessage.getData().size()>0) {
             JSONObject object = new JSONObject(params);
@@ -63,7 +59,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         break;
                 }
             }
-        }
+        }*/
 
     }
 

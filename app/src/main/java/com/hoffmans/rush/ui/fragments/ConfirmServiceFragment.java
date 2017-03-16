@@ -3,7 +3,6 @@ package com.hoffmans.rush.ui.fragments;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,13 +22,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.bean.ConfirmServiceBean;
 import com.hoffmans.rush.http.request.ServiceRequest;
 import com.hoffmans.rush.listners.ApiCallback;
-import com.hoffmans.rush.location.LocationData;
-import com.hoffmans.rush.location.LocationInterface;
 import com.hoffmans.rush.model.CardData;
 import com.hoffmans.rush.model.ConfirmService;
 import com.hoffmans.rush.model.Estimate;
@@ -48,7 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ConfirmServiceFragment extends BaseFragment implements View.OnClickListener,LocationInterface ,OnMapReadyCallback{
+public class ConfirmServiceFragment extends BaseFragment implements View.OnClickListener ,OnMapReadyCallback{
 
 
     private RelativeLayout viewCardDetails;
@@ -63,9 +61,8 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
     private RecyclerView recyclerView;
     private Button   btnMakeOrder;
     private LoadAddressAdapter addressAdapter;
-    private LocationData mLocationData;
     private GoogleMap mGoogleMap;
-    private Location mCurrentLocation;
+
     private List<PickDropAddress>listAddressData=new ArrayList<>();
 
     public ConfirmServiceFragment() {
@@ -179,7 +176,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
     private void checkPermission(){
         String [] arrPermission=new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
         if(mActivity.isPermissionGranted(arrPermission)){
-            mLocationData=new LocationData(mActivity,this);
+
             initMap();
           }else {
             requestPermissions(arrPermission, BookServiceActivity.REQUEST_LOCATION_PERMISSION);
@@ -374,7 +371,6 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
         switch (requestCode){
             case BookServiceActivity.REQUEST_LOCATION_PERMISSION:
                 if(mActivity.isPermissionGranted(grantResults)){
-                    mLocationData=new LocationData(mActivity,this);
                     initMap();
 
                 }else{
@@ -384,31 +380,16 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
         }
     }
 
-    @Override
-    public void onLocation(Location location) {
-        if(location!=null){
-            mCurrentLocation=location;
-            LatLng latLng=new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
-            addlocationMarker(latLng,0,mGoogleMap,false);
-        }
-    }
-
-    @Override
-    public void onLocationFailed() {
-
-    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap=googleMap;
-        try {
-            mGoogleMap.setMyLocationEnabled(true);
-        }catch (SecurityException e){
+        if(mServiceParams!=null){
+            PickDropAddress pickUpAddress=mServiceParams.getPick_address();
+            LatLng latLng=new LatLng(pickUpAddress.getLatitude(),pickUpAddress.getLongitude());
+            Marker marker=addlocationMarker(latLng,R.drawable.marker,mGoogleMap,false);
+            marker.setTitle("Pick Up");
+        }
 
-        }
-        if(mCurrentLocation!=null){
-            LatLng latLng=new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
-            addlocationMarker(latLng,0,mGoogleMap,false);
-        }
     }
 }

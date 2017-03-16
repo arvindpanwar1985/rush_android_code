@@ -1,12 +1,16 @@
 package com.hoffmans.rush.ui.driver.fragments;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.hoffmans.rush.R;
@@ -57,6 +61,7 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
         View view= inflater.inflate(R.layout.fragment_upcoming, container, false);
         initViews(view);
         initListeners();
+        showCommentDialog();
         return view;
     }
 
@@ -71,20 +76,16 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
         mtxtPriceEstimate = (TextView)view.findViewById(R.id.txtPriceEstimated);
         btnStart          = (Button)view.findViewById(R.id.btnStart);
         btnComplete       = (Button)view.findViewById(R.id.btnComplete);
-
-
     }
 
     @Override
     protected void initListeners() {
-
         btnStart.setOnClickListener(this);
         btnComplete.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-
         int id=view.getId();
         switch (id){
             case R.id.btnStart:
@@ -121,4 +122,32 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
             }
         });
     }
+
+
+    private void showCommentDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        builder.setTitle("Please add comment.");
+        // Set up the input
+        final EditText input = new EditText(mActivity);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        input.setHint("Add comment.");
+        builder.setView(input);
+        builder.setPositiveButton("Add Comment", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+    }
+
+
+
 }
