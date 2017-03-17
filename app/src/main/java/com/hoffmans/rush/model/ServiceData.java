@@ -55,6 +55,8 @@ public class ServiceData {
     @Expose
     private CustomerDetail customerDetail;
 
+
+
     public Integer getId() {
         return id;
     }

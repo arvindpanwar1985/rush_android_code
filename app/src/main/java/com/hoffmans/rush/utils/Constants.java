@@ -41,6 +41,10 @@ public class Constants {
     public static final String IP="";
     public static final int PORT=3000;
 
+    public static final String STATUS_ACCEPTED  = "accepted";
+    public static final String STATUS_RUNNING   = "running";
+    public static final String STATUS_COMPLETED = "completed";
+
 
 
     public static class FBCONTANTS{

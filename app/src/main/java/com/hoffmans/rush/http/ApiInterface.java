@@ -121,4 +121,7 @@ public interface ApiInterface {
 
     @GET("/maps/api/geocode/json")
     Call<ResponseBody> getPlaceID(@QueryMap(encoded = true) Map<String, String> params);
+    @FormUrlEncoded
+    @POST("/api/services/upcoming_services")
+    Call<ResponseBody> getUpcomingServices(@Header("Authorization")String authorization,@Field("page") String page,@Field("perpage")String perpage, @Field("state")String state);
 }

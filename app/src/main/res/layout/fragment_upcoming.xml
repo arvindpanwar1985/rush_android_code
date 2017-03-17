@@ -6,10 +6,58 @@
     tools:context="com.hoffmans.rush.ui.driver.fragments.UpcomingFragment">
 
 
-    <include
+    <!--<include
         android:layout_marginTop="@dimen/dp_20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        layout="@layout/view_driver_upcoming"/>
+        layout="@layout/view_driver_upcoming"/>-->
+
+       <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_above="@+id/linearLoadMore"
+        android:layout_height="wrap_content"
+        android:id="@+id/currentScheduleOrderList"/>
+
+
+    <TextView
+        android:id="@+id/txtNorecords"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:textSize="@dimen/sp_16"
+        android:textColor="@android:color/white"
+        android:textStyle="bold|italic"
+        android:text="No records found." />
+
+
+    <LinearLayout
+        android:id="@+id/linearLoadMore"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_4"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressLoadMore"
+            android:layout_gravity="center|center_horizontal"
+            android:layout_centerHorizontal="true"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textStyle="bold|italic"
+            android:textSize="@dimen/sp_14"
+            android:layout_gravity="center|center_horizontal"
+            android:text="Loading.."/>
+    </LinearLayout>
+
 
 </RelativeLayout>

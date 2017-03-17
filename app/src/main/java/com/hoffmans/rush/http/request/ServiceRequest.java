@@ -3,6 +3,7 @@ package com.hoffmans.rush.http.request;
 import com.hoffmans.rush.bean.ConfirmServiceBean;
 import com.hoffmans.rush.bean.MessageBean;
 import com.hoffmans.rush.bean.RecordBean;
+import com.hoffmans.rush.bean.ScheduledBean;
 import com.hoffmans.rush.bean.ServiceBean;
 import com.hoffmans.rush.bean.ServiceDetailBean;
 import com.hoffmans.rush.http.ConnectionManager;
@@ -208,6 +209,41 @@ public class ServiceRequest extends BaseRequest {
 
                         String data = obj.getJSONObject(DATA).toString();
                         ServiceDetailBean bean = getGsonBuilder().fromJson(data, ServiceDetailBean.class);
+                        bean.setMessage(message);
+                        apiCallback.onRequestSuccess(bean);
+                    } else {
+                        apiCallback.onRequestFailed(message);
+                    }
+
+                }catch (Exception e){
+                    apiCallback.onRequestFailed(e.getMessage());
+                }
+            }
+
+            @Override
+            public void onWebStatusFalse(String message) {
+                apiCallback.onRequestFailed(message);
+            }
+        });
+    }
+
+
+
+    public void getUpcomingServices(String auth ,String page,String perpage,String state,final ApiCallback apiCallback){
+        Call<ResponseBody> call=getAPIClient().getUpcomingServices(auth,page,perpage,state);
+        ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(call);
+        connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
+            @Override
+            public void onWebServiceComplete(ResponseBody responseBody) {
+                try {
+                    JSONObject obj=new JSONObject(responseBody.string());
+                    boolean status = obj.getBoolean(SUCCESS);
+
+                    String message=obj.getString(MESSAGE);
+                    if (status) {
+
+                        String data = obj.getJSONObject(DATA).toString();
+                        ScheduledBean bean = getGsonBuilder().fromJson(data, ScheduledBean.class);
                         bean.setMessage(message);
                         apiCallback.onRequestSuccess(bean);
                     } else {

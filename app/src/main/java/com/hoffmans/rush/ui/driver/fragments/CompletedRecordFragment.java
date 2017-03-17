@@ -36,7 +36,7 @@ public class CompletedRecordFragment extends BaseFragment {
     private static final String KEY_PAGE           ="page";
     private static final String KEY_STATE          ="state";
     private static final String KEY_PER_PAGE       ="perpage";
-    private static final String STATE_COMPLETED    ="completed";
+
     private static final String DEFAULT_ITEMS      ="5";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -138,7 +138,7 @@ public class CompletedRecordFragment extends BaseFragment {
         HashMap<String,String> params=new HashMap<>();
         params.put(KEY_PAGE,page);
         params.put(KEY_PER_PAGE,perpage);
-        params.put(KEY_STATE,STATE_COMPLETED);
+        params.put(KEY_STATE,Constants.STATUS_COMPLETED);
 
         return params;
     }

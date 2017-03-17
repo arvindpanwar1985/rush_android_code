@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.model.CustomerDetail;
+import com.hoffmans.rush.model.DateTime;
 import com.hoffmans.rush.model.Estimate;
 import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.Record;
@@ -42,7 +43,7 @@ public class RecordAdapter  extends RecyclerView.Adapter<RecordAdapter.ViewHolde
 
 
         ImageView imgProfile;
-        TextView txtNamePhone,txtSource,txtDestination,txtEstimatedPrice;
+        TextView txtNamePhone,txtSource,txtDestination,txtEstimatedPrice,txtDateTime;
 
 
         public ViewHolder(View v) {
@@ -52,6 +53,7 @@ public class RecordAdapter  extends RecyclerView.Adapter<RecordAdapter.ViewHolde
             txtSource      =(TextView)v.findViewById(R.id.txtSource);
             txtDestination =(TextView)v.findViewById(R.id.txtdestination);
             txtEstimatedPrice=(TextView)v.findViewById(R.id.txtPriceEstimated);
+            txtDateTime   =(TextView)v.findViewById(R.id.txtdateTime);
              v.setOnClickListener(this);
 
         }
@@ -93,6 +95,8 @@ public class RecordAdapter  extends RecyclerView.Adapter<RecordAdapter.ViewHolde
         CustomerDetail customerDetail=record.getCustomer_details();
         Estimate estimate=record.getEstimate();
         PickDropAddress pickUpAddress=record.getPick_up();
+        DateTime dateTime=record.getDate_time();
+
         List<PickDropAddress> dropAddresses=record.getDrop_down();
 
         if(customerDetail!=null){
@@ -146,6 +150,9 @@ public class RecordAdapter  extends RecyclerView.Adapter<RecordAdapter.ViewHolde
                }
                holder.txtDestination.setText(builder, TextView.BufferType.SPANNABLE);
            }
+        }
+        if(dateTime!=null){
+            holder.txtDateTime.setText(dateTime.getDate()+" "+dateTime.getTime());
         }
     }
 

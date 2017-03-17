@@ -39,21 +39,15 @@ import java.util.ArrayList;
 public class AddCardFragment extends BaseFragment implements View.OnClickListener ,BrainTreeHandler {
 
     private static final String ARG_PARAM1 = "bt_token";
-
     private String bt_token;
-
-
     private EditText edtCardNumber,edtEdtTitular,edtCvv;
     private TextView txtExpiry;
     private Button btnSaveCard;
     private BraintreeFragment mBraintreeFragment;
     private LinearLayout topLinear;
-
     public AddCardFragment() {
         // Required empty public constructor
     }
-
-
     public static AddCardFragment newInstance(String btToken) {
 
         AddCardFragment fragment = new AddCardFragment();
@@ -75,11 +69,8 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             bt_token = getArguments().getString(ARG_PARAM1);
-
         }
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -95,12 +86,10 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
 
     @Override
     protected void initViews(View view) {
-
         edtCardNumber=(EditText)view.findViewById(R.id.fpEdtCard);
         edtEdtTitular=(EditText)view.findViewById(R.id.fpEdtTitular);
         txtExpiry    =(TextView) view.findViewById(R.id.fpEdtExpiry);
         edtCvv       =(EditText)view.findViewById(R.id.fpEdtCvv);
-
         btnSaveCard  =(Button) view.findViewById(R.id.fpBtnSaveCard);
         topLinear    =(LinearLayout)view.findViewById(R.id.topLinearPayment);
 
@@ -114,7 +103,6 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
         edtEdtTitular.setOnClickListener(this);
         btnSaveCard.setOnClickListener(this);
         topLinear.setOnClickListener(this);
-
     }
 
 
