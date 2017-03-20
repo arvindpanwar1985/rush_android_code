@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.listners.OnHeaderButtonClickListners;
 import com.hoffmans.rush.model.CustomerDetail;
 import com.hoffmans.rush.model.DateTime;
 import com.hoffmans.rush.model.Estimate;
@@ -33,10 +34,12 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
     private Button btnStart;
     private Context mContext;
     private CircleImageView imgAcceptreject;
+    private OnHeaderButtonClickListners onHeaderButtonClickListner;
 
-    public HeaderViewHolder(View itemView) {
+    public HeaderViewHolder(View itemView, OnHeaderButtonClickListners onHeaderButtonClickListner) {
         super(itemView);
         mContext=itemView.getContext();
+        this.onHeaderButtonClickListner=onHeaderButtonClickListner;
         mTxtname          = (TextView)itemView.findViewById(R.id.txtARName);
         mtxtPhone         = (TextView)itemView.findViewById(R.id.txtARPhone);
         mtxtSource        = (TextView)itemView.findViewById(R.id.txtARSource);
@@ -48,12 +51,9 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-   public void render(ServiceData header) {
-
-
-
+   public void render(final ServiceData header) {
         if(header!=null){
-            String state=header.getState();
+            final String state=header.getState();
             if(state.equals(Constants.STATUS_ACCEPTED)){
                 btnStart.setText("Start");
             }else if(state.equals(Constants.STATUS_RUNNING)){
@@ -80,11 +80,22 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
             if(dateTime!=null){
                 txtDatetime.setText(dateTime.getDate()+" "+dateTime.getTime());
             }
+
+            btnStart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                  onHeaderButtonClickListner.onStartStopButtonClicked(state,header.getId());
+                }
+            });
         }
+
 
     }
 
-
+    /**
+     * set customer detail
+     * @param customerDetail
+     */
     private void setCustomerDetail(CustomerDetail customerDetail){
         mTxtname.setText(customerDetail.getName());
         mtxtPhone.setText(customerDetail.getPhone());
@@ -93,11 +104,19 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
+    /**
+     * set price estimation
+     * @param estimate
+     */
     private void setPriceEstimate(Estimate estimate){
         StringBuilder stringBuilder=new StringBuilder(estimate.getSymbol()).append(" ").append(estimate.getApproxConvertedAmount());
         mtxtPriceEstimate.setText(stringBuilder.toString());
     }
 
+    /**
+     * set source address
+     * @param pickUpAddress
+     */
     private void setPickAddress(PickDropAddress pickUpAddress){
         //set spannable string
         mbuilder.clear();
@@ -110,6 +129,10 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
 
     }
 
+    /**
+     * set multiple drop address if having multiple drops
+     * @param dropAddresses
+     */
     private void setDropAddresses(List<PickDropAddress>dropAddresses){
         if(dropAddresses.size()==1){
             //single destination order

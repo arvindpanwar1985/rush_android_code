@@ -27,7 +27,7 @@ import java.util.List;
 public class CharacterViewHolder  extends RecyclerView.ViewHolder {
 
     private ImageView imgProfile;
-    private TextView txtNamePhone,txtSource,txtDestination,txtEstimatedPrice,txtDateTime;
+    private TextView txtNamePhone,txtSource,txtDestination,txtEstimatedPrice,txtDateTime,txtState;
     private  Context mContext;
     private SpannableStringBuilder mbuilder=new SpannableStringBuilder();
 
@@ -40,6 +40,7 @@ public class CharacterViewHolder  extends RecyclerView.ViewHolder {
         txtDestination =(TextView)itemView.findViewById(R.id.txtdestination);
         txtEstimatedPrice=(TextView)itemView.findViewById(R.id.txtPriceEstimated);
         txtDateTime   =(TextView)itemView.findViewById(R.id.txtdateTime);
+        txtState      =(TextView)itemView.findViewById(R.id.txtState);
     }
 
     public void render(Record record) {
@@ -47,65 +48,101 @@ public class CharacterViewHolder  extends RecyclerView.ViewHolder {
         Estimate estimate=record.getEstimate();
         PickDropAddress pickUpAddress=record.getPick_up();
         DateTime dateTime=record.getDate_time();
-
+        txtState.setText(record.getState());
         List<PickDropAddress> dropAddresses=record.getDrop_down();
-
         if(customerDetail!=null){
-            StringBuilder namePhoneBuilder=new StringBuilder(".").append(customerDetail.getName())
-                    .append(" . ").append(customerDetail.getPhone());
-            txtNamePhone.setText(namePhoneBuilder.toString());
-            if(customerDetail.getPicUrl()!=null){
-                Glide.with(mContext).load(customerDetail.getPicUrl()).into(imgProfile);
-            }
-
+           setCustomerDetail(customerDetail);
         }
         if(estimate!=null){
-            StringBuilder stringBuilder=new StringBuilder(estimate.getSymbol()).append(" ").append(estimate.getApproxConvertedAmount());
-            txtEstimatedPrice.setText(stringBuilder.toString());
+            setPriceEstimate(estimate);
         }
         if(pickUpAddress!=null){
-            //set spannable string
-            mbuilder.clear();
-
-            String start = mContext.getString(R.string.str_collect)+": ";
-            getSpanableBuilder(start, ContextCompat.getColor(mContext,R.color.civ_border));
-            String address=pickUpAddress.getStreetAddress();
-            SpannableStringBuilder builder=getSpanableBuilder(address,ContextCompat.getColor(mContext,R.color.colorPrimary));
-
-            txtSource.setText(builder, TextView.BufferType.SPANNABLE);
+            setPickAddress(pickUpAddress);
         }
-        if(dropAddresses!=null && dropAddresses.size()>0){
-            if(dropAddresses.size()==1){
-                //single destination order
-                PickDropAddress dropAddress=dropAddresses.get(0);
-                mbuilder.clear();
-
-                String start = mContext.getString(R.string.str_deliver)+": ";
-                getSpanableBuilder(start,ContextCompat.getColor(mContext,R.color.civ_border));
-                String address=dropAddress.getStreetAddress();
-                SpannableStringBuilder builder=getSpanableBuilder(address,ContextCompat.getColor(mContext,R.color.colorPrimary));
-
-                txtDestination.setText(builder, TextView.BufferType.SPANNABLE);
-
-            }else{
-                //multiple destination order
-                SpannableStringBuilder builder=null;
-                mbuilder.clear();
-                // building multiple destination text
-                for(PickDropAddress dropAddress:dropAddresses){
-                    String start=mContext.getString(R.string.str_deliver)+": ";
-                    getSpanableBuilder(start,ContextCompat.getColor(mContext,R.color.civ_border));
-                    String address=dropAddress.getStreetAddress()+"\n";
-                    builder=getSpanableBuilder(address,ContextCompat.getColor(mContext,R.color.colorPrimary));
-
-                }
-                txtDestination.setText(builder, TextView.BufferType.SPANNABLE);
-            }
+        if(dropAddresses!=null && dropAddresses.size()>0) {
+            setDropAddresses(dropAddresses);
         }
+
         if(dateTime!=null){
             txtDateTime.setText(dateTime.getDate()+" "+dateTime.getTime());
         }
     }
+
+
+
+    /**
+     * set customer detail
+     * @param customerDetail
+     */
+    private void setCustomerDetail(CustomerDetail customerDetail){
+        StringBuilder namePhoneBuilder=new StringBuilder(".").append(customerDetail.getName())
+                .append(" . ").append(customerDetail.getPhone());
+        txtNamePhone.setText(namePhoneBuilder.toString());
+        if(customerDetail.getPicUrl()!=null){
+            Glide.with(mContext).load(customerDetail.getPicUrl()).into(imgProfile);
+        }
+    }
+
+    /**
+     * set price estimation
+     * @param estimate
+     */
+    private void setPriceEstimate(Estimate estimate){
+
+        StringBuilder stringBuilder=new StringBuilder(estimate.getSymbol()).append(" ").append(estimate.getApproxConvertedAmount());
+        txtEstimatedPrice.setText(stringBuilder.toString());
+    }
+
+    /**
+     * set source address
+     * @param pickUpAddress
+     */
+    private void setPickAddress(PickDropAddress pickUpAddress){
+
+       //set spannable string
+        mbuilder.clear();
+
+        String start = mContext.getString(R.string.str_collect)+": ";
+        getSpanableBuilder(start, ContextCompat.getColor(mContext,R.color.civ_border));
+        String address=pickUpAddress.getStreetAddress();
+        SpannableStringBuilder builder=getSpanableBuilder(address,ContextCompat.getColor(mContext,R.color.colorPrimary));
+
+        txtSource.setText(builder, TextView.BufferType.SPANNABLE);
+    }
+
+    /**
+     * set multiple drop address if having multiple drops
+     * @param dropAddresses
+     */
+    private void setDropAddresses(List<PickDropAddress>dropAddresses){
+        if(dropAddresses.size()==1){
+            //single destination order
+            PickDropAddress dropAddress=dropAddresses.get(0);
+            mbuilder.clear();
+
+            String start = mContext.getString(R.string.str_deliver)+": ";
+            getSpanableBuilder(start,ContextCompat.getColor(mContext,R.color.civ_border));
+            String address=dropAddress.getStreetAddress();
+            SpannableStringBuilder builder=getSpanableBuilder(address,ContextCompat.getColor(mContext,R.color.colorPrimary));
+
+            txtDestination.setText(builder, TextView.BufferType.SPANNABLE);
+
+        }else{
+            //multiple destination order
+            SpannableStringBuilder builder=null;
+            mbuilder.clear();
+            // building multiple destination text
+            for(PickDropAddress dropAddress:dropAddresses){
+                String start=mContext.getString(R.string.str_deliver)+": ";
+                getSpanableBuilder(start,ContextCompat.getColor(mContext,R.color.civ_border));
+                String address=dropAddress.getStreetAddress()+"\n";
+                builder=getSpanableBuilder(address,ContextCompat.getColor(mContext,R.color.colorPrimary));
+
+            }
+            txtDestination.setText(builder, TextView.BufferType.SPANNABLE);
+        }
+    }
+
 
     /**
      *

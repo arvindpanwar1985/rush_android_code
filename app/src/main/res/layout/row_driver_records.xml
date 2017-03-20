@@ -29,6 +29,7 @@
 
          <RelativeLayout
              android:layout_width="match_parent"
+             android:id="@+id/relativeSourceDestination"
              android:layout_height="wrap_content"
              android:layout_marginLeft="@dimen/dp_4"
              android:layout_marginRight="@dimen/dp_4"
@@ -92,6 +93,20 @@
 
 
         </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:id="@+id/txtState"
+            android:layout_alignParentRight="true"
+            android:textStyle="italic"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp_15"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_below="@+id/relativeSourceDestination"
+            android:background="@drawable/btn_estimated_bg"
+            android:layout_height="wrap_content"/>
+
         </RelativeLayout>
 
 </RelativeLayout>

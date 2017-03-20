@@ -26,4 +26,8 @@ public class ScheduledBean extends BaseBean {
     public ServiceData getCurrentOrder() {
         return currentOrder;
     }
+
+    public void setCurrentOrder(ServiceData currentOrder) {
+        this.currentOrder = currentOrder;
+    }
 }

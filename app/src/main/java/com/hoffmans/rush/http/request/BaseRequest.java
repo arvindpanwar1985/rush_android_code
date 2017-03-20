@@ -11,10 +11,10 @@ import com.hoffmans.rush.http.ApiInterface;
 
 public class BaseRequest {
 
-    public String DATA="data";
-    public String MESSAGE="message";
-    public String STATUS="status";
-    public String SUCCESS="success";
+    public String DATA       ="data";
+    public String MESSAGE    ="message";
+    public String STATUS     ="status";
+    public String SUCCESS    ="success";
 
 
     public  ApiInterface getAPIClient(){

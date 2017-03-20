@@ -50,6 +50,7 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
 
     private static final String DRIVER_STATUS_ACTIVE="active";
     private static final String DRIVER_STATUS_INACTIVE="inactive";
+    private static final String DRIVER_STATUS_AVAIABLE="available";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private  String KEY_SERVICE_ID   ="service_id";
@@ -168,6 +169,7 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
                     acceptOrderIntent.putExtra(KEY_MESSAGE,"");
                     acceptOrderIntent.putExtra(KEY_SERVICE_ID,mServiceId);
                     startActivity(acceptOrderIntent);
+                    includedNotificationView.setVisibility(View.GONE);
                 }
                 break;
         }
@@ -230,7 +232,7 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
            @Override
            public void onRequestSuccess(BaseBean body) {
                Progress.dismissProgress();
-               if(status.equals(DRIVER_STATUS_ACTIVE)){
+               if(status.equals(DRIVER_STATUS_AVAIABLE)){
                    enableInService(false);
                }else if(status.equals(DRIVER_STATUS_INACTIVE)){
                    enableOutOfservice(false);
@@ -275,7 +277,6 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
                         }
                     }
                 }
-
                 @Override
                 public void onRequestFailed(String message) {
                     Progress.dismissProgress();
@@ -295,7 +296,7 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
                     .setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
-                            String status=(inService)?DRIVER_STATUS_ACTIVE:DRIVER_STATUS_INACTIVE;
+                            String status=(inService)?DRIVER_STATUS_AVAIABLE:DRIVER_STATUS_INACTIVE;
                             setDriverStaus(status);
                             dialog.dismiss();
                         }
@@ -443,6 +444,4 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
 
 
     }
-
-
 }

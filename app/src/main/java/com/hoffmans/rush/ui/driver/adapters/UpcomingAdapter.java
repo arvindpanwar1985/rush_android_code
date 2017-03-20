@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.listners.OnHeaderButtonClickListners;
 import com.hoffmans.rush.model.DriverDetail;
 import com.hoffmans.rush.model.Record;
 import com.hoffmans.rush.model.ServiceData;
@@ -21,17 +22,18 @@ import com.karumi.headerrecyclerview.HeaderRecyclerViewAdapter;
 
 public class UpcomingAdapter extends HeaderRecyclerViewAdapter<RecyclerView.ViewHolder, ServiceData,Record, DriverDetail>  {
 
+    private OnHeaderButtonClickListners onHeaderButtonClickListners;
     private static final String LOG_TAG = UpcomingAdapter.class.getSimpleName();
     private Context mContext;
-     public UpcomingAdapter(Context context){
+     public UpcomingAdapter(Context context ,OnHeaderButtonClickListners listener){
         mContext=context;
-
+        onHeaderButtonClickListners=listener;
     }
     @Override
     protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = getLayoutInflater(parent);
         View headerView = inflater.inflate(R.layout.header_upcoming, parent, false);
-        return new HeaderViewHolder(headerView);
+        return new HeaderViewHolder(headerView,onHeaderButtonClickListners);
     }
 
     @Override

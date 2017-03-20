@@ -19,7 +19,7 @@ public class ApiBuilder {
             new OkHttpClient.Builder();
 
     public  static ApiInterface  createApiBuilder(){
-
+        setLogInterCeptor();
          if(retrofit!=null){
              return apiInterface=retrofit.create(ApiInterface.class);
          }else {
@@ -29,7 +29,7 @@ public class ApiBuilder {
                      .addConverterFactory(GsonConverterFactory.create())
                      .build();
              apiInterface = retrofit.create(ApiInterface.class);
-             setLogInterCeptor();
+
              return apiInterface;
          }
     }

@@ -24,44 +24,86 @@
             android:text=". Dev bhandari ."
             android:layout_marginTop="@dimen/dp_7"
             android:textStyle="bold|italic"
-            android:textSize="@dimen/sp_16"
-            android:layout_marginLeft="@dimen/dp_50"
+            android:textSize="@dimen/sp_15"
+            android:layout_marginLeft="@dimen/dp_30"
             android:layout_height="wrap_content"/>
+
+
+
 
 
         <TextView
             android:id="@+id/txtARPhone"
             android:textColor="@color/colorPrimaryDark"
             android:layout_width="wrap_content"
-            android:text="+918126525293"
-            android:layout_marginLeft="@dimen/dp_5"
+            android:text=""
+            android:layout_marginLeft="@dimen/dp_3"
             android:layout_toRightOf="@+id/txtARName"
             android:layout_marginRight="@dimen/dp_2"
             android:layout_marginTop="@dimen/dp_7"
             android:textStyle="bold|italic"
-            android:textSize="@dimen/sp_16"
+            android:textSize="@dimen/sp_15"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/txtARDatetime"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_width="wrap_content"
+            android:text="date"
+            android:layout_marginTop="@dimen/dp_3"
+            android:textStyle="bold|italic"
+            android:layout_below="@+id/txtARName"
+            android:textSize="@dimen/sp_15"
+            android:layout_marginLeft="@dimen/dp_30"
             android:layout_height="wrap_content"/>
 
 
-        <include
-            android:id="@+id/viewPriceEstimated"
+        <RelativeLayout
+            android:id="@+id/estimatedView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_20"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:layout_below="@+id/txtARName"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            layout="@layout/layout_price_estimated"/>
+            android:layout_below="@+id/txtARDatetime"
+            android:background="@drawable/btn_estimated_bg"
+            android:paddingTop="@dimen/dp_3"
+            android:layout_marginTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_3"
+            android:paddingLeft="@dimen/dp_4"
+            android:paddingRight="@dimen/dp_4">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtPriceEstimated"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_20"
+                android:text=""
+                android:layout_centerHorizontal="true"
+                android:textStyle="bold|italic"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_9"
+                android:layout_below="@+id/txtPriceEstimated"
+                android:layout_centerHorizontal="true"
+                android:text="@string/estimated_price"
+                android:textStyle="normal|italic"/>
+
+
+        </RelativeLayout>
 
            <LinearLayout
+               android:id="@+id/sourceDestinationLinear"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:orientation="vertical"
-               android:layout_alignTop="@+id/viewPriceEstimated"
+               android:layout_centerVertical="true"
+               android:layout_alignTop="@+id/estimatedView"
                android:layout_marginTop="@dimen/dp_3"
-               android:layout_below="@+id/txtARName"
-               android:layout_toRightOf="@+id/viewPriceEstimated"
+               android:layout_below="@+id/txtARDatetime"
+               android:layout_toRightOf="@+id/estimatedView"
                android:layout_marginLeft="@dimen/dp_20">
 
                <TextView
@@ -89,7 +131,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/viewPriceEstimated"
+            android:layout_below="@+id/sourceDestinationLinear"
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/dp_20"
             android:gravity="center_horizontal">
@@ -118,9 +160,6 @@
         app:civ_border_color="@color/civ_border"
         android:layout_gravity="left|top"
         />
-
-
-
 
 
 

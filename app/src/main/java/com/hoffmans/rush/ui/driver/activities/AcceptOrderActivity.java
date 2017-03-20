@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.Button;
@@ -14,11 +15,12 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
-import com.hoffmans.rush.bean.MessageBean;
+import com.hoffmans.rush.bean.ScheduledBean;
 import com.hoffmans.rush.bean.ServiceDetailBean;
 import com.hoffmans.rush.http.request.ServiceRequest;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.model.CustomerDetail;
+import com.hoffmans.rush.model.DateTime;
 import com.hoffmans.rush.model.Estimate;
 import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.ServiceData;
@@ -40,7 +42,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
     private static final String STATUS_RUNNING   = "running";
     private static final String STATUS_PENDING   = "pending";
 
-    private TextView mTxtname,mtxtPhone,mtxtSource,mtxtdestination,mtxtPriceEstimate;
+    private TextView mTxtname,mtxtPhone,mtxtSource,mtxtdestination,mtxtPriceEstimate,txtdateTime;
     private Button btnAccept,btnReject;
     private String mSeriveId,mMessage;
     private ImageView imgClose;
@@ -69,6 +71,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
         btnReject         = (Button)findViewById(R.id.btnReject);
         imgClose          =(ImageView)findViewById(R.id.imgARClose);
         imgProfile        =(CircleImageView)findViewById(R.id.imgAcceptreject);
+        txtdateTime       =(TextView)findViewById(R.id.txtARDatetime);
     }
 
     @Override
@@ -84,8 +87,11 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
 
         mSeriveId=getIntent().getStringExtra(KEY_SERVICE_ID);
         mMessage=getIntent().getStringExtra(KEY_MESSAGE);
-
+        if(!TextUtils.isEmpty(mSeriveId)){
         getServiceDetail(mSeriveId);
+        }else{
+            finish();
+        }
 
     }
 
@@ -127,8 +133,9 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
                     PickDropAddress pickAddress        =serviceData.getPicAddress();
                     List<PickDropAddress>dropAddresses =serviceData.getDropAddressList();
                     CustomerDetail customerDetail      =serviceData.getCustomerDetail();
+                    DateTime dateTime                  =serviceData.getDateTime();
                     //populate the UI
-                    setData(estimate,pickAddress,dropAddresses,customerDetail);
+                    setData(estimate,pickAddress,dropAddresses,customerDetail,dateTime);
 
                 }
             }
@@ -150,7 +157,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
      * @param pickAddress
      * @param dropAddressList
      */
-    private void setData(Estimate estimate, PickDropAddress pickAddress, List<PickDropAddress> dropAddressList, CustomerDetail customerDetail){
+    private void setData(Estimate estimate, PickDropAddress pickAddress, List<PickDropAddress> dropAddressList, CustomerDetail customerDetail,DateTime dateTime){
 
         //set customer detail
         if(customerDetail!=null){
@@ -159,6 +166,9 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
             if(customerDetail.getPicUrl()!=null){
                 Glide.with(getApplicationContext()).load(customerDetail.getPicUrl()).into(imgProfile);
             }
+        }
+        if(dateTime!=null){
+            txtdateTime.setText(dateTime.getDate()+" "+dateTime.getTime());
         }
         //set estimate price
         if(estimate!=null){
@@ -213,12 +223,11 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onRequestSuccess(BaseBean body) {
                 Progress.dismissProgress();
-                MessageBean messageBean=(MessageBean)body;
+                ScheduledBean messageBean=(ScheduledBean) body;
                 showSnackbar(messageBean.getMessage(), Toast.LENGTH_LONG);
                 if(service_status.equals(STATUS_ACCEPTED)){
-
-                    //TODO move app to upcoming intent
-
+                    showSnackbar(messageBean.getMessage(),Toast.LENGTH_LONG);
+                    finish();
                 }else if(service_status.equals(STATUS_PENDING)){
                     //close current activity
                     finish();

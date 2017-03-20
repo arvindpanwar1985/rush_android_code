@@ -1,7 +1,6 @@
 package com.hoffmans.rush.http.request;
 
 import com.hoffmans.rush.bean.ConfirmServiceBean;
-import com.hoffmans.rush.bean.MessageBean;
 import com.hoffmans.rush.bean.RecordBean;
 import com.hoffmans.rush.bean.ScheduledBean;
 import com.hoffmans.rush.bean.ServiceBean;
@@ -168,14 +167,13 @@ public class ServiceRequest extends BaseRequest {
 
                     String message=obj.getString(MESSAGE);
                     if (status) {
-
-                        MessageBean messageBean=new MessageBean();
-                        messageBean.setMessage(message);
-                        apiCallback.onRequestSuccess(messageBean);
+                        String data = obj.getJSONObject(DATA).toString();
+                        ScheduledBean scheduledBean=getGsonBuilder().fromJson(data,ScheduledBean.class);
+                        scheduledBean.setMessage(message);
+                        apiCallback.onRequestSuccess(scheduledBean);
                     } else {
                         apiCallback.onRequestFailed(message);
                     }
-
                 }catch (Exception e){
                     apiCallback.onRequestFailed(e.getMessage());
                 }
@@ -241,7 +239,6 @@ public class ServiceRequest extends BaseRequest {
 
                     String message=obj.getString(MESSAGE);
                     if (status) {
-
                         String data = obj.getJSONObject(DATA).toString();
                         ScheduledBean bean = getGsonBuilder().fromJson(data, ScheduledBean.class);
                         bean.setMessage(message);

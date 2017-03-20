@@ -64,6 +64,7 @@
             layout="@layout/layout_price_estimated"/>
 
         <LinearLayout
+            android:id="@+id/linearSourceDestination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -98,7 +99,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/viewPriceEstimated"
+            android:layout_below="@+id/linearSourceDestination"
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/dp_20"
             android:gravity="center_horizontal">

@@ -20,6 +20,7 @@ import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.bean.ScheduledBean;
 import com.hoffmans.rush.http.request.ServiceRequest;
 import com.hoffmans.rush.listners.ApiCallback;
+import com.hoffmans.rush.listners.OnHeaderButtonClickListners;
 import com.hoffmans.rush.model.Record;
 import com.hoffmans.rush.ui.driver.adapters.UpcomingAdapter;
 import com.hoffmans.rush.ui.fragments.BaseFragment;
@@ -34,11 +35,9 @@ import java.util.List;
  * Use the {@link UpcomingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UpcomingFragment extends BaseFragment implements View.OnClickListener {
+public class UpcomingFragment extends BaseFragment implements View.OnClickListener,OnHeaderButtonClickListners {
 
-    private static final String STATUS_ACCEPTED  = "accepted";
-    private static final String STATUS_RUNNING   = "running";
-    private static final String STATUS_COMPLETED = "completed";
+
     private static final String KEY_PAGE           ="page";
     private static final String KEY_STATE          ="state";
     private static final String KEY_PER_PAGE       ="perpage";
@@ -47,6 +46,7 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
     private RecyclerView mRecyclerView;
     private UpcomingAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
+    private ScheduledBean bean;
 
     public UpcomingFragment() {
         // Required empty public constructor
@@ -57,6 +57,10 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
         UpcomingFragment fragment = new UpcomingFragment();
         return fragment;
     }
+
+
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,7 +99,7 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
         btnComplete       = (Button)view.findViewById(R.id.btnComplete);*/
 
 
-       getScheduledAndCurrentSercices("1","5",STATUS_ACCEPTED);
+       getScheduledAndCurrentSercices("1","5",Constants.STATUS_ACCEPTED);
     }
 
     @Override
@@ -128,7 +132,7 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
         HashMap<String,String> params=new HashMap<>();
         params.put(KEY_PAGE,page);
         params.put(KEY_PER_PAGE,perpage);
-        params.put(KEY_STATE,STATUS_COMPLETED);
+        params.put(KEY_STATE,Constants.STATUS_COMPLETED);
 
         return params;
     }
@@ -145,12 +149,9 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
             public void onRequestSuccess(BaseBean body) {
                 Progress.dismissProgress();
                 ScheduledBean bean=(ScheduledBean)body;
+                setScheduleBean(bean);
                 if(bean!=null){
-                    adapter=new UpcomingAdapter(mActivity);
-                    adapter.setHeader(bean.getCurrentOrder());
-                    List<Record> recordList=bean.getScheduledServices();
-                    adapter.setItems(recordList);
-                    mRecyclerView.setAdapter(adapter);
+                    setScheduledCurrentServicesAdapter(bean,false);
                 }
 
             }
@@ -163,12 +164,37 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
         });
     }
 
+    private void setScheduledCurrentServicesAdapter(ScheduledBean bean,boolean isNotify){
+        adapter=new UpcomingAdapter(mActivity,this);
+        if(bean.getCurrentOrder()!=null) {
+            adapter.setHeader(bean.getCurrentOrder());
+        }
+        List<Record> recordList=bean.getScheduledServices();
+        adapter.setItems(recordList);
+        if(!isNotify) {
+            mRecyclerView.setAdapter(adapter);
+        }else{
+            adapter.notifyDataSetChanged();
+        }
+
+    }
+
+
+
+    @Override
+    public void onStartStopButtonClicked(String state, int serviceId) {
+         if(state!=null && serviceId!=0){
+             String filteredStatus=(state.equals(Constants.STATUS_ACCEPTED))?Constants.STATUS_RUNNING:Constants.STATUS_COMPLETED;
+             setServiceStatus(serviceId,filteredStatus);
+         }
+    }
+
     /**
      * set the service status
      * @param serviceId id of service
      * @param service_status accepted/running/completed;
      */
-    private void setServiceStatus(int serviceId,String service_status){
+    private void setServiceStatus(int serviceId, final String service_status){
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         String token=appPreference.getUserDetails().getToken();
         ServiceRequest serviceRequest=new ServiceRequest();
@@ -176,6 +202,14 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onRequestSuccess(BaseBean body) {
                 Progress.dismissProgress();
+                ScheduledBean scheduledBean=(ScheduledBean) body;
+                mActivity.showSnackbar(scheduledBean.getMessage(),0);
+                if(scheduledBean!=null){
+                    ScheduledBean oldSchedulebean=getScheduleBean();
+                    oldSchedulebean.setCurrentOrder(scheduledBean.getCurrentOrder());
+                    handleServiceStatus(oldSchedulebean);
+                }
+
             }
 
             @Override
@@ -189,6 +223,12 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
         });
     }
 
+
+    private void handleServiceStatus(ScheduledBean bean){
+      if(adapter!=null){
+          setScheduledCurrentServicesAdapter(bean,true);
+      }
+    }
 
     private void showCommentDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
@@ -214,6 +254,11 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
         builder.show();
     }
 
+    public ScheduledBean getScheduleBean() {
+        return bean;
+    }
 
-
+    public void setScheduleBean(ScheduledBean bean) {
+        this.bean = bean;
+    }
 }

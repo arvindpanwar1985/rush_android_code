@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Record {
 
+ private String state;
  private DateTime date_time;
  private DriverDetail driver_details;
  private Estimate estimate;
@@ -71,5 +72,9 @@ public class Record {
     public void setDrop_down(List<PickDropAddress> drop_down) {
         this.drop_down = drop_down;
 
+    }
+
+    public String getState() {
+        return state;
     }
 }

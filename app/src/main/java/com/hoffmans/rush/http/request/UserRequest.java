@@ -85,12 +85,10 @@ public class UserRequest extends BaseRequest {
                     } else {
                         callback.onRequestFailed(message);
                     }
-
                 }catch (Exception e){
                     callback.onRequestFailed(e.getMessage());
                 }
             }
-
             @Override
             public void onWebStatusFalse(String message) {
                 callback.onRequestFailed(message);
@@ -225,7 +223,6 @@ public class UserRequest extends BaseRequest {
                     } else {
                         callback.onRequestFailed(message);
                     }
-
                 }catch (Exception e){
                     callback.onRequestFailed(e.getMessage());
                 }
@@ -263,7 +260,6 @@ public class UserRequest extends BaseRequest {
                     } else {
                         callback.onRequestFailed(message);
                     }
-
                 }catch (Exception e){
                     callback.onRequestFailed(e.getMessage());
                 }
