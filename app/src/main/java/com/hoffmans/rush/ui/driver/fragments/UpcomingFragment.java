@@ -151,7 +151,7 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
                 ScheduledBean bean=(ScheduledBean)body;
                 setScheduleBean(bean);
                 if(bean!=null){
-                    setScheduledCurrentServicesAdapter(bean,false);
+                    setScheduledCurrentServicesAdapter(bean);
                 }
 
             }
@@ -164,18 +164,19 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
         });
     }
 
-    private void setScheduledCurrentServicesAdapter(ScheduledBean bean,boolean isNotify){
+    /**
+     * set upcoming and recent adapter
+     * @param bean schedule bean
+     */
+    private void setScheduledCurrentServicesAdapter(ScheduledBean bean){
         adapter=new UpcomingAdapter(mActivity,this);
         if(bean.getCurrentOrder()!=null) {
             adapter.setHeader(bean.getCurrentOrder());
         }
         List<Record> recordList=bean.getScheduledServices();
         adapter.setItems(recordList);
-        if(!isNotify) {
-            mRecyclerView.setAdapter(adapter);
-        }else{
-            adapter.notifyDataSetChanged();
-        }
+        mRecyclerView.setAdapter(adapter);
+
 
     }
 
@@ -194,7 +195,7 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
      * @param serviceId id of service
      * @param service_status accepted/running/completed;
      */
-    private void setServiceStatus(int serviceId, final String service_status){
+    private void setServiceStatus(final int serviceId, final String service_status){
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         String token=appPreference.getUserDetails().getToken();
         ServiceRequest serviceRequest=new ServiceRequest();
@@ -205,9 +206,19 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
                 ScheduledBean scheduledBean=(ScheduledBean) body;
                 mActivity.showSnackbar(scheduledBean.getMessage(),0);
                 if(scheduledBean!=null){
-                    ScheduledBean oldSchedulebean=getScheduleBean();
-                    oldSchedulebean.setCurrentOrder(scheduledBean.getCurrentOrder());
-                    handleServiceStatus(oldSchedulebean);
+                    ScheduledBean lastSchedulebean=getScheduleBean();
+                    lastSchedulebean.setCurrentOrder(scheduledBean.getCurrentOrder());
+                    if(adapter!=null){
+                        if(lastSchedulebean.getCurrentOrder()!=null){
+                            adapter.setHeader(lastSchedulebean.getCurrentOrder());
+                            adapter.setItems(lastSchedulebean.getScheduledServices());
+                            adapter.notifyDataSetChanged();
+                            if(service_status.equals(Constants.STATUS_COMPLETED)){
+                                //show comment dialog
+                                showCommentDialog(serviceId);
+                            }
+                        }
+                    }
                 }
 
             }
@@ -224,13 +235,9 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
     }
 
 
-    private void handleServiceStatus(ScheduledBean bean){
-      if(adapter!=null){
-          setScheduledCurrentServicesAdapter(bean,true);
-      }
-    }
 
-    private void showCommentDialog(){
+
+    private void showCommentDialog(int serviceId){
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setTitle("Please add comment.");
         // Set up the input

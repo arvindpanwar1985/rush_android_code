@@ -170,6 +170,10 @@
             android:name=".ui.driver.activities.CompletedRecords"
             android:label="@string/title_activity_completed_records"
             android:theme="@style/AppTheme"></activity>
+
+        <activity
+            android:name=".ui.driver.activities.RatingActivity"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

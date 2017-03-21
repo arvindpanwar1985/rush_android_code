@@ -409,6 +409,9 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                     mGoogleMap.clear();
                     LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
                     addlocationMArker(latLng, true);
+                    setUpdatedPosition(0);
+                    Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
+                    GeoCodingService.getInstance(mActivity,latLng);
                 }
                 return false;
             }
