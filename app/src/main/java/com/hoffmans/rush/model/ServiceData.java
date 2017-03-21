@@ -55,6 +55,7 @@ public class ServiceData {
     @Expose
     private CustomerDetail customerDetail;
 
+    private boolean typenoHeader;
 
 
     public Integer getId() {
@@ -128,4 +129,13 @@ public class ServiceData {
     public CustomerDetail getCustomerDetail() {
         return customerDetail;
     }
+
+    public boolean isTypenoHeader() {
+        return typenoHeader;
+    }
+
+    public void setTypenoHeader(boolean typenoHeader) {
+        this.typenoHeader = typenoHeader;
+    }
+
 }

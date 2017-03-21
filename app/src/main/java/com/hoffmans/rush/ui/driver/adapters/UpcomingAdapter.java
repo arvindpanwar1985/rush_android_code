@@ -32,7 +32,7 @@ public class UpcomingAdapter extends HeaderRecyclerViewAdapter<RecyclerView.View
     @Override
     protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = getLayoutInflater(parent);
-        View headerView = inflater.inflate(R.layout.header_upcoming, parent, false);
+        View   headerView = inflater.inflate(R.layout.header_upcoming, parent, false);
         return new HeaderViewHolder(headerView,onHeaderButtonClickListners);
     }
 

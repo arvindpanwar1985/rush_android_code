@@ -30,7 +30,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HeaderViewHolder extends RecyclerView.ViewHolder {
     private SpannableStringBuilder mbuilder=new SpannableStringBuilder();
-    private TextView mTxtname,mtxtPhone,mtxtSource,mtxtdestination,mtxtPriceEstimate,txtDatetime;
+    private TextView mTxtname,mtxtPhone,mtxtSource,mtxtdestination,mtxtPriceEstimate,txtDatetime,txtNoRecords;
     private Button btnStart;
     private Context mContext;
     private CircleImageView imgAcceptreject;
@@ -48,49 +48,54 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
         btnStart          = (Button)itemView.findViewById(R.id.btnStart);
         txtDatetime       =(TextView)itemView.findViewById(R.id.txtdateTime);
         imgAcceptreject   =(CircleImageView)itemView.findViewById(R.id.imgAcceptreject);
+        txtNoRecords      =(TextView)itemView.findViewById(R.id.txtNoRecords);
 
     }
 
    public void render(final ServiceData header) {
-        if(header!=null){
-            final String state=header.getState();
-            if(state.equals(Constants.STATUS_ACCEPTED)){
-                btnStart.setText("Start");
-            }else if(state.equals(Constants.STATUS_RUNNING)){
-                btnStart.setText("Complete");
-            }
-            CustomerDetail customerDetail=header.getCustomerDetail();
-            Estimate estimate=header.getEstimate();
-            PickDropAddress pickUpAddress=header.getPicAddress();
-            DateTime dateTime=header.getDateTime();
+        if(header!=null ) {
 
-            List<PickDropAddress> dropAddresses=header.getDropAddressList();
-            if(customerDetail!=null){
-                setCustomerDetail(customerDetail);
-            }
-            if(estimate!=null){
-                setPriceEstimate(estimate);
-            }
-            if(pickUpAddress!=null){
-                setPickAddress(pickUpAddress);
-            }
-            if(dropAddresses!=null && dropAddresses.size()>0){
-                setDropAddresses(dropAddresses);
-                  }
-            if(dateTime!=null){
-                txtDatetime.setText(dateTime.getDate()+" "+dateTime.getTime());
-            }
 
-            btnStart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                  onHeaderButtonClickListner.onStartStopButtonClicked(state,header.getId());
+                final String state = header.getState();
+                if (state.equals(Constants.STATUS_ACCEPTED)) {
+                    btnStart.setText("Start");
+                } else if (state.equals(Constants.STATUS_RUNNING)) {
+                    btnStart.setText("Complete");
                 }
-            });
-        }
+                CustomerDetail customerDetail = header.getCustomerDetail();
+                Estimate estimate = header.getEstimate();
+                PickDropAddress pickUpAddress = header.getPicAddress();
+                DateTime dateTime = header.getDateTime();
+
+                List<PickDropAddress> dropAddresses = header.getDropAddressList();
+                if (customerDetail != null) {
+                    setCustomerDetail(customerDetail);
+                }
+                if (estimate != null) {
+                    setPriceEstimate(estimate);
+                }
+                if (pickUpAddress != null) {
+                    setPickAddress(pickUpAddress);
+                }
+                if (dropAddresses != null && dropAddresses.size() > 0) {
+                    setDropAddresses(dropAddresses);
+                }
+                if (dateTime != null) {
+                    txtDatetime.setText(dateTime.getDate() + " " + dateTime.getTime());
+                }
+
+                btnStart.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onHeaderButtonClickListner.onStartStopButtonClicked(state, header.getId());
+                    }
+                });
+            }
+
 
 
     }
+
 
     /**
      * set customer detail
@@ -109,8 +114,15 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
      * @param estimate
      */
     private void setPriceEstimate(Estimate estimate){
-        StringBuilder stringBuilder=new StringBuilder(estimate.getSymbol()).append(" ").append(estimate.getApproxConvertedAmount());
+        StringBuilder stringBuilder=new StringBuilder();
+        if(estimate.getSymbol()!=null){
+            stringBuilder.append(estimate.getSymbol());
+        }
+        if(estimate.getApproxConvertedAmount()!=null){
+            stringBuilder.append(" ").append(estimate.getApproxConvertedAmount());
+        }
         mtxtPriceEstimate.setText(stringBuilder.toString());
+
     }
 
     /**

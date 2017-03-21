@@ -8,20 +8,23 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
+import com.hoffmans.rush.bean.MessageBean;
 import com.hoffmans.rush.bean.ScheduledBean;
 import com.hoffmans.rush.http.request.ServiceRequest;
+import com.hoffmans.rush.http.request.UserRequest;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.listners.OnHeaderButtonClickListners;
 import com.hoffmans.rush.model.Record;
+import com.hoffmans.rush.model.ServiceData;
 import com.hoffmans.rush.ui.driver.adapters.UpcomingAdapter;
 import com.hoffmans.rush.ui.fragments.BaseFragment;
 import com.hoffmans.rush.utils.Constants;
@@ -41,11 +44,10 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
     private static final String KEY_PAGE           ="page";
     private static final String KEY_STATE          ="state";
     private static final String KEY_PER_PAGE       ="perpage";
-    private TextView mTxtname,mtxtPhone,mtxtSource,mtxtdestination,mtxtPriceEstimate;
-    private Button btnStart,btnComplete;
     private RecyclerView mRecyclerView;
     private UpcomingAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
+    private TextView txtNoRecordsFound;
     private ScheduledBean bean;
 
     public UpcomingFragment() {
@@ -88,8 +90,10 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
     protected void initViews(View view) {
         mRecyclerView     =(RecyclerView)view.findViewById(R.id.currentScheduleOrderList);
         linearLayoutManager = new LinearLayoutManager(mActivity);
+        txtNoRecordsFound   =(TextView)view.findViewById(R.id.txtNoRecords);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
+
       /*mTxtname          = (TextView)view.findViewById(R.id.txtARName);
         mtxtPhone         = (TextView)view.findViewById(R.id.txtARPhone);
         mtxtSource        = (TextView)view.findViewById(R.id.txtARSource);
@@ -149,7 +153,6 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
             public void onRequestSuccess(BaseBean body) {
                 Progress.dismissProgress();
                 ScheduledBean bean=(ScheduledBean)body;
-                setScheduleBean(bean);
                 if(bean!=null){
                     setScheduledCurrentServicesAdapter(bean);
                 }
@@ -170,14 +173,14 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
      */
     private void setScheduledCurrentServicesAdapter(ScheduledBean bean){
         adapter=new UpcomingAdapter(mActivity,this);
-        if(bean.getCurrentOrder()!=null) {
-            adapter.setHeader(bean.getCurrentOrder());
-        }
+        ServiceData currentOrderData=bean.getCurrentOrder();
+
+        adapter.setHeader(currentOrderData);
+
         List<Record> recordList=bean.getScheduledServices();
         adapter.setItems(recordList);
         mRecyclerView.setAdapter(adapter);
-
-
+        setEmptyListText(recordList);
     }
 
 
@@ -189,7 +192,6 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
              setServiceStatus(serviceId,filteredStatus);
          }
     }
-
     /**
      * set the service status
      * @param serviceId id of service
@@ -206,21 +208,18 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
                 ScheduledBean scheduledBean=(ScheduledBean) body;
                 mActivity.showSnackbar(scheduledBean.getMessage(),0);
                 if(scheduledBean!=null){
-                    ScheduledBean lastSchedulebean=getScheduleBean();
-                    lastSchedulebean.setCurrentOrder(scheduledBean.getCurrentOrder());
                     if(adapter!=null){
-                        if(lastSchedulebean.getCurrentOrder()!=null){
-                            adapter.setHeader(lastSchedulebean.getCurrentOrder());
-                            adapter.setItems(lastSchedulebean.getScheduledServices());
-                            adapter.notifyDataSetChanged();
-                            if(service_status.equals(Constants.STATUS_COMPLETED)){
+                        ServiceData currentOrderData=scheduledBean.getCurrentOrder();
+                          adapter.setHeader(currentOrderData);
+                          adapter.setItems(scheduledBean.getScheduledServices());
+                          adapter.notifyDataSetChanged();
+                          setEmptyListText(scheduledBean.getScheduledServices());
+                          if(service_status.equals(Constants.STATUS_COMPLETED)){
                                 //show comment dialog
-                                showCommentDialog(serviceId);
-                            }
-                        }
-                    }
+                            showCommentDialog(serviceId);
+                       }
+                   }
                 }
-
             }
 
             @Override
@@ -235,37 +234,92 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
     }
 
 
+    /**
+     * set the empty textview for list
+     * @param recordList lsit of schedule records
+     */
+    private void setEmptyListText(List<Record>recordList){
+        if(recordList!=null && recordList.size()>0){
+            txtNoRecordsFound.setVisibility(View.GONE);
+        }else{
+            txtNoRecordsFound.setVisibility(View.VISIBLE);
+        }
+    }
 
 
-    private void showCommentDialog(int serviceId){
+    private void showCommentDialog(final int serviceId){
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setTitle("Please add comment.");
+        builder.setCancelable(false);
         // Set up the input
         final EditText input = new EditText(mActivity);
+
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        input.setInputType(InputType.TYPE_CLASS_TEXT| InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         input.setHint("Add comment.");
         builder.setView(input);
-        builder.setPositiveButton("Add Comment", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
-        builder.show();
+
+        builder.setPositiveButton("Add Comment",
+                new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        //Do nothing here because we override this button later to change the close behaviour.
+                        //However, we still need this because on older versions of Android unless we
+                        //pass a handler the button doesn't get instantiated
+                    }
+                });
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                String comment=input.getText().toString().trim();
+                if(!TextUtils.isEmpty(comment)){
+                    //add comments
+                    dialog.dismiss();
+                    addComment(serviceId,comment);
+                }else{
+                    input.setError("Please add comment");
+                }
+            }
+        });
+
+
     }
 
-    public ScheduledBean getScheduleBean() {
-        return bean;
+
+    private void addComment(int serviceId,String comment){
+        Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
+        String token=appPreference.getUserDetails().getToken();
+        UserRequest request=new UserRequest();
+        request.addComment(token, serviceId, comment, new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                Progress.dismissProgress();
+                MessageBean bean=(MessageBean)body;
+                mActivity.showSnackbar(bean.getMessage(),0);
+            }
+
+            @Override
+            public void onRequestFailed(String message) {
+                Progress.dismissProgress();
+                mActivity.showSnackbar(message,0);
+                if(message.equals(Constants.AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
+            }
+        });
     }
 
-    public void setScheduleBean(ScheduledBean bean) {
-        this.bean = bean;
-    }
+
 }

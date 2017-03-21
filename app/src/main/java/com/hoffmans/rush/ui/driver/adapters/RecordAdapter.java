@@ -43,7 +43,7 @@ public class RecordAdapter  extends RecyclerView.Adapter<RecordAdapter.ViewHolde
 
 
         ImageView imgProfile;
-        TextView txtNamePhone,txtSource,txtDestination,txtEstimatedPrice,txtDateTime;
+        TextView txtNamePhone,txtSource,txtDestination,txtEstimatedPrice,txtDateTime,txtState;
 
 
         public ViewHolder(View v) {
@@ -54,6 +54,7 @@ public class RecordAdapter  extends RecyclerView.Adapter<RecordAdapter.ViewHolde
             txtDestination   =(TextView)v.findViewById(R.id.txtdestination);
             txtEstimatedPrice=(TextView)v.findViewById(R.id.txtPriceEstimated);
             txtDateTime      =(TextView)v.findViewById(R.id.txtdateTime);
+            txtState         =(TextView)v.findViewById(R.id.txtState);
              v.setOnClickListener(this);
 
         }
@@ -112,6 +113,7 @@ public class RecordAdapter  extends RecyclerView.Adapter<RecordAdapter.ViewHolde
         if(dateTime!=null){
             holder.txtDateTime.setText(dateTime.getDate()+" "+dateTime.getTime());
         }
+        holder.txtState.setText(mContext.getString(R.string.str_finished));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -139,7 +141,13 @@ public class RecordAdapter  extends RecyclerView.Adapter<RecordAdapter.ViewHolde
      * @param estimate
      */
     private void setPriceEstimate(Estimate estimate,RecordAdapter.ViewHolder holder){
-        StringBuilder stringBuilder=new StringBuilder(estimate.getSymbol()).append(" ").append(estimate.getApproxConvertedAmount());
+        StringBuilder stringBuilder=new StringBuilder();
+        if(estimate.getSymbol()!=null){
+            stringBuilder.append(estimate.getSymbol());
+        }
+        if(estimate.getApproxConvertedAmount()!=null){
+            stringBuilder.append(" ").append(estimate.getApproxConvertedAmount());
+        }
         holder.txtEstimatedPrice.setText(stringBuilder.toString());
     }
 

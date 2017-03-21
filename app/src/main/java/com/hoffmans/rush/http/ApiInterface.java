@@ -124,4 +124,8 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("/api/services/upcoming_services")
     Call<ResponseBody> getUpcomingServices(@Header("Authorization")String authorization,@Field("page") String page,@Field("perpage")String perpage, @Field("state")String state);
+
+    @FormUrlEncoded
+    @POST("/api/drivers/driver_comment")
+    Call<ResponseBody>addDriverComment(@Header("Authorization")String auth,@Field("service_id")int serviceID,@Field("comment")String comment);
 }

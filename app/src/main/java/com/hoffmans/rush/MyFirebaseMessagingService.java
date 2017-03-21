@@ -2,10 +2,12 @@ package com.hoffmans.rush;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.hoffmans.rush.ui.driver.activities.AcceptOrderActivity;
+import com.hoffmans.rush.ui.driver.activities.RatingActivity;
 import com.hoffmans.rush.utils.AppPreference;
 
 import org.greenrobot.eventbus.EventBus;
@@ -23,6 +25,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String ROLE_DRIVER       ="Driver";
     private static final String ROLE_CUSTOMER     ="customer";
     private static final String TYPE_ACCEPT_ORDER ="driver_assigned";
+    private static final String TYPE_SERVICE_COMPLETED ="service_completed";
 
 
     private  String KEY_NOTIFY_TYPE  ="type";
@@ -33,7 +36,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-
         mAppPreference=AppPreference.newInstance(this);
         Map<String, String> params = remoteMessage.getData();
         if(remoteMessage.getData().size()>0) {
@@ -75,7 +77,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void handleDriverNotifications(JSONObject object,String  notifyType){
 
         try{
-
             switch (notifyType){
                 case TYPE_ACCEPT_ORDER:
                     String message   =object.getString(KEY_MESSAGE);
@@ -83,18 +84,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     if(!mAppPreference.getPause()) {
                         EventBus.getDefault().postSticky(serviceID);
                     }else{
-
                         Intent acceptOrderIntent=new Intent(this, AcceptOrderActivity.class);
                         acceptOrderIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         acceptOrderIntent.putExtra(KEY_MESSAGE,message);
                         acceptOrderIntent.putExtra(KEY_SERVICE_ID,serviceID);
                         startActivity(acceptOrderIntent);
                     }
-
                     break;
             }
-        }catch (Exception e){
-
+        }catch (JSONException e){
+            Log.i(TAG,e.toString());
         }
     }
 
@@ -106,9 +105,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      */
     private void handleCustomerNotifications(JSONObject object,String  notifyType){
         try{
-
-        }catch (Exception e){
-
+            switch (notifyType){
+                case TYPE_SERVICE_COMPLETED:
+                    String message   =object.getString(KEY_MESSAGE);
+                    String serviceID =object.getString(KEY_SERVICE_ID);
+                    Intent ratingIntent=new Intent(this, RatingActivity.class);
+                    ratingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    ratingIntent.putExtra(KEY_MESSAGE,message);
+                    ratingIntent.putExtra(KEY_SERVICE_ID,serviceID);
+                    startActivity(ratingIntent);
+                    break;
+            }
+        }catch (JSONException e){
+            Log.i(TAG,e.toString());
         }
     }
 }

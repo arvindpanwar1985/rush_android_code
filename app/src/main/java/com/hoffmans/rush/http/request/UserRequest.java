@@ -270,4 +270,40 @@ public class UserRequest extends BaseRequest {
             }
         });
     }
+
+
+    /**
+     * add comments
+     * @param auth
+     * @param serviceId
+     * @param comment
+     * @param callback
+     */
+    public void addComment(String auth,int serviceId,String comment ,final  ApiCallback callback){
+        Call<ResponseBody> commentCall=getAPIClient().addDriverComment(auth,serviceId,comment);
+        ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(commentCall);
+        connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
+            @Override
+            public void onWebServiceComplete(ResponseBody responseBody) {
+                try {
+                    JSONObject obj=new JSONObject(responseBody.string());
+                    boolean status = obj.getBoolean(SUCCESS);
+                    String message=obj.getString(MESSAGE);
+                    if (status) {
+                        MessageBean bean=new MessageBean();
+                        bean.setMessage(message);
+                        callback.onRequestSuccess(bean);
+                    } else {
+                        callback.onRequestFailed(message);
+                    }
+                }catch (Exception e){
+                    callback.onRequestFailed(e.getMessage());
+                }
+            }
+            @Override
+            public void onWebStatusFalse(String message) {
+                callback.onRequestFailed(message);
+            }
+        });
+    }
 }
