@@ -128,8 +128,12 @@ public class RecordAdapter  extends RecyclerView.Adapter<RecordAdapter.ViewHolde
      * @param customerDetail
      */
     private void setCustomerDetail(CustomerDetail customerDetail ,RecordAdapter.ViewHolder holder ){
+        String customerphone=customerDetail.getPhone();
+        if(customerphone==null){
+            customerphone="";
+        }
         StringBuilder namePhoneBuilder=new StringBuilder(".").append(customerDetail.getName())
-                .append(" . ").append(customerDetail.getPhone());
+                .append(" . ").append(customerphone);
         holder.txtNamePhone.setText(namePhoneBuilder.toString());
         if(customerDetail.getPicUrl()!=null){
             Glide.with(mContext).load(customerDetail.getPicUrl()).into(holder.imgProfile);

@@ -18,6 +18,8 @@ import com.hoffmans.rush.R;
 import com.hoffmans.rush.location.LocationData;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.BaseActivity;
+import com.hoffmans.rush.ui.activities.BookServiceActivity;
+import com.hoffmans.rush.ui.activities.EditProfileActivity;
 import com.hoffmans.rush.ui.driver.fragments.HomeFragment;
 import com.hoffmans.rush.utils.AppPreference;
 
@@ -167,6 +169,12 @@ public class DriverNavigationActivity extends BaseActivity
                 } else {
                     drawer.closeDrawer(GravityCompat.START);
                 }
+                break;
+
+            case R.id.nav_editProfile:
+                Intent edtProfileIntent=new Intent(DriverNavigationActivity.this,DriverEditprofileActivity.class);
+                edtProfileIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(edtProfileIntent);
                 break;
 
             case R.id.nav_Upcoming:

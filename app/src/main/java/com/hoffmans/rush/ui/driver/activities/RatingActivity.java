@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.hoffmans.rush.R;
@@ -95,14 +96,17 @@ public class RatingActivity extends BaseActivity implements View.OnClickListener
                 finish();
                 break;
             case R.id.btnsubmitRating:
-                    rateDriver(buildRatingParam());
-                    break;
+                 rateDriver(buildRatingParam());
+                 break;
         }
     }
 
 
-
-    private RatingParam buildRatingParam(){
+    /**
+     * build the rating params
+     * @return Rating params
+     */
+     private RatingParam buildRatingParam(){
         RatingParam ratingParam=new RatingParam();
         Rating rating=new Rating();
         rating.setRating(String.valueOf(ratingBar.getRating()));
@@ -116,7 +120,6 @@ public class RatingActivity extends BaseActivity implements View.OnClickListener
     private void setData(DriverDetail driverDetail){
         mtxtPhone.setText(driverDetail.getPhone());
         mTxtname .setText(driverDetail.getName());
-
         if(driverDetail.getPicUrl()!=null){
             Glide.with(RatingActivity.this).load(driverDetail.getPicUrl()).into(imgProfile);
         }
@@ -161,7 +164,6 @@ public class RatingActivity extends BaseActivity implements View.OnClickListener
         });
     }
 
-
     /**
      * rate driver
      * @param param
@@ -174,12 +176,11 @@ public class RatingActivity extends BaseActivity implements View.OnClickListener
             @Override
             public void onRequestSuccess(BaseBean body) {
                 Progress.dismissProgress();
-                showSnackbar(body.getMessage(),0);
+                Toast.makeText(getApplicationContext(),body.getMessage(),Toast.LENGTH_LONG).show();
+                finish();
             }
-
             @Override
             public void onRequestFailed(String message) {
-
                 Progress.dismissProgress();
                 showSnackbar(message,0);
                 if(message.equals(Constants.AUTH_ERROR)){

@@ -1,24 +1,24 @@
 package com.hoffmans.rush.model;
 
 public class Rating{
-	private String serviceId;
-	private String serviceReview;
+	private String service_id;
+	private String service_review;
 	private String rating;
 
 	public void setServiceId(String serviceId){
-		this.serviceId = serviceId;
+		this.service_id = serviceId;
 	}
 
 	public String getServiceId(){
-		return serviceId;
+		return service_id;
 	}
 
 	public void setServiceReview(String serviceReview){
-		this.serviceReview = serviceReview;
+		this.service_review = serviceReview;
 	}
 
 	public String getServiceReview(){
-		return serviceReview;
+		return service_review;
 	}
 
 	public void setRating(String rating){
@@ -33,8 +33,8 @@ public class Rating{
  	public String toString(){
 		return 
 			"Rating{" + 
-			"service_id = '" + serviceId + '\'' + 
-			",service_review = '" + serviceReview + '\'' + 
+			"service_id = '" + service_id + '\'' +
+			",service_review = '" + service_review + '\'' +
 			",rating = '" + rating + '\'' + 
 			"}";
 		}

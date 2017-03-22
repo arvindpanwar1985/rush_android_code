@@ -12,7 +12,7 @@
         android:background="@drawable/bg_accept_order"
         android:layout_marginLeft="@dimen/dp_30"
         android:layout_marginTop="@dimen/dp_30"
-
+        android:layout_marginBottom="@dimen/dp_20"
         android:layout_marginRight="@dimen/dp_10"
         android:minHeight="160dp"
         android:layout_height="wrap_content">
@@ -137,15 +137,15 @@
             android:gravity="center_horizontal">
             <Button
                 android:id="@+id/btnAccept"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Accept"/>
+                android:text="Accept"
+                android:layout_marginBottom="@dimen/dp_10"
+                style="@style/AppTheme.Button.Driver"/>
 
 
             <Button
+                style="@style/AppTheme.Button.Driver"
                 android:id="@+id/btnReject"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_10"
                 android:layout_marginLeft="@dimen/dp_10"
                 android:text="Reject"/>
             </LinearLayout>

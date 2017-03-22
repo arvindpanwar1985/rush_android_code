@@ -143,6 +143,7 @@
     <string name="str_source">Source</string>
     <string name="str_finished">Finished</string>
     <string name="str_dest">Destination</string>
+    <string name="str_notify_text">Have you received request?</string>
 
 
 </resources>

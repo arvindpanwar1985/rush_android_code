@@ -18,7 +18,7 @@ import com.hoffmans.rush.model.DateTime;
 import com.hoffmans.rush.model.Estimate;
 import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.ServiceData;
-import com.hoffmans.rush.utils.Constants;
+import com.hoffmans.rush.utils.Status;
 
 import java.util.List;
 
@@ -54,12 +54,10 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
 
    public void render(final ServiceData header) {
         if(header!=null ) {
-
-
                 final String state = header.getState();
-                if (state.equals(Constants.STATUS_ACCEPTED)) {
+                if (state.equals(Status.ACCEPTED)) {
                     btnStart.setText("Start");
-                } else if (state.equals(Constants.STATUS_RUNNING)) {
+                } else if (state.equals(Status.RUNNING)) {
                     btnStart.setText("Complete");
                 }
                 CustomerDetail customerDetail = header.getCustomerDetail();
@@ -91,9 +89,6 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
                     }
                 });
             }
-
-
-
     }
 
 

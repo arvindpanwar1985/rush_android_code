@@ -29,6 +29,7 @@ import com.hoffmans.rush.ui.driver.adapters.UpcomingAdapter;
 import com.hoffmans.rush.ui.fragments.BaseFragment;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
+import com.hoffmans.rush.utils.Status;
 
 import java.util.HashMap;
 import java.util.List;
@@ -103,7 +104,7 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
         btnComplete       = (Button)view.findViewById(R.id.btnComplete);*/
 
 
-       getScheduledAndCurrentSercices("1","5",Constants.STATUS_ACCEPTED);
+       getScheduledAndCurrentSercices("1","5",Status.ACCEPTED);
     }
 
     @Override
@@ -136,7 +137,7 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
         HashMap<String,String> params=new HashMap<>();
         params.put(KEY_PAGE,page);
         params.put(KEY_PER_PAGE,perpage);
-        params.put(KEY_STATE,Constants.STATUS_COMPLETED);
+        params.put(KEY_STATE,Status.COMPLETED);
 
         return params;
     }
@@ -188,7 +189,7 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onStartStopButtonClicked(String state, int serviceId) {
          if(state!=null && serviceId!=0){
-             String filteredStatus=(state.equals(Constants.STATUS_ACCEPTED))?Constants.STATUS_RUNNING:Constants.STATUS_COMPLETED;
+             String filteredStatus=(state.equals(Status.ACCEPTED))?Status.RUNNING:Status.COMPLETED;
              setServiceStatus(serviceId,filteredStatus);
          }
     }
@@ -214,7 +215,7 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
                           adapter.setItems(scheduledBean.getScheduledServices());
                           adapter.notifyDataSetChanged();
                           setEmptyListText(scheduledBean.getScheduledServices());
-                          if(service_status.equals(Constants.STATUS_COMPLETED)){
+                          if(service_status.equals(Status.COMPLETED)){
                                 //show comment dialog
                             showCommentDialog(serviceId);
                        }

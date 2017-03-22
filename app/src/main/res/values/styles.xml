@@ -53,10 +53,30 @@
         <item name="android:padding">@dimen/dp_5</item>
     </style>
 
+
+    <style name="AppTheme.Button.Driver" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/btn_driver</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColorHint">@android:color/white</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textStyle">italic|bold</item>
+        <item name="android:textSize">@dimen/sp_12</item>
+        <item name="android:paddingLeft">@dimen/dp_5</item>
+        <item name="android:paddingRight">@dimen/dp_5</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+
+    <style name="rating_bar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/rating_progress</item>
+        <item name="android:minHeight">24dip</item>
+        <item name="android:maxHeight">70dip</item>
+    </style>
 
     <style name="NavigationView">
         <item name="android:listDivider">@android:color/white</item>

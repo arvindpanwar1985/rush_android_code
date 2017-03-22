@@ -30,19 +30,20 @@ import com.hoffmans.rush.ui.activities.BaseActivity;
 import com.hoffmans.rush.utils.AppPreference;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
+import com.hoffmans.rush.utils.Status;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.hoffmans.rush.ui.activities.LoginActivity.STATUS_PENDING;
 
 public class AcceptOrderActivity extends BaseActivity implements View.OnClickListener{
 
     private  String KEY_MESSAGE      ="message";
     private  String KEY_SERVICE_ID   ="service_id";
     private  String NEW_LINE         ="\n";
-    private static final String STATUS_ACCEPTED  = "accepted";
-    private static final String STATUS_RUNNING   = "running";
-    private static final String STATUS_PENDING   = "pending";
+
     private RelativeLayout topRelative;
     private TextView mTxtname,mtxtPhone,mtxtSource,mtxtdestination,mtxtPriceEstimate,txtdateTime;
     private Button btnAccept,btnReject;
@@ -104,7 +105,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
         int id =view.getId();
         switch (id){
             case R.id.btnAccept:
-                setServiceStatus(mSeriveId,STATUS_ACCEPTED);
+                setServiceStatus(mSeriveId,Status.ACCEPTED);
                 break;
             case R.id.btnReject:
                 setServiceStatus(mSeriveId,STATUS_PENDING);
@@ -163,14 +164,9 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
      * @param dropAddressList
      */
     private void setData(Estimate estimate, PickDropAddress pickAddress, List<PickDropAddress> dropAddressList, CustomerDetail customerDetail,DateTime dateTime){
-
         //set customer detail
         if(customerDetail!=null){
-            mTxtname.setText("."+customerDetail.getName()+".");
-            mtxtPhone.setText(customerDetail.getPhone());
-            if(customerDetail.getPicUrl()!=null){
-                Glide.with(getApplicationContext()).load(customerDetail.getPicUrl()).into(imgProfile);
-            }
+           setCustomerDetails(customerDetail);
         }
         if(dateTime!=null){
             txtdateTime.setText(dateTime.getDate()+" "+dateTime.getTime());
@@ -181,38 +177,56 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
         }
         // set pickup address
         if(pickAddress!=null){
-            mBuilder.clear();
-            String boldText=getString(R.string.str_collect)+": ";
-            getSpanableBuilder(boldText,ContextCompat.getColor(getApplicationContext(),R.color.civ_border));
-            String address=pickAddress.getStreetAddress();
-            SpannableStringBuilder builder=getSpanableBuilder(address,ContextCompat.getColor(getApplicationContext(),R.color.colorPrimary));
-            mtxtSource.setText(builder, TextView.BufferType.SPANNABLE);
+            setPickAddress(pickAddress);
         }
         //set drop address
         if(dropAddressList!=null && dropAddressList.size()>0){
-            if(dropAddressList.size()==1){
-                //single destination order
-                PickDropAddress dropAddress=dropAddressList.get(0);
-                mBuilder.clear();
-                String start = getString(R.string.str_deliver)+": ";
-                getSpanableBuilder(start,ContextCompat.getColor(getApplicationContext(),R.color.civ_border));
-                String address=dropAddress.getStreetAddress();
-                SpannableStringBuilder builder=getSpanableBuilder(address,ContextCompat.getColor(getApplicationContext(),R.color.colorPrimary));
-                mtxtdestination.setText(builder, TextView.BufferType.SPANNABLE);
+            setDropAddresses(dropAddressList);
+        }
+    }
 
-            }else{
-                //multiple destination order
-                SpannableStringBuilder builder=null;
-                 mBuilder.clear();
-                // building multiple destination text
-                for(PickDropAddress dropAddress:dropAddressList){
-                    String start=getString(R.string.str_deliver)+": ";
-                    getSpanableBuilder(start,ContextCompat.getColor(getApplicationContext(),R.color.civ_border));
-                    String address=dropAddress.getStreetAddress()+NEW_LINE;
-                    builder=getSpanableBuilder(address,ContextCompat.getColor(getApplicationContext(),R.color.colorPrimary));
-                }
-                mtxtdestination.setText(builder, TextView.BufferType.SPANNABLE);
+    private void setCustomerDetails(CustomerDetail customerDetail){
+        mTxtname.setText("."+customerDetail.getName()+".");
+        mtxtPhone.setText(customerDetail.getPhone());
+        if(customerDetail.getPicUrl()!=null){
+            Glide.with(getApplicationContext()).load(customerDetail.getPicUrl()).into(imgProfile);
+        }
+    }
+
+    private void setPickAddress(PickDropAddress pickAddress ){
+        mBuilder.clear();
+        String boldText=getString(R.string.str_collect)+": ";
+        getSpanableBuilder(boldText,ContextCompat.getColor(getApplicationContext(),R.color.civ_border));
+        String address=pickAddress.getStreetAddress();
+        SpannableStringBuilder builder=getSpanableBuilder(address,ContextCompat.getColor(getApplicationContext(),R.color.colorPrimary));
+        mtxtSource.setText(builder, TextView.BufferType.SPANNABLE);
+    }
+
+
+    private void setDropAddresses(List<PickDropAddress>dropAddressList){
+
+        if(dropAddressList.size()==1){
+            //single destination order
+            PickDropAddress dropAddress=dropAddressList.get(0);
+            mBuilder.clear();
+            String start = getString(R.string.str_deliver)+": ";
+            getSpanableBuilder(start,ContextCompat.getColor(getApplicationContext(),R.color.civ_border));
+            String address=dropAddress.getStreetAddress();
+            SpannableStringBuilder builder=getSpanableBuilder(address,ContextCompat.getColor(getApplicationContext(),R.color.colorPrimary));
+            mtxtdestination.setText(builder, TextView.BufferType.SPANNABLE);
+
+        }else{
+            //multiple destination order
+            SpannableStringBuilder builder=null;
+            mBuilder.clear();
+            // building multiple destination text
+            for(PickDropAddress dropAddress:dropAddressList){
+                String start=getString(R.string.str_deliver)+": ";
+                getSpanableBuilder(start,ContextCompat.getColor(getApplicationContext(),R.color.civ_border));
+                String address=dropAddress.getStreetAddress()+NEW_LINE;
+                builder=getSpanableBuilder(address,ContextCompat.getColor(getApplicationContext(),R.color.colorPrimary));
             }
+            mtxtdestination.setText(builder, TextView.BufferType.SPANNABLE);
         }
     }
     /**
@@ -230,10 +244,11 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
                 Progress.dismissProgress();
                 ScheduledBean messageBean=(ScheduledBean) body;
                 showSnackbar(messageBean.getMessage(), Toast.LENGTH_LONG);
-                if(service_status.equals(STATUS_ACCEPTED)){
+                if(service_status.equals(Status.ACCEPTED)){
                     //update driver status to active
-                    SetDriverStatus.updateDriverStatus(getApplicationContext(),Constants.STATUS_ACTIVE);
-                    showSnackbar(messageBean.getMessage(),Toast.LENGTH_LONG);
+                    SetDriverStatus.updateDriverStatus(getApplicationContext(), Status.ACTIVE);
+                    Toast.makeText(getApplicationContext(),messageBean.getMessage(),Toast.LENGTH_LONG).show();
+
                     finish();
                 }else if(service_status.equals(STATUS_PENDING)){
                     //close current activity

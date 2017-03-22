@@ -110,23 +110,24 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/linearSourceDestination"
             android:layout_marginTop="@dimen/dp_20"
-            android:gravity="center_horizontal"
+
+
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btnStart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                style="@style/AppTheme.Button.Driver"
+                android:layout_marginBottom="@dimen/dp_10"
+                android:layout_centerHorizontal="true"
                 android:text="Start" />
 
 
-        </LinearLayout>
+        </RelativeLayout>
 
     </RelativeLayout>
     <de.hdodenhof.circleimageview.CircleImageView

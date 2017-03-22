@@ -10,7 +10,7 @@
         android:id="@+id/img_circle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/notification_circle"
+        android:src="@drawable/notify_circle"
         android:layout_alignParentLeft="true"/>
     <TextView
         android:layout_width="wrap_content"
@@ -22,7 +22,7 @@
         android:textStyle="bold|italic"
         android:textSize="@dimen/sp_12"
         android:layout_marginRight="@dimen/dp_20"
-        android:text="Have you received request?"
+        android:text="@string/str_notify_text"
         android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -19,7 +20,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,12 +38,16 @@ import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Utils;
 import com.hoffmans.rush.utils.Validation;
+import com.mukesh.countrypicker.fragments.CountryPicker;
+import com.mukesh.countrypicker.interfaces.CountryPickerListener;
+import com.mukesh.countrypicker.models.Country;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -68,10 +75,14 @@ public class EditProfile extends BaseFragment implements View.OnClickListener{
     private static final String ARG_PARAM2         = "param2";
     private EditText edtname,edtEmail,edtphone,edtoldPassword,edtNewPassword,edtConfirmNewPassword;
     private RelativeLayout linearNewPass,linearConfirmNewPass,linearOldPass,topView;
-    private TextView editableName,editableNumber,editablePassword;
+    private TextView editableName,editableNumber,editablePassword,txtCountryCode;
     private CircleImageView imgProfilePic;
     private Button btnSave;
+    private Spinner spinnerCurrency;
+    private CountryPicker mCountryPicker;
+    private ImageView imgFlag;
     private String mCurrentPhotoPath;
+    private View incCountryCodes;
     private boolean isEditablePassClicked,isEditableName,isEditablePhone;
 
 
@@ -125,10 +136,25 @@ public class EditProfile extends BaseFragment implements View.OnClickListener{
         editableNumber=(TextView)view.findViewById(R.id.editablePhone);
         btnSave=(Button)view.findViewById(R.id.fEPBtnSave);
         imgProfilePic=(CircleImageView)view.findViewById(R.id.fEPImgProfile);
-
+        txtCountryCode=(TextView)view.findViewById(R.id.txtCountryCode);
+        imgFlag=(ImageView)view.findViewById(R.id.imgFlag);
         topView =(RelativeLayout)view.findViewById(R.id.topRegistration);
+        incCountryCodes=(View)view.findViewById(R.id.viewCountryCode);
         if(appPreference.getUserDetails().isSocialProvider()){
             linearOldPass.setVisibility(View.GONE);
+        }
+
+        spinnerCurrency=(Spinner)view.findViewById(R.id.spinnerCurrency);
+
+
+
+        mCountryPicker=CountryPicker.newInstance("Select country");
+        //get current country code and flag
+        Locale current = getResources().getConfiguration().locale;
+        Country country=mCountryPicker.getCountryByLocale(mActivity,current);
+        if(country!=null) {
+            txtCountryCode.setText(country.getDialCode());
+            imgFlag.setImageDrawable(ContextCompat.getDrawable(mActivity, country.getFlag()));
         }
 
 
@@ -143,6 +169,7 @@ public class EditProfile extends BaseFragment implements View.OnClickListener{
         editableNumber.setOnClickListener(this);
         btnSave.setOnClickListener(this);
         topView.setOnClickListener(this);
+        incCountryCodes.setOnClickListener(this);
 
     }
 
@@ -214,13 +241,36 @@ public class EditProfile extends BaseFragment implements View.OnClickListener{
                 edtphone.setFocusable(true);
                 isEditablePhone=true;
                 edtphone.setEnabled(true);
+                edtphone.setText("");
+                incCountryCodes.setVisibility(View.VISIBLE);
                 break;
             case R.id.topRegistration:
                 Utils.hideKeyboard(mActivity);
                 break;
+            case R.id.viewCountryCode:
+                showCountryCodePicker();
+                break;
         }
     }
 
+
+
+
+    private void showCountryCodePicker(){
+        mCountryPicker.show(mActivity.getSupportFragmentManager(), "COUNTRY_PICKER");
+
+        mCountryPicker.setListener(new CountryPickerListener() {
+            @Override
+            public void onSelectCountry(String name, String code, String dialCode, int flagDrawableResID) {
+                if(flagDrawableResID!=0){imgFlag.setImageResource(flagDrawableResID);}
+                if(dialCode!=null) {
+                    txtCountryCode.setText(dialCode);
+                }
+                mCountryPicker.dismiss();
+
+            }
+        });
+    }
     /**
      * set user profile
      * @param user
@@ -252,7 +302,8 @@ public class EditProfile extends BaseFragment implements View.OnClickListener{
         String newpassword = edtNewPassword.getText().toString().trim();
         String confirmNewpassword = edtConfirmNewPassword.getText().toString().trim();
         String fullname = edtname.getText().toString().trim();
-        String phoneNo = edtphone.getText().toString().trim();
+        String countrycode=txtCountryCode.getText().toString();//"";//edtcc.getText().toString().trim();
+        String phoneNo=countrycode+edtphone.getText().toString().trim();
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(fullname) && isEditableName) {
@@ -527,6 +578,7 @@ public class EditProfile extends BaseFragment implements View.OnClickListener{
                 isEditablePhone=false;
                 isEditableName=false;
                 isEditablePassClicked=false;
+                incCountryCodes.setVisibility(View.GONE);
             }
 
             @Override

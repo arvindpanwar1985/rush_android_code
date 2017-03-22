@@ -6,62 +6,64 @@
     android:background="@android:color/transparent"
     android:layout_height="wrap_content">
 
+
+
     <RelativeLayout
         android:id="@+id/rel"
         android:layout_width="match_parent"
-        android:background="@drawable/bg_accept_order"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_30"
-        android:layout_marginTop="@dimen/dp_30"
-
         android:layout_marginRight="@dimen/dp_10"
-        android:minHeight="160dp"
-        android:layout_height="wrap_content">
+
+        android:layout_marginTop="@dimen/dp_30"
+        android:background="@drawable/bg_accept_order"
+        android:minHeight="160dp">
 
         <TextView
             android:id="@+id/txtRName"
-            android:textColor="@color/colorPrimaryDark"
             android:layout_width="wrap_content"
-            android:text=". Dev bhandari ."
-            android:layout_marginTop="@dimen/dp_7"
-            android:textStyle="bold|italic"
-            android:textSize="@dimen/sp_15"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_30"
-            android:layout_height="wrap_content"/>
+            android:layout_marginTop="@dimen/dp_7"
+            android:text=". Dev bhandari ."
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/sp_15"
+            android:textStyle="bold|italic" />
 
         <TextView
             android:id="@+id/txtRPhone"
-            android:textColor="@color/colorPrimaryDark"
             android:layout_width="wrap_content"
-            android:text="+918126525293"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_3"
-            android:layout_toRightOf="@+id/txtRName"
             android:layout_marginRight="@dimen/dp_10"
             android:layout_marginTop="@dimen/dp_7"
-            android:textStyle="bold|italic"
+            android:layout_toRightOf="@+id/txtRName"
+            android:text="+918126525293"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="@dimen/sp_15"
-            android:layout_height="wrap_content"/>
+            android:textStyle="bold|italic" />
 
         <RatingBar
             android:id="@+id/ratingBAr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtRName"
-            android:layout_marginTop="@dimen/dp_20"
             android:layout_centerHorizontal="true"
-            android:numStars="3"
-            android:stepSize="1"
+            android:layout_marginTop="@dimen/dp_20"
             android:isIndicator="false"
+            android:numStars="3"
             android:rating="3"
-            />
+            style="@style/rating_bar"
+            android:stepSize="1" />
 
         <Button
             android:id="@+id/btnsubmitRating"
-            android:layout_marginTop="@dimen/dp_20"
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
+            style="@style/AppTheme.Button.Driver"
             android:layout_below="@+id/ratingBAr"
-            android:layout_height="wrap_content"
-            android:text="Submit"/>
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_20"
+            android:text="Submit" />
 
     </RelativeLayout>
 
@@ -73,8 +75,5 @@
         app:civ_border_color="@color/civ_border"
         android:layout_gravity="left|top"
         />
-
-
-
 
 </FrameLayout>

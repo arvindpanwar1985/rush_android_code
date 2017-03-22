@@ -20,6 +20,7 @@ import com.hoffmans.rush.model.Record;
 import com.hoffmans.rush.ui.fragments.BaseFragment;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
+import com.hoffmans.rush.utils.Status;
 import com.hoffmans.rush.widgets.EndlessRecyclerViewScrollListener;
 
 import java.util.HashMap;
@@ -138,14 +139,12 @@ public class CompletedRecordFragment extends BaseFragment {
         HashMap<String,String> params=new HashMap<>();
         params.put(KEY_PAGE,page);
         params.put(KEY_PER_PAGE,perpage);
-        params.put(KEY_STATE,Constants.STATUS_COMPLETED);
+        params.put(KEY_STATE, Status.COMPLETED);
 
         return params;
     }
 
     private void getRecordData(HashMap<String,String> params){
-
-
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         ServiceRequest request=new ServiceRequest();
         request.getRecords(appPreference.getUserDetails().getToken(), params, new ApiCallback() {

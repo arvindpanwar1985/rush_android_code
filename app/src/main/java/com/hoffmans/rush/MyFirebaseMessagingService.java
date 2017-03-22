@@ -1,6 +1,10 @@
 package com.hoffmans.rush;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -22,9 +26,9 @@ import java.util.Map;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-    private static final String ROLE_DRIVER       ="Driver";
-    private static final String ROLE_CUSTOMER     ="Customer";
-    private static final String TYPE_ACCEPT_ORDER ="driver_assigned";
+    private static final String ROLE_DRIVER            ="Driver";
+    private static final String ROLE_CUSTOMER          ="Customer";
+    private static final String TYPE_ACCEPT_ORDER      ="driver_assigned";
     private static final String TYPE_SERVICE_COMPLETED ="service_completed";
 
 
@@ -40,6 +44,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Map<String, String> params = remoteMessage.getData();
         if(remoteMessage.getData().size()>0) {
             JSONObject object = new JSONObject(params);
+            Log.e("object",object.toString());
             String role = mAppPreference.getUserDetails().getRole();
             if (!TextUtils.isEmpty(role) && role != null) {
                 switch (role) {
@@ -81,9 +86,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 case TYPE_ACCEPT_ORDER:
                     String message   =object.getString(KEY_MESSAGE);
                     String serviceID =object.getString(KEY_SERVICE_ID);
+                    sendNotification(message);
                     if(!mAppPreference.getPause()) {
                         EventBus.getDefault().postSticky(serviceID);
                     }else{
+                        // start activity to accept the order
                         Intent acceptOrderIntent=new Intent(this, AcceptOrderActivity.class);
                         acceptOrderIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         acceptOrderIntent.putExtra(KEY_MESSAGE,message);
@@ -105,19 +112,46 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      */
     private void handleCustomerNotifications(JSONObject object,String  notifyType){
         try{
+            String message   =object.getString(KEY_MESSAGE);
+            String serviceID =object.getString(KEY_SERVICE_ID);
             switch (notifyType){
+
                 case TYPE_SERVICE_COMPLETED:
-                    String message   =object.getString(KEY_MESSAGE);
-                    String serviceID =object.getString(KEY_SERVICE_ID);
+                    sendNotification(message);
                     Intent ratingIntent=new Intent(this, RatingActivity.class);
                     ratingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     ratingIntent.putExtra(KEY_MESSAGE,message);
                     ratingIntent.putExtra(KEY_SERVICE_ID,serviceID);
                     startActivity(ratingIntent);
                     break;
+
+                case TYPE_ACCEPT_ORDER:
+                    sendNotification(message);
+                    break;
             }
         }catch (JSONException e){
             Log.i(TAG,e.toString());
         }
+    }
+
+
+    private void sendNotification(String message){
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle(getString(R.string.app_name))
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+                        .setContentText(message);
+       //No intent after notification clicked
+        PendingIntent contentIntent = PendingIntent.getActivity(
+                getApplicationContext(),
+                0,
+                new Intent(), // add this
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(contentIntent);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        // mId allows you to update the notification later on.
+        mNotificationManager.notify(0, mBuilder.build());
     }
 }

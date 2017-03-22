@@ -9,7 +9,6 @@ import com.google.gson.annotations.SerializedName;
 public class RatingParam {
     @SerializedName("rater")
     private Rating rating;
-
     public void setRating(Rating rating) {
         this.rating = rating;
     }
