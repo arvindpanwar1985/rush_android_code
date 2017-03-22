@@ -13,11 +13,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.location.LocationData;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.BaseActivity;
-import com.hoffmans.rush.ui.activities.MainActivity;
 import com.hoffmans.rush.ui.driver.fragments.HomeFragment;
 import com.hoffmans.rush.utils.AppPreference;
 
@@ -152,11 +152,13 @@ public class DriverNavigationActivity extends BaseActivity
         int id = item.getItemId();
         switch (id) {
             case R.id.nav_logout:
-                appPreference.logoutUser();
-                Intent loginIntent = new Intent(DriverNavigationActivity.this, MainActivity.class);
-                loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(loginIntent);
-                this.finish();
+                //logout user
+                String uuid =appPreference.getNoticficationToken();
+                if(TextUtils.isEmpty(uuid)){
+                    uuid= FirebaseInstanceId.getInstance().getToken();
+                    appPreference.setNotificationToken(uuid);
+                    }
+                singOutUser(uuid);
                 break;
             case R.id.nav_home:
                 if (!isFragmentOpened(HomeFragment.class.getCanonicalName())) {

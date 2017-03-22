@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.fragments.SelectVechileFragment;
@@ -206,11 +207,18 @@ public class BookServiceActivity extends BaseActivity
                 startActivity(settingsIntent);
                 break;*/
             case R.id.nav_logout:
-                appPreference.logoutUser();
+                /*appPreference.logoutUser();
                 Intent loginIntent=new Intent(BookServiceActivity.this,MainActivity.class);
                 loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(loginIntent);
-                this.finish();
+                this.finish();*/
+                String uuid =appPreference.getNoticficationToken();
+                if(TextUtils.isEmpty(uuid)){
+                    uuid= FirebaseInstanceId.getInstance().getToken();
+                    appPreference.setNotificationToken(uuid);
+                }
+                singOutUser(uuid);
+
                 break;
 
         }

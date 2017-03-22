@@ -306,4 +306,38 @@ public class UserRequest extends BaseRequest {
             }
         });
     }
+
+    /**
+     * logut user from app
+     * @param auth
+     * @param uuid
+     * @param callback
+     */
+    public void userLogout(String auth,String uuid,final ApiCallback callback){
+        Call<ResponseBody> logoutCall=getAPIClient().logoutUser(auth,uuid);
+        ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(logoutCall);
+        connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
+            @Override
+            public void onWebServiceComplete(ResponseBody responseBody) {
+                try {
+                    JSONObject obj=new JSONObject(responseBody.string());
+                    boolean status = obj.getBoolean(SUCCESS);
+                    String message=obj.getString(MESSAGE);
+                    if (status) {
+                        MessageBean bean=new MessageBean();
+                        bean.setMessage(message);
+                        callback.onRequestSuccess(bean);
+                    } else {
+                        callback.onRequestFailed(message);
+                    }
+                }catch (Exception e){
+                    callback.onRequestFailed(e.getMessage());
+                }
+            }
+            @Override
+            public void onWebStatusFalse(String message) {
+                callback.onRequestFailed(message);
+            }
+        });
+    }
 }

@@ -9,6 +9,7 @@ import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.hoffmans.rush.model.DateTime;
 import com.hoffmans.rush.model.Estimate;
 import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.ServiceData;
+import com.hoffmans.rush.services.SetDriverStatus;
 import com.hoffmans.rush.ui.activities.BaseActivity;
 import com.hoffmans.rush.utils.AppPreference;
 import com.hoffmans.rush.utils.Constants;
@@ -41,7 +43,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
     private static final String STATUS_ACCEPTED  = "accepted";
     private static final String STATUS_RUNNING   = "running";
     private static final String STATUS_PENDING   = "pending";
-
+    private RelativeLayout topRelative;
     private TextView mTxtname,mtxtPhone,mtxtSource,mtxtdestination,mtxtPriceEstimate,txtdateTime;
     private Button btnAccept,btnReject;
     private String mSeriveId,mMessage;
@@ -72,6 +74,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
         imgClose          =(ImageView)findViewById(R.id.imgARClose);
         imgProfile        =(CircleImageView)findViewById(R.id.imgAcceptreject);
         txtdateTime       =(TextView)findViewById(R.id.txtARDatetime);
+        topRelative=(RelativeLayout)findViewById(R.id.topRelative);
     }
 
     @Override
@@ -126,6 +129,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onRequestSuccess(BaseBean body) {
                 Progress.dismissProgress();
+                topRelative.setVisibility(View.VISIBLE);
                 ServiceDetailBean serviceDetailBean=(ServiceDetailBean)body;
                 if(serviceDetailBean.getService()!=null){
                     ServiceData serviceData=serviceDetailBean.getService();
@@ -144,6 +148,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
             public void onRequestFailed(String message) {
 
                 Progress.dismissProgress();
+                topRelative.setVisibility(View.GONE);
                 showSnackbar(message,0);
                 if(message.equals(Constants.AUTH_ERROR)){
                     logOutUser();
@@ -215,7 +220,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
      * @param serviceId id of service
      * @param service_status accepted/running/completed;
      */
-    private void setServiceStatus(String serviceId,final String service_status){
+    private void setServiceStatus(final String serviceId, final String service_status){
         Progress.showprogress(AcceptOrderActivity.this,getString(R.string.progress_loading),false);
         String token= AppPreference.newInstance(AcceptOrderActivity.this).getUserDetails().getToken();
         ServiceRequest serviceRequest=new ServiceRequest();
@@ -226,6 +231,8 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
                 ScheduledBean messageBean=(ScheduledBean) body;
                 showSnackbar(messageBean.getMessage(), Toast.LENGTH_LONG);
                 if(service_status.equals(STATUS_ACCEPTED)){
+                    //update driver status to active
+                    SetDriverStatus.updateDriverStatus(getApplicationContext(),Constants.STATUS_ACTIVE);
                     showSnackbar(messageBean.getMessage(),Toast.LENGTH_LONG);
                     finish();
                 }else if(service_status.equals(STATUS_PENDING)){

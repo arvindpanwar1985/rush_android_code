@@ -36,9 +36,13 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.bean.BaseBean;
+import com.hoffmans.rush.http.request.UserRequest;
+import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.utils.AppPreference;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.DateUtils;
+import com.hoffmans.rush.utils.Progress;
 
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
@@ -440,13 +444,14 @@ public abstract  class BaseActivity extends AppCompatActivity {
 
 
     /**
-     * logout user from app
+     *
+     * logout user from app locally
      */
     public void logOutUser(){
         AppPreference preference =AppPreference.newInstance(BaseActivity.this);
         preference.logoutUser();
-        Intent intent =new Intent(BaseActivity.this,LoginActivity.class);
-        intent.putExtra(Constants.KEY_AUTH_ERROR,true);
+        Intent intent =new Intent(BaseActivity.this,MainActivity.class);
+        intent.putExtra(Constants.KEY_AUTH_ERROR,false);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
@@ -471,16 +476,38 @@ public abstract  class BaseActivity extends AppCompatActivity {
      * @return is fragment attached
      */
     public boolean isFragmentOpened(String className){
-
         int backCount=getSupportFragmentManager().getBackStackEntryCount();
         if (!getSupportFragmentManager().getBackStackEntryAt(backCount - 1).getName().equals(className)){
-
             return false;
         }
         return true;
     }
 
-
+    /**
+     * api call to signout user
+     * @param uuid
+     */
+    public void singOutUser(String uuid){
+        Progress.showprogress(this,getString(R.string.progress_loading),false);
+        AppPreference preference=AppPreference.newInstance(BaseActivity.this);
+        String token=preference.getUserDetails().getToken();
+        UserRequest logoutUser=new UserRequest();
+        logoutUser.userLogout(token, uuid, new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                Progress.dismissProgress();
+                logOutUser();
+            }
+            @Override
+            public void onRequestFailed(String message) {
+                Progress.dismissProgress();
+                showSnackbar(message,0);
+                if(message.equals(Constants.AUTH_ERROR)){
+                    logOutUser();
+                }
+            }
+        });
+    }
 
 
 }

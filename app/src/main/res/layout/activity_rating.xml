@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#e6000000"
+    android:id="@+id/topRelative"
     tools:context="com.hoffmans.rush.ui.driver.activities.AcceptOrderActivity">
     <ImageView
         android:layout_width="wrap_content"
@@ -16,8 +17,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_20"
-        android:layout_centerInParent="true">
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_centerVertical="true">
 
         <include
             android:layout_width="wrap_content"

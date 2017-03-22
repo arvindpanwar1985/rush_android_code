@@ -23,7 +23,7 @@ import java.util.Map;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String ROLE_DRIVER       ="Driver";
-    private static final String ROLE_CUSTOMER     ="customer";
+    private static final String ROLE_CUSTOMER     ="Customer";
     private static final String TYPE_ACCEPT_ORDER ="driver_assigned";
     private static final String TYPE_SERVICE_COMPLETED ="service_completed";
 

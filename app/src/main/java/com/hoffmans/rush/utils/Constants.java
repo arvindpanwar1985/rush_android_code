@@ -44,6 +44,7 @@ public class Constants {
     public static final String STATUS_ACCEPTED  = "accepted";
     public static final String STATUS_RUNNING   = "running";
     public static final String STATUS_COMPLETED = "completed";
+    public static final String STATUS_ACTIVE    = "active";
 
 
 

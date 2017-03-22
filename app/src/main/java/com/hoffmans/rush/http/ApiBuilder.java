@@ -25,7 +25,7 @@ public class ApiBuilder {
          }else {
              retrofit = new Retrofit.Builder().baseUrl(ApiConfig.getdevBaseUrl())
                      // set the okhttpclient and add default connect and read timepouts
-                     .client(okHttpClient.connectTimeout(45, TimeUnit.SECONDS).readTimeout(45, TimeUnit.SECONDS).build())
+                     .client(okHttpClient.connectTimeout(15, TimeUnit.SECONDS).readTimeout(20, TimeUnit.SECONDS).build())
                      .addConverterFactory(GsonConverterFactory.create())
                      .build();
              apiInterface = retrofit.create(ApiInterface.class);

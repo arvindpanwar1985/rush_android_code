@@ -169,11 +169,14 @@
         <activity
             android:name=".ui.driver.activities.CompletedRecords"
             android:label="@string/title_activity_completed_records"
-            android:theme="@style/AppTheme"></activity>
-
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.driver.activities.RatingActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+
+        <service
+            android:name=".services.SetDriverStatus"
+            android:exported="false"></service>
     </application>
 
 </manifest>

@@ -57,6 +57,9 @@ public class ServiceData {
 
     private boolean typenoHeader;
 
+    @SerializedName("driver_details")
+    private DriverDetail driverDetail;
+
 
     public Integer getId() {
         return id;
@@ -138,4 +141,7 @@ public class ServiceData {
         this.typenoHeader = typenoHeader;
     }
 
+    public DriverDetail getDriverDetail() {
+        return driverDetail;
+    }
 }

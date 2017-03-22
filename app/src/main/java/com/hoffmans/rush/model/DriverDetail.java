@@ -17,7 +17,7 @@ public class DriverDetail {
     private String email;
     @SerializedName("phone")
     @Expose
-    private Object phone;
+    private String phone;
     @SerializedName("status")
     @Expose
     private String status;
@@ -47,11 +47,11 @@ public class DriverDetail {
         this.email = email;
     }
 
-    public Object getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(Object phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

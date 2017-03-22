@@ -2,6 +2,7 @@ package com.hoffmans.rush.http;
 
 import com.hoffmans.rush.model.AddFavouriteBody;
 import com.hoffmans.rush.model.EstimateServiceParams;
+import com.hoffmans.rush.model.RatingParam;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -128,4 +129,11 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("/api/drivers/driver_comment")
     Call<ResponseBody>addDriverComment(@Header("Authorization")String auth,@Field("service_id")int serviceID,@Field("comment")String comment);
+
+    @FormUrlEncoded
+    @POST("/api/user/logout")
+    Call<ResponseBody>logoutUser(@Header("Authorization")String auth,@Field("udid")String deviceToken);
+
+    @POST("/api/rate")
+    Call<ResponseBody>rateDriver(@Header("Authorization")String authorization , @Body RatingParam param);
 }
