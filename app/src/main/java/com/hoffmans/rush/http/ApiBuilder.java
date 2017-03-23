@@ -23,7 +23,7 @@ public class ApiBuilder {
          if(retrofit!=null){
              return apiInterface=retrofit.create(ApiInterface.class);
          }else {
-             retrofit = new Retrofit.Builder().baseUrl(ApiConfig.getdevBaseUrl())
+             retrofit = new Retrofit.Builder().baseUrl(ApiConfig.getBaseUrl())
                      // set the okhttpclient and add default connect and read timepouts
                      .client(okHttpClient.connectTimeout(15, TimeUnit.SECONDS).readTimeout(20, TimeUnit.SECONDS).build())
                      .addConverterFactory(GsonConverterFactory.create())
@@ -50,7 +50,7 @@ public class ApiBuilder {
         if(retrofit!=null){
             return retrofit;
         }else {
-            return new Retrofit.Builder().baseUrl(ApiConfig.getdevBaseUrl())
+            return new Retrofit.Builder().baseUrl(ApiConfig.getBaseUrl())
                     // set the okhttpclient and add default connect and read timepouts
                     .client(okHttpClient.connectTimeout(45, TimeUnit.SECONDS).readTimeout(45, TimeUnit.SECONDS).build())
                     .addConverterFactory(GsonConverterFactory.create())

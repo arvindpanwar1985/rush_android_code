@@ -129,4 +129,5 @@
     <string name="str_dest">Entregar</string>
 
     <string name="str_notify_text">¿Ha recibido una solicitud?</string>
+    <string name="str_add_comment">agregar comentario</string>
 </resources>

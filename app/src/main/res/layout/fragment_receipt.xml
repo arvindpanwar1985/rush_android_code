@@ -185,7 +185,7 @@
             android:layout_weight=".6"
             android:layout_marginLeft="@dimen/dp_4"
             android:layout_height="wrap_content"
-            android:text="Amount"/>
+            android:text=""/>
 
 
     </LinearLayout>
@@ -225,7 +225,7 @@
             android:layout_marginTop="@dimen/dp_20"
             android:textStyle="bold|italic"
             android:layout_height="wrap_content"
-            android:text="Transaction ID"/>
+            android:text=""/>
 
 
     </LinearLayout>
@@ -248,6 +248,7 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp_16"
             android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_20"
             android:textStyle="bold|italic"
             android:layout_weight=".4"
             android:layout_height="wrap_content"
@@ -260,11 +261,12 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp_16"
             android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_20"
             android:textStyle="bold|italic"
             android:layout_marginLeft="@dimen/dp_4"
             android:layout_weight=".6"
             android:layout_height="wrap_content"
-            android:text="Authorized"/>
+            android:text=""/>
 
 
     </LinearLayout>

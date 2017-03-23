@@ -82,7 +82,6 @@ public class ReceiptFragment extends BaseFragment {
 
     @Override
     protected void initViews(View view) {
-
         txtDate          =(TextView)view.findViewById(R.id.reTxtDate);
         txtTime          =(TextView)view.findViewById(R.id.reTxtTime);
         txtAmount        =(TextView)view.findViewById(R.id.reTxtAmount);
@@ -91,7 +90,6 @@ public class ReceiptFragment extends BaseFragment {
         txtTransactionId =(TextView)view.findViewById(R.id.reTxtTransactionId);
         txtAuthorized    =(TextView)view.findViewById(R.id.reTxtAuthorised);
         txtTime          =(TextView)view.findViewById(R.id.reTxtTime);
-
         try{setData();}catch (NullPointerException e){};
 
 

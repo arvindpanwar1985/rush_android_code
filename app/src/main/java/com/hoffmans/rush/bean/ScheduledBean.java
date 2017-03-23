@@ -12,6 +12,8 @@ import java.util.List;
  */
 
 public class ScheduledBean extends BaseBean {
+
+    private int total_items;
     @SerializedName("upcoming_services")
     @Expose
     private List<Record> scheduledServices;
@@ -29,5 +31,9 @@ public class ScheduledBean extends BaseBean {
 
     public void setCurrentOrder(ServiceData currentOrder) {
         this.currentOrder = currentOrder;
+    }
+
+    public int getTotal_items() {
+        return total_items;
     }
 }

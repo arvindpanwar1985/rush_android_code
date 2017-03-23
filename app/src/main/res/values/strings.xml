@@ -144,6 +144,7 @@
     <string name="str_finished">Finished</string>
     <string name="str_dest">Destination</string>
     <string name="str_notify_text">Have you received request?</string>
+    <string name="str_add_comment">Add Comment</string>
 
 
 </resources>

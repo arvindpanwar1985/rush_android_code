@@ -29,9 +29,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String ROLE_DRIVER            ="Driver";
     private static final String ROLE_CUSTOMER          ="Customer";
     private static final String TYPE_ACCEPT_ORDER      ="driver_assigned";
+    private static final String TYPE_DRIVER_ASSIGNED   ="driver_assigned";
     private static final String TYPE_SERVICE_COMPLETED ="service_completed";
-
-
     private  String KEY_NOTIFY_TYPE  ="type";
     private  String KEY_MESSAGE      ="message";
     private  String KEY_SERVICE_ID   ="service_id";
@@ -115,7 +114,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String message   =object.getString(KEY_MESSAGE);
             String serviceID =object.getString(KEY_SERVICE_ID);
             switch (notifyType){
-
                 case TYPE_SERVICE_COMPLETED:
                     sendNotification(message);
                     Intent ratingIntent=new Intent(this, RatingActivity.class);
@@ -124,8 +122,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     ratingIntent.putExtra(KEY_SERVICE_ID,serviceID);
                     startActivity(ratingIntent);
                     break;
-
-                case TYPE_ACCEPT_ORDER:
+                case TYPE_DRIVER_ASSIGNED:
                     sendNotification(message);
                     break;
             }
@@ -133,8 +130,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.i(TAG,e.toString());
         }
     }
-
-
     private void sendNotification(String message){
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)

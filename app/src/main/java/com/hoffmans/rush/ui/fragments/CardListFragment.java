@@ -321,7 +321,11 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==REQUEST_ADD_CARD && resultCode==mActivity.RESULT_OK){
            if(data!=null){
-               cardDataList.clear();
+               if(cardDataList!=null) {
+                   cardDataList.clear();
+               }else{
+                   cardDataList=new ArrayList<>();
+               }
                ArrayList<CardData> cards=data.getParcelableArrayListExtra(AddCardActivity.KEY_CARD_DATA);
                boolean showDelete=(isCardSelectable)?false:true;
                cardDataList.clear();

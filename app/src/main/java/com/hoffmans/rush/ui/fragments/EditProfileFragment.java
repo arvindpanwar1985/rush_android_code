@@ -196,7 +196,6 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
      * get user profile
      */
     private void getProfile(){
-
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         UserRequest request=new UserRequest();
         request.getProfile(appPreference.getUserDetails().getToken(), new ApiCallback() {
@@ -210,7 +209,6 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
                     getAllCurrency();
                 }
             }
-
             @Override
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
@@ -218,7 +216,6 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
                 if(message.equals(Constants.AUTH_ERROR)){
                     mActivity.logOutUser();
                 }
-
             }
         });
     }

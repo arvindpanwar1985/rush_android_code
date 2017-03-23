@@ -2,6 +2,8 @@ package com.hoffmans.rush.ui.driver.fragments;
 
 
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -13,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.hoffmans.rush.R;
@@ -30,8 +34,8 @@ import com.hoffmans.rush.ui.fragments.BaseFragment;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Status;
+import com.hoffmans.rush.widgets.EndlessRecyclerViewScrollListener;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -39,17 +43,21 @@ import java.util.List;
  * Use the {@link UpcomingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UpcomingFragment extends BaseFragment implements View.OnClickListener,OnHeaderButtonClickListners {
+public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClickListners {
 
 
-    private static final String KEY_PAGE           ="page";
-    private static final String KEY_STATE          ="state";
-    private static final String KEY_PER_PAGE       ="perpage";
     private RecyclerView mRecyclerView;
     private UpcomingAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
     private TextView txtNoRecordsFound;
     private ScheduledBean bean;
+    private LinearLayout linearProgress;
+    private EndlessRecyclerViewScrollListener scrollListener;
+    private int records_count,currentListSize;
+    private List<Record> recordList;
+    private ProgressBar progressBar;
+    private static final String DEFAULT_ITEMS      ="5";
+    private static final String DEFAULT_PAGE_NO    ="1";
 
     public UpcomingFragment() {
         // Required empty public constructor
@@ -60,10 +68,6 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
         UpcomingFragment fragment = new UpcomingFragment();
         return fragment;
     }
-
-
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,56 +98,39 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
         txtNoRecordsFound   =(TextView)view.findViewById(R.id.txtNoRecords);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
+        linearProgress=(LinearLayout)view.findViewById(R.id.linearLoadMore);
+        progressBar =(ProgressBar)view.findViewById(R.id.progressLoadMore);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
 
-      /*mTxtname          = (TextView)view.findViewById(R.id.txtARName);
-        mtxtPhone         = (TextView)view.findViewById(R.id.txtARPhone);
-        mtxtSource        = (TextView)view.findViewById(R.id.txtARSource);
-        mtxtdestination   = (TextView)view.findViewById(R.id.txtARDestination);
-        mtxtPriceEstimate = (TextView)view.findViewById(R.id.txtPriceEstimated);
-        btnStart          = (Button)view.findViewById(R.id.btnStart);
-        btnComplete       = (Button)view.findViewById(R.id.btnComplete);*/
-
-
-       getScheduledAndCurrentSercices("1","5",Status.ACCEPTED);
+        getScheduledAndCurrentSercices(DEFAULT_PAGE_NO,DEFAULT_ITEMS,Status.ACCEPTED);
     }
 
     @Override
     protected void initListeners() {
-        //btnStart.setOnClickListener(this);
-        //btnComplete.setOnClickListener(this);
+      scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                if(currentListSize!=records_count){
+                    linearProgress.setVisibility(View.VISIBLE);
+                     //load more schedule services
+                     loadmoreItems(String.valueOf(page+1),DEFAULT_ITEMS,Status.ACCEPTED);
+                }
+            }
+        };
+        // Adds the scroll listener to RecyclerView
+        mRecyclerView.addOnScrollListener(scrollListener);
     }
 
-    @Override
-    public void onClick(View view) {
-        /*int id=view.getId();
-        switch (id){
-            case R.id.btnStart:
-                setServiceStatus(1,STATUS_RUNNING);
-                break;
-            case R.id.btnComplete:
-                setServiceStatus(1,STATUS_COMPLETED);
-                break;
-        }*/
-    }
 
 
     /**
-     *
-     * @param page page number to laod
-     * @param perpage items per page
-     * @return Hashmap params for api call
+     * get current and schedule services
+     * @param page
+     * @param perpage
+     * @param state
      */
-    private HashMap<String ,String> buildParams(String page, String perpage){
-        HashMap<String,String> params=new HashMap<>();
-        params.put(KEY_PAGE,page);
-        params.put(KEY_PER_PAGE,perpage);
-        params.put(KEY_STATE,Status.COMPLETED);
-
-        return params;
-    }
-
-
-
     private void getScheduledAndCurrentSercices(String page,String perpage,String state){
 
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
@@ -155,11 +142,10 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
                 Progress.dismissProgress();
                 ScheduledBean bean=(ScheduledBean)body;
                 if(bean!=null){
+                    records_count=bean.getTotal_items();
                     setScheduledCurrentServicesAdapter(bean);
                 }
-
             }
-
             @Override
             public void onRequestFailed(String message) {
 
@@ -178,7 +164,7 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
 
         adapter.setHeader(currentOrderData);
 
-        List<Record> recordList=bean.getScheduledServices();
+        recordList=bean.getScheduledServices();
         adapter.setItems(recordList);
         mRecyclerView.setAdapter(adapter);
         setEmptyListText(recordList);
@@ -210,13 +196,13 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
                 mActivity.showSnackbar(scheduledBean.getMessage(),0);
                 if(scheduledBean!=null){
                     if(adapter!=null){
-                        ServiceData currentOrderData=scheduledBean.getCurrentOrder();
-                          adapter.setHeader(currentOrderData);
-                          adapter.setItems(scheduledBean.getScheduledServices());
+                         ServiceData currentOrderData=scheduledBean.getCurrentOrder();
+                          adapter.setHeader(currentOrderData);//update header to recyclerView
+                          adapter.setItems(scheduledBean.getScheduledServices()); //update listview items
                           adapter.notifyDataSetChanged();
                           setEmptyListText(scheduledBean.getScheduledServices());
                           if(service_status.equals(Status.COMPLETED)){
-                                //show comment dialog
+                             //show comment dialog
                             showCommentDialog(serviceId);
                        }
                    }
@@ -257,16 +243,16 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
 
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT| InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-        input.setHint("Add comment.");
+        input.setHint(getString(R.string.str_add_comment));
         builder.setView(input);
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
 
-        builder.setPositiveButton("Add Comment",
+        builder.setPositiveButton(getString(R.string.str_add_comment),
                 new DialogInterface.OnClickListener()
                 {
                     @Override
@@ -299,6 +285,49 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
     }
 
 
+    /**
+     * laod more schedule services
+     * @param page
+     * @param perpage
+     * @param state
+     */
+    private  void loadmoreItems(String page,String perpage,String state){
+        String token=appPreference.getUserDetails().getToken();
+        ServiceRequest request=new ServiceRequest();
+        request.getUpcomingServices(token, page,perpage,state, new ApiCallback() {
+            @Override
+            public void onRequestSuccess(BaseBean body) {
+                linearProgress.setVisibility(View.GONE);
+                ScheduledBean bean=(ScheduledBean)body;
+                if(bean!=null){
+                    linearProgress.setVisibility(View.GONE);
+                    records_count=bean.getTotal_items();
+                    if(bean.getScheduledServices().size()!=0){
+                        //update the current schedule listing
+                        recordList.addAll(bean.getScheduledServices());
+                        currentListSize=recordList.size();
+                        if(adapter!=null){
+                            adapter.setItems(recordList);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onRequestFailed(String message) {
+                linearProgress.setVisibility(View.GONE);
+                if(message.equals(Constants.AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
+            }
+        });
+    }
+
+    /**
+     * add comment to recently completed service
+     * @param serviceId
+     * @param comment
+     */
     private void addComment(int serviceId,String comment){
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         String token=appPreference.getUserDetails().getToken();
@@ -310,7 +339,6 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
                 MessageBean bean=(MessageBean)body;
                 mActivity.showSnackbar(bean.getMessage(),0);
             }
-
             @Override
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
@@ -321,6 +349,4 @@ public class UpcomingFragment extends BaseFragment implements View.OnClickListen
             }
         });
     }
-
-
 }
