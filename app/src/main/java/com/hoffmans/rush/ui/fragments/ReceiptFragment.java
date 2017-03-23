@@ -19,22 +19,17 @@ import java.util.ArrayList;
  * The type Receipt fragment.
  */
 public class ReceiptFragment extends BaseFragment {
-
     private DateTime date_time;
     private TransactionDetails transactionDetails;
     private String mStreetAddress;
     private ArrayList<PickDropAddress> dropAddressArrayList;
     private TextView txtDate,txtTime,txtAmount,txtTransactionId,txtAuthorized,txtPickAddress,txtDropAddress;
-
-
     /**
      * Instantiates a new Receipt fragment.
      */
     public ReceiptFragment() {
         // Required empty public constructor
     }
-
-
     /**
      * New instance receipt fragment.
      *
@@ -65,9 +60,6 @@ public class ReceiptFragment extends BaseFragment {
             dropAddressArrayList   =getArguments().getParcelableArrayList(Constants.KEY_DROP_ADDRESS);
         }
     }
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -77,10 +69,7 @@ public class ReceiptFragment extends BaseFragment {
         initListeners();
         return view;
     }
-
-
-
-    @Override
+   @Override
     protected void initViews(View view) {
         txtDate          =(TextView)view.findViewById(R.id.reTxtDate);
         txtTime          =(TextView)view.findViewById(R.id.reTxtTime);
@@ -99,7 +88,6 @@ public class ReceiptFragment extends BaseFragment {
     protected void initListeners() {
 
     }
-
 
     private void setData() throws NullPointerException{
         if(transactionDetails!=null){
@@ -120,7 +108,6 @@ public class ReceiptFragment extends BaseFragment {
         }
 
     }
-
     /**
      * set multiple drop addresses
      */

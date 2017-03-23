@@ -62,13 +62,10 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
     public UpcomingFragment() {
         // Required empty public constructor
     }
-
-
     public static UpcomingFragment newInstance() {
         UpcomingFragment fragment = new UpcomingFragment();
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,8 +73,6 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
 
         }
     }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,8 +84,6 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
        // showCommentDialog();
         return view;
     }
-
-
     @Override
     protected void initViews(View view) {
         mRecyclerView     =(RecyclerView)view.findViewById(R.id.currentScheduleOrderList);
@@ -122,8 +115,6 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
         // Adds the scroll listener to RecyclerView
         mRecyclerView.addOnScrollListener(scrollListener);
     }
-
-
 
     /**
      * get current and schedule services
@@ -233,8 +224,8 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
         }
     }
 
-
     private void showCommentDialog(final int serviceId){
+
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setTitle("Please add comment.");
         builder.setCancelable(false);

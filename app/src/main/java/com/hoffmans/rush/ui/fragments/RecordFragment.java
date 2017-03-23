@@ -28,8 +28,6 @@ import java.util.List;
 
 
 public class RecordFragment extends BaseFragment {
-
-
    private static final String KEY_IS_RECORD      ="isRecord";
    private static final String KEY_PAGE           ="page";
    private static final String KEY_STATE          ="state";
@@ -37,7 +35,6 @@ public class RecordFragment extends BaseFragment {
    private static final String STATE_PENDING      ="pending";
    private static final String STATE_COMPLETED    ="completed";
    private static final String DEFAULT_ITEMS      ="5";
-
    private boolean isRecord;
    private RecyclerView recyclerView;
    private LinearLayout linearProgress;
@@ -45,18 +42,12 @@ public class RecordFragment extends BaseFragment {
    private EndlessRecyclerViewScrollListener scrollListener;
    private LinearLayoutManager linearLayoutManager;
    private int records_count,currentListSize;
-
    private List<Record> recordList;
    private ProgressBar progressBar;
-
    private TextView txtNoRecords;
-
-
-
     public RecordFragment() {
         // Required empty public constructor
     }
-
 
     public static RecordFragment newInstance(boolean isRecord) {
         RecordFragment fragment = new RecordFragment();
@@ -91,11 +82,8 @@ public class RecordFragment extends BaseFragment {
         return view;
     }
 
-
-
     @Override
     protected void initViews(View view) {
-
         recyclerView=(RecyclerView)view.findViewById(R.id.listRecords);
         linearLayoutManager = new LinearLayoutManager(mActivity);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -104,8 +92,6 @@ public class RecordFragment extends BaseFragment {
         progressBar =(ProgressBar)view.findViewById(R.id.progressLoadMore);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         txtNoRecords=(TextView)view.findViewById(R.id.txtNoRecords);
-
-
     }
 
 
@@ -147,8 +133,6 @@ public class RecordFragment extends BaseFragment {
     }
 
     private void getRecordData(HashMap<String,String> params){
-
-
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         txtNoRecords.setVisibility(View.GONE);
         ServiceRequest request=new ServiceRequest();
@@ -170,13 +154,11 @@ public class RecordFragment extends BaseFragment {
             }
             @Override
             public void onRequestFailed(String message) {
-
                 mActivity.showSnackbar(message,0);
                 Progress.dismissProgress();
                 if(message.equals(Constants.AUTH_ERROR)){
                     mActivity.logOutUser();
                 }
-
             }
         });
     }
@@ -213,7 +195,5 @@ public class RecordFragment extends BaseFragment {
             }
         });
     }
-
-
 
 }

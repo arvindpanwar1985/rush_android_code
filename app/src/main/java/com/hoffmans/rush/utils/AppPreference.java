@@ -61,7 +61,10 @@ public class AppPreference {
         mEditor.commit();
     }
 
-
+    /**
+     *
+     * @return logged in user
+     */
     public User getUserDetails(){
         User user =new User();
         user.setEmail(mPref.getString(PrefConstant.KEY_EMAIL,""));
@@ -105,15 +108,27 @@ public class AppPreference {
         return mPref.getBoolean(PrefConstant.ISUSERLOGIN,false);
     }
 
+
+    /**
+     * clear the session
+     */
     public void logoutUser(){
 
         mEditor.clear().commit();
     }
 
+    /**
+     * set presaved notification token
+     * @param token
+     */
     public void setNotificationToken(String token){
         mEditor.putString(PrefConstant.KEY_NOTIFICATION_TOKEN,token).commit();
     }
 
+    /**
+     *
+     * @return notification token
+     */
     public String getNoticficationToken(){
         return mPref.getString(PrefConstant.KEY_NOTIFICATION_TOKEN,"");
     }

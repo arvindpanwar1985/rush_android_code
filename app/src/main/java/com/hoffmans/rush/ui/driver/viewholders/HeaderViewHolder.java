@@ -25,6 +25,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
+ *
  * Created by devesh on 17/3/17.
  */
 
@@ -49,9 +50,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
         txtDatetime       =(TextView)itemView.findViewById(R.id.txtdateTime);
         imgAcceptreject   =(CircleImageView)itemView.findViewById(R.id.imgAcceptreject);
         txtNoRecords      =(TextView)itemView.findViewById(R.id.txtNoRecords);
-
     }
-
    public void render(final ServiceData header) {
         if(header!=null ) {
                 final String state = header.getState();

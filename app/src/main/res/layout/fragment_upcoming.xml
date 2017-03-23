@@ -27,6 +27,7 @@
         android:layout_marginBottom="@dimen/dp_50"
         android:visibility="gone"
         android:textSize="@dimen/sp_16"
+        android:layout_centerHorizontal="true"
         android:textColor="@android:color/white"
         android:textStyle="bold|italic"
         android:text="No records found." />

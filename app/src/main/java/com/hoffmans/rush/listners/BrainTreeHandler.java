@@ -8,6 +8,6 @@ import com.braintreepayments.api.models.PaymentMethodNonce;
 
 public interface BrainTreeHandler {
 
-    public void onError(Exception error);
-    public void onNonceCreated(PaymentMethodNonce paymentMethodNonce);
+    void onError(Exception error);
+    void onNonceCreated(PaymentMethodNonce paymentMethodNonce);
 }

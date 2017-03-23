@@ -101,7 +101,6 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-
         int id =view.getId();
         switch (id){
             case R.id.btnAccept:
@@ -134,20 +133,13 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
                 ServiceDetailBean serviceDetailBean=(ServiceDetailBean)body;
                 if(serviceDetailBean.getService()!=null){
                     ServiceData serviceData=serviceDetailBean.getService();
-                    Estimate estimate                  =serviceData.getEstimate();
-                    PickDropAddress pickAddress        =serviceData.getPicAddress();
-                    List<PickDropAddress>dropAddresses =serviceData.getDropAddressList();
-                    CustomerDetail customerDetail      =serviceData.getCustomerDetail();
-                    DateTime dateTime                  =serviceData.getDateTime();
                     //populate the UI
-                    setData(estimate,pickAddress,dropAddresses,customerDetail,dateTime);
-
+                    setData(serviceData);
                 }
             }
 
             @Override
             public void onRequestFailed(String message) {
-
                 Progress.dismissProgress();
                 topRelative.setVisibility(View.GONE);
                 showSnackbar(message,0);
@@ -159,11 +151,15 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
     }
     /**
      * populate the data
-     * @param estimate
-     * @param pickAddress
-     * @param dropAddressList
+     *
      */
-    private void setData(Estimate estimate, PickDropAddress pickAddress, List<PickDropAddress> dropAddressList, CustomerDetail customerDetail,DateTime dateTime){
+    private void setData(ServiceData serviceData){
+        Estimate estimate                    =serviceData.getEstimate();
+        PickDropAddress pickAddress          =serviceData.getPicAddress();
+        List<PickDropAddress>dropAddressList =serviceData.getDropAddressList();
+        CustomerDetail customerDetail        =serviceData.getCustomerDetail();
+        DateTime dateTime                    =serviceData.getDateTime();
+
         //set customer detail
         if(customerDetail!=null){
            setCustomerDetails(customerDetail);
@@ -255,7 +251,6 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
                     finish();
                 }
             }
-
             @Override
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
