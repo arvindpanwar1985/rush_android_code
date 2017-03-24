@@ -94,9 +94,7 @@ public class BuildAddressService extends IntentService {
         getPlaceDetails(placeId);
 
     }
-
     private void getPlaceDetails(String placeId){
-
         HashMap<String,String> hashMap=new HashMap<>();
         hashMap.put(KEY_PLACE_ID,placeId);
         hashMap.put(KEY_API_KEY,"AIzaSyDeE8mZavwOAHWE4Up3WtM6-L7NClaffvY");
@@ -121,7 +119,6 @@ public class BuildAddressService extends IntentService {
                 setFetchAddressstatus(t.getMessage(),false);
             }
         });
-
     }
 
 
@@ -185,7 +182,6 @@ public class BuildAddressService extends IntentService {
 
 
     private ApiInterface getApiInterface(){
-
         if(retrofit!=null){
             ApiInterface apiInterface = retrofit.create(ApiInterface.class);
             return apiInterface;

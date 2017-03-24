@@ -43,7 +43,6 @@ public class RatingActivity extends BaseActivity implements View.OnClickListener
     private String mSeriveId,mMessage;
     private Button btnSubmitReview;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +76,6 @@ public class RatingActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void initManagers() {
-
         mSeriveId=getIntent().getStringExtra(KEY_SERVICE_ID);
         mMessage=getIntent().getStringExtra(KEY_MESSAGE);
         if(!TextUtils.isEmpty(mSeriveId)){
@@ -89,7 +87,6 @@ public class RatingActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-
         int id =view.getId();
         switch (id){
               case R.id.imgARClose:
@@ -115,7 +112,6 @@ public class RatingActivity extends BaseActivity implements View.OnClickListener
         ratingParam.setRating(rating);
         return ratingParam;
     }
-
 
     private void setData(DriverDetail driverDetail){
         mtxtPhone.setText(driverDetail.getPhone());
@@ -151,7 +147,6 @@ public class RatingActivity extends BaseActivity implements View.OnClickListener
                     }
                 }
             }
-
             @Override
             public void onRequestFailed(String message) {
                 topRelative.setVisibility(View.GONE);
@@ -163,7 +158,6 @@ public class RatingActivity extends BaseActivity implements View.OnClickListener
             }
         });
     }
-
     /**
      * rate driver
      * @param param

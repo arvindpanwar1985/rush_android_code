@@ -94,11 +94,8 @@ public class RecordFragment extends BaseFragment {
         txtNoRecords=(TextView)view.findViewById(R.id.txtNoRecords);
     }
 
-
-
     @Override
     protected void initListeners() {
-
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
@@ -162,7 +159,6 @@ public class RecordFragment extends BaseFragment {
             }
         });
     }
-
     /**
      * load more data on endless scrolling
      * @param params
@@ -181,9 +177,8 @@ public class RecordFragment extends BaseFragment {
                         if(mAdapter!=null){
                             mAdapter.notifyDataSetChanged();
                         }
-                  }
+                }
             }
-
             @Override
             public void onRequestFailed(String message) {
                  mActivity.showSnackbar(message,0);
@@ -194,6 +189,6 @@ public class RecordFragment extends BaseFragment {
                  }
             }
         });
-    }
+   }
 
 }

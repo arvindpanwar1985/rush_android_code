@@ -24,8 +24,6 @@ import retrofit2.Call;
  */
 
 public class ServiceRequest extends BaseRequest {
-
-
     /**
      *APi request to estimate particular service
      * @param header
@@ -260,10 +258,7 @@ public class ServiceRequest extends BaseRequest {
             }
         });
     }
-
-
     public void setServiceRating(String auth ,RatingParam ratingParam,final ApiCallback apiCallback){
-
         Call<ResponseBody> call=getAPIClient().rateDriver(auth, ratingParam);
         ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(call);
         connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
@@ -272,7 +267,6 @@ public class ServiceRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-
                     String message=obj.getString(MESSAGE);
                     if (status) {
                         MessageBean messageBean=new MessageBean();

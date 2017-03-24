@@ -1,5 +1,6 @@
 package com.hoffmans.rush.ui.driver.activities;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
@@ -8,7 +9,6 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,7 +25,6 @@ import com.hoffmans.rush.model.DateTime;
 import com.hoffmans.rush.model.Estimate;
 import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.ServiceData;
-import com.hoffmans.rush.services.SetDriverStatus;
 import com.hoffmans.rush.ui.activities.BaseActivity;
 import com.hoffmans.rush.utils.AppPreference;
 import com.hoffmans.rush.utils.Constants;
@@ -48,7 +47,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
     private TextView mTxtname,mtxtPhone,mtxtSource,mtxtdestination,mtxtPriceEstimate,txtdateTime;
     private Button btnAccept,btnReject;
     private String mSeriveId,mMessage;
-    private ImageView imgClose;
+   // private ImageView imgClose;
     private CircleImageView imgProfile;
     private SpannableStringBuilder mBuilder=new SpannableStringBuilder();
     @Override
@@ -72,7 +71,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
         mtxtPriceEstimate = (TextView)findViewById(R.id.txtPriceEstimated);
         btnAccept         = (Button)findViewById(R.id.btnAccept);
         btnReject         = (Button)findViewById(R.id.btnReject);
-        imgClose          =(ImageView)findViewById(R.id.imgARClose);
+       // imgClose          =(ImageView)findViewById(R.id.imgARClose);
         imgProfile        =(CircleImageView)findViewById(R.id.imgAcceptreject);
         txtdateTime       =(TextView)findViewById(R.id.txtARDatetime);
         topRelative=(RelativeLayout)findViewById(R.id.topRelative);
@@ -83,7 +82,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
 
         btnAccept.setOnClickListener(this);
         btnReject.setOnClickListener(this);
-        imgClose.setOnClickListener(this);
+        //imgClose.setOnClickListener(this);
     }
 
     @Override
@@ -109,13 +108,8 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
             case R.id.btnReject:
                 setServiceStatus(mSeriveId,STATUS_PENDING);
                 break;
-            case R.id.imgARClose:
-                finish();
-                break;
-        }
+          }
     }
-
-
     /**
      * get detail of service
      * @param serviceId
@@ -145,6 +139,8 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
                 showSnackbar(message,0);
                 if(message.equals(Constants.AUTH_ERROR)){
                     logOutUser();
+                }else{
+                    showFailureDialog(message);
                 }
             }
         });
@@ -242,7 +238,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
                 showSnackbar(messageBean.getMessage(), Toast.LENGTH_LONG);
                 if(service_status.equals(Status.ACCEPTED)){
                     //update driver status to active
-                    SetDriverStatus.updateDriverStatus(getApplicationContext(), Status.ACTIVE);
+                    //SetDriverStatus.updateDriverStatus(getApplicationContext(), Status.ACTIVE);
                     Toast.makeText(getApplicationContext(),messageBean.getMessage(),Toast.LENGTH_LONG).show();
 
                     finish();
@@ -272,5 +268,32 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
         SpannableString darkSpannable = new SpannableString(text);
         darkSpannable.setSpan(new ForegroundColorSpan(color), 0, text.length(), 0);
         return  mBuilder.append(darkSpannable);
+    }
+
+
+    private void showFailureDialog(String mMessage){
+        try {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(AcceptOrderActivity.this);
+            builder.setTitle(R.string.app_name)
+                    .setMessage(mMessage)
+                    .setCancelable(false)
+                    .setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            getServiceDetail(mSeriveId);
+                            dialog.dismiss();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
+        }catch (Exception e){
+
+        }
+
     }
 }

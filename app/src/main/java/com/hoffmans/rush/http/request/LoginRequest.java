@@ -14,6 +14,8 @@ import retrofit2.Call;
  * Created by devesh on 23/12/16.
  */
 
+
+
 public class LoginRequest extends BaseRequest {
 
     public void loginUser(String username,String password,String login_as,String uuid,String device_type,String timeZone ,final ApiCallback callback){
@@ -49,7 +51,6 @@ public class LoginRequest extends BaseRequest {
 
         });
     }
-
     /**
      *
      * @param socialId

@@ -237,6 +237,8 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
                }else if(status.equals(DRIVER_STATUS_INACTIVE)){
                    enableOutOfservice(false);
                }
+
+               mActivity.showSnackbar(body.getMessage(),Toast.LENGTH_LONG);
            }
 
            @Override

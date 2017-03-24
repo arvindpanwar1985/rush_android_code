@@ -28,7 +28,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  *
  * Created by devesh on 17/3/17.
  */
-
 public class HeaderViewHolder extends RecyclerView.ViewHolder {
     private SpannableStringBuilder mbuilder=new SpannableStringBuilder();
     private TextView mTxtname,mtxtPhone,mtxtSource,mtxtdestination,mtxtPriceEstimate,txtDatetime,txtNoRecords;
@@ -51,7 +50,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
         imgAcceptreject   =(CircleImageView)itemView.findViewById(R.id.imgAcceptreject);
         txtNoRecords      =(TextView)itemView.findViewById(R.id.txtNoRecords);
     }
-   public void render(final ServiceData header) {
+    public void render(final ServiceData header) {
         if(header!=null ) {
                 final String state = header.getState();
                 if (state.equals(Status.ACCEPTED)) {
@@ -59,6 +58,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
                 } else if (state.equals(Status.RUNNING)) {
                     btnStart.setText("Complete");
                 }
+
                 CustomerDetail customerDetail = header.getCustomerDetail();
                 Estimate estimate = header.getEstimate();
                 PickDropAddress pickUpAddress = header.getPicAddress();
@@ -116,7 +116,6 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
             stringBuilder.append(" ").append(estimate.getApproxConvertedAmount());
         }
         mtxtPriceEstimate.setText(stringBuilder.toString());
-
     }
 
     /**
@@ -164,6 +163,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
             mtxtdestination.setText(builder, TextView.BufferType.SPANNABLE);
         }
     }
+
     /**
      *
      * @param text text

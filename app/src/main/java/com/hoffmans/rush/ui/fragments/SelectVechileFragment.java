@@ -104,6 +104,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     private String futureDataTime;
     private CircleImageView imageAcceptReject;
     private GoogleApiClient mGoogleApiClient;
+    private boolean calMoveToPlaceAutoCompleteActivity=true;
     public SelectVechileFragment() {
         // Required empty public constructor
     }
@@ -520,19 +521,21 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     @Override
     public void onitemclicked(View view, int position) {
 
-       setUpdatedPosition(position);
-       try {
-            Intent intent =
-                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                            .build(mActivity);
-            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
-        } catch (GooglePlayServicesRepairableException e) {
+        if(calMoveToPlaceAutoCompleteActivity) {
+            setUpdatedPosition(position);
+            calMoveToPlaceAutoCompleteActivity=false;
+            try {
+                Intent intent =
+                        new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                                .build(mActivity);
+                startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+            } catch (GooglePlayServicesRepairableException e) {
+                calMoveToPlaceAutoCompleteActivity=true;
 
-        } catch (GooglePlayServicesNotAvailableException e) {
-
+            } catch (GooglePlayServicesNotAvailableException e) {
+                calMoveToPlaceAutoCompleteActivity=true;
+            }
         }
-        //Intent intent =new Intent(mActivity, com.hoffmans.rush.ui.activities.PlaceAutocomplete.class);
-       // startActivity(intent);
     }
 
     /**
@@ -600,6 +603,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            calMoveToPlaceAutoCompleteActivity=true;
             if (resultCode == mActivity.RESULT_OK) {
                 Progress.showprogress(mActivity,"Please wait..",false);
                 try {
