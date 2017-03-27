@@ -35,7 +35,6 @@ import com.hoffmans.rush.bean.UserBean;
 import com.hoffmans.rush.http.request.LoginRequest;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.model.User;
-import com.hoffmans.rush.services.TrackingService;
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.ui.activities.ForgotPassActivity;
 import com.hoffmans.rush.ui.activities.LoginActivity;
@@ -55,8 +54,8 @@ import static com.hoffmans.rush.ui.activities.LoginActivity.REQUEST_GOOGLE_SIGNI
 /**
  * Created by devesh on 19/12/16.
  */
-
 public class LoginFragment extends BaseFragment implements View.OnClickListener,FacebookCallback<LoginResult> {
+
 
     private View loginView;
     private final String login_as="user";
@@ -98,7 +97,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
 
  
        }
-
     @Override
     protected void initListeners() {
      txtCreateAccount.setOnClickListener(this);
@@ -182,7 +180,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                 if(user!=null && user.getRole()!=null &&user.getRole().equals(com.hoffmans.rush.ui.driver.fragments.LoginFragment.ROLE_CUST)) {
                     handleLoginResult(user);
                 }else{
-                    mActivity.showSnackbar("Invalid credentials",0);
+                    mActivity.showSnackbar(getString(R.string.str_invalid_credentials),0);
                 }
 
             }
@@ -198,8 +196,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void handleLoginResult(User user){
-
-
        if(!user.is_email_verified()){
           showAlertDialog(getString(R.string.str_verify_text));
         }else if(!user.is_card_verfied()){
@@ -234,7 +230,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                                     email = object.getString(Constants.FBCONTANTS.FB_EMAIL);
                                 }
                                 String socialId = object.getString(Constants.FBCONTANTS.FB_ID);
-                                String imageUrl = Constants.FBCONTANTS.FB_IMG_URL+socialId+"/picture?type=large";
+                                String imageUrl = Constants.FBCONTANTS.FB_IMG_URL+socialId+Constants.FBCONTANTS.FB_IMAGE;
 
                                 // socialLogin(Constants.FB_PROVIDER,first_name,last_name,email,socialId,imageUrl,notificationToken,Constants.DEVICE_TYPE,Utils.getTimeZone());
                                 socialLogin(socialId,first_name,last_name,email,Constants.FB_PROVIDER,imageUrl,notificationToken,Constants.DEVICE_TYPE,Utils.getTimeZone());
@@ -288,7 +284,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
 
 
     private void handleUserRegistrationCases(User user){
-
         if(user!=null) {
             if(user.getStatus()!=null && user.getStatus().equals(LoginActivity.STATUS_ACTIVE)){
                 appPreference.saveUser(user);
@@ -306,12 +301,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                     }
                 }
             }
-
-
     }
-
-
-    /**
+  /**
      * sign in through google
      */
     private void googleSignIn(){
@@ -321,6 +312,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
             startActivityForResult(signInIntent, LoginActivity.REQUEST_GOOGLE_SIGNIN);
         }
     }
+
 
     public void showAlertDialog(String message) {
         try {
@@ -363,7 +355,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
      * @param result Result from google + login
      */
     private void handleSignInResult(GoogleSignInResult result) {
-
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
@@ -400,6 +391,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mActivity.stopService(new Intent(mActivity,TrackingService.class));
+        //TODO uncomment this when implemneted
+        //mActivity.stopService(new Intent(mActivity,TrackingService.class));
     }
 }

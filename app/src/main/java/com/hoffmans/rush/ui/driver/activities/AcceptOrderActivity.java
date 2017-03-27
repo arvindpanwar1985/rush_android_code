@@ -277,14 +277,14 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
             builder.setTitle(R.string.app_name)
                     .setMessage(mMessage)
                     .setCancelable(false)
-                    .setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(getString(R.string.str_try_again), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
                             getServiceDetail(mSeriveId);
                             dialog.dismiss();
                         }
                     })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
                             dialog.dismiss();
@@ -294,6 +294,5 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
         }catch (Exception e){
 
         }
-
     }
 }

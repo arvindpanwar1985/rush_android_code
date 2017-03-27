@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
@@ -123,7 +124,6 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
      * @param state
      */
     private void getScheduledAndCurrentSercices(String page,String perpage,String state){
-
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         String token=appPreference.getUserDetails().getToken();
         ServiceRequest request=new ServiceRequest();
@@ -141,6 +141,10 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
             public void onRequestFailed(String message) {
 
                 Progress.dismissProgress();
+                if(message.equals(Constants.AUTH_ERROR)){
+                    mActivity.logOutUser();
+                }
+                mActivity.showSnackbar(message,0);
             }
         });
     }
@@ -152,9 +156,7 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
     private void setScheduledCurrentServicesAdapter(ScheduledBean bean){
         adapter=new UpcomingAdapter(mActivity,this);
         ServiceData currentOrderData=bean.getCurrentOrder();
-
         adapter.setHeader(currentOrderData);
-
         recordList=bean.getScheduledServices();
         adapter.setItems(recordList);
         mRecyclerView.setAdapter(adapter);
@@ -169,7 +171,7 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
              String filteredStatus=(state.equals(Status.ACCEPTED))?Status.RUNNING:Status.COMPLETED;
              setServiceStatus(serviceId,filteredStatus);
          }
-    }
+      }
     /**
      * set the service status
      * @param serviceId id of service
@@ -240,6 +242,7 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
+                mActivity.finish();
             }
         });
 
@@ -328,7 +331,9 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
             public void onRequestSuccess(BaseBean body) {
                 Progress.dismissProgress();
                 MessageBean bean=(MessageBean)body;
-                mActivity.showSnackbar(bean.getMessage(),0);
+                Toast.makeText(mActivity,bean.getMessage(),Toast.LENGTH_SHORT).show();
+                //finish current activity
+                mActivity.finish();
             }
             @Override
             public void onRequestFailed(String message) {

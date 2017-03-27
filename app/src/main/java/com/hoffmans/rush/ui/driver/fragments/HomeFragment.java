@@ -36,6 +36,7 @@ import com.hoffmans.rush.services.UpdateCurentLocation;
 import com.hoffmans.rush.ui.driver.activities.AcceptOrderActivity;
 import com.hoffmans.rush.ui.fragments.BaseFragment;
 import com.hoffmans.rush.utils.Progress;
+import com.hoffmans.rush.utils.Status;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -48,9 +49,7 @@ import static org.greenrobot.eventbus.util.ErrorDialogManager.KEY_MESSAGE;
 
 public class HomeFragment extends BaseFragment implements LocationInterface ,OnMapReadyCallback,View.OnClickListener{
 
-    private static final String DRIVER_STATUS_ACTIVE="active";
-    private static final String DRIVER_STATUS_INACTIVE="inactive";
-    private static final String DRIVER_STATUS_AVAIABLE="available";
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private  String KEY_SERVICE_ID   ="service_id";
@@ -232,24 +231,26 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
            @Override
            public void onRequestSuccess(BaseBean body) {
                Progress.dismissProgress();
-               if(status.equals(DRIVER_STATUS_AVAIABLE)){
+               if(status.equals(Status.AVAIABLE) || status.equals(Status.ACTIVE)){
                    enableInService(false);
-               }else if(status.equals(DRIVER_STATUS_INACTIVE)){
+               }else if(status.equals(Status.INACTIVE)){
                    enableOutOfservice(false);
                }
-
                mActivity.showSnackbar(body.getMessage(),Toast.LENGTH_LONG);
            }
 
            @Override
            public void onRequestFailed(String message) {
                Progress.dismissProgress();
+               if(status.equals(Status.AVAIABLE)){
+                   enableOutOfservice(false);
+               }else if(status.equals(Status.INACTIVE)){
+                   enableInService(false);
+               }
                mActivity.showSnackbar(message,Toast.LENGTH_LONG);
            }
        });
    }
-
-
     /**
      * set the driver status to active
      */
@@ -260,6 +261,7 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
         String token=appPreference.getUserDetails().getToken();
         int id=appPreference.getUserDetails().getId();
         if(id!=0) {
+            //create url
             String url = "/api/user/" + String.valueOf(id);
             userRequest.driverShow(token, url, new ApiCallback() {
                 @Override
@@ -268,11 +270,11 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
                     UserBean bean = (UserBean) body;
                     User user = bean.getUser();
                     if (user != null) {
-                        if (user.getStatus().equals(DRIVER_STATUS_ACTIVE)) {
+                        if (user.getStatus().equals(Status.ACTIVE)) {
                             txtInservice.setSelected(false);
                             txtOutOfService.setSelected(true);
                             enableInService(false);
-                        } else if (user.getStatus().equals(DRIVER_STATUS_INACTIVE)) {
+                        } else if (user.getStatus().equals(Status.INACTIVE)) {
                             txtInservice.setSelected(true);
                             txtOutOfService.setSelected(false);
                             enableOutOfservice(false);
@@ -298,7 +300,7 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
                     .setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
-                            String status=(inService)?DRIVER_STATUS_AVAIABLE:DRIVER_STATUS_INACTIVE;
+                            String status=(inService)?Status.AVAIABLE:Status.INACTIVE;
                             setDriverStaus(status);
                             dialog.dismiss();
                         }

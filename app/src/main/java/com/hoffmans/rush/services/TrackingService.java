@@ -23,7 +23,6 @@ public class TrackingService extends Service implements LocationInterface {
         locationUpdate = LocationUpdate.getInstance();
         locationUpdate.startLocationUpdate(this, this);
    }
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(locationUpdate==null){
@@ -31,28 +30,21 @@ public class TrackingService extends Service implements LocationInterface {
             locationUpdate.startLocationUpdate(this, this);
         }
         return START_STICKY;
-
     }
-
     @Override
     public IBinder onBind(Intent intent) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
-
-
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         // stop location update and stop updating socket
         locationUpdate.stop();
     }
-
     @Override
     public void onLocation(Location location) {
        // Log.v("location",location.getLatitude()+":"+location.getLongitude());
     }
-
     @Override
     public void onLocationFailed() {
        Log.v("location","failed");

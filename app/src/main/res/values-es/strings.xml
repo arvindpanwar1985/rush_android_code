@@ -130,4 +130,5 @@
 
     <string name="str_notify_text">¿Ha recibido una solicitud?</string>
     <string name="str_add_comment">agregar comentario</string>
+    <string name="str_try_again">Inténtalo de nuevo</string>
 </resources>

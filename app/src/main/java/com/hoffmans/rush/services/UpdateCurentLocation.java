@@ -19,12 +19,9 @@ public class UpdateCurentLocation extends IntentService {
     private static final String KEY_AUTH   = "auth";
     private static final String KEY_LAT    = "lat";
     private static final String KEY_LNG    = "lng";
-
     public UpdateCurentLocation() {
         super("UpdateCurentLocation");
     }
-
-
     public static void startLocationUpdate(Context context, String auth, String latitude,String longitude) {
         Intent intent = new Intent(context, UpdateCurentLocation.class);
         intent.setAction(ACTION_LOCATION);
@@ -33,9 +30,6 @@ public class UpdateCurentLocation extends IntentService {
         intent.putExtra(KEY_LNG, longitude);
         context.startService(intent);
     }
-
-
-
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
@@ -45,13 +39,12 @@ public class UpdateCurentLocation extends IntentService {
                 final String latitude = intent.getStringExtra(KEY_LAT);
                 final String logitude = intent.getStringExtra(KEY_LNG);
                 //Update user location request
-                 updateUserLocation(auth,"9.045654215","-79.515554");
-                // updateUserLocation(auth,latitude,logitude);
+                // updateUserLocation(auth,"9.045654215","-79.515554");
+                updateUserLocation(auth,latitude,logitude);
 
             }
         }
     }
-
     /**
      * api call for update user location
      * @param auth auth token

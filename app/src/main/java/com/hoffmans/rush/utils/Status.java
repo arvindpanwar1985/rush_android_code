@@ -11,4 +11,6 @@ public class Status {
     public static final String COMPLETED = "completed";
     public static final String ACTIVE    = "active";
     public static final String PENDING   = "pending";
+    public static final String INACTIVE  = "inactive";
+    public static final String AVAIABLE  ="available";
 }

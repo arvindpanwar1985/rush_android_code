@@ -126,6 +126,8 @@
     <string name="str_add_card">Add Card</string>
     <string name="str_frequent_address">Frequently used Address</string>
     <string name="str_receipt">Receipt</string>
+    <string name="str_something_wrong">Something went wrong.</string>
+    <string name="str_invalid_credentials">Invalid credentials</string>
 
 
     /****************************************************************Drivers String.************\
@@ -145,6 +147,7 @@
     <string name="str_dest">Destination</string>
     <string name="str_notify_text">Have you received request?</string>
     <string name="str_add_comment">Add Comment</string>
+    <string name="str_try_again">Try Again.</string>
 
 
 </resources>

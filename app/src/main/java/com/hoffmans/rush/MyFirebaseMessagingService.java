@@ -22,6 +22,8 @@ import java.util.Map;
 
 /**
  * Created by devesh on 29/12/16.
+ *
+ * Class to receive app notifications
  */
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
@@ -130,6 +132,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.i(TAG,e.toString());
         }
     }
+
+    /**
+     * show the notification icon
+     * @param message messgae to show in notification
+     */
     private void sendNotification(String message){
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)

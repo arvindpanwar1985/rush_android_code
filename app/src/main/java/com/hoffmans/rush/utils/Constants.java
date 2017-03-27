@@ -45,6 +45,7 @@ public class Constants {
         public static final String FB_ID="id";
         public static final String FB_EMAIL="email";
         public static final String FB_IMG_URL="http://graph.facebook.com/";
+        public static final String FB_IMAGE  ="/picture?type=large";
     }
 
 

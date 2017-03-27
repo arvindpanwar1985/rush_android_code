@@ -180,7 +180,6 @@ public class BuildAddressService extends IntentService {
         EventBus.getDefault().post(fetchAddressEvent);
     }
 
-
     private ApiInterface getApiInterface(){
         if(retrofit!=null){
             ApiInterface apiInterface = retrofit.create(ApiInterface.class);
