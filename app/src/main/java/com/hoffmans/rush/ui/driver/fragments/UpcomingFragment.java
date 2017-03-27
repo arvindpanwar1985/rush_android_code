@@ -242,7 +242,7 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
-                mActivity.finish();
+               // mActivity.finish();
             }
         });
 
@@ -333,7 +333,7 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
                 MessageBean bean=(MessageBean)body;
                 Toast.makeText(mActivity,bean.getMessage(),Toast.LENGTH_SHORT).show();
                 //finish current activity
-                mActivity.finish();
+               // mActivity.finish();
             }
             @Override
             public void onRequestFailed(String message) {

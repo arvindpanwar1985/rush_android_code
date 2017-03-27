@@ -37,7 +37,6 @@ import java.util.ArrayList;
 
 
 public class AddCardFragment extends BaseFragment implements View.OnClickListener ,BrainTreeHandler {
-
     private static final String ARG_PARAM1 = "bt_token";
     private String bt_token;
     private EditText edtCardNumber,edtEdtTitular,edtCvv;
@@ -105,7 +104,9 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
         topLinear.setOnClickListener(this);
     }
 
-
+    /**
+     * Intialize braintree
+     */
     private void initializeBrainTree(){
         try {
             if(!TextUtils.isEmpty(bt_token)) {
@@ -146,7 +147,7 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
      *
      * @return the user input card
      */
-    private Card getCreditCard(){
+    private Card getUserInputCreditCard(){
         Card card=new Card();
         String cardnumber=edtCardNumber.getText().toString().trim();
         String expiry    =txtExpiry.getText().toString().trim();
@@ -163,7 +164,7 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
 
 
         private void validateCardDetails(){
-        Card card=getCreditCard();
+        Card card=getUserInputCreditCard();
         if(card!=null){
             if (!Validation.isValidCreditCard(card.getCardNumber())) {
                 //Utils.showToast(mActivity, "Invalid Card Number");
@@ -190,8 +191,6 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
             buildCreditCard(card);
         }
     }
-
-
     /**
      * token the card at Braintree
      * @param card user input card
@@ -212,8 +211,7 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
         }
     }
 
-
-    @Override
+   @Override
     public void onError(Exception error) {
         Progress.dismissProgress();
         mActivity.showSnackbar(error.getMessage(),0);
@@ -227,6 +225,10 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
 
     }
 
+    /**
+     * api call for adding card
+     * @param nounce nounce from brain-tree
+     */
     private void addCard(String nounce){
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         PaymentRequest paymentRequest=new PaymentRequest();
@@ -246,7 +248,6 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
                 }
 
             }
-
             @Override
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();

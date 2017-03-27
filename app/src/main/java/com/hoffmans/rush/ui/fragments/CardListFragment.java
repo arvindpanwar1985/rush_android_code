@@ -237,7 +237,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            defaultCard(token);
+                            setDefaultCard(token);
                         }
 
                     }).create().show();
@@ -287,7 +287,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
      * @param token
      */
 
-    private void defaultCard(String token){
+    private void setDefaultCard(String token){
        Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         PaymentRequest deleteCardRequest=new PaymentRequest();
         deleteCardRequest.defaultCard(appPreference.getUserDetails().getToken(), token, new ApiCallback() {
@@ -314,10 +314,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
             }
         });
     }
-
-
-
-    @Override
+   @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==REQUEST_ADD_CARD && resultCode==mActivity.RESULT_OK){
            if(data!=null){

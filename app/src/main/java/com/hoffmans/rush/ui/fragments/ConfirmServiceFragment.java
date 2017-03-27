@@ -69,7 +69,6 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
         // Required empty public constructor
     }
 
-
     public static ConfirmServiceFragment newInstance(Estimate param1, CardData param2, Service param3,int transID) {
         ConfirmServiceFragment fragment = new ConfirmServiceFragment();
         Bundle args = new Bundle();
@@ -163,7 +162,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
 
                 break;
             case R.id.btnMakeOrder:
-                validateFields();
+                validateDefaultCard();
                 break;
         }
     }
@@ -195,7 +194,11 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
             Toast.makeText(getActivity(),"Error in iniializing map",Toast.LENGTH_SHORT).show();
         }
     }
-    private void validateFields(){
+
+    /**
+     * Validate possible fields before order
+     */
+    private void validateDefaultCard(){
 
         if(defaultCardData==null && TextUtils.isEmpty(defaultCardData.getToken())){
             mActivity.showSnackbar(getString(R.string.str_select_card),0);
@@ -238,6 +241,10 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
     }
 
 
+    /**
+     * set estimated Price
+     * @throws NullPointerException
+     */
     private void setEstimatedPrice() throws NullPointerException{
         if(mesTimatedData!=null){
             txtCurrency.setText(mesTimatedData.getSymbol());
@@ -247,12 +254,20 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
         }
     }
 
+    /**
+     * set estimated time
+     * @throws NullPointerException
+     */
     private void setEstimatedTime() throws NullPointerException{
         if(mesTimatedData!=null){
             txtEstimatedTime.setText(mesTimatedData.getApproxTime());
         }
     }
 
+    /**
+     * set default card data
+     * @throws NullPointerException
+     */
     private void setDefaultCarData()throws NullPointerException{
 
         if(defaultCardData!=null){
@@ -265,7 +280,10 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
         }
     }
 
-
+    /**
+     * set pick and drop UI
+     * @throws NullPointerException
+     */
    private void setPickDropUi()throws NullPointerException{
         listAddressData.clear();
         listAddressData.add(mServiceParams.getPick_address());
@@ -386,9 +404,11 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
         mGoogleMap=googleMap;
         if(mServiceParams!=null){
             PickDropAddress pickUpAddress=mServiceParams.getPick_address();
-            LatLng latLng=new LatLng(pickUpAddress.getLatitude(),pickUpAddress.getLongitude());
-            Marker marker=addlocationMarker(latLng,R.drawable.marker,mGoogleMap,false);
-            marker.setTitle("Pick Up");
+            if(pickUpAddress!=null) {
+                LatLng latLng = new LatLng(pickUpAddress.getLatitude(), pickUpAddress.getLongitude());
+                Marker marker = addlocationMarker(latLng, R.drawable.marker, mGoogleMap, false);
+                marker.setTitle("Pick Up");
+            }
         }
 
     }
