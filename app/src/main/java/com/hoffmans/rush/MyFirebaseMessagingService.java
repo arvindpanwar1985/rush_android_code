@@ -33,6 +33,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TYPE_ACCEPT_ORDER      ="driver_assigned";
     private static final String TYPE_DRIVER_ASSIGNED   ="driver_assigned";
     private static final String TYPE_SERVICE_COMPLETED ="service_completed";
+    private static final String TYPE_SERVICE_ACCEPTED  ="service_accepted";
     private  String KEY_NOTIFY_TYPE  ="type";
     private  String KEY_MESSAGE      ="message";
     private  String KEY_SERVICE_ID   ="service_id";
@@ -125,6 +126,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     startActivity(ratingIntent);
                     break;
                 case TYPE_DRIVER_ASSIGNED:
+                    sendNotification(message);
+                    break;
+                case TYPE_SERVICE_ACCEPTED:
                     sendNotification(message);
                     break;
             }

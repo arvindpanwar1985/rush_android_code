@@ -23,8 +23,6 @@ import retrofit2.Call;
  */
 
 public class UserRequest extends BaseRequest {
-
-
     /**
      *
      * @param requestBodyMap request body map
@@ -41,15 +39,14 @@ public class UserRequest extends BaseRequest {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
                     String message=obj.getString(MESSAGE);
-                    if (status) {
+                    if (status){
                         String data = obj.getJSONObject(DATA).toString();
                         UserBean bean = getGsonBuilder().fromJson(data, UserBean.class);
                         bean.setMessage(message);
                         callback.onRequestSuccess(bean);
-                    } else {
+                    }else{
                         callback.onRequestFailed(message);
                     }
-
                 }catch (Exception e){
                     callback.onRequestFailed(e.getMessage());
                 }
@@ -157,16 +154,12 @@ public class UserRequest extends BaseRequest {
                     callback.onRequestFailed(e.getMessage());
                 }
             }
-
             @Override
             public void onWebStatusFalse(String message) {
                 callback.onRequestFailed(message);
             }
         });
     }
-
-
-
 
 
     public void getProfile(String token, final ApiCallback callback){
@@ -198,7 +191,6 @@ public class UserRequest extends BaseRequest {
             }
         });
     }
-
 
     /**
      * Update the driver status
@@ -233,7 +225,6 @@ public class UserRequest extends BaseRequest {
             }
         });
     }
-
 
     /**
      * get driver details
@@ -271,7 +262,6 @@ public class UserRequest extends BaseRequest {
         });
     }
 
-
     /**
      * add comments
      * @param auth
@@ -306,7 +296,6 @@ public class UserRequest extends BaseRequest {
             }
         });
     }
-
     /**
      * logut user from app
      * @param auth
@@ -340,4 +329,5 @@ public class UserRequest extends BaseRequest {
             }
         });
     }
+
 }

@@ -101,7 +101,6 @@ public class DriverNavigationActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
         View navHeader=navigationView.getHeaderView(0);
         initheaderView(navHeader);
-
     }
 
     @Override
@@ -160,7 +159,7 @@ public class DriverNavigationActivity extends BaseActivity
                     uuid= FirebaseInstanceId.getInstance().getToken();
                     appPreference.setNotificationToken(uuid);
                     }
-                singOutUser(uuid);
+                 singOutUser(uuid);
                 break;
             case R.id.nav_home:
                 if (!isFragmentOpened(HomeFragment.class.getCanonicalName())) {
@@ -190,7 +189,6 @@ public class DriverNavigationActivity extends BaseActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()){

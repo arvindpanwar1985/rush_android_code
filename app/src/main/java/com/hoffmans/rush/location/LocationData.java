@@ -34,7 +34,6 @@ public class LocationData implements GoogleApiClient.ConnectionCallbacks, Google
     private LocationInterface mlocationInterface;
     public static  final int REQUEST_CHECK_SETTINGS=500;
 
-
     private PendingResult<LocationSettingsResult> result;
 
     //Location requests
@@ -68,8 +67,7 @@ public class LocationData implements GoogleApiClient.ConnectionCallbacks, Google
 
     // call back for other class
     public void callbacksResults()
-    {
-        // call backs for lcoation status
+    {  // call backs for lcoation status
         result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
             @Override
             public void onResult(LocationSettingsResult result) {
