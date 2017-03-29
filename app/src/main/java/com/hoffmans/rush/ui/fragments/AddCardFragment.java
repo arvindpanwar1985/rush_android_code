@@ -211,7 +211,7 @@ public class AddCardFragment extends BaseFragment implements View.OnClickListene
         }
     }
 
-   @Override
+    @Override
     public void onError(Exception error) {
         Progress.dismissProgress();
         mActivity.showSnackbar(error.getMessage(),0);

@@ -75,8 +75,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/txtPriceEstimated"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sp_20"
-                android:text=""
+                android:textSize="@dimen/sp_16"
+                android:text="sds"
                 android:layout_centerHorizontal="true"
                 android:textStyle="bold|italic"/>
 

@@ -39,12 +39,13 @@ public class UpdateCurentLocation extends IntentService {
                 final String latitude = intent.getStringExtra(KEY_LAT);
                 final String logitude = intent.getStringExtra(KEY_LNG);
                 //Update user location request
-                // updateUserLocation(auth,"9.045654215","-79.515554");
-                updateUserLocation(auth,latitude,logitude);
+                updateUserLocation(auth,"9.045654215","-79.515554");
+                //updateUserLocation(auth,latitude,logitude);
 
             }
         }
     }
+
     /**
      * api call for update user location
      * @param auth auth token

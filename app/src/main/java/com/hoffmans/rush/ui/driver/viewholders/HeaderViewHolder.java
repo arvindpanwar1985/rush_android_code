@@ -8,6 +8,7 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -30,10 +31,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class HeaderViewHolder extends RecyclerView.ViewHolder {
     private SpannableStringBuilder mbuilder=new SpannableStringBuilder();
-    private TextView mTxtname,mtxtPhone,mtxtSource,mtxtdestination,mtxtPriceEstimate,txtDatetime,txtNoRecords;
+    private TextView mTxtname,mtxtPhone,mtxtSource,mtxtdestination,mtxtPriceEstimate,txtDatetime,txtNoRecords,txtNoUpcoming;
     private Button btnStart;
     private Context mContext;
     private CircleImageView imgAcceptreject;
+    private RelativeLayout relativeLayoutHeader;
     private OnHeaderButtonClickListners onHeaderButtonClickListner;
 
     public HeaderViewHolder(View itemView, OnHeaderButtonClickListners onHeaderButtonClickListner) {
@@ -49,45 +51,57 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
         txtDatetime       =(TextView)itemView.findViewById(R.id.txtdateTime);
         imgAcceptreject   =(CircleImageView)itemView.findViewById(R.id.imgAcceptreject);
         txtNoRecords      =(TextView)itemView.findViewById(R.id.txtNoRecords);
+        relativeLayoutHeader=(RelativeLayout)itemView.findViewById(R.id.relativeHeader);
+        txtNoUpcoming   =(TextView)itemView.findViewById(R.id.txtNoUpcoming);
     }
     public void render(final ServiceData header) {
         if(header!=null ) {
-                final String state = header.getState();
-                if (state.equals(Status.ACCEPTED)) {
-                    btnStart.setText("Start");
-                } else if (state.equals(Status.RUNNING)) {
-                    btnStart.setText("Complete");
-                }
+             if(!header.isTypenoHeader()) {
+                 relativeLayoutHeader.setVisibility(View.VISIBLE);
+                 txtNoUpcoming.setVisibility(View.GONE);
+                 final String state = header.getState();
+                 if (state.equals(Status.ACCEPTED)) {
+                     btnStart.setText("Start");
+                 } else if (state.equals(Status.RUNNING)) {
+                     btnStart.setText("Complete");
+                 }
 
-                CustomerDetail customerDetail = header.getCustomerDetail();
-                Estimate estimate = header.getEstimate();
-                PickDropAddress pickUpAddress = header.getPicAddress();
-                DateTime dateTime = header.getDateTime();
+                 CustomerDetail customerDetail = header.getCustomerDetail();
+                 Estimate estimate = header.getEstimate();
+                 PickDropAddress pickUpAddress = header.getPicAddress();
+                 DateTime dateTime = header.getDateTime();
 
-                List<PickDropAddress> dropAddresses = header.getDropAddressList();
-                if (customerDetail != null) {
-                    setCustomerDetail(customerDetail);
-                }
-                if (estimate != null) {
-                    setPriceEstimate(estimate);
-                }
-                if (pickUpAddress != null) {
-                    setPickAddress(pickUpAddress);
-                }
-                if (dropAddresses != null && dropAddresses.size() > 0) {
-                    setDropAddresses(dropAddresses);
-                }
-                if (dateTime != null) {
-                    txtDatetime.setText(dateTime.getDate() + " " + dateTime.getTime());
-                }
+                 List<PickDropAddress> dropAddresses = header.getDropAddressList();
+                 if (customerDetail != null) {
+                     setCustomerDetail(customerDetail);
+                 }
+                 if (estimate != null) {
+                     setPriceEstimate(estimate);
+                 }
+                 if (pickUpAddress != null) {
+                     setPickAddress(pickUpAddress);
+                 }
+                 if (dropAddresses != null && dropAddresses.size() > 0) {
+                     setDropAddresses(dropAddresses);
+                 }
+                 if (dateTime != null) {
+                     txtDatetime.setText(dateTime.getDate() + " " + dateTime.getTime());
+                 }
 
-                btnStart.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        onHeaderButtonClickListner.onStartStopButtonClicked(state, header.getId());
-                    }
-                });
+                 btnStart.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View view) {
+                         onHeaderButtonClickListner.onStartStopButtonClicked(state, header.getId());
+                     }
+                 });
+
+             }else{
+                 //hide the topview and show no header
+                 relativeLayoutHeader.setVisibility(View.GONE);
+                 txtNoUpcoming.setVisibility(View.VISIBLE);
+             }
             }
+
     }
 
 

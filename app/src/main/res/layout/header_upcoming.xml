@@ -5,12 +5,38 @@
     android:orientation="vertical"
     tools:context="com.hoffmans.rush.ui.driver.fragments.UpcomingFragment">
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:id="@+id/relativeHeader"
+        android:visibility="visible"
+        android:layout_height="wrap_content"
+
+       >
 
     <include
         android:layout_marginTop="@dimen/dp_7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         layout="@layout/view_driver_upcoming"
+        />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/txtNoUpcoming"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_4"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/sp_17"
+        android:textStyle="bold|italic"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal"
+        android:text="No upcoming order."
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_4"
+        android:layout_marginTop="@dimen/dp_30"
+        android:layout_marginBottom="@dimen/dp_30"
+        android:background="@android:color/white"
         />
 
     <TextView
@@ -25,7 +51,6 @@
         android:paddingBottom="@dimen/dp_4"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_marginBottom="@dimen/dp_10"
-
         android:background="@android:color/white"
         />
 

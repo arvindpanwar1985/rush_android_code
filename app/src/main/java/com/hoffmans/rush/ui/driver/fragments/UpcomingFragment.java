@@ -39,6 +39,9 @@ import com.hoffmans.rush.widgets.EndlessRecyclerViewScrollListener;
 
 import java.util.List;
 
+import static com.hoffmans.rush.ui.driver.activities.UpcomingActivity.DEFAULT_ITEMS;
+import static com.hoffmans.rush.ui.driver.activities.UpcomingActivity.DEFAULT_PAGE_NO;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link UpcomingFragment#newInstance} factory method to
@@ -57,8 +60,7 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
     private int records_count,currentListSize;
     private List<Record> recordList;
     private ProgressBar progressBar;
-    private static final String DEFAULT_ITEMS      ="5";
-    private static final String DEFAULT_PAGE_NO    ="1";
+
 
     public UpcomingFragment() {
         // Required empty public constructor
@@ -123,7 +125,7 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
      * @param perpage
      * @param state
      */
-    private void getScheduledAndCurrentSercices(String page,String perpage,String state){
+    public void getScheduledAndCurrentSercices(String page,String perpage,String state){
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         String token=appPreference.getUserDetails().getToken();
         ServiceRequest request=new ServiceRequest();
@@ -156,6 +158,10 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
     private void setScheduledCurrentServicesAdapter(ScheduledBean bean){
         adapter=new UpcomingAdapter(mActivity,this);
         ServiceData currentOrderData=bean.getCurrentOrder();
+        if(currentOrderData==null){
+            currentOrderData=new ServiceData();
+            currentOrderData.setTypenoHeader(true);
+        }
         adapter.setHeader(currentOrderData);
         recordList=bean.getScheduledServices();
         adapter.setItems(recordList);
@@ -190,6 +196,10 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
                 if(scheduledBean!=null){
                     if(adapter!=null){
                          ServiceData currentOrderData=scheduledBean.getCurrentOrder();
+                          if(currentOrderData==null){
+                              currentOrderData=new ServiceData();
+                              currentOrderData.setTypenoHeader(true);
+                          }
                           adapter.setHeader(currentOrderData);//update header to recyclerView
                           adapter.setItems(scheduledBean.getScheduledServices()); //update listview items
                           adapter.notifyDataSetChanged();
@@ -295,8 +305,9 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
                 ScheduledBean bean=(ScheduledBean)body;
                 if(bean!=null){
                     linearProgress.setVisibility(View.GONE);
-                    records_count=bean.getTotal_items();
-                    if(bean.getScheduledServices().size()!=0){
+                    List<Record> records=bean.getScheduledServices();
+                    if(records!=null && records.size()!=0){
+                        records_count=bean.getTotal_items();
                         //update the current schedule listing
                         recordList.addAll(bean.getScheduledServices());
                         currentListSize=recordList.size();

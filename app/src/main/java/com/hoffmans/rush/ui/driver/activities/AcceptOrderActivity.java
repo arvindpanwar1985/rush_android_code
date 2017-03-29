@@ -1,6 +1,7 @@
 package com.hoffmans.rush.ui.driver.activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
@@ -240,7 +241,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
                     //update driver status to active
                     //SetDriverStatus.updateDriverStatus(getApplicationContext(), Status.ACTIVE);
                     Toast.makeText(getApplicationContext(),messageBean.getMessage(),Toast.LENGTH_LONG).show();
-
+                    handleOrderAcceptRequest();
                     finish();
                 }else if(service_status.equals(STATUS_PENDING)){
                     //close current activity
@@ -258,6 +259,13 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
+
+
+    private void handleOrderAcceptRequest(){
+        //move control to upcoming activity
+        Intent upcomingIntent = new Intent(AcceptOrderActivity.this, UpcomingActivity.class);
+        startActivity(upcomingIntent);
+    }
     /**
      *
      * @param text text

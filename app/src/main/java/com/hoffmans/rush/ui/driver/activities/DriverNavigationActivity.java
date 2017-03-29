@@ -179,7 +179,6 @@ public class DriverNavigationActivity extends BaseActivity
 
             case R.id.nav_Upcoming:
                 Intent upcomingIntent = new Intent(DriverNavigationActivity.this, UpcomingActivity.class);
-                upcomingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(upcomingIntent);
                 break;
             case R.id.nav_record:
@@ -213,6 +212,5 @@ public class DriverNavigationActivity extends BaseActivity
          super.onActivityResult(requestCode, resultCode, data);
         }
     }
-
 
 }

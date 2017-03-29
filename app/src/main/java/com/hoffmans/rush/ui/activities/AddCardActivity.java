@@ -21,10 +21,8 @@ public class AddCardActivity extends BaseActivity  implements PaymentMethodNonce
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_add_card, getParentView());
         AppPreference appPreference=AppPreference.newInstance(this);
-
         AddCardFragment fragment=AddCardFragment.newInstance(appPreference.getUserDetails().getBt_token());
         replaceFragment(fragment,R.id.content_add_card,false);
-
     }
 
     @Override
@@ -58,10 +56,13 @@ public class AddCardActivity extends BaseActivity  implements PaymentMethodNonce
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * set brain-tree handler
+     * @param handler
+     */
     public void setBrainTreeHandler(BrainTreeHandler handler){
         this.brainTreeHandler=handler;
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

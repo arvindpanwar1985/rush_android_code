@@ -12,24 +12,27 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ApiBuilder {
 
+    private static final int CONNECT_TIME_OUT =15;// in seconds
+    private static final int READ_TIME_OUT    =20;// in seconds
     public static Retrofit retrofit;
     static ApiInterface apiInterface;
-
     private static OkHttpClient.Builder okHttpClient =
             new OkHttpClient.Builder();
-
+    /**
+     * create ApiInterface
+     * @return ApiInterface
+     */
     public  static ApiInterface  createApiBuilder(){
-        setLogInterCeptor();
+         setLogInterCeptor();
          if(retrofit!=null){
              return apiInterface=retrofit.create(ApiInterface.class);
          }else {
-             retrofit = new Retrofit.Builder().baseUrl(ApiConfig.getdevBaseUrl())
+             retrofit = new Retrofit.Builder().baseUrl(ApiConfig.getBaseUrl())
                      // set the okhttpclient and add default connect and read timepouts
-                     .client(okHttpClient.connectTimeout(15, TimeUnit.SECONDS).readTimeout(20, TimeUnit.SECONDS).build())
+                     .client(okHttpClient.connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS).readTimeout(READ_TIME_OUT, TimeUnit.SECONDS).build())
                      .addConverterFactory(GsonConverterFactory.create())
                      .build();
              apiInterface = retrofit.create(ApiInterface.class);
-
              return apiInterface;
          }
     }
@@ -50,12 +53,11 @@ public class ApiBuilder {
         if(retrofit!=null){
             return retrofit;
         }else {
-            return new Retrofit.Builder().baseUrl(ApiConfig.getdevBaseUrl())
+            return new Retrofit.Builder().baseUrl(ApiConfig.getBaseUrl())
                     // set the okhttpclient and add default connect and read timepouts
-                    .client(okHttpClient.connectTimeout(45, TimeUnit.SECONDS).readTimeout(45, TimeUnit.SECONDS).build())
+                    .client(okHttpClient.connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS).readTimeout(READ_TIME_OUT, TimeUnit.SECONDS).build())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
-      // Create an instance of our GitHub API interface.
-    }
+     }
 }
