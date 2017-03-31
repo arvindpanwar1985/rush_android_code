@@ -14,33 +14,38 @@ public class ApiBuilder {
 
     private static final int CONNECT_TIME_OUT =15;// in seconds
     private static final int READ_TIME_OUT    =20;// in seconds
-    public static Retrofit retrofit;
-    static ApiInterface apiInterface;
-    private static OkHttpClient.Builder okHttpClient =
-            new OkHttpClient.Builder();
+    private static Retrofit retrofit;
+    private static ApiInterface apiInterface;
+    private static OkHttpClient.Builder okHttpClient =new OkHttpClient.Builder();
+    private static  HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
     /**
      * create ApiInterface
      * @return ApiInterface
      */
     public  static ApiInterface  createApiBuilder(){
+         // set logging interceptor
          setLogInterCeptor();
          if(retrofit!=null){
              return apiInterface=retrofit.create(ApiInterface.class);
          }else {
-             retrofit = new Retrofit.Builder().baseUrl(ApiConfig.getBaseUrl())
-                     // set the okhttpclient and add default connect and read timepouts
-                     .client(okHttpClient.connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS).readTimeout(READ_TIME_OUT, TimeUnit.SECONDS).build())
-                     .addConverterFactory(GsonConverterFactory.create())
+             retrofit = new Retrofit.Builder()
+                     .baseUrl(ApiConfig.getBaseUrl())
+                     .client(okHttpClient.connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS) //default  connect timeout
+                     .readTimeout(READ_TIME_OUT, TimeUnit.SECONDS).build())                  //default  read timeout
+                     .addConverterFactory(GsonConverterFactory.create())                     // add converter factory
                      .build();
-             apiInterface = retrofit.create(ApiInterface.class);
-             return apiInterface;
+             return retrofit.create(ApiInterface.class);
+
          }
     }
+
     /**
      * set log interceptor for logging the network response
      */
     private static  void setLogInterCeptor(){
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        if(interceptor==null){
+            interceptor=new HttpLoggingInterceptor();
+        }
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         okHttpClient.addInterceptor(interceptor).build();
     }
@@ -49,15 +54,19 @@ public class ApiBuilder {
      * @return Retrofit Instance
      */
     public static Retrofit getRetrofitInstance(){
+        //set log interceptor
         setLogInterCeptor();
         if(retrofit!=null){
             return retrofit;
         }else {
-            return new Retrofit.Builder().baseUrl(ApiConfig.getBaseUrl())
-                    // set the okhttpclient and add default connect and read timepouts
-                    .client(okHttpClient.connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS).readTimeout(READ_TIME_OUT, TimeUnit.SECONDS).build())
-                    .addConverterFactory(GsonConverterFactory.create())
+            return new Retrofit.Builder()
+                    .baseUrl(ApiConfig.getBaseUrl())
+                    .client(okHttpClient.connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS) //default  connect timeout
+                            .readTimeout(READ_TIME_OUT, TimeUnit.SECONDS).build())          //default  read timeout
+                    .addConverterFactory(GsonConverterFactory.create())                     // add converter factory
                     .build();
         }
      }
+
 }
+

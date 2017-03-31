@@ -105,7 +105,6 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
         edtEdtTitular=(EditText)view.findViewById(R.id.fpEdtTitular);
         txtExpiry    =(TextView) view.findViewById(R.id.fpEdtExpiry);
         edtCvv       =(EditText)view.findViewById(R.id.fpEdtCvv);
-
         btnSaveCard  =(Button) view.findViewById(R.id.fpBtnSaveCard);
         topLinear    =(LinearLayout)view.findViewById(R.id.topLinearPayment);
 
@@ -242,6 +241,11 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
         }
 
     }
+
+    /**
+     * api call to add new card
+     * @param nounce
+     */
     private void addPaymentMethod(String nounce){
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         PaymentRequest paymentRequest=new PaymentRequest();

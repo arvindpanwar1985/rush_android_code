@@ -118,8 +118,6 @@ public interface ApiInterface {
     @POST("/api/drivers/service_status")
     Call<ResponseBody> setServiceStatus(@Header("Authorization")String auth,@Field("service_id")String service_id,@Field("service_status")String service_status);
 
-
-
     @GET("/maps/api/geocode/json")
     Call<ResponseBody> getPlaceID(@QueryMap(encoded = true) Map<String, String> params);
     @FormUrlEncoded

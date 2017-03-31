@@ -39,7 +39,6 @@ public class ServiceRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-
                     String message=obj.getString(MESSAGE);
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
@@ -49,7 +48,6 @@ public class ServiceRequest extends BaseRequest {
                     } else {
                        apiCallback.onRequestFailed(message);
                     }
-
                 }catch (Exception e){
                     apiCallback.onRequestFailed(e.getMessage());
                 }
@@ -59,7 +57,6 @@ public class ServiceRequest extends BaseRequest {
             public void onWebStatusFalse(String message) {
                 apiCallback.onRequestFailed(message);
             }
-
 
         });
     }

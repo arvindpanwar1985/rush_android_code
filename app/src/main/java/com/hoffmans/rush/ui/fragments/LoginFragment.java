@@ -123,7 +123,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
             case com.hoffmans.rush.R.id.flBtnLogin:
                 validateFields();
                 break;
-
             case R.id.frBtnFacebook:
                 LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
                 break;

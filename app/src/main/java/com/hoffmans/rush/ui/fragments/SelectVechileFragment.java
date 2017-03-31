@@ -645,7 +645,6 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             addlocationMArker(favouriteLatLng, true);
         }
     }
-
     /**
      *
      * @param place place from autocompleter

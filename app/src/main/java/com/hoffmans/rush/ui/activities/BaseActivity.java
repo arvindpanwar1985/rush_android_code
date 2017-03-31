@@ -442,7 +442,6 @@ public abstract  class BaseActivity extends AppCompatActivity {
         userIsInteracting = true;
     }
 
-
     /**
      *
      * logout user from app locally
@@ -508,7 +507,5 @@ public abstract  class BaseActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }
 

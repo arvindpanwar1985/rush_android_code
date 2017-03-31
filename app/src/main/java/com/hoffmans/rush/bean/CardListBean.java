@@ -11,8 +11,8 @@ import java.util.ArrayList;
 public class CardListBean extends BaseBean {
 
  private ArrayList<CardData>  cards=new ArrayList<>();
-
-    public ArrayList<CardData> getCards() {
+ public ArrayList<CardData> getCards() {
         return cards;
     }
+
 }

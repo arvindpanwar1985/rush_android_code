@@ -9,20 +9,19 @@ import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.http.request.LocationRequest;
 import com.hoffmans.rush.listners.ApiCallback;
 
-
 public class UpdateCurentLocation extends IntentService {
 
     private static final String ACTION_LOCATION = "com.hoffmans.rush.services.action.location_update";
     private static final String TAG             =UpdateCurentLocation.class.getCanonicalName();
-
-
     private static final String KEY_AUTH   = "auth";
     private static final String KEY_LAT    = "lat";
     private static final String KEY_LNG    = "lng";
     public UpdateCurentLocation() {
         super("UpdateCurentLocation");
     }
-    public static void startLocationUpdate(Context context, String auth, String latitude,String longitude) {
+
+
+    public static void startLocationUpdate(Context context, String auth, String latitude,String longitude){
         Intent intent = new Intent(context, UpdateCurentLocation.class);
         intent.setAction(ACTION_LOCATION);
         intent.putExtra(KEY_AUTH, auth);
@@ -31,7 +30,7 @@ public class UpdateCurentLocation extends IntentService {
         context.startService(intent);
     }
     @Override
-    protected void onHandleIntent(Intent intent) {
+    protected void onHandleIntent(Intent intent){
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_LOCATION.equals(action)) {
@@ -41,12 +40,10 @@ public class UpdateCurentLocation extends IntentService {
                 //Update user location request
                 //updateUserLocation(auth,"9.045654215","-79.515554");
                 updateUserLocation(auth,latitude,logitude);
-
             }
-        }
+       }
     }
-
-    /**
+     /**
      * api call for update user location
      * @param auth auth token
      * @param latitude
@@ -61,12 +58,10 @@ public class UpdateCurentLocation extends IntentService {
                     Log.v(TAG, body.getMessage());
                 }
             }
-
             @Override
             public void onRequestFailed(String message) {
                 Log.v(TAG,message);
             }
         });
     }
-
-}
+ }
