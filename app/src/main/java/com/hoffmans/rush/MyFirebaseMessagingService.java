@@ -39,6 +39,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private  String KEY_SERVICE_ID   ="service_id";
     private AppPreference mAppPreference;
     private static final String TAG = MyFirebaseMessagingService.class.getCanonicalName();
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);

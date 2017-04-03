@@ -12,10 +12,10 @@ import com.hoffmans.rush.listners.ApiCallback;
 public class UpdateCurentLocation extends IntentService {
 
     private static final String ACTION_LOCATION = "com.hoffmans.rush.services.action.location_update";
-    private static final String TAG             =UpdateCurentLocation.class.getCanonicalName();
-    private static final String KEY_AUTH   = "auth";
-    private static final String KEY_LAT    = "lat";
-    private static final String KEY_LNG    = "lng";
+    private static final String TAG             = UpdateCurentLocation.class.getCanonicalName();
+    private static final String KEY_AUTH        = "auth";
+    private static final String KEY_LAT         = "lat";
+    private static final String KEY_LNG         = "lng";
     public UpdateCurentLocation() {
         super("UpdateCurentLocation");
     }

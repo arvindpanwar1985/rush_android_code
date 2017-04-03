@@ -11,12 +11,15 @@ import com.hoffmans.rush.http.ApiInterface;
 
 public class BaseRequest {
 
+    private Gson gson= new GsonBuilder().create();
     public String DATA       ="data";
     public String MESSAGE    ="message";
-    public String STATUS     ="status";
     public String SUCCESS    ="success";
 
-
+    /**
+     *
+     * @return ApiInterface
+     */
     public  ApiInterface getAPIClient(){
 
         return  ApiBuilder.createApiBuilder();
@@ -24,8 +27,10 @@ public class BaseRequest {
     }
 
     public Gson getGsonBuilder(){
-       Gson gson= new GsonBuilder().create();
-       gson.serializeNulls();
+        if(gson==null) {
+            gson = new GsonBuilder().create();
+        }
+        gson.serializeNulls();
         return gson;
 
     }

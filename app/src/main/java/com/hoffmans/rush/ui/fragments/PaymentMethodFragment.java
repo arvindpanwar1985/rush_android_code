@@ -43,10 +43,7 @@ import com.hoffmans.rush.widgets.MonthYearPicker;
 public class PaymentMethodFragment extends BaseFragment implements View.OnClickListener ,BrainTreeHandler {
 
     private static final String ARG_PARAM1 = "param1";
-
     private User user;
-
-
     private EditText edtCardNumber,edtEdtTitular,edtCvv;
     private TextView txtExpiry;
     private Button btnSaveCard;
@@ -74,7 +71,7 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = getArguments().getParcelable(ARG_PARAM1);

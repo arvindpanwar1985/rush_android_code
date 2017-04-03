@@ -17,7 +17,6 @@ import retrofit2.Call;
 
 public class FavouriteRequest extends BaseRequest {
 
-
     public void addToFavourite(String token, AddFavouriteBody body, final ApiCallback callback){
         Call<ResponseBody> favCall=getAPIClient().createfavoriteAddress(token,body);
         ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(favCall);
@@ -27,7 +26,6 @@ public class FavouriteRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-
                     String message=obj.getString(MESSAGE);
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
@@ -42,13 +40,10 @@ public class FavouriteRequest extends BaseRequest {
                     callback.onRequestFailed(e.getMessage());
                 }
             }
-
             @Override
             public void onWebStatusFalse(String message) {
                 callback.onRequestFailed(message);
             }
-
-
         });
     }
 

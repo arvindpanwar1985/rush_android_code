@@ -48,8 +48,6 @@ import static com.hoffmans.rush.ui.driver.activities.UpcomingActivity.DEFAULT_PA
  * create an instance of this fragment.
  */
 public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClickListners {
-
-
     private RecyclerView mRecyclerView;
     private UpcomingAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
@@ -60,7 +58,6 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
     private int records_count,currentListSize;
     private List<Record> recordList;
     private ProgressBar progressBar;
-
 
     public UpcomingFragment() {
         // Required empty public constructor
@@ -83,7 +80,8 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_upcoming, container, false);
         initViews(view);
-        initListeners();
+        getScheduledAndCurrentSercices(DEFAULT_PAGE_NO,DEFAULT_ITEMS,Status.ACCEPTED);
+
        // showCommentDialog();
         return view;
     }
@@ -98,7 +96,7 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
         progressBar =(ProgressBar)view.findViewById(R.id.progressLoadMore);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
 
-        getScheduledAndCurrentSercices(DEFAULT_PAGE_NO,DEFAULT_ITEMS,Status.ACCEPTED);
+
     }
 
     @Override
@@ -126,6 +124,8 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
      * @param state
      */
     public void getScheduledAndCurrentSercices(String page,String perpage,String state){
+
+        initListeners();
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         String token=appPreference.getUserDetails().getToken();
         ServiceRequest request=new ServiceRequest();
@@ -327,7 +327,6 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
             }
         });
     }
-
     /**
      * add comment to recently completed service
      * @param serviceId

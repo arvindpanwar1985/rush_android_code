@@ -578,10 +578,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             }
         });
     }
-
-
-
-    private void handleUserRegistrationCases(User user){
+   private void handleUserRegistrationCases(User user){
         if(user!=null) {
             if(user.getStatus()!=null && user.getStatus().equals(LoginActivity.STATUS_ACTIVE)){
                 appPreference.saveUser(user);

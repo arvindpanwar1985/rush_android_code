@@ -75,7 +75,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static android.app.Activity.RESULT_CANCELED;
 import static com.hoffmans.rush.R.drawable.marker;
 
-
 public class SelectVechileFragment extends BaseFragment implements OnitemClickListner.OnFrequentAddressClicked,View.OnClickListener,GoogleApiClient.OnConnectionFailedListener,LocationInterface ,OnMapReadyCallback{
 
     private static final String ARG_PARAM1 = "param1";
@@ -791,20 +790,17 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
                 }
             }
-
             @Override
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
                 mActivity.showSnackbar(message,0);
                 if(message.equals(Constants.AUTH_ERROR)){
                     mActivity.logOutUser();
-                }
+               }
             }
         });
 
     }
-
-
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -865,7 +861,6 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             addressAdapter=null;
         }
     }
-
     /**
      * api call to add addresses to favourite.
      *
