@@ -177,6 +177,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                 UserBean bean=(UserBean)body;
                 User user=bean.getUser();
                 if(user!=null && user.getRole()!=null &&user.getRole().equals(com.hoffmans.rush.ui.driver.fragments.LoginFragment.ROLE_CUST)) {
+
                     handleLoginResult(user);
                 }else{
                     mActivity.showSnackbar(getString(R.string.str_invalid_credentials),0);

@@ -51,7 +51,6 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
 
     private RelativeLayout viewCardDetails;
     private static final int REQUEST_SELECT_CARD=108;
-
     private ImageView imgCardType;
     private TextView txtCardData,txtCurrency,txtAmount,txtEstimatedTime;
     private int mTransactionId;
@@ -62,7 +61,6 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
     private Button   btnMakeOrder;
     private LoadAddressAdapter addressAdapter;
     private GoogleMap mGoogleMap;
-
     private List<PickDropAddress>listAddressData=new ArrayList<>();
 
     public ConfirmServiceFragment() {

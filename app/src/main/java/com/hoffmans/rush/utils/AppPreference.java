@@ -94,9 +94,9 @@ public class AppPreference {
         if(user.getPic_url()!=null){
             mEditor.putString(PrefConstant.KEY_PIC,user.getPic_url());
         }
-        if(null!=user.getProvider()){
+        /*if(null!=user.getProvider()){
             mEditor.putBoolean(PrefConstant.IS_SOCIAL_PROVIDER,true);
-        }
+        }*/
 
         mEditor.commit();
     }

@@ -32,24 +32,24 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
  * <p>
- * TODO: Customize class - update intent actions, extra parameters and static
+ * T
  * helper methods.
  */
+
 public class GeoCodingService extends IntentService {
 
     private static final String ACTION_PLACE_ID = "com.hoffmans.rush.services.action.placeId";
-
     private String MESSAGE="Unable to find Geocode data.";
     private static Retrofit retrofit;
-    private FetchAddressEvent fetchAddressEvent=new FetchAddressEvent();
-    private static final String EXTRA_LAT    = "lat";
-    private static final String EXTRA_LNG    = "lng";
-    private static final String KEY_LATLNG   = "latlng";
-    private static final String KEY_API_KEY  = "key";
-    private static final String KEY_STATUS   = "status";
-    private static final String KEY_OK       = "OK";
-    private static final String KEY_RESULT   = "results";
-    private static final String KEY_PLACE_ID = "place_id";
+    private FetchAddressEvent fetchAddressEvent = new FetchAddressEvent();
+    private static final String EXTRA_LAT       = "lat";
+    private static final String EXTRA_LNG       = "lng";
+    private static final String KEY_LATLNG      = "latlng";
+    private static final String KEY_API_KEY     = "key";
+    private static final String KEY_STATUS      = "status";
+    private static final String KEY_OK          = "OK";
+    private static final String KEY_RESULT      = "results";
+    private static final String KEY_PLACE_ID    = "place_id";
 
     public GeoCodingService() {
         super("GeoCodingService");
@@ -112,7 +112,6 @@ public class GeoCodingService extends IntentService {
                     setFetchAddressstatus(MESSAGE,false);
                 }
             }
-
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 fetchAddressEvent.setSucess(false);
@@ -164,7 +163,6 @@ public class GeoCodingService extends IntentService {
 
 
     private ApiInterface getApiInterface(){
-
         if(retrofit!=null){
             ApiInterface apiInterface = retrofit.create(ApiInterface.class);
             return apiInterface;

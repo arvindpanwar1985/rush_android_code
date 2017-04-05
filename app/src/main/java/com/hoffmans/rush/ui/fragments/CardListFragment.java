@@ -286,7 +286,6 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
      * make card default
      * @param token
      */
-
     private void setDefaultCard(String token){
        Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         PaymentRequest deleteCardRequest=new PaymentRequest();

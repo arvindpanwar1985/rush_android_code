@@ -499,7 +499,13 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
     }
 
-
+    /**
+     * build register params
+     * @param email
+     * @param password
+     * @param phoneNo
+     * @param fullname
+     */
     private void buildParams(String email,String password,String phoneNo,String fullname){
         try {
             MultipartBody.Part imageFileBody=null;
@@ -528,6 +534,11 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
+    /**
+     * api call for registering new user.
+     * @param requestBodyMap
+     * @param imageFileBody
+     */
     private void createAccount(Map<String,RequestBody> requestBodyMap, MultipartBody.Part imageFileBody){
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         UserRequest request=new UserRequest();
@@ -578,6 +589,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             }
         });
     }
+
    private void handleUserRegistrationCases(User user){
         if(user!=null) {
             if(user.getStatus()!=null && user.getStatus().equals(LoginActivity.STATUS_ACTIVE)){
@@ -713,8 +725,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
-
-
     private  void setSpinnerListner(){
         spinnerCurrency.setOnItemSelectedListener(this);
     }
@@ -728,12 +738,10 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             selectedCurrency=null;
         }
     }
-
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
-
     @Override
     public void onDestroy(){
         super.onDestroy();
@@ -741,8 +749,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             Progress.mprogressDialog.cancel();
         }
     }
-
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);

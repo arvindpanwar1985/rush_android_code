@@ -26,7 +26,6 @@ import com.hoffmans.rush.widgets.EndlessRecyclerViewScrollListener;
 import java.util.HashMap;
 import java.util.List;
 
-
 public class RecordFragment extends BaseFragment {
    private static final String KEY_IS_RECORD      ="isRecord";
    private static final String KEY_PAGE           ="page";
@@ -48,7 +47,6 @@ public class RecordFragment extends BaseFragment {
     public RecordFragment() {
         // Required empty public constructor
     }
-
     public static RecordFragment newInstance(boolean isRecord) {
         RecordFragment fragment = new RecordFragment();
         Bundle args = new Bundle();
@@ -56,7 +54,6 @@ public class RecordFragment extends BaseFragment {
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +67,6 @@ public class RecordFragment extends BaseFragment {
             }
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -81,7 +77,6 @@ public class RecordFragment extends BaseFragment {
         getRecordData(buildParams(String.valueOf(1),DEFAULT_ITEMS));
         return view;
     }
-
     @Override
     protected void initViews(View view) {
         recyclerView=(RecyclerView)view.findViewById(R.id.listRecords);
@@ -93,7 +88,6 @@ public class RecordFragment extends BaseFragment {
         progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         txtNoRecords=(TextView)view.findViewById(R.id.txtNoRecords);
     }
-
     @Override
     protected void initListeners() {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {

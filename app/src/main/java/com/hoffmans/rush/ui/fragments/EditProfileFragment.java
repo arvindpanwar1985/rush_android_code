@@ -175,7 +175,6 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
             txtCountryCode.setText(country.getDialCode());
             imgFlag.setImageDrawable(ContextCompat.getDrawable(mActivity, country.getFlag()));
         }
-
     }
 
     @Override

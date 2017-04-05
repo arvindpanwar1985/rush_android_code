@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 
 /**
+ *
  * The type Receipt fragment.
  */
 public class ReceiptFragment extends BaseFragment {
@@ -80,8 +81,6 @@ public class ReceiptFragment extends BaseFragment {
         txtAuthorized    =(TextView)view.findViewById(R.id.reTxtAuthorised);
         txtTime          =(TextView)view.findViewById(R.id.reTxtTime);
         try{setData();}catch (NullPointerException e){};
-
-
     }
 
     @Override
@@ -94,7 +93,6 @@ public class ReceiptFragment extends BaseFragment {
             txtTransactionId.setText(transactionDetails.getPaymentTransactionId());
             txtAuthorized.setText(transactionDetails.getStatus());
             txtAmount.setText( transactionDetails.getSymbol()+" "+transactionDetails.getConverted_amount());
-
         }
         if(date_time!=null){
             txtDate.setText(date_time.getDate());

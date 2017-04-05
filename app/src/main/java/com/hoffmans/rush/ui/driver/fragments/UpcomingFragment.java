@@ -59,6 +59,7 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
     private List<Record> recordList;
     private ProgressBar progressBar;
 
+
     public UpcomingFragment() {
         // Required empty public constructor
     }

@@ -79,9 +79,9 @@
 
     <string name="str_no_changes">No change selected</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="map_debug_key">AIzaSyC9mIzTclxIaJ58qXttq4SbWB7bBx1xxfk</string>
+    <string name="map_debug_key">AIzaSyDwSOxeJ0GIxeqK-GPfBhOv8hFH-ssgFfE</string>
 
     <string name="str_reservation">Reservation</string>
     <string name="str_now">Now</string>
@@ -139,7 +139,7 @@
     <string name="str_deliver">Deliver</string>
     <string name="estimated_price">Estimated Price</string>
     <string name="title_activity_upcoming">UpcomingActivity</string>
-    <string name="geo_coding_key">AIzaSyBnCvbt86W9GGcNcOIzCPF2mkMauYRgA2o</string>
+    <string name="geo_coding_key">AIzaSyDCRfXUt0ipr-UfxIPhHGO5osj-bncoJWk</string>
     <string name="title_activity_accept_order">AcceptOrderActivity</string>
     <string name="title_activity_completed_records">CompletedRecords</string>
     <string name="str_source">Source</string>
