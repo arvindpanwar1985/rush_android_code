@@ -77,7 +77,7 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mActivity.initToolBar("Upcoming",true);
+        mActivity.initToolBar(getString(R.string.str_upcoming),true);
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_upcoming, container, false);
         initViews(view);

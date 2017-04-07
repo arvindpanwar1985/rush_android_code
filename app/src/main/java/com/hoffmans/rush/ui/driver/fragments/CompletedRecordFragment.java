@@ -37,7 +37,6 @@ public class CompletedRecordFragment extends BaseFragment {
     private static final String KEY_PAGE           ="page";
     private static final String KEY_STATE          ="state";
     private static final String KEY_PER_PAGE       ="perpage";
-
     private static final String DEFAULT_ITEMS      ="5";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -51,12 +50,9 @@ public class CompletedRecordFragment extends BaseFragment {
     private TextView  txtNorecords;
     private LinearLayout linearProgress;
     private com.hoffmans.rush.ui.driver.adapters.RecordAdapter mAdapter;
-
-
     public CompletedRecordFragment() {
         // Required empty public constructor
     }
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -86,7 +82,6 @@ public class CompletedRecordFragment extends BaseFragment {
 
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -98,7 +93,6 @@ public class CompletedRecordFragment extends BaseFragment {
         return view;
 
     }
-
     @Override
     protected void initViews(View view) {
 
@@ -110,7 +104,6 @@ public class CompletedRecordFragment extends BaseFragment {
         linearProgress=(LinearLayout)view.findViewById(R.id.linearLoadMore);
         getRecordData(buildParams(String.valueOf(1),DEFAULT_ITEMS));
     }
-
     @Override
     protected void initListeners() {
 
@@ -178,7 +171,6 @@ public class CompletedRecordFragment extends BaseFragment {
         });
     }
 
-
     /**
      * load more data on endless scrolling
      * @param params
@@ -199,7 +191,6 @@ public class CompletedRecordFragment extends BaseFragment {
                     }
                 }
             }
-
             @Override
             public void onRequestFailed(String message) {
                mActivity.showSnackbar(message,0);

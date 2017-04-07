@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -30,28 +31,36 @@ public class Utils {
      * @param contentUri Uri of the file
      * @return the complete path of file from cursor
      */
-
     public static String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;
+
+
+
+
         try {
             String[] proj = { MediaStore.Images.Media.DATA };
             cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
             if(cursor==null){
                 Log.e("pic url",contentUri.getPath());
                 return contentUri.getPath();
-            }else {
+            }
+            else {
                 int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                 cursor.moveToFirst();
                 Log.e("pic url",contentUri.getPath());
-                return cursor.getString(column_index);
+                String path =cursor.getString(column_index);
+                if(path!=null && !TextUtils.isEmpty(path)) {
+                    return cursor.getString(column_index);
+                }
             }
-        } finally {
+
+            return null;
+         } finally {
             if (cursor != null) {
                 cursor.close();
             }
         }
     }
-
 
 
     public static Bitmap rotateImage(Bitmap source, float angle) {
@@ -60,7 +69,6 @@ public class Utils {
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
                 matrix, true);
     }
-
     public static void showAlertDialog(Context context,  String message) {
         try {
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
@@ -87,6 +95,10 @@ public class Utils {
         TimeZone tz = TimeZone.getDefault();
         return tz.getID();
     }
+
+
+
+
 
 
     /**

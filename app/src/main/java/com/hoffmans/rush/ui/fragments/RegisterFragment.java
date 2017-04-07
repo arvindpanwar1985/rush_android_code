@@ -670,7 +670,8 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             }
         }else if(requestCode==GALLERY_PIC_REQUEST &&resultCode==RESULT_OK && data != null && data.getData() != null){
             Uri uri = data.getData();
-            mCurrentPhotoPath= Utils.getRealPathFromURI(mActivity,uri);
+             mCurrentPhotoPath= Utils.getRealPathFromURI(mActivity,uri);
+             //mCurrentPhotoPath= RealPathUtil.getRealPath(mActivity,uri);
             if (mCurrentPhotoPath!=null) {
                 setPic();
             }
@@ -692,7 +693,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
      */
     private void handleSignInResult(GoogleSignInResult result) {
 
-        if (result.isSuccess()) {
+        if (result.isSuccess()){
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
             String googleId=acct.getId();
@@ -715,6 +716,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
     }
 
+
     @Override
     public void onError(FacebookException error) {
      mActivity.showSnackbar(error.getMessage(),0);
@@ -724,6 +726,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             }
         }
     }
+
 
     private  void setSpinnerListner(){
         spinnerCurrency.setOnItemSelectedListener(this);

@@ -349,7 +349,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         }
     }
 
-
     /**
      *
      * @param result Result from google + login

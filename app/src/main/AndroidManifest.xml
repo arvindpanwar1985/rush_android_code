@@ -143,11 +143,11 @@
             android:enabled="true"
             android:exported="true" />
 
-        <!--<receiver android:name=".LocaleChangeReceiver">
+        <receiver android:name=".LocaleChangeReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.LOCALE_CHANGED" />
             </intent-filter>
-        </receiver>-->
+        </receiver>
 
         <service
             android:name=".services.UpdateCurentLocation"

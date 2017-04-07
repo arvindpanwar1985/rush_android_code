@@ -29,19 +29,19 @@ public class UpcomingAdapter extends HeaderRecyclerViewAdapter<RecyclerView.View
         mContext=context;
         onHeaderButtonClickListners=listener;
     }
-    @Override
-    protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
+    @Override protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = getLayoutInflater(parent);
         View   headerView = inflater.inflate(R.layout.header_upcoming, parent, false);
         return new HeaderViewHolder(headerView,onHeaderButtonClickListners);
     }
 
-    @Override
-    protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
+
+    @Override protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = getLayoutInflater(parent);
         View characterView = inflater.inflate(R.layout.row_driver_records, parent, false);
         return new CharacterViewHolder(characterView);
     }
+
 
 
 
@@ -50,6 +50,7 @@ public class UpcomingAdapter extends HeaderRecyclerViewAdapter<RecyclerView.View
         HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
         headerViewHolder.render(currentOrderData);
     }
+
 
     @Override protected void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
         Record record = getItem(position);

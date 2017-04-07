@@ -43,7 +43,7 @@ public class CharacterViewHolder  extends RecyclerView.ViewHolder {
         txtState      =(TextView)itemView.findViewById(R.id.txtState);
     }
 
-    public void render(Record record) {
+    public void render(Record record){
         CustomerDetail customerDetail=record.getCustomer_details();
         Estimate estimate=record.getEstimate();
         PickDropAddress pickUpAddress=record.getPick_up();
@@ -62,7 +62,6 @@ public class CharacterViewHolder  extends RecyclerView.ViewHolder {
         if(dropAddresses!=null && dropAddresses.size()>0) {
             setDropAddresses(dropAddresses);
         }
-
         if(dateTime!=null){
             txtDateTime.setText(dateTime.getDate()+" "+dateTime.getTime());
         }

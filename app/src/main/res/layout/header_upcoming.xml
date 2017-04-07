@@ -31,7 +31,7 @@
         android:textStyle="bold|italic"
         android:visibility="gone"
         android:layout_gravity="center_horizontal"
-        android:text="You don't have order right now!"
+        android:text="@string/str_no_order"
         android:paddingLeft="@dimen/dp_10"
         android:paddingBottom="@dimen/dp_4"
         android:layout_marginTop="@dimen/dp_30"

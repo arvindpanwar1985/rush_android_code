@@ -1,17 +1,17 @@
 <resources>
 <string name="hint_user">Usuario</string>
-    <string name="hint_password">Contrasena</string>
+    <string name="hint_password">Contraseña</string>
     <string name="hint_confirm_password">Nueva Contrasena</string>
     <string name="hint_new_password">nueva contraseña</string>
     <string name="hint_confirm_new_password">Confirmar nueva contraseña</string>
 
     <string name="str_login">Iniciar Sesion</string>
     <string name="str_create_account">Crear cuenta</string>
-    <string name="str_has_forgotPass">has olvidado tu Contrasena</string>
+    <string name="str_has_forgotPass">¿Has olvidado tu Contraseña?</string>
     <string name="str_signup_with">Registrate con</string>
     <string name="str_pay_method">Formas de pago</string>
     <string name="str_Number">Numero</string>
-    <string name="str_expiration">Caduciad</string>
+    <string name="str_expiration">Caducidad</string>
     <string name="str_headline">Nombre del titular de la tarjeta</string>
     <string name="str_country">Pais</string>
     <string name="str_city">Cuidad</string>
@@ -71,7 +71,7 @@
     <string name="str_menu_payment_method">Métodos de pago</string>
     <string name="str_menu_record">Grabar</string>
     <string name="str_menu_schedule">Programado</string>
-    <string name="str_menu_fav">Mi favorito</string>
+    <string name="str_menu_fav">Mis Favoritos</string>
     <string name="str_settings">Ajustes</string>
     <string name="str_menu_logout">Desconectar</string>
 
@@ -111,13 +111,16 @@
     <string name="str_estimate_cost">Costo estimado</string>
 
     <string name="str_edit_profile">Editar perfil</string>
+    <string name="str_edit">editar</string>
     <string name="str_add_card">Agregar tarjeta</string>
     <string name="str_frequent_address">Dirección de uso frecuente</string>
-
+    <string name="str_upcoming">Próximo</string>
     <string name="str_receipt">Recibo</string>
+    <string name="str_home">Casa</string>
+    <string name="str_order_complete">Su pedido ha sido enviado, se le asignará un controlador en breve</string>
     /****************************************************************Drivers String.************\
     <string name="login_as_user">Iniciar como usuario</string>
-    <string name="login_as_driver">Iniciar como Mensajaro</string>
+    <string name="login_as_driver">Iniciar como Mensajero</string>
     <string name="in_service">En Servicio</string>
     <string name="out_service">Fuera de Servicio</string>
 
@@ -131,4 +134,6 @@
     <string name="str_notify_text">¿Ha recibido una solicitud?</string>
     <string name="str_add_comment">agregar comentario</string>
     <string name="str_try_again">Inténtalo de nuevo</string>
+
+    <string name="str_no_order">No posees ordenes por el momento.</string>
 </resources>

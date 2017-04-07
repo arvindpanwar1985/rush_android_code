@@ -123,11 +123,16 @@
 
     <string name="str_internet_error"></string>
     <string name="str_edit_profile">Edit Profile</string>
+    <string name="str_edit">edit</string>
     <string name="str_add_card">Add Card</string>
     <string name="str_frequent_address">Frequently used Address</string>
     <string name="str_receipt">Receipt</string>
     <string name="str_something_wrong">Something went wrong.</string>
     <string name="str_invalid_credentials">Invalid credentials</string>
+    <string name="str_upcoming">Upcoming</string>
+    <string name="str_home">Home</string>
+
+    <string name="str_order_complete">Your order has been submitted, a driver will be assigned to you shortly</string>
 
 
     /****************************************************************Drivers String.************\
@@ -148,6 +153,7 @@
     <string name="str_notify_text">Have you received request?</string>
     <string name="str_add_comment">Add Comment</string>
     <string name="str_try_again">Try Again.</string>
+    <string name="str_no_order">You don\'t have order right now</string>
 
 
 </resources>

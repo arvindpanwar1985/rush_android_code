@@ -7,17 +7,7 @@
     tools:context="com.hoffmans.rush.ui.fragments.ReceiptFragment">
 
 
-    <TextView
 
-        android:layout_width="wrap_content"
-        android:id="@+id/txtOrderComp"
-        android:layout_height="wrap_content"
-        android:text="Order Complete"
-        android:layout_marginTop="@dimen/dp_30"
-        android:textSize="@dimen/sp_22"
-        android:layout_centerHorizontal="true"
-        android:textColor="@android:color/white"
-        android:textStyle="bold|italic"/>
 
 
 
@@ -27,12 +17,14 @@
         android:layout_width="wrap_content"
         android:textColor="@android:color/white"
         android:layout_marginTop="@dimen/dp_5"
-        android:layout_below="@+id/txtOrderComp"
         android:textSize="@dimen/sp_15"
+        android:gravity="center_horizontal"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20"
         android:layout_centerHorizontal="true"
         android:textStyle="bold|italic"
         android:layout_height="wrap_content"
-        android:text="Your driver will reach you shortly."/>
+        android:text="@string/str_order_complete"/>
 
 
     <LinearLayout

@@ -64,9 +64,6 @@ import static android.app.Activity.RESULT_OK;
 
 public class EditProfile extends BaseFragment implements View.OnClickListener{
 
-
-
-
     private static final String FILE_PROVIDER="com.example.android.fileprovider";
     private static final int IMAGE_REQUEST_PERMISSION=100;
     private static final int CAMERA_PIC_REQUEST    = 101;
@@ -85,13 +82,9 @@ public class EditProfile extends BaseFragment implements View.OnClickListener{
     private View incCountryCodes;
     private boolean isEditablePassClicked,isEditableName,isEditablePhone;
 
-
-
     public EditProfile() {
         // Required empty public constructor
     }
-
-
 
     public static EditProfile newInstance() {
         EditProfile fragment = new EditProfile();
@@ -103,12 +96,11 @@ public class EditProfile extends BaseFragment implements View.OnClickListener{
         super.onCreate(savedInstanceState);
 
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mActivity.initToolBar("Edit Profile",true,true);
+        mActivity.initToolBar(getString(R.string.str_edit_profile),true,true);
         View editProfileView=inflater.inflate(R.layout.driver_edit_profile,container,false);
         initViews(editProfileView);
         initListeners();
@@ -116,7 +108,6 @@ public class EditProfile extends BaseFragment implements View.OnClickListener{
 
         return editProfileView;
     }
-
 
     @Override
     protected void initViews(View view) {
@@ -143,11 +134,7 @@ public class EditProfile extends BaseFragment implements View.OnClickListener{
         if(appPreference.getUserDetails().isSocialProvider()){
             linearOldPass.setVisibility(View.GONE);
         }
-
         spinnerCurrency=(Spinner)view.findViewById(R.id.spinnerCurrency);
-
-
-
         mCountryPicker=CountryPicker.newInstance("Select country");
         //get current country code and flag
         Locale current = getResources().getConfiguration().locale;
@@ -156,13 +143,10 @@ public class EditProfile extends BaseFragment implements View.OnClickListener{
             txtCountryCode.setText(country.getDialCode());
             imgFlag.setImageDrawable(ContextCompat.getDrawable(mActivity, country.getFlag()));
         }
-
-
     }
 
     @Override
     protected void initListeners() {
-
         imgProfilePic.setOnClickListener(this);
         editableName.setOnClickListener(this);
         editablePassword.setOnClickListener(this);
@@ -170,13 +154,11 @@ public class EditProfile extends BaseFragment implements View.OnClickListener{
         btnSave.setOnClickListener(this);
         topView.setOnClickListener(this);
         incCountryCodes.setOnClickListener(this);
-
     }
 
 
 
     private void getProfile(){
-
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         UserRequest request=new UserRequest();
         request.getProfile(appPreference.getUserDetails().getToken(), new ApiCallback() {
@@ -186,11 +168,9 @@ public class EditProfile extends BaseFragment implements View.OnClickListener{
 
                 UserBean userBean=(UserBean)body;
                 if(userBean.getUser()!=null) {
-                    setProfile(userBean.getUser());
-
+                   setProfile(userBean.getUser());
                 }
             }
-
             @Override
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
@@ -198,19 +178,16 @@ public class EditProfile extends BaseFragment implements View.OnClickListener{
                 if(message.equals(Constants.AUTH_ERROR)){
                     mActivity.logOutUser();
                 }
-
             }
         });
     }
 
     @Override
     public void onClick(View view) {
-
         switch (view.getId()){
             case R.id.fEPBtnSave:
                 validateFields();
                 break;
-
             case R.id.fEPImgProfile:
                 checkPermission();
                 break;

@@ -5,12 +5,12 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_order_24dp"
-        android:title="Home" />
+        android:title="@string/str_home" />
 
     <item
         android:id="@+id/nav_Upcoming"
         android:icon="@drawable/ic_schedule"
-        android:title="Upcoming" />
+        android:title="@string/str_upcoming" />
 
     <item
         android:id="@+id/nav_record"
