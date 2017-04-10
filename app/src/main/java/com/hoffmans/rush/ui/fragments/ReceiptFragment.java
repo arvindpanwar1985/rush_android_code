@@ -14,7 +14,6 @@ import com.hoffmans.rush.utils.Constants;
 
 import java.util.ArrayList;
 
-
 /**
  *
  * The type Receipt fragment.
@@ -25,6 +24,7 @@ public class ReceiptFragment extends BaseFragment {
     private String mStreetAddress;
     private ArrayList<PickDropAddress> dropAddressArrayList;
     private TextView txtDate,txtTime,txtAmount,txtTransactionId,txtAuthorized,txtPickAddress,txtDropAddress;
+
     /**
      * Instantiates a new Receipt fragment.
      */

@@ -253,7 +253,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                         listAddressData.add(newDetination);
                         addressAdapter.notifyDataSetChanged();
                     }else{
-                        mActivity.showSnackbar("Please select destination",Toast.LENGTH_SHORT);
+                        mActivity.showSnackbar(getString(R.string.str_select_destination),Toast.LENGTH_SHORT);
                     }
                 }
                 break;
@@ -308,21 +308,21 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         String source =listAddressData.get(0).getStreetAddress();
         String destination=listAddressData.get(1).getStreetAddress();
         if(TextUtils.isEmpty(source)){
-            mActivity.showSnackbar("Please select source",0);
+            mActivity.showSnackbar(getString(R.string.str_select_source),0);
 
             return;
         }
         if(TextUtils.isEmpty(destination)){
-            mActivity.showSnackbar("Please select destination",0);
+            mActivity.showSnackbar(getString(R.string.str_select_destination),0);
             return;
         }
         if(!isVehicleSelected && getVechileType()==-1){
-            mActivity.showSnackbar("Please select vehicle",0);
+            mActivity.showSnackbar(getString(R.string.str_select_vechile),0);
             return;
         }
         if(txtReservation.isSelected() && TextUtils.isEmpty(futureDataTime)){
             //mActivity.showSnackbar("SEle");
-            mActivity.showSnackbar("Please select reservation date ",0);
+            mActivity.showSnackbar(getString(R.string.str_select_reservation),0);
             return;
         }
          estimateService(buildEstimateServiceParams());

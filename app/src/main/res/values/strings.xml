@@ -131,6 +131,10 @@
     <string name="str_invalid_credentials">Invalid credentials</string>
     <string name="str_upcoming">Upcoming</string>
     <string name="str_home">Home</string>
+    <string name="str_select_reservation">Please select reservation date</string>
+    <string name="str_select_source">Please select source</string>
+    <string name="str_select_destination">Please select destination</string>
+    <string name="str_select_vechile">Please select vehicle</string>
 
     <string name="str_order_complete">Your order has been submitted, a driver will be assigned to you shortly</string>
 

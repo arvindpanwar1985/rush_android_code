@@ -38,7 +38,9 @@ public class UserRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-                    String message=obj.getString(MESSAGE);
+                    String msg=obj.getString(MESSAGE);
+                    String msg1=obj.getString(SPANISH_MESSAGE);
+                    String message=parseMessageUsingLocale(msg,msg1);
                     if (status){
                         String data = obj.getJSONObject(DATA).toString();
                         UserBean bean = getGsonBuilder().fromJson(data, UserBean.class);
@@ -73,7 +75,9 @@ public class UserRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-                    String message=obj.getString(MESSAGE);
+                    String msg=obj.getString(MESSAGE);
+                    String msg1=obj.getString(SPANISH_MESSAGE);
+                    String message=parseMessageUsingLocale(msg,msg1);
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
                         UserBean bean = getGsonBuilder().fromJson(data, UserBean.class);
@@ -109,7 +113,9 @@ public class UserRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-                    String message=obj.getString(MESSAGE);
+                    String msg=obj.getString(MESSAGE);
+                    String msg1=obj.getString(SPANISH_MESSAGE);
+                    String message=parseMessageUsingLocale(msg,msg1);
                     if (status) {
                         ForgotPassBean forgotPassBean=new ForgotPassBean();
                         forgotPassBean.setMessage(message);
@@ -139,7 +145,9 @@ public class UserRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-                    String message=obj.getString(MESSAGE);
+                    String msg=obj.getString(MESSAGE);
+                    String msg1=obj.getString(SPANISH_MESSAGE);
+                    String message=parseMessageUsingLocale(msg,msg1);
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
 
@@ -171,7 +179,9 @@ public class UserRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-                    String message=obj.getString(MESSAGE);
+                    String msg=obj.getString(MESSAGE);
+                    String msg1=obj.getString(SPANISH_MESSAGE);
+                    String message=parseMessageUsingLocale(msg,msg1);
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
                         UserBean bean = getGsonBuilder().fromJson(data, UserBean.class);
@@ -207,7 +217,9 @@ public class UserRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-                    String message=obj.getString(MESSAGE);
+                    String msg=obj.getString(MESSAGE);
+                    String msg1=obj.getString(SPANISH_MESSAGE);
+                    String message=parseMessageUsingLocale(msg,msg1);
                     if (status) {
                         MessageBean messageBean=new MessageBean();
                         messageBean.setMessage(message);
@@ -241,7 +253,9 @@ public class UserRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-                    String message=obj.getString(MESSAGE);
+                    String msg=obj.getString(MESSAGE);
+                    String msg1=obj.getString(SPANISH_MESSAGE);
+                    String message=parseMessageUsingLocale(msg,msg1);
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
 
@@ -278,7 +292,9 @@ public class UserRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-                    String message=obj.getString(MESSAGE);
+                    String msg=obj.getString(MESSAGE);
+                    String msg1=obj.getString(SPANISH_MESSAGE);
+                    String message=parseMessageUsingLocale(msg,msg1);
                     if (status) {
                         MessageBean bean=new MessageBean();
                         bean.setMessage(message);
@@ -311,7 +327,9 @@ public class UserRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-                    String message=obj.getString(MESSAGE);
+                    String msg=obj.getString(MESSAGE);
+                    String msg1=obj.getString(SPANISH_MESSAGE);
+                    String message=parseMessageUsingLocale(msg,msg1);
                     if (status) {
                         MessageBean bean=new MessageBean();
                         bean.setMessage(message);

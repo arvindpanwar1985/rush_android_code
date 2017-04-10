@@ -26,7 +26,9 @@ public class FavouriteRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-                    String message=obj.getString(MESSAGE);
+                    String msg=obj.getString(MESSAGE);
+                    String msg1=obj.getString(SPANISH_MESSAGE);
+                    String message=parseMessageUsingLocale(msg,msg1);
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
                         FavouriteBean bean = getGsonBuilder().fromJson(data, FavouriteBean.class);
@@ -58,7 +60,9 @@ public class FavouriteRequest extends BaseRequest {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
 
-                    String message=obj.getString(MESSAGE);
+                    String msg=obj.getString(MESSAGE);
+                    String msg1=obj.getString(SPANISH_MESSAGE);
+                    String message=parseMessageUsingLocale(msg,msg1);
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
                         FavouriteBean bean = getGsonBuilder().fromJson(data, FavouriteBean.class);
@@ -92,7 +96,9 @@ public class FavouriteRequest extends BaseRequest {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
 
-                    String message=obj.getString(MESSAGE);
+                    String msg=obj.getString(MESSAGE);
+                    String msg1=obj.getString(SPANISH_MESSAGE);
+                    String message=parseMessageUsingLocale(msg,msg1);
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
                         FavouriteBean bean = getGsonBuilder().fromJson(data, FavouriteBean.class);

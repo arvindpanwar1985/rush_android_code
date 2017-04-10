@@ -28,7 +28,9 @@ public class LoginRequest extends BaseRequest {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
 
-                    String message=obj.getString(MESSAGE);
+                    String msg=obj.getString(MESSAGE);
+                    String msg1=obj.getString(SPANISH_MESSAGE);
+                    String message=parseMessageUsingLocale(msg,msg1);
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
                         UserBean bean = getGsonBuilder().fromJson(data, UserBean.class);
@@ -71,7 +73,9 @@ public class LoginRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-                    String message=obj.getString(MESSAGE);
+                    String msg=obj.getString(MESSAGE);
+                    String msg1=obj.getString(SPANISH_MESSAGE);
+                    String message=parseMessageUsingLocale(msg,msg1);
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
                         UserBean bean = getGsonBuilder().fromJson(data, UserBean.class);

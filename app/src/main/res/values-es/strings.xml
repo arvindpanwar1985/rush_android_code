@@ -117,7 +117,12 @@
     <string name="str_upcoming">Próximo</string>
     <string name="str_receipt">Recibo</string>
     <string name="str_home">Casa</string>
+    <string name="str_select_reservation">Por favor, seleccione la fecha de reserva</string>
     <string name="str_order_complete">Su pedido ha sido enviado, se le asignará un controlador en breve</string>
+
+    <string name="str_select_source">Seleccione la fuente</string>
+    <string name="str_select_destination">Por favor seleccione el destino</string>
+    <string name="str_select_vechile">Seleccione el vehículo</string>
     /****************************************************************Drivers String.************\
     <string name="login_as_user">Iniciar como usuario</string>
     <string name="login_as_driver">Iniciar como Mensajero</string>
