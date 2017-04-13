@@ -15,10 +15,7 @@ import retrofit2.Call;
  */
 
 public class AppCurrencyRequest extends BaseRequest {
-
-
     /**
-     *
      * @param callback
      */
     public void getCurrency(final ApiCallback callback){
@@ -26,13 +23,20 @@ public class AppCurrencyRequest extends BaseRequest {
         ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(currencyCall);
         connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
             @Override
-            public void onWebServiceComplete(ResponseBody responseBody) {
+            public void onWebServiceComplete(ResponseBody responseBody){
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-                    String msg=obj.getString(MESSAGE);
-                    String msg1=obj.getString(SPANISH_MESSAGE);
-                    String message=parseMessageUsingLocale(msg,msg1);
+                    String message="",msg1="";
+                    if(obj.has(MESSAGE)){
+                        String msg=obj.getString(MESSAGE);
+                        if(!obj.has(SPANISH_MESSAGE)) {
+                            message=msg;
+                        }else{
+                            msg1=obj.getString(SPANISH_MESSAGE);
+                            message=parseMessageUsingLocale(msg,msg1);
+                        }
+                    }
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
                         CurrencyBean bean = getGsonBuilder().fromJson(data, CurrencyBean.class);
@@ -51,8 +55,6 @@ public class AppCurrencyRequest extends BaseRequest {
             public void onWebStatusFalse(String message) {
                 callback.onRequestFailed(message);
             }
-
-
         });
     }
 }

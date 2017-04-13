@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -160,10 +161,11 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
 
                 break;
             case R.id.btnMakeOrder:
+                btnMakeOrder.startAnimation(new AlphaAnimation(1.0f, 0.0f));
                 validateDefaultCard();
                 break;
         }
-    }
+     }
 
 
 
@@ -316,7 +318,6 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
                        receiptIntent.putParcelableArrayListExtra(Constants.KEY_DROP_ADDRESS,service.getDrop_addresses());
                     }
                     receiptIntent.putExtra(Constants.KEY_RECEIPT_DATA,service);
-
                     startActivity(receiptIntent);
                     // finish confirm service
                     mActivity.finish();
@@ -388,7 +389,6 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
             case BookServiceActivity.REQUEST_LOCATION_PERMISSION:
                 if(mActivity.isPermissionGranted(grantResults)){
                     initMap();
-
                 }else{
                     Toast.makeText(mActivity,getString(R.string.str_permission_denied),Toast.LENGTH_LONG).show();
                 }

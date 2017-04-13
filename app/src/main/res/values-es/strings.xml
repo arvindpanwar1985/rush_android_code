@@ -30,6 +30,7 @@
 
 
     <string name="error_empty_email">La dirección de correo electrónico no puede estar vacía.</string>
+    <string name="error_empty_username">El nombre de usuario no puede estar vacío.</string>
     <string name="error_empty_name">Fullname no puede estar vacío.</string>
     <string name="error_empty_password">La contraseña no puede estar vacía.</string>
     <string name="error_empty_Mobile">El número de móvil no puede estar vacío.</string>
@@ -123,6 +124,14 @@
     <string name="str_select_source">Seleccione la fuente</string>
     <string name="str_select_destination">Por favor seleccione el destino</string>
     <string name="str_select_vechile">Seleccione el vehículo</string>
+
+    <string name ="str_terms_part_one">Al continuar con el registro, estoy de acuerdo con el \t</string>
+    <string name ="str_terms_part_two">Términos y Condiciones \t</string>
+    <string name ="str_terms_part_three">y \t</string>
+    <string name ="str_terms_part_four">Política de privacidad</string>
+
+    <string name="terms_condition">Términos y Condiciones</string>
+    <string name="privacy_policy">Política de privacidad</string>
     /****************************************************************Drivers String.************\
     <string name="login_as_user">Iniciar como usuario</string>
     <string name="login_as_driver">Iniciar como Mensajero</string>

@@ -30,6 +30,7 @@
 
 
     <string name="error_empty_email">Email address cannot be empty.</string>
+    <string name="error_empty_username">Username cannot be empty.</string>
     <string name="error_empty_name">Fullname  cannot be empty.</string>
     <string name="error_empty_password">Password cannot be empty.</string>
     <string name="error_empty_Mobile">Mobile number cannot be empty.</string>
@@ -82,6 +83,7 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="map_debug_key">AIzaSyDwSOxeJ0GIxeqK-GPfBhOv8hFH-ssgFfE</string>
+    <string name="key_release">AIzaSyBXEHIlXNyrt0D9sqijDE4XGyx4TLdWDKs</string>
 
     <string name="str_reservation">Reservation</string>
     <string name="str_now">Now</string>
@@ -138,6 +140,13 @@
 
     <string name="str_order_complete">Your order has been submitted, a driver will be assigned to you shortly</string>
 
+    <string name="str_terms_part_one">By continuing with registration, I agree with the\t</string>
+    <string name="str_terms_part_two">Terms and Conditions\t</string>
+    <string name="str_terms_part_three">And\t</string>
+    <string name="str_terms_part_four">Privacy Policy</string>
+    <string name="terms_condition">Terms and Conditions</string>
+    <string name="privacy_policy">Privacy Policy</string>
+
 
     /****************************************************************Drivers String.************\
     <string name="login_as_user">Start as user</string>
@@ -158,6 +167,7 @@
     <string name="str_add_comment">Add Comment</string>
     <string name="str_try_again">Try Again.</string>
     <string name="str_no_order">You don\'t have order right now</string>
+    <string name="title_activity_test">Map</string>
 
 
 </resources>

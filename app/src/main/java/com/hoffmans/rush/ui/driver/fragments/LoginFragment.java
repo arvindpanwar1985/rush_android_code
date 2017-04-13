@@ -7,12 +7,14 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.bean.UserBean;
 import com.hoffmans.rush.http.request.LoginRequest;
@@ -23,7 +25,6 @@ import com.hoffmans.rush.ui.driver.activities.DriverNavigationActivity;
 import com.hoffmans.rush.ui.fragments.BaseFragment;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Utils;
-import com.hoffmans.rush.utils.Validation;
 
 /**
  * A simple {@link BaseFragment} subclass.
@@ -95,9 +96,11 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()){
             case com.hoffmans.rush.R.id.flBtnLogin:
+                btnLogin.startAnimation(new AlphaAnimation(1.0f, 0.0f));
                 validateFields();
                 break;
             case com.hoffmans.rush.R.id.flForgotPass:
+                txtForgotPassword.startAnimation(new AlphaAnimation(1.0f, 0.0f));
                 Intent forgotPassIntent=new Intent(mActivity, ForgotPassActivity.class);
                 forgotPassIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(forgotPassIntent);
@@ -116,14 +119,14 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.error_empty_email), Toast.LENGTH_SHORT);
+            mActivity.showSnackbar(getString(R.string.error_empty_username), Toast.LENGTH_SHORT);
             return;
 
-        } else if (!Validation.isValidEmail(email)) {
+        } /*else if (!Validation.isValidEmail(email)) {
             mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.error_title_invalid_email), Toast.LENGTH_SHORT);
             return;
 
-        }
+        }*/
 
         if (TextUtils.isEmpty(password.trim())) {
             mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.error_empty_password), Toast.LENGTH_SHORT);

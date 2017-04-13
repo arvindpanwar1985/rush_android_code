@@ -16,16 +16,26 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -60,6 +70,7 @@ import com.hoffmans.rush.model.Currency;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.ui.activities.LoginActivity;
+import com.hoffmans.rush.ui.activities.TermsPolicyActivity;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Utils;
@@ -78,6 +89,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -96,13 +108,15 @@ import static com.hoffmans.rush.ui.activities.LoginActivity.REQUEST_GOOGLE_SIGNI
  * Created by devesh on 19/12/16.
  */
 public class RegisterFragment extends BaseFragment implements View.OnClickListener,FacebookCallback<LoginResult>,AdapterView.OnItemSelectedListener {
+    public static final String KEY_TERMS="terms";
+    public static final String KEY_URL="url";
     private static final String FILE_PROVIDER="com.example.android.fileprovider";
     private EditText edtname,edtEmail,edtphone,edtPassword,edtConfirmPassword,edtcc;
     private Button btnRegister,btnFb,btnGoogle;
     private CircleImageView imgProfilePic;
     private Spinner spinnerCurrency;
     private ImageView imgFlag;
-    private TextView txtCountryCode;
+    private TextView txtCountryCode,txtTerms;
     private CallbackManager callbackManager;
     private String  mCurrentPhotoPath;
     private Currency selectedCurrency;
@@ -113,6 +127,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     private Fragment fragment;
     private Uri photoURI;
     private CountryPicker countryPicker;
+    private CheckBox chekboxtermsCondition;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -132,7 +147,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                  appPreference.setNotificationToken(notificationToken);
              }
          }
-
         return view;
     }
 
@@ -154,6 +168,13 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         viewSelectCountryPicker=(View)view.findViewById(R.id.viewCountryCode);
         imgFlag=(ImageView)view.findViewById(R.id.imgFlag);
         txtCountryCode=(TextView)view.findViewById(R.id.txtCountryCode);
+        chekboxtermsCondition=(CheckBox)view.findViewById(R.id.checkboxTermsCondition);
+        txtTerms=(TextView)view.findViewById(R.id.txtTermsAndCondition);
+
+        setSpanable(txtTerms);
+
+
+
     }
 
     @Override
@@ -170,20 +191,79 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     }
 
 
+
+    private void setSpanable(TextView tv){
+        Spannable word = new SpannableString(getString(R.string.str_terms_part_one));
+        word.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mActivity,android.R.color.white)), 0, word.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tv.setText(word);
+        tv.setMovementMethod(LinkMovementMethod.getInstance());
+
+        Spannable wordTwo = new SpannableString(getString(R.string.str_terms_part_two));
+        wordTwo.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mActivity,R.color.com_facebook_blue)), 0, wordTwo.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        wordTwo.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(View v) {
+                Intent termsIntent = new Intent(mActivity, TermsPolicyActivity.class);
+                termsIntent.putExtra(KEY_TERMS,true);
+                termsIntent.putExtra(KEY_URL,getLocaleBasedUrl());
+                startActivity(termsIntent);
+            }
+            public void updateDrawState(TextPaint ds) {// override updateDrawState
+                ds.setUnderlineText(false); // set to false to remove underline
+            }
+        }, 0, wordTwo.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tv.append(wordTwo);
+
+        Spannable wordThree = new SpannableString(getString(R.string.str_terms_part_three));
+        wordThree.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mActivity,android.R.color.white)), 0, wordThree.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tv.append(wordThree);
+
+        Spannable wordFour = new SpannableString(getString(R.string.str_terms_part_four));
+        wordFour.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mActivity,R.color.com_facebook_blue)), 0, wordFour.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        wordFour.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(View v) {
+                Intent termsIntent = new Intent(mActivity, TermsPolicyActivity.class);
+                termsIntent.putExtra(KEY_TERMS,false);
+                termsIntent.putExtra(KEY_URL,getLocaleBasedUrl());
+                startActivity(termsIntent);
+            }
+            public void updateDrawState(TextPaint ds) {// override updateDrawState
+                ds.setUnderlineText(false); // set to false to remove underline
+            }
+        }, 0, wordFour.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tv.append(wordFour);
+    }
+
+    /**
+     *
+     * @return terms and policy url according to locale
+     */
+    private String getLocaleBasedUrl(){
+        String locale= Locale.getDefault().getLanguage();
+        if(locale.equals("es")){
+            return "http://192.168.1.210:3000/privacy_policy?locale=es";
+        }
+        return "http://192.168.1.210:3000/privacy_policy?locale=en";
+    }
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.frBtnCreateAccount:
+                btnRegister.startAnimation(new AlphaAnimation(1.0f, 0.0f));
                 validateFields();
                 break;
             case R.id.frBtnFacebook:
+                btnFb.startAnimation(new AlphaAnimation(1.0f, 0.0f));
                 LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
                 break;
             case R.id.frBtnGoogle:
+                btnGoogle.startAnimation(new AlphaAnimation(1.0f, 0.0f));
                 mActivity.idGoogleApiclient++;
                 googleSignIn();
                 break;
             case R.id.frImgProfile:
+                imgProfilePic.startAnimation(new AlphaAnimation(1.0f, 0.0f));
                 checkPermission();
                 break;
             case R.id.topRegistration:
@@ -377,7 +457,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
 
             // Decode the image file into a Bitmap sized to fill the View
-            bmOptions.inJustDecodeBounds = false;
+            bmOptions.inJustDecodeBounds =  false;
             bmOptions.inSampleSize = scaleFactor;
             bmOptions.inPurgeable = true;
 
@@ -624,8 +704,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 break;
         }
     }
-
-
 
     private void getAllCurrency(){
 

@@ -26,9 +26,16 @@ public class FavouriteRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-                    String msg=obj.getString(MESSAGE);
-                    String msg1=obj.getString(SPANISH_MESSAGE);
-                    String message=parseMessageUsingLocale(msg,msg1);
+                    String message="",msg1="";
+                    if(obj.has(MESSAGE)){
+                        String msg=obj.getString(MESSAGE);
+                        if(!obj.has(SPANISH_MESSAGE)) {
+                            message=msg;
+                        }else{
+                            msg1=obj.getString(SPANISH_MESSAGE);
+                            message=parseMessageUsingLocale(msg,msg1);
+                        }
+                    }
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
                         FavouriteBean bean = getGsonBuilder().fromJson(data, FavouriteBean.class);
@@ -60,9 +67,16 @@ public class FavouriteRequest extends BaseRequest {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
 
-                    String msg=obj.getString(MESSAGE);
-                    String msg1=obj.getString(SPANISH_MESSAGE);
-                    String message=parseMessageUsingLocale(msg,msg1);
+                    String message="",msg1="";
+                    if(obj.has(MESSAGE)){
+                        String msg=obj.getString(MESSAGE);
+                        if(!obj.has(SPANISH_MESSAGE)) {
+                            message=msg;
+                        }else{
+                            msg1=obj.getString(SPANISH_MESSAGE);
+                            message=parseMessageUsingLocale(msg,msg1);
+                        }
+                    }
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
                         FavouriteBean bean = getGsonBuilder().fromJson(data, FavouriteBean.class);

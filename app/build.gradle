@@ -35,6 +35,14 @@ allprojects {
 
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'RushApp'
+            keyPassword 'U2hvZnVyQXJ89'
+            storeFile file('/home/devesh/Desktop/Keystore/rush/rush_store.jks')
+            storePassword 'QXJtaXJTaG9mdX98='
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion '25.0.0'
     defaultConfig {
@@ -50,6 +58,8 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable true
+            signingConfig signingConfigs.config
         }
     }
 }
@@ -62,17 +72,17 @@ dependencies {
 
     // JSON Converter
 
-    compile 'com.google.firebase:firebase-messaging:10.0.1'
+    compile 'com.google.firebase:firebase-messaging:10.2.1'
 
     compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'com.google.android.gms:play-services:10.0.1'
+    compile 'com.google.android.gms:play-services:10.2.1'
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.okhttp3:okhttp:3.5.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 
     compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
-    compile 'com.google.firebase:firebase-core:10.0.1'
+    compile 'com.google.firebase:firebase-core:10.2.1'
     compile 'com.github.bumptech.glide:glide:3.6.0'
 
     compile 'com.braintreepayments.api:braintree:2.+'
@@ -100,6 +110,13 @@ dependencies {
 }
 dependencies {
     compile 'com.android.support:support-v4:25.+'
+}
+dependencies {
+    compile 'com.google.android.gms:play-services-maps:10.2.1'
+    compile 'com.android.support:appcompat-v7:25.+'
+}
+dependencies {
+    compile 'com.android.support.constraint:constraint-layout:+'
 }
 
 

@@ -16,6 +16,7 @@ import retrofit2.Call;
 
 public class LocationRequest extends BaseRequest {
 
+
     public void updateUserLocation(String token, String latitude,String longitude,final ApiCallback callback){
         Call<ResponseBody> locationCall=getAPIClient().updateDriverLocation(token,latitude,longitude);
         ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(locationCall);
@@ -25,15 +26,21 @@ public class LocationRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-
-                    String msg=obj.getString(MESSAGE);
-                    String msg1=obj.getString(SPANISH_MESSAGE);
-                    String message=parseMessageUsingLocale(msg,msg1);
-                    if (status) {
+                    String message="",msg1="";
+                    if(obj.has(MESSAGE)){
+                        String msg=obj.getString(MESSAGE);
+                        if(!obj.has(SPANISH_MESSAGE)) {
+                            message=msg;
+                        }else{
+                            msg1=obj.getString(SPANISH_MESSAGE);
+                            message=parseMessageUsingLocale(msg,msg1);
+                        }
+                    }
+                    if (status){
                         MessageBean bean=new MessageBean();
                         bean.setMessage(message);
                         callback.onRequestSuccess(bean);
-                    } else {
+                    }else {
                         callback.onRequestFailed(message);
                     }
 
@@ -41,13 +48,10 @@ public class LocationRequest extends BaseRequest {
                     callback.onRequestFailed(e.getMessage());
                 }
             }
-
             @Override
             public void onWebStatusFalse(String message) {
                 callback.onRequestFailed(message);
             }
-
-
         });
     }
 }

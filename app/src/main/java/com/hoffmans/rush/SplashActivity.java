@@ -24,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         appPreference=AppPreference.newInstance(this);
-
+        //generateKeyHash();
         initHandler();
     }
     /*
@@ -63,4 +63,21 @@ public class SplashActivity extends AppCompatActivity {
         this.finish();
     }
 
+
+
+    /*public void generateKeyHash() {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo("com.hoffmans.rush", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.e("Keyhash: ", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+                // Signedkey.setText(Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }*/
 }

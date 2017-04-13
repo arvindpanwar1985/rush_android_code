@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -244,6 +245,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.viewAddMoreAddress:
+                imageViewLoadMoreAddress.startAnimation(new AlphaAnimation(1.0f, 0.0f));
                 if(listAddressData!=null && listAddressData.size()!=4 ){
                     int lastPostition=listAddressData.size()-1;
                     PickDropAddress lastFilledDropAddress=listAddressData.get(lastPostition);
@@ -264,6 +266,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                 enableReservation();
                 break;
             case R.id.btnEstimatePrice:
+                btnEstimateCost.startAnimation(new AlphaAnimation(1.0f, 0.0f));
                 validateFields();
                 break;
 

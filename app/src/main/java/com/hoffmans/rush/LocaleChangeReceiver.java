@@ -3,9 +3,6 @@ package com.hoffmans.rush;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
-
-import java.util.Locale;
 
 /**
  * Created by devesh on 6/3/17.
@@ -17,7 +14,7 @@ public class LocaleChangeReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         if(intent.getAction().equals("android.intent.action.LOCALE_CHANGED")){
-            Toast.makeText(context,"Locale :"+ Locale.getDefault().getLanguage(),Toast.LENGTH_SHORT).show();
+           // Toast.makeText(context,"Locale :"+ Locale.getDefault().getLanguage(),Toast.LENGTH_SHORT).show();
         }
     }
 }

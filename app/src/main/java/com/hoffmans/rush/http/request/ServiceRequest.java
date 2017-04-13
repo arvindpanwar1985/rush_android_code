@@ -39,9 +39,14 @@ public class ServiceRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-                    String msg=obj.getString(MESSAGE);
-                    String msg1=obj.getString(SPANISH_MESSAGE);
-                    String message=parseMessageUsingLocale(msg,msg1);
+                    String message,msg,msg1="";
+                    msg=obj.getString(MESSAGE);
+                    if(!obj.has(SPANISH_MESSAGE)){
+                        message=msg;
+                    }else {
+                        msg1 = obj.getString(SPANISH_MESSAGE);
+                        message=parseMessageUsingLocale(msg,msg1);
+                    }
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
                         ServiceBean bean = getGsonBuilder().fromJson(data, ServiceBean.class);
@@ -80,10 +85,14 @@ public class ServiceRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-
-                    String msg=obj.getString(MESSAGE);
-                    String msg1=obj.getString(SPANISH_MESSAGE);
-                    String message=parseMessageUsingLocale(msg,msg1);
+                    String message,msg,msg1="";
+                    msg=obj.getString(MESSAGE);
+                    if(!obj.has(SPANISH_MESSAGE)){
+                        message=msg;
+                    }else {
+                        msg1 = obj.getString(SPANISH_MESSAGE);
+                        message=parseMessageUsingLocale(msg,msg1);
+                    }
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
 
@@ -125,9 +134,14 @@ public class ServiceRequest extends BaseRequest {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
 
-                    String msg=obj.getString(MESSAGE);
-                    String msg1=obj.getString(SPANISH_MESSAGE);
-                    String message=parseMessageUsingLocale(msg,msg1);
+                    String message,msg,msg1="";
+                    msg=obj.getString(MESSAGE);
+                    if(!obj.has(SPANISH_MESSAGE)){
+                        message=msg;
+                    }else {
+                        msg1 = obj.getString(SPANISH_MESSAGE);
+                        message=parseMessageUsingLocale(msg,msg1);
+                    }
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
                         RecordBean bean = getGsonBuilder().fromJson(data, RecordBean.class);
@@ -168,9 +182,14 @@ public class ServiceRequest extends BaseRequest {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
 
-                    String msg=obj.getString(MESSAGE);
-                    String msg1=obj.getString(SPANISH_MESSAGE);
-                    String message=parseMessageUsingLocale(msg,msg1);
+                    String message,msg,msg1="";
+                    msg=obj.getString(MESSAGE);
+                    if(!obj.has(SPANISH_MESSAGE)){
+                        message=msg;
+                    }else {
+                        msg1 = obj.getString(SPANISH_MESSAGE);
+                        message=parseMessageUsingLocale(msg,msg1);
+                    }
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
                         ScheduledBean scheduledBean=getGsonBuilder().fromJson(data,ScheduledBean.class);
@@ -207,9 +226,14 @@ public class ServiceRequest extends BaseRequest {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
 
-                    String msg=obj.getString(MESSAGE);
-                    String msg1=obj.getString(SPANISH_MESSAGE);
-                    String message=parseMessageUsingLocale(msg,msg1);
+                    String message,msg,msg1="";
+                    msg=obj.getString(MESSAGE);
+                    if(!obj.has(SPANISH_MESSAGE)){
+                        message=msg;
+                    }else {
+                        msg1 = obj.getString(SPANISH_MESSAGE);
+                        message=parseMessageUsingLocale(msg,msg1);
+                    }
                     if (status) {
 
                         String data = obj.getJSONObject(DATA).toString();
@@ -244,9 +268,14 @@ public class ServiceRequest extends BaseRequest {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
 
-                    String msg=obj.getString(MESSAGE);
-                    String msg1=obj.getString(SPANISH_MESSAGE);
-                    String message=parseMessageUsingLocale(msg,msg1);
+                    String message,msg,msg1="";
+                    msg=obj.getString(MESSAGE);
+                    if(!obj.has(SPANISH_MESSAGE)){
+                        message=msg;
+                    }else {
+                        msg1 = obj.getString(SPANISH_MESSAGE);
+                        message=parseMessageUsingLocale(msg,msg1);
+                    }
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
                         ScheduledBean bean = getGsonBuilder().fromJson(data, ScheduledBean.class);
@@ -276,9 +305,14 @@ public class ServiceRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-                    String msg=obj.getString(MESSAGE);
-                    String msg1=obj.getString(SPANISH_MESSAGE);
-                    String message=parseMessageUsingLocale(msg,msg1);
+                    String message,msg,msg1="";
+                    msg=obj.getString(MESSAGE);
+                    if(!obj.has(SPANISH_MESSAGE)){
+                        message=msg;
+                    }else {
+                        msg1 = obj.getString(SPANISH_MESSAGE);
+                        message=parseMessageUsingLocale(msg,msg1);
+                    }
                     if (status) {
                         MessageBean messageBean=new MessageBean();
                         messageBean.setMessage(message);

@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -41,7 +42,6 @@ import com.hoffmans.rush.ui.activities.LoginActivity;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Utils;
-import com.hoffmans.rush.utils.Validation;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -112,21 +112,26 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     public void onClick(View view) {
         switch (view.getId()){
             case com.hoffmans.rush.R.id.flCreateAccount:
+                txtCreateAccount.startAnimation(new AlphaAnimation(1.0f, 0.0f));
                 Fragment fragment=new RegisterFragment();
                 replaceFragment(fragment,true);
                 break;
             case com.hoffmans.rush.R.id.flForgotPass:
+                txtForgotPassword.startAnimation(new AlphaAnimation(1.0f, 0.0f));
                 Intent forgotPassIntent=new Intent(mActivity, ForgotPassActivity.class);
                 forgotPassIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(forgotPassIntent);
                 break;
             case com.hoffmans.rush.R.id.flBtnLogin:
+                btnLogin.startAnimation(new AlphaAnimation(1.0f, 0.0f));
                 validateFields();
                 break;
             case R.id.frBtnFacebook:
+                btnFb.startAnimation(new AlphaAnimation(1.0f, 0.0f));
                 LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
                 break;
             case R.id.frBtnGoogle:
+                btnGoogle.startAnimation(new AlphaAnimation(1.0f, 0.0f));
                 mActivity.idGoogleApiclient++;
                 googleSignIn();
                 break;
@@ -142,10 +147,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         String password = edtPassword.getText().toString().trim();
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.error_empty_email), Toast.LENGTH_SHORT);
-            return;
-        } else if (!Validation.isValidEmail(email)) {
-            mActivity.showSnackbar(getString(com.hoffmans.rush.R.string.error_title_invalid_email), Toast.LENGTH_SHORT);
+            mActivity.showSnackbar(getString(R.string.error_empty_username), Toast.LENGTH_SHORT);
             return;
         }
         if (TextUtils.isEmpty(password.trim())) {
@@ -165,8 +167,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
      * @param password password of user
      */
     private void proceedToLogin(String email,String password){
-
-
         mActivity.showProgress();
         LoginRequest loginRequest =new LoginRequest();
         loginRequest.loginUser(email, password,login_as,notificationToken,Constants.DEVICE_TYPE,Utils.getTimeZone(), new ApiCallback() {
@@ -177,7 +177,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                 UserBean bean=(UserBean)body;
                 User user=bean.getUser();
                 if(user!=null && user.getRole()!=null &&user.getRole().equals(com.hoffmans.rush.ui.driver.fragments.LoginFragment.ROLE_CUST)) {
-
                     handleLoginResult(user);
                 }else{
                     mActivity.showSnackbar(getString(R.string.str_invalid_credentials),0);

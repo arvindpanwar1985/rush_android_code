@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -83,6 +84,7 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
+
         if(position==0){
             holder.txtAddress.setHint(mContext.getString(R.string.str_hint_start));
         }else{
@@ -122,6 +124,7 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
             @Override
             public void onClick(View view) {
                 if (mItemClickListener != null) {
+                    view.startAnimation(new AlphaAnimation(1.0f, 0.0f));
                     mItemClickListener.onitemclicked(view,position);
                     //mItemClickListener.onitemclicked(v,getPosition());
                 }
@@ -134,6 +137,8 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
             @Override
             public void onClick(View view) {
                 if (mItemClickListener != null) {
+                    view.startAnimation(new AlphaAnimation(1.0f, 0.0f));
+
                     mItemClickListener.onfrequentAddressclicked(view,position);
                     //mItemClickListener.onitemclicked(v,getPosition());
                 }
@@ -146,6 +151,7 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
             @Override
             public void onClick(View view) {
                 if(mItemClickListener!=null){
+                    view.startAnimation(new AlphaAnimation(1.0f, 0.0f));
                     mItemClickListener.onCloseButtomClicked(view,position);
                 }
             }

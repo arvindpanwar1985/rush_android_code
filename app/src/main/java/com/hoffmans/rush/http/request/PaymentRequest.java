@@ -34,9 +34,16 @@ public class PaymentRequest extends BaseRequest {
                 try {
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
-                    String msg=obj.getString(MESSAGE);
-                    String msg1=obj.getString(SPANISH_MESSAGE);
-                    String message=parseMessageUsingLocale(msg,msg1);
+                    String message="",msg1="";
+                    if(obj.has(MESSAGE)){
+                        String msg=obj.getString(MESSAGE);
+                        if(!obj.has(SPANISH_MESSAGE)) {
+                            message=msg;
+                        }else{
+                            msg1=obj.getString(SPANISH_MESSAGE);
+                            message=parseMessageUsingLocale(msg,msg1);
+                        }
+                    }
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
                         CardListBean bean = getGsonBuilder().fromJson(data, CardListBean.class);
@@ -74,14 +81,18 @@ public class PaymentRequest extends BaseRequest {
             @Override
             public void onWebServiceComplete(ResponseBody responseBody) {
                 try {
-                    String message="";
+
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
+                    String message="",msg1="";
                     if(obj.has(MESSAGE)){
                         String msg=obj.getString(MESSAGE);
-                        String msg1=obj.getString(SPANISH_MESSAGE);
-                        message=parseMessageUsingLocale(msg,msg1);
-
+                        if(!obj.has(SPANISH_MESSAGE)) {
+                            message=msg;
+                        }else{
+                            msg1=obj.getString(SPANISH_MESSAGE);
+                            message=parseMessageUsingLocale(msg,msg1);
+                        }
                     }
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();
@@ -114,13 +125,18 @@ public class PaymentRequest extends BaseRequest {
             @Override
             public void onWebServiceComplete(ResponseBody responseBody) {
                 try {
-                    String message="";
+
                     JSONObject obj=new JSONObject(responseBody.string());
                     boolean status = obj.getBoolean(SUCCESS);
+                    String message="",msg1="";
                     if(obj.has(MESSAGE)){
-                        String msg=obj.getString(MESSAGE);
-                        String msg1=obj.getString(SPANISH_MESSAGE);
-                        message=parseMessageUsingLocale(msg,msg1);
+                       String msg=obj.getString(MESSAGE);
+                        if(!obj.has(SPANISH_MESSAGE)) {
+                            message=msg;
+                        }else{
+                            msg1=obj.getString(SPANISH_MESSAGE);
+                            message=parseMessageUsingLocale(msg,msg1);
+                        }
                     }
                     if (status) {
                         String data = obj.getJSONObject(DATA).toString();

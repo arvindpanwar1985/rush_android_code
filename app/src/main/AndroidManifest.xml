@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/map_debug_key" />
+            android:value="@string/key_release" />
 
         <uses-feature android:name="android.hardware.camera" />
         <!-- Needed only if your app targets Android 5.0 (API level 21) or higher. -->
@@ -177,7 +177,9 @@
 
         <service
             android:name=".services.SetDriverStatus"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity android:name=".ui.activities.TermsPolicyActivity"></activity>
     </application>
 
 </manifest>

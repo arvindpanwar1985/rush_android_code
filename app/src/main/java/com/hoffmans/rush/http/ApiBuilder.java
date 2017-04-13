@@ -29,7 +29,7 @@ public class ApiBuilder {
              return apiInterface=retrofit.create(ApiInterface.class);
          }else {
              retrofit = new Retrofit.Builder()
-                     .baseUrl(ApiConfig.getdevBaseUrl())
+                     .baseUrl(ApiConfig.getTestUrl())
                      .client(okHttpClient.connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS) //default  connect timeout
                      .readTimeout(READ_TIME_OUT, TimeUnit.SECONDS).build())                  //default  read timeout
                      .addConverterFactory(GsonConverterFactory.create())                     // add converter factory
@@ -37,6 +37,7 @@ public class ApiBuilder {
              return retrofit.create(ApiInterface.class);
          }
     }
+
 
     /**
      * set log interceptor for logging the network response
@@ -59,7 +60,7 @@ public class ApiBuilder {
             return retrofit;
         }else {
             return new Retrofit.Builder()
-                    .baseUrl(ApiConfig.getdevBaseUrl())
+                    .baseUrl(ApiConfig.getTestUrl())
                     .client(okHttpClient.connectTimeout(CONNECT_TIME_OUT, TimeUnit.SECONDS) //default  connect timeout
                     .readTimeout(READ_TIME_OUT, TimeUnit.SECONDS).build())                  //default  read timeout
                     .addConverterFactory(GsonConverterFactory.create())                     // add converter factory

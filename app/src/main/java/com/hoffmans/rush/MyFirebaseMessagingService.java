@@ -1,5 +1,4 @@
 package com.hoffmans.rush;
-
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -19,13 +18,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
-
 /**
  * Created by devesh on 29/12/16.
  *
  * Class to receive app notifications
  */
-
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String ROLE_DRIVER            ="Driver";
@@ -83,7 +80,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param notifyType type of notification
      */
     private void handleDriverNotifications(JSONObject object,String  notifyType){
-
         try{
             switch (notifyType){
                 case TYPE_ACCEPT_ORDER:
