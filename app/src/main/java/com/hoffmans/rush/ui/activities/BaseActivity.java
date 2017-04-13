@@ -39,6 +39,7 @@ import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.http.request.UserRequest;
 import com.hoffmans.rush.listners.ApiCallback;
+import com.hoffmans.rush.services.TrackingService;
 import com.hoffmans.rush.utils.AppPreference;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.DateUtils;
@@ -506,6 +507,14 @@ public abstract  class BaseActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * stop the tracking service
+     */
+    public void stopTrackingService(){
+        Intent locationServiceIntent=new Intent(getApplicationContext(), TrackingService.class);
+        stopService(locationServiceIntent);
     }
 }
 

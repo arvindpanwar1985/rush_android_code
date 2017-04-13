@@ -32,6 +32,7 @@ import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.location.LocationData;
 import com.hoffmans.rush.location.LocationInterface;
 import com.hoffmans.rush.model.User;
+import com.hoffmans.rush.services.TrackingService;
 import com.hoffmans.rush.services.UpdateCurentLocation;
 import com.hoffmans.rush.ui.driver.activities.AcceptOrderActivity;
 import com.hoffmans.rush.ui.fragments.BaseFragment;
@@ -113,7 +114,7 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
         initViews(view);
         initListeners();
         checkPermission();
-        showDriverDetails();
+        //showDriverDetails();
         return view;
     }
 
@@ -134,6 +135,8 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
         super.onResume();
         appPreference.setPause(false);
         EventBus.getDefault().register(this);
+        //check the status of driver
+        showDriverDetails();
     }
 
 
@@ -236,6 +239,7 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
                }else if(status.equals(Status.INACTIVE)){
                    enableOutOfservice(false);
                }
+               filterStatus(status);
                mActivity.showSnackbar(body.getMessage(),Toast.LENGTH_LONG);
            }
 
@@ -270,6 +274,7 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
                     UserBean bean = (UserBean) body;
                     User user = bean.getUser();
                     if (user != null) {
+                        filterStatus(user.getStatus());
                         if (user.getStatus().equals(Status.ACTIVE)) {
                             txtInservice.setSelected(false);
                             txtOutOfService.setSelected(true);
@@ -287,6 +292,23 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
                     mActivity.showSnackbar(message, Toast.LENGTH_LONG);
                 }
             });
+        }
+    }
+
+    /**
+     * filter the status
+     * @param status
+     */
+    private void filterStatus(String status){
+        if(status!=null && !TextUtils.isEmpty(status)){
+            if(status.equals(Status.AVAIABLE)){
+                //update location on socket and user location database
+                Intent locationServiceIntent=new Intent(mActivity, TrackingService.class);
+                mActivity.startService(locationServiceIntent);
+            }else{
+                //stop service if status is inactive and active.
+                mActivity.stopTrackingService();
+            }
         }
     }
 

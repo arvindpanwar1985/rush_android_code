@@ -11,7 +11,6 @@ import com.hoffmans.rush.R;
 import com.hoffmans.rush.ui.fragments.RegisterFragment;
 
 public class TermsPolicyActivity extends BaseActivity {
-
     private WebView mWebview;
     private ProgressBar progressBar;
     @Override
@@ -51,7 +50,6 @@ public class TermsPolicyActivity extends BaseActivity {
     protected void initManagers() {
 
     }
-
 
     private void loadWebview(String termsPolicyUrl){
         mWebview.getSettings().setJavaScriptEnabled(true);

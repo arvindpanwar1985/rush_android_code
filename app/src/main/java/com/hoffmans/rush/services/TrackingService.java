@@ -21,13 +21,15 @@ public class TrackingService extends Service implements LocationInterface {
     public void onCreate() {
         super.onCreate();
         locationUpdate = LocationUpdate.getInstance();
-        locationUpdate.startLocationUpdate(this, this);
+        locationUpdate.startLocationUpdate(this, this,true);
+
+
    }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(locationUpdate==null){
             locationUpdate = LocationUpdate.getInstance();
-            locationUpdate.startLocationUpdate(this, this);
+            locationUpdate.startLocationUpdate(this, this,true);
         }
         return START_STICKY;
     }

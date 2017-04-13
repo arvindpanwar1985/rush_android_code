@@ -249,7 +249,6 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         request.executeAsync();
     }
 
-
     /**
      * login via google and facebook
      * @param provider facebook/google

@@ -43,8 +43,7 @@ public class ReceiptActivity extends BaseActivity {
     }
 
     @Override
-    protected void initManagers() {
-
+    protected void initManagers(){
     }
 
     @Override
