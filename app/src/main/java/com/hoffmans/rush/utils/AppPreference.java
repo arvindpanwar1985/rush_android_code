@@ -2,7 +2,9 @@ package com.hoffmans.rush.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Location;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.hoffmans.rush.model.User;
 
 
@@ -141,4 +143,18 @@ public class AppPreference {
         return mPref.getBoolean(PrefConstant.KEY_PAUSE_REUSME,false);
     }
 
+    public void saveCustomerLocation(LatLng location){
+        mEditor.putString(PrefConstant.KEY_LAT,String.valueOf(location.latitude));
+        mEditor.putString(PrefConstant.KEY_LONG,String.valueOf(location.longitude));
+        mEditor.commit();
+    }
+
+    public Location getCustomerLocation(){
+        double lat=Double.parseDouble(mPref.getString(PrefConstant.KEY_LAT,"0.0"));
+        double lng=Double.parseDouble(mPref.getString(PrefConstant.KEY_LONG,"0.0"));
+        Location customerLocation=new Location("A");
+        customerLocation.setLatitude(lat);
+        customerLocation.setLongitude(lng);
+        return customerLocation;
+    }
 }

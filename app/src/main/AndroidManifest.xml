@@ -179,7 +179,15 @@
             android:name=".services.SetDriverStatus"
             android:exported="false" />
 
-        <activity android:name=".ui.activities.TermsPolicyActivity"></activity>
+        <activity android:name=".ui.activities.TermsPolicyActivity" />
+
+        <service
+            android:name=".services.UpdateDriversOnMapService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".services.FindNearbyDrivers"
+            android:exported="false"></service>
     </application>
 
 </manifest>

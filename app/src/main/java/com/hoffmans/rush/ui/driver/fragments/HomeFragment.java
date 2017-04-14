@@ -32,7 +32,6 @@ import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.location.LocationData;
 import com.hoffmans.rush.location.LocationInterface;
 import com.hoffmans.rush.model.User;
-import com.hoffmans.rush.services.TrackingService;
 import com.hoffmans.rush.services.UpdateCurentLocation;
 import com.hoffmans.rush.ui.driver.activities.AcceptOrderActivity;
 import com.hoffmans.rush.ui.fragments.BaseFragment;
@@ -47,9 +46,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static org.greenrobot.eventbus.util.ErrorDialogManager.KEY_MESSAGE;
 
-
 public class HomeFragment extends BaseFragment implements LocationInterface ,OnMapReadyCallback,View.OnClickListener{
-
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -303,8 +300,7 @@ public class HomeFragment extends BaseFragment implements LocationInterface ,OnM
         if(status!=null && !TextUtils.isEmpty(status)){
             if(status.equals(Status.AVAIABLE)){
                 //update location on socket and user location database
-                Intent locationServiceIntent=new Intent(mActivity, TrackingService.class);
-                mActivity.startService(locationServiceIntent);
+                 mActivity.startTrackingService();
             }else{
                 //stop service if status is inactive and active.
                 mActivity.stopTrackingService();

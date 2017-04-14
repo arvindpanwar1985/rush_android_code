@@ -210,6 +210,13 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
                             showCommentDialog(serviceId);
                        }
                    }
+                   if(service_status.equals(Status.COMPLETED)){
+                       //driver is avaiable now start sending location to socket and database
+                       mActivity.startTrackingService();
+                   }else{
+                       // driver is active  and is on some job stop updating the location and stop updating socket data
+                       mActivity.stopTrackingService();
+                   }
                 }
             }
 

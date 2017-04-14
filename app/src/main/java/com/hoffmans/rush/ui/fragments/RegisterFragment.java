@@ -71,6 +71,7 @@ import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.ui.activities.LoginActivity;
 import com.hoffmans.rush.ui.activities.TermsPolicyActivity;
+import com.hoffmans.rush.utils.ApiConfig;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Utils;
@@ -205,7 +206,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             public void onClick(View v) {
                 Intent termsIntent = new Intent(mActivity, TermsPolicyActivity.class);
                 termsIntent.putExtra(KEY_TERMS,true);
-                termsIntent.putExtra(KEY_URL,getLocaleBasedUrl());
+                termsIntent.putExtra(KEY_URL,getLocaleBasedUrl(true));
                 startActivity(termsIntent);
             }
             public void updateDrawState(TextPaint ds) {// override updateDrawState
@@ -225,7 +226,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             public void onClick(View v) {
                 Intent termsIntent = new Intent(mActivity, TermsPolicyActivity.class);
                 termsIntent.putExtra(KEY_TERMS,false);
-                termsIntent.putExtra(KEY_URL,getLocaleBasedUrl());
+                termsIntent.putExtra(KEY_URL,getLocaleBasedUrl(false));
                 startActivity(termsIntent);
             }
             public void updateDrawState(TextPaint ds) {// override updateDrawState
@@ -239,12 +240,13 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
      *
      * @return terms and policy url according to locale
      */
-    private String getLocaleBasedUrl(){
+    private String getLocaleBasedUrl(boolean isterms){
         String locale= Locale.getDefault().getLanguage();
+        String url=(isterms)? ApiConfig.TERMS_URL:ApiConfig.PRIVACY_URL;
         if(locale.equals("es")){
-            return "http://192.168.1.210:3000/privacy_policy?locale=es";
+            return url+"locale=es";
         }
-        return "http://192.168.1.210:3000/privacy_policy?locale=en";
+        return url+"locale=en";
     }
     @Override
     public void onClick(View view) {

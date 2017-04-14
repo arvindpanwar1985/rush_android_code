@@ -134,4 +134,7 @@ public interface ApiInterface {
 
     @POST("/api/rate")
     Call<ResponseBody>rateDriver(@Header("Authorization")String authorization , @Body RatingParam param);
+    @FormUrlEncoded
+    @POST("/api/driver_location/driver_locations")
+    Call<ResponseBody>nearbyDrivers(@Header("Authorization")String authorization,@Field("lat")String lat,@Field("long")String lng,@Field("radius") String radius);
 }

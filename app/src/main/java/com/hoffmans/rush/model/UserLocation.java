@@ -12,6 +12,8 @@ public class UserLocation implements Parcelable {
     private String city;
     private String country;
     private String state;
+    private double longitude;
+    private double latitude;
 
     public String getCity() {
         return city;
@@ -37,6 +39,17 @@ public class UserLocation implements Parcelable {
         this.state = state;
     }
 
+    public UserLocation() {
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -47,18 +60,19 @@ public class UserLocation implements Parcelable {
         dest.writeString(this.city);
         dest.writeString(this.country);
         dest.writeString(this.state);
-    }
-
-    public UserLocation() {
+        dest.writeDouble(this.longitude);
+        dest.writeDouble(this.latitude);
     }
 
     protected UserLocation(Parcel in) {
         this.city = in.readString();
         this.country = in.readString();
         this.state = in.readString();
+        this.longitude = in.readDouble();
+        this.latitude = in.readDouble();
     }
 
-    public static final Parcelable.Creator<UserLocation> CREATOR = new Parcelable.Creator<UserLocation>() {
+    public static final Creator<UserLocation> CREATOR = new Creator<UserLocation>() {
         @Override
         public UserLocation createFromParcel(Parcel source) {
             return new UserLocation(source);

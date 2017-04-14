@@ -1,6 +1,7 @@
 package com.hoffmans.rush.http.request;
 
 import com.hoffmans.rush.bean.MessageBean;
+import com.hoffmans.rush.bean.NeaabyDriversBean;
 import com.hoffmans.rush.http.ConnectionManager;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.listners.BaseListener;
@@ -38,6 +39,45 @@ public class LocationRequest extends BaseRequest {
                     }
                     if (status){
                         MessageBean bean=new MessageBean();
+                        bean.setMessage(message);
+                        callback.onRequestSuccess(bean);
+                    }else {
+                        callback.onRequestFailed(message);
+                    }
+
+                }catch (Exception e){
+                    callback.onRequestFailed(e.getMessage());
+                }
+            }
+            @Override
+            public void onWebStatusFalse(String message) {
+                callback.onRequestFailed(message);
+            }
+        });
+    }
+
+    public void getNearbyDrivers(String auth,String lat,String lng,String radius,final ApiCallback callback){
+        Call<ResponseBody> nearbyCall=getAPIClient().nearbyDrivers(auth,lat,lng,radius);
+        ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(nearbyCall);
+        connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
+            @Override
+            public void onWebServiceComplete(ResponseBody responseBody) {
+                try {
+                    JSONObject obj=new JSONObject(responseBody.string());
+                    boolean status = obj.getBoolean(SUCCESS);
+                    String message="",msg1="";
+                    if(obj.has(MESSAGE)){
+                        String msg=obj.getString(MESSAGE);
+                        if(!obj.has(SPANISH_MESSAGE)) {
+                            message=msg;
+                        }else{
+                            msg1=obj.getString(SPANISH_MESSAGE);
+                            message=parseMessageUsingLocale(msg,msg1);
+                        }
+                    }
+                    if (status){
+                        String data = obj.getJSONObject(DATA).toString();
+                        NeaabyDriversBean bean=getGsonBuilder().fromJson(data,NeaabyDriversBean.class);
                         bean.setMessage(message);
                         callback.onRequestSuccess(bean);
                     }else {

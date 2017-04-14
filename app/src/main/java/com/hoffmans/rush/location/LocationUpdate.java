@@ -19,6 +19,7 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.hoffmans.rush.services.UpdateCurentLocation;
+import com.hoffmans.rush.utils.ApiConfig;
 import com.hoffmans.rush.utils.AppPreference;
 
 import org.json.JSONException;
@@ -159,7 +160,7 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
         client = new okhttp3.OkHttpClient();
         //Request request = new Request.Builder().url("ws://echo.websocket.org").build();
         //TODO add the IP and port
-        okhttp3.Request request= new okhttp3.Request.Builder().url("ws://192.168.1.150:8080/").build();
+        okhttp3.Request request= new okhttp3.Request.Builder().url(ApiConfig.URL_SOCKET).build();
         listener = new EchoWebSocketListener();
         webSocket= client.newWebSocket(request, listener);
 
@@ -174,7 +175,7 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("lat", latitude);
                 jsonObject.put("driver_id",""+appPreference.getUserDetails().getId());
-                jsonObject.put("lng", longitude);
+                jsonObject.put("long", longitude);
                 webSocket.send(jsonObject.toString());
                 if(updateCount==4 && isUpdateAfterFixedInterval()){
                     UpdateCurentLocation.startLocationUpdate(mContext,appPreference.getUserDetails().getToken(),latitude,longitude);
@@ -259,7 +260,7 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("lat", "0.0");
                 jsonObject.put("driver_id", "" +appPreference.getUserDetails().getId());
-                jsonObject.put("lng", "0.0");
+                jsonObject.put("long", "0.0");
                 webSocket.send(jsonObject.toString());
             }catch (JSONException e){
                 Log.e(TAG,e.toString());

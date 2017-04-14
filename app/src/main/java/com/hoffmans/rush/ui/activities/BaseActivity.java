@@ -516,5 +516,10 @@ public abstract  class BaseActivity extends AppCompatActivity {
         Intent locationServiceIntent=new Intent(getApplicationContext(), TrackingService.class);
         stopService(locationServiceIntent);
     }
+
+    public void startTrackingService(){
+        Intent locationServiceIntent=new Intent(getApplicationContext(), TrackingService.class);
+        startService(locationServiceIntent);
+    }
 }
 

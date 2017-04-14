@@ -1,10 +1,15 @@
 package com.hoffmans.rush.ui.fragments;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,8 +38,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.bean.ServiceBean;
@@ -42,6 +49,7 @@ import com.hoffmans.rush.http.request.FavouriteRequest;
 import com.hoffmans.rush.http.request.ServiceRequest;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.listners.OnitemClickListner;
+import com.hoffmans.rush.listners.ServiceCallbacks;
 import com.hoffmans.rush.location.LocationData;
 import com.hoffmans.rush.location.LocationInterface;
 import com.hoffmans.rush.model.AddFavouriteBody;
@@ -51,8 +59,12 @@ import com.hoffmans.rush.model.EstimateServiceParams;
 import com.hoffmans.rush.model.FetchAddressEvent;
 import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.Service;
+import com.hoffmans.rush.model.User;
+import com.hoffmans.rush.model.UserLocation;
 import com.hoffmans.rush.services.BuildAddressService;
+import com.hoffmans.rush.services.FindNearbyDrivers;
 import com.hoffmans.rush.services.GeoCodingService;
+import com.hoffmans.rush.services.UpdateDriversOnMapService;
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.ui.activities.ConfirmServiceActivity;
 import com.hoffmans.rush.ui.activities.FavouriteActivity;
@@ -76,8 +88,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static android.app.Activity.RESULT_CANCELED;
 import static com.hoffmans.rush.R.drawable.marker;
 
-public class SelectVechileFragment extends BaseFragment implements OnitemClickListner.OnFrequentAddressClicked,View.OnClickListener,GoogleApiClient.OnConnectionFailedListener,LocationInterface ,OnMapReadyCallback{
+public class SelectVechileFragment extends BaseFragment implements OnitemClickListner.OnFrequentAddressClicked,
+                                                                   View.OnClickListener, GoogleApiClient.OnConnectionFailedListener,
+                                                                   LocationInterface ,OnMapReadyCallback,ServiceCallbacks{
 
+    private List<Marker> lastVisibleMeakers=new ArrayList<>();
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final int  PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -105,6 +120,9 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     private CircleImageView imageAcceptReject;
     private GoogleApiClient mGoogleApiClient;
     private boolean calMoveToPlaceAutoCompleteActivity=true;
+    private boolean mBound;
+
+    private UpdateDriversOnMapService mService;
     public SelectVechileFragment() {
         // Required empty public constructor
     }
@@ -125,6 +143,9 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         if(appPreference.getUserDetails().getPic_url()!=null){
             Glide.with(mActivity).load(appPreference.getUserDetails().getPic_url()).into(imageAcceptReject);
         }
+        if(!mBound){
+            bindService(mActivity);
+        }
     }
 
     @Override
@@ -144,6 +165,51 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                 .build();
 
 
+
+    }
+
+
+    /**
+     * binding activity to service
+     * @param activity
+     */
+    public void bindService(Activity activity){
+
+        Intent bindIntent=new Intent(mActivity,UpdateDriversOnMapService.class);
+        mActivity.bindService(bindIntent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    /** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            UpdateDriversOnMapService.MyBinder binder = (UpdateDriversOnMapService.MyBinder) service;
+            mService = binder.getService();
+            mBound = true;
+            //register the service callback when server(Service)connected with activity
+            setServiceCallback();
+            Intent intent=new Intent(mActivity,UpdateDriversOnMapService.class);
+            mActivity.startService(intent);
+
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+
+
+    };
+
+    /**
+     * set the service callbacks in UpdateDriverLocation
+     */
+    private  void setServiceCallback(){
+        mService.setServiceCallBack(this);
 
     }
 
@@ -368,6 +434,39 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     }
 
 
+    /**
+     * event when new driver found from api
+     * @param nearbyDrivers
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFetchNearbyDrivers(List<User> nearbyDrivers) {
+          lastVisibleMeakers.clear();
+          for(final User nearbyUser: nearbyDrivers){
+              UserLocation location=nearbyUser.getLocation();
+              if(location!=null){
+                  try{
+                      double lat=location.getLatitude();
+                      double lng=location.getLongitude();
+                      if(lat!=0.0 &&lng!=0.0){
+                          final LatLng driverLatLng=new LatLng(lat,lng);
+                          mActivity.runOnUiThread(new Runnable() {
+                              @Override
+                              public void run() {
+                                  Marker newMArker=  mGoogleMap.addMarker(new MarkerOptions().position(driverLatLng).draggable(false).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_pink)));
+                                  newMArker.setTag(String.valueOf(nearbyUser.getId()));
+                                  lastVisibleMeakers.add(newMArker);
+                              }
+                          });
+                      }
+                  }catch (NumberFormatException e){
+
+                  }
+              }
+          }
+     }
+
+
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -400,6 +499,9 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                 Log.e(TAG,"drag end");
                 //set update postion to source location
                 setUpdatedPosition(0);
+                //save customer location
+
+                appPreference.saveCustomerLocation(marker.getPosition());
                 Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
                 GeoCodingService.getInstance(mActivity,marker.getPosition());
             }
@@ -817,13 +919,18 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
          mCurrentLocation=location;
          LatLng latLng=new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
          addlocationMArker(latLng,true);
-
          //set the source when we get the location first time
          //set update postion to source location
          setUpdatedPosition(0);
          LatLng latLng1=new LatLng(location.getLatitude(),location.getLongitude());
          Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
          GeoCodingService.getInstance(mActivity,latLng1);
+
+         // save customer Location
+         appPreference.saveCustomerLocation(latLng1);
+         // find nearby drivers
+         FindNearbyDrivers.findDrivers(mActivity,location.getLatitude(),location.getLongitude(),"");
+
      }
     }
 
@@ -849,21 +956,8 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mLocationData.disconnect();
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.stopAutoManage(mActivity);
-            mGoogleApiClient.disconnect();
-        }
-        if(mLocationData!=null){
-            mLocationData=null;
-        }
-        if(addressAdapter!=null){
-            addressAdapter=null;
-        }
-    }
+
+
     /**
      * api call to add addresses to favourite.
      *
@@ -898,7 +992,80 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     }
 
 
+    @Override
+    public void onDataRecieved(final String driver_id, final double latitude, final double longitude) {
+        final LatLng driverLAtLng=new LatLng(latitude,longitude);
+        Log.e("data receive",driver_id + " "+latitude +" "+longitude);
+        if(lastVisibleMeakers!=null){
+             final Marker marker =findMarkerByTag(driver_id);
+             if(marker!=null){
+                 //marker already exists
+                 mActivity.runOnUiThread(new Runnable() {
+                     @Override
+                     public void run() {
+                         if(latitude!=0.0 && longitude!=0.0) {
+                             marker.setPosition(driverLAtLng);
+                         }else{
+                             marker.remove();
+                             lastVisibleMeakers.remove(marker);
+                         }
+                     }
+                 });
+
+             }else{
+                 //create a new marker
+                 mActivity.runOnUiThread(new Runnable() {
+                     @Override
+                     public void run() {
+                         Marker newMArker=  mGoogleMap.addMarker(new MarkerOptions().position(driverLAtLng).draggable(false).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_pink)));
+                         newMArker.setTag(driver_id);
+                         lastVisibleMeakers.add(newMArker);
+                     }
+                 });
+
+             }
+        }else{
+            lastVisibleMeakers.clear();
+        }
+    }
 
 
+    private Marker findMarkerByTag(String tag){
+        for(Marker marker:lastVisibleMeakers){
+            if(marker.getTag().equals(tag)){
+                return  marker;
+            }
+        }
+        return null;
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mLocationData.disconnect();
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.stopAutoManage(mActivity);
+            mGoogleApiClient.disconnect();
+        }
+        if(mLocationData!=null){
+            mLocationData=null;
+        }
+        if(addressAdapter!=null){
+            addressAdapter=null;
+        }
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(mBound){
+            //unbind the service with activity
+            mActivity.unbindService(mConnection);
+            //stop service
+            Intent intent=new Intent(mActivity,UpdateDriversOnMapService.class);
+            mActivity.stopService(intent);
+            mBound=false;
+        }
+    }
 }

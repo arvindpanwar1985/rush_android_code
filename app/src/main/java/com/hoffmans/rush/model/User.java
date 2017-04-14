@@ -12,6 +12,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class User implements Parcelable {
 
+
+
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -50,6 +52,7 @@ public class User implements Parcelable {
     private boolean isSocialProvider;
 
     private int currency_symbol_id;
+
 
     public boolean isSocialProvider() {
         return isSocialProvider;

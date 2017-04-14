@@ -19,4 +19,6 @@ public class PrefConstant {
     public static String KEY_CURRENCY_ID  ="currency_id";
     public static String KEY_NOTIFICATION_TOKEN="notification_token";
     public static String KEY_PAUSE_REUSME="pause_resume";
+    public static String KEY_LAT="lat";
+    public static String KEY_LONG="lng";
 }
