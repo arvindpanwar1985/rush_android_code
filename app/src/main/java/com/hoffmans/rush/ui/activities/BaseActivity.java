@@ -454,6 +454,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
         intent.putExtra(Constants.KEY_AUTH_ERROR,false);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+        stopTrackingService();
     }
 
     /**

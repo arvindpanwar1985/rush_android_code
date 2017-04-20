@@ -86,6 +86,7 @@ public abstract class BaseFragment extends Fragment {
             return   null;
         }else {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+
             return  mMap.addMarker(new MarkerOptions().position(latLng).draggable(draggable).icon(BitmapDescriptorFactory.fromResource(marker)));
 
         }

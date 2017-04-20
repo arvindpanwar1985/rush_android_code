@@ -44,6 +44,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
+import com.hoffmans.rush.bean.NeaabyDriversBean;
 import com.hoffmans.rush.bean.ServiceBean;
 import com.hoffmans.rush.http.request.FavouriteRequest;
 import com.hoffmans.rush.http.request.ServiceRequest;
@@ -61,6 +62,7 @@ import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.Service;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.model.UserLocation;
+import com.hoffmans.rush.model.VechileDetail;
 import com.hoffmans.rush.services.BuildAddressService;
 import com.hoffmans.rush.services.FindNearbyDrivers;
 import com.hoffmans.rush.services.GeoCodingService;
@@ -86,7 +88,6 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_CANCELED;
-import static com.hoffmans.rush.R.drawable.marker;
 
 public class SelectVechileFragment extends BaseFragment implements OnitemClickListner.OnFrequentAddressClicked,
                                                                    View.OnClickListener, GoogleApiClient.OnConnectionFailedListener,
@@ -273,6 +274,8 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             listAddressData.add(end_address);
             addressAdapter=new LoadAddressAdapter(mActivity,listAddressData,this);
             recyclerView.setAdapter(addressAdapter);
+            //set default Vechile
+            setBackgroundVehicle(imgTypeCycle);
             checkPermission();
         }return view;
     }
@@ -419,7 +422,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                     //do nothing with marker when not dragged
                     if(!event.isDrag()) {
                         mGoogleMap.clear();
-                        addlocationMArker(sourceLatng, true);
+                        addlocationMArker(sourceLatng, true,R.drawable.marker);
                     }
                 } else {
                     PickDropAddress dropAddress = listAddressData.get(getUpdatedPosition());
@@ -436,37 +439,53 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
     /**
      * event when new driver found from api
-     * @param nearbyDrivers
+     * @param nearbyDriversBean
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onFetchNearbyDrivers(List<User> nearbyDrivers) {
-          lastVisibleMeakers.clear();
-          for(final User nearbyUser: nearbyDrivers){
-              UserLocation location=nearbyUser.getLocation();
-              if(location!=null){
-                  try{
-                      double lat=location.getLatitude();
-                      double lng=location.getLongitude();
-                      if(lat!=0.0 &&lng!=0.0){
-                          final LatLng driverLatLng=new LatLng(lat,lng);
-                          mActivity.runOnUiThread(new Runnable() {
-                              @Override
-                              public void run() {
-                                  Marker newMArker=  mGoogleMap.addMarker(new MarkerOptions().position(driverLatLng).draggable(false).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_pink)));
-                                  newMArker.setTag(String.valueOf(nearbyUser.getId()));
-                                  lastVisibleMeakers.add(newMArker);
-                              }
-                          });
-                      }
-                  }catch (NumberFormatException e){
+    public void onFetchNearbyDrivers(NeaabyDriversBean nearbyDriversBean) {
+         if(nearbyDriversBean.isFoundDrivers()) {
+             List<User>nearbyDrivers=nearbyDriversBean.getListNearbyDrivers();
+             removeLastVisibleNMarker();
+             for (final User nearbyUser : nearbyDrivers) {
+                 UserLocation location = nearbyUser.getLocation();
+                 VechileDetail vechileDetail=nearbyUser.getVehicle_details();
+                 int vechile_id=vechileDetail.getVehicle_type_id();
+                 if (location != null && vechile_id==getVechileType()) {
+                     try {
+                         double lat = location.getLatitude();
+                         double lng = location.getLongitude();
+                         if (lat != 0.0 && lng != 0.0) {
+                             final LatLng driverLatLng = new LatLng(lat, lng);
+                             mActivity.runOnUiThread(new Runnable() {
+                                 @Override
+                                 public void run() {
+                                     Marker newMArker = mGoogleMap.addMarker(new MarkerOptions().position(driverLatLng).draggable(false).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_pink)));
+                                     newMArker.setTag(String.valueOf(nearbyUser.getId()));
+                                     lastVisibleMeakers.add(newMArker);
+                                 }
+                             });
+                         }
+                     } catch (NumberFormatException e) {
 
-                  }
-              }
-          }
+                     }
+                 }
+             }
+         }else{
+             // remove the marker
+              removeLastVisibleNMarker();
+         }
      }
 
 
 
+     private void removeLastVisibleNMarker(){
+         if(lastVisibleMeakers!=null){
+             for(Marker marker:lastVisibleMeakers){
+                 marker.remove();
+             }
+         }
+         lastVisibleMeakers.clear();
+     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -478,7 +497,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         }
         if(mCurrentLocation!=null){
             LatLng latLng=new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
-            addlocationMArker(latLng,true);
+            addlocationMArker(latLng,true,R.drawable.marker);
         }
 
         //set marker draglistener
@@ -497,10 +516,14 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             @Override
             public void onMarkerDragEnd(Marker marker) {
                 Log.e(TAG,"drag end");
+                //set current location
+                mCurrentLocation.setLatitude(marker.getPosition().latitude);
+                mCurrentLocation.setLatitude(marker.getPosition().longitude);
+                // find the nearby drivers on location change
+                findNearbyDrivers(mCurrentLocation);
                 //set update postion to source location
                 setUpdatedPosition(0);
                 //save customer location
-
                 appPreference.saveCustomerLocation(marker.getPosition());
                 Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
                 GeoCodingService.getInstance(mActivity,marker.getPosition());
@@ -510,13 +533,19 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         mGoogleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
             @Override
             public boolean onMyLocationButtonClick() {
-                if(mCurrentLocation!=null){
-                    mGoogleMap.clear();
-                    LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-                    addlocationMArker(latLng, true);
-                    setUpdatedPosition(0);
-                    Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
-                    GeoCodingService.getInstance(mActivity,latLng);
+                if (mLocationData != null) {
+                    mCurrentLocation=mLocationData.getLatKnowLocation();
+                    appPreference.saveCustomerLocation(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
+                    if (mCurrentLocation != null) {
+                        mGoogleMap.clear();
+                        LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+                        addlocationMArker(latLng, true, R.drawable.marker);
+                        setUpdatedPosition(0);
+                        Progress.showprogress(mActivity, getString(R.string.progress_loading), false);
+                        GeoCodingService.getInstance(mActivity, latLng);
+                        findNearbyDrivers(mCurrentLocation);
+                    }
+
                 }
                 return false;
             }
@@ -528,7 +557,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
      * @param latLng
      * @param draggable
      */
-    private void addlocationMArker(LatLng latLng,boolean draggable){
+    private void addlocationMArker(LatLng latLng,boolean draggable ,int marker){
         addlocationMarker(latLng, marker,mGoogleMap,draggable);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
     }
@@ -619,6 +648,9 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             imgTypeCar.setSelected(false);
             imgTypeBike.setSelected(false);
             imgTypeCycle.setSelected(false);
+        }
+        if(view.isSelected()){
+            findNearbyDrivers(mCurrentLocation);
         }
     }
 
@@ -746,7 +778,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
         if(getUpdatedPosition()==0) {
             mGoogleMap.clear();
             LatLng favouriteLatLng = new LatLng(favouriteSelected.getLatitude(), favouriteSelected.getLongitude());
-            addlocationMArker(favouriteLatLng, true);
+            addlocationMArker(favouriteLatLng, true,R.drawable.marker);
         }
     }
     /**
@@ -907,6 +939,17 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
     }
 
+    /**
+     * find the nearby driver with respect to vecchile
+     * @param location
+     */
+    private void findNearbyDrivers(Location location){
+        int vechile_id=getVechileType();
+        if(vechile_id!=-1 && vechile_id!=0 && location!=null) {
+            FindNearbyDrivers.findDrivers(mActivity, location.getLatitude(), location.getLongitude(),"",String.valueOf(vechile_id));
+        }
+    }
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         mActivity.showSnackbar(connectionResult.getErrorMessage(),0);
@@ -918,7 +961,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
      if(location!=null){
          mCurrentLocation=location;
          LatLng latLng=new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
-         addlocationMArker(latLng,true);
+         addlocationMArker(latLng,true,R.drawable.marker);
          //set the source when we get the location first time
          //set update postion to source location
          setUpdatedPosition(0);
@@ -929,10 +972,11 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
          // save customer Location
          appPreference.saveCustomerLocation(latLng1);
          // find nearby drivers
-         FindNearbyDrivers.findDrivers(mActivity,location.getLatitude(),location.getLongitude(),"");
+         findNearbyDrivers(mCurrentLocation);
 
      }
     }
+
 
     @Override
     public void onLocationFailed() {
@@ -993,12 +1037,13 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
 
     @Override
-    public void onDataRecieved(final String driver_id, final double latitude, final double longitude) {
+    public void onDataRecieved(final String driver_id, final double latitude, final double longitude,final String vechile_id) {
         final LatLng driverLAtLng=new LatLng(latitude,longitude);
         Log.e("data receive",driver_id + " "+latitude +" "+longitude);
-        if(lastVisibleMeakers!=null){
+        int vechile_type_id=Integer.parseInt(vechile_id);
+        if(lastVisibleMeakers!=null && vechile_type_id!=0 && getVechileType()==vechile_type_id){
              final Marker marker =findMarkerByTag(driver_id);
-             if(marker!=null){
+             if(marker!=null ){
                  //marker already exists
                  mActivity.runOnUiThread(new Runnable() {
                      @Override
@@ -1025,16 +1070,25 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
              }
         }else{
-            lastVisibleMeakers.clear();
+            try {
+                lastVisibleMeakers.clear();
+            }catch (NullPointerException e){
+                lastVisibleMeakers=new ArrayList<>();
+            }
+
         }
     }
 
 
     private Marker findMarkerByTag(String tag){
-        for(Marker marker:lastVisibleMeakers){
-            if(marker.getTag().equals(tag)){
-                return  marker;
+        try {
+            for (Marker marker : lastVisibleMeakers) {
+                if (marker.getTag().equals(tag)) {
+                    return marker;
+                }
             }
+        }catch (NullPointerException e){
+            lastVisibleMeakers=new ArrayList<>();
         }
         return null;
     }

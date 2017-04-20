@@ -18,6 +18,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.services.UpdateCurentLocation;
 import com.hoffmans.rush.utils.ApiConfig;
 import com.hoffmans.rush.utils.AppPreference;
@@ -31,7 +32,7 @@ import okhttp3.WebSocketListener;
 import okio.ByteString;
 
 import static com.hoffmans.rush.location.LocationData.REQUEST_CHECK_SETTINGS;
-import static com.hoffmans.rush.location.LocationUpdate.EchoWebSocketListener.NORMAL_CLOSURE_STATUS;
+
 
 
 /**
@@ -169,22 +170,34 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
     private void updateOnSocket(Location location){
         if(location!=null) {
             AppPreference appPreference=AppPreference.newInstance(mContext);
-            try {
-                String latitude=String.valueOf(location.getLatitude());
-                String longitude=String.valueOf(location.getLongitude());
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("lat", latitude);
-                jsonObject.put("driver_id",""+appPreference.getUserDetails().getId());
-                jsonObject.put("long", longitude);
-                webSocket.send(jsonObject.toString());
-                if(updateCount==4 && isUpdateAfterFixedInterval()){
-                    UpdateCurentLocation.startLocationUpdate(mContext,appPreference.getUserDetails().getToken(),latitude,longitude);
-                    updateCount=0;
-                }else{
-                    updateCount++;
+            User user=appPreference.getUserDetails();
+            if(user.getVehicle_details()!=null) {
+                try {
+                    String latitude = String.valueOf(location.getLatitude());
+                    String longitude = String.valueOf(location.getLongitude());
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("lat", latitude);
+                    jsonObject.put("driver_id", "" + appPreference.getUserDetails().getId());
+                    jsonObject.put("long", longitude);
+                    if(user.getVehicle_details()!=null) {
+                        int vechile_id=user.getVehicle_details().getVehicle_type_id();
+                        if(vechile_id!=0) {
+                            jsonObject.put("vehicle_type_id", String.valueOf(vechile_id));
+                            webSocket.send(jsonObject.toString());
+                            if (updateCount == 4 && isUpdateAfterFixedInterval()) {
+                                UpdateCurentLocation.startLocationUpdate(mContext, appPreference.getUserDetails().getToken(), latitude, longitude);
+                                updateCount = 0;
+                            } else {
+                                updateCount++;
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                }catch (Exception e){
+
                 }
-             } catch (JSONException e) {
-          }
+
+            }
         }
     }
 
@@ -235,7 +248,7 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
     }
     private void disconnectSocket(){
         if(webSocket!=null){
-            webSocket.close(NORMAL_CLOSURE_STATUS, "Goodbye!");
+            webSocket.close(EchoWebSocketListener.NORMAL_CLOSURE_STATUS, "Goodbye!");
             webSocket=null;
         }if(client!=null){
             // Trigger shutdown of the dispatcher's executor so this process can
@@ -255,13 +268,18 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
 
     private void sendDeaultHeartBeatToSocket(){
         AppPreference appPreference=AppPreference.newInstance(mContext);
+        User user=appPreference.getUserDetails();
         for(int i=0;i<DEFAULT_HEARBEATCOUNT;i++){
             try {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("lat", "0.0");
                 jsonObject.put("driver_id", "" +appPreference.getUserDetails().getId());
                 jsonObject.put("long", "0.0");
-                webSocket.send(jsonObject.toString());
+                if(user.getVehicle_details()!=null && user.getVehicle_details().getVehicle_type_id()!=0) {
+                    jsonObject.put("vehicle_type_id", String.valueOf(user.getVehicle_details().getVehicle_type_id()));
+                    webSocket.send(jsonObject.toString());
+                }
+
             }catch (JSONException e){
                 Log.e(TAG,e.toString());
             }

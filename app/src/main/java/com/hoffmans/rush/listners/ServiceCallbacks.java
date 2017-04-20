@@ -5,5 +5,5 @@ package com.hoffmans.rush.listners;
  */
 
 public interface ServiceCallbacks {
-    void onDataRecieved(String driver_id,double latitude,double longitude);
+    void onDataRecieved(String driver_id,double latitude,double longitude,String vechile_id);
 }

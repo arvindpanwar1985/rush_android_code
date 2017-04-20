@@ -25,6 +25,25 @@ public class VechileDetail {
     @Expose
     private String deletedAt;
 
+    private String vehicle_type;
+    private int vehicle_type_id;
+
+    public int getVehicle_type_id() {
+        return vehicle_type_id;
+    }
+
+    public void setVehicle_type_id(int vehicle_type_id) {
+        this.vehicle_type_id = vehicle_type_id;
+    }
+
+    public String getVehicle_type() {
+        return vehicle_type;
+    }
+
+    public void setVehicle_type(String vehicle_type) {
+        this.vehicle_type = vehicle_type;
+    }
+
     public Integer getId() {
         return id;
     }

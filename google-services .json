@@ -1,0 +1,66 @@
+{
+  "project_info": {
+    "project_number": "712546380700",
+    "firebase_url": "https://nicamandados-151611.firebaseio.com",
+    "project_id": "nicamandados-151611",
+    "storage_bucket": "nicamandados-151611.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712546380700:android:e5cf1f61a7627793",
+        "android_client_info": {
+          "package_name": "com.hoffmans.rush"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "712546380700-ukq2pbnimt0t8028b344s2nujnq5qb75.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hoffmans.rush",
+            "certificate_hash": "4ba1418145ed808221de71847206615257675076"
+          }
+        },
+        {
+          "client_id": "712546380700-6rpq1b6hqose5oau8rpqk4svjjde3a1r.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "712546380700-lv7bg4lho3s88jktjev8opaou87a7cj4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEIFH5D-vppvi_jQwqHIJKNAe9LndvtdM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "712546380700-6rpq1b6hqose5oau8rpqk4svjjde3a1r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "712546380700-0gro4ahl5dt06thriicgfh78f68hkmuh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rush"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

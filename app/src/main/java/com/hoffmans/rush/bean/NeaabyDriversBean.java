@@ -13,6 +13,8 @@ import java.util.List;
 
 public class NeaabyDriversBean extends BaseBean {
 
+
+    private  boolean foundDrivers;
     @SerializedName("drivers")
     @Expose
     private List<User> listNearbyDrivers=new ArrayList<>();
@@ -20,5 +22,14 @@ public class NeaabyDriversBean extends BaseBean {
 
     public List<User> getListNearbyDrivers() {
         return listNearbyDrivers;
+    }
+
+
+    public boolean isFoundDrivers() {
+        return foundDrivers;
+    }
+
+    public void setFoundDrivers(boolean foundDrivers) {
+        this.foundDrivers = foundDrivers;
     }
 }

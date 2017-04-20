@@ -23,7 +23,7 @@ import okio.ByteString;
 
 public class UpdateDriversOnMapService extends Service {
     private MyBinder binder = new MyBinder();
-    private int DEFAULT_DISTANCE =1000000;  //distance in meters
+    private double DEFAULT_DISTANCE =1000.0;  //distance in meters
     private ServiceCallbacks serviceCallbacksListner;
     private EchoWebSocketListener listener;
     private WebSocket webSocket;
@@ -111,11 +111,12 @@ public class UpdateDriversOnMapService extends Service {
                  double lat=Double.valueOf(newObject.getString("lat"));
                  double lon=Double.valueOf(newObject.getString("long"));
                  String driver_id=newObject.getString("driver_id");
+                 String vehicle_type_id=newObject.getString("vehicle_type_id");
                  if(driver_id!=null && !TextUtils.isEmpty(driver_id) && misBindedToactivity){
                      Location driverLocation=new Location("B");
                      driverLocation.setLatitude(lat);
                      driverLocation.setLongitude(lon);
-                     new CalculateDistanceBetweenTwoLoation(driverLocation,driver_id).execute();
+                     new CalculateDistanceBetweenTwoLoation(driverLocation,driver_id,vehicle_type_id).execute();
 
                  }
 
@@ -144,18 +145,42 @@ public class UpdateDriversOnMapService extends Service {
 
     }
 
+
+   private double distanceInMtrs(double lat1, double lon1, double lat2, double lon2) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1))
+                * Math.sin(deg2rad(lat2))
+                + Math.cos(deg2rad(lat1))
+                * Math.cos(deg2rad(lat2))
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        return (dist*1000);
+    }
+
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
+    }
+
     class CalculateDistanceBetweenTwoLoation extends AsyncTask<String,String,String>{
         Location driverLocation;
         String driver_id;
-        float distance;
-        CalculateDistanceBetweenTwoLoation(Location location2,String driver_id){
+        String vechile_type_id;
+        double distance;
+        CalculateDistanceBetweenTwoLoation(Location location2,String driver_id,String vechile_type_id){
 
             this.driverLocation=location2;
             this.driver_id=driver_id;
+            this.vechile_type_id=vechile_type_id;
         }
         @Override
         protected String doInBackground(String... strings) {
-            distance=customerLocation.distanceTo(driverLocation);
+            distance=distanceInMtrs(customerLocation.getLatitude(),customerLocation.getLongitude(),driverLocation.getLatitude(),driverLocation.getLongitude());
 
             return null;
         }
@@ -163,16 +188,16 @@ public class UpdateDriversOnMapService extends Service {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if(distance!=0.0f && distance<DEFAULT_DISTANCE){
+            if(distance!=0.0f && distance<=DEFAULT_DISTANCE){
                 Log.e("distance",distance+"");
                 if(serviceCallbacksListner!=null){
-                    serviceCallbacksListner.onDataRecieved(driver_id,driverLocation.getLatitude(),driverLocation.getLongitude());
-                    distance=0.0f;
+                    serviceCallbacksListner.onDataRecieved(driver_id,driverLocation.getLatitude(),driverLocation.getLongitude(),vechile_type_id);
+                    distance=0.0;
                 }
             }else if(driverLocation.getLatitude()==0.0 && driverLocation.getLongitude()==0.0){
                 if(serviceCallbacksListner!=null){
-                    serviceCallbacksListner.onDataRecieved(driver_id,driverLocation.getLatitude(),driverLocation.getLongitude());
-                    distance=0.0f;
+                    serviceCallbacksListner.onDataRecieved(driver_id,driverLocation.getLatitude(),driverLocation.getLongitude(),vechile_type_id);
+                    distance=0.0;
                 }
             }
         }

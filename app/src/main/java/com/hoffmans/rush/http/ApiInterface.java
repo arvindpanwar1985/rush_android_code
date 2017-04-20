@@ -136,5 +136,5 @@ public interface ApiInterface {
     Call<ResponseBody>rateDriver(@Header("Authorization")String authorization , @Body RatingParam param);
     @FormUrlEncoded
     @POST("/api/driver_location/driver_locations")
-    Call<ResponseBody>nearbyDrivers(@Header("Authorization")String authorization,@Field("lat")String lat,@Field("long")String lng,@Field("radius") String radius);
+    Call<ResponseBody>nearbyDrivers(@Header("Authorization")String authorization,@Field("lat")String lat,@Field("long")String lng,@Field("radius") String radius,@Field("vehicle_type_id")String vechile_id);
 }

@@ -12,8 +12,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class User implements Parcelable {
 
-
-
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -52,6 +50,8 @@ public class User implements Parcelable {
     private boolean isSocialProvider;
 
     private int currency_symbol_id;
+
+    private VechileDetail vehicle_details;
 
 
     public boolean isSocialProvider() {
@@ -241,4 +241,12 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
+
+    public VechileDetail getVehicle_details() {
+        return vehicle_details;
+    }
+
+    public void setVehicle_details(VechileDetail vehicle_details) {
+        this.vehicle_details = vehicle_details;
+    }
 }

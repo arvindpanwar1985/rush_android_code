@@ -6,6 +6,7 @@ import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.hoffmans.rush.model.User;
+import com.hoffmans.rush.model.VechileDetail;
 
 
 public class AppPreference {
@@ -60,6 +61,10 @@ public class AppPreference {
         if(null!=user.getProvider()){
             mEditor.putBoolean(PrefConstant.IS_SOCIAL_PROVIDER,true);
         }
+        VechileDetail vechileDetail=user.getVehicle_details();
+        if(vechileDetail!=null && vechileDetail.getVehicle_type_id()!=0){
+            mEditor.putInt(PrefConstant.KEY_VECHILE_ID,vechileDetail.getVehicle_type_id());
+        }
         mEditor.commit();
     }
 
@@ -79,6 +84,9 @@ public class AppPreference {
         user.setSocialProvider(mPref.getBoolean(PrefConstant.IS_SOCIAL_PROVIDER,false));
         user.setRole(mPref.getString(PrefConstant.KEY_ROLE,""));
         user.setId(mPref.getInt(PrefConstant.KEY_ID,0));
+        VechileDetail detail=new VechileDetail();
+        detail.setVehicle_type_id(mPref.getInt(PrefConstant.KEY_VECHILE_ID,0));
+        user.setVehicle_details(detail);
         return  user;
 
     }
