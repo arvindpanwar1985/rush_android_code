@@ -1,5 +1,8 @@
 package com.hoffmans.rush.ui.driver.fragments;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,13 +17,21 @@ import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.bean.RecordBean;
 import com.hoffmans.rush.http.request.ServiceRequest;
 import com.hoffmans.rush.listners.ApiCallback;
+import com.hoffmans.rush.listners.OnRecordsItemClickListeners;
+import com.hoffmans.rush.model.CustomerDetail;
+import com.hoffmans.rush.model.DateTime;
+import com.hoffmans.rush.model.Estimate;
+import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.Record;
+import com.hoffmans.rush.model.VechileDetail;
+import com.hoffmans.rush.ui.driver.activities.DriverDetailsActivity;
 import com.hoffmans.rush.ui.fragments.BaseFragment;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Status;
 import com.hoffmans.rush.widgets.EndlessRecyclerViewScrollListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,7 +40,7 @@ import java.util.List;
  * Use the {@link CompletedRecordFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CompletedRecordFragment extends BaseFragment {
+public class CompletedRecordFragment extends BaseFragment implements OnRecordsItemClickListeners {
 
     private static final String KEY_IS_RECORD      ="isRecord";
     private static final String KEY_PAGE           ="page";
@@ -148,8 +159,7 @@ public class CompletedRecordFragment extends BaseFragment {
                 records_count=recordBean.getTotal_items();
                 if(records_count!=0 &&recordBean.getRecords().size()!=0){
                     recordList=recordBean.getRecords();
-                    mAdapter=new com.hoffmans.rush.ui.driver.adapters.RecordAdapter(mActivity,recordList);
-                    recyclerView.setAdapter(mAdapter);
+                    setAdapter(recordList);
                     currentListSize=recordList.size();
 
                 }else{
@@ -167,6 +177,12 @@ public class CompletedRecordFragment extends BaseFragment {
 
             }
         });
+    }
+
+    private void setAdapter(List<Record> recordList) {
+
+        mAdapter=new com.hoffmans.rush.ui.driver.adapters.RecordAdapter(mActivity,recordList,this);
+        recyclerView.setAdapter(mAdapter);
     }
 
     /**
@@ -202,4 +218,31 @@ public class CompletedRecordFragment extends BaseFragment {
     }
 
 
+    @Override
+    public void onRecordsItemClicked(int position) {
+        Record record=recordList.get(position);
+
+
+        VechileDetail vechileDetail=record.getVehicle_details();
+        //DriverDetail driverDetail=record.getDriver_details();
+        //PickDropAddress pickDropAddress=record.getPick_up();
+       // DateTime dateTime=record.getDate_time();
+
+        CustomerDetail customerDetail=record.getCustomer_details();
+        Estimate estimate=record.getEstimate();
+        PickDropAddress pickUpAddress=record.getPick_up();
+        DateTime dateTime=record.getDate_time();
+
+        Intent intent=new Intent(mActivity,DriverDetailsActivity.class);
+        intent.putExtra(Constants.KEY_ESTIMATE_DATA,estimate);
+        //intent.putExtra(Constants.KEY_VEHICLE_DETAILS,vechileDetail);
+        intent.putExtra(Constants.KEY_DRIVER_DETAILS,customerDetail);
+        intent.putExtra(Constants.KEY_PICK_ADDRESS,pickUpAddress);
+        intent.putExtra(Constants.KEY_DATA_DATE_TIME,dateTime);
+        intent.putParcelableArrayListExtra(Constants.KEY_DROP_DOWN, (ArrayList<? extends Parcelable>) record.getDrop_down());
+        intent.putExtra(Constants.KEY_COMMENT,record.getComment());
+        intent.putExtra(Constants.SERVICE_STATUS,record.getState());
+
+        startActivity(intent);
+    }
 }

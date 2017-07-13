@@ -19,7 +19,7 @@
         />
 
     <TextView
-        android:layout_width="60dp"
+        android:layout_width="match_parent"
         android:id="@+id/txtInService"
         android:layout_marginLeft="@dimen/dp_10"
         android:gravity="center"
@@ -33,7 +33,7 @@
         android:background="@drawable/in_service"/>
     <TextView
         android:id="@+id/txtOutOfservice"
-        android:layout_width="60dp"
+        android:layout_width="match_parent"
         android:layout_marginLeft="@dimen/dp_7"
         android:gravity="center"
         android:padding="@dimen/dp_4"

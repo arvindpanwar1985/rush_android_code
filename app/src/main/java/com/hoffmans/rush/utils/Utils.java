@@ -1,12 +1,15 @@
 package com.hoffmans.rush.utils;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.hoffmans.rush.R;
 
+import java.util.List;
 import java.util.TimeZone;
 
 /**
@@ -62,7 +66,6 @@ public class Utils {
         }
     }
 
-
     public static Bitmap rotateImage(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
@@ -97,7 +100,34 @@ public class Utils {
     }
 
 
+    /**
+     * Get credit card type using this method
+     * @param creditCardNumber provide credit card number
+     * @return
+     */
+    public static String getCreditCardTypeByNumber(String creditCardNumber) {
 
+        String regVisa = "^4[0-9]{12}(?:[0-9]{3})?$";
+        String regMaster = "^5[1-5][0-9]{14}$";
+        String regExpress = "^3[47][0-9]{13}$";
+        String regDiners = "^3(?:0[0-5]|[68][0-9])[0-9]{11}$";
+        String regDiscover = "^6(?:011|5[0-9]{2})[0-9]{12}$";
+        String regJCB= "^(?:2131|1800|35\\d{3})\\d{11}$";
+
+        if(creditCardNumber.matches(regVisa))
+            return "Visa";
+        if (creditCardNumber.matches(regMaster))
+            return "mastercard";
+        if (creditCardNumber.matches(regExpress))
+            return "amex";
+        if (creditCardNumber.matches(regDiners))
+            return "DINERS";
+        if (creditCardNumber.matches(regDiscover))
+            return "discover";
+        if (creditCardNumber.matches(regJCB))
+            return "Jcb";
+        return "invalid";
+    }
 
 
 
@@ -115,5 +145,31 @@ public class Utils {
         if (currentFocusedView != null) {
             inputMethodManager.hideSoftInputFromWindow(currentFocusedView.getWindowToken(), 0);
         }
+    }
+
+
+    public static  boolean isAppIsInBackground(Context context) {
+        boolean isInBackground = true;
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
+            List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
+            for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
+                if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    for (String activeProcess : processInfo.pkgList) {
+                        if (activeProcess.equals(context.getPackageName())) {
+                            isInBackground = false;
+                        }
+                    }
+                }
+            }
+        } else {
+            List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+            ComponentName componentInfo = taskInfo.get(0).topActivity;
+            if (componentInfo.getPackageName().equals(context.getPackageName())) {
+                isInBackground = false;
+            }
+        }
+
+        return isInBackground;
     }
 }

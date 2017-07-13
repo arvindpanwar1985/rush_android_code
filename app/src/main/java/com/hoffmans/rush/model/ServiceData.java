@@ -37,6 +37,18 @@ public class ServiceData {
     @Expose
     private Estimate estimate;
 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    @SerializedName("comment")
+    @Expose
+    private String comment;
+
     @SerializedName("vehicle_details")
     @Expose
     private VechileDetail vechileDetail;

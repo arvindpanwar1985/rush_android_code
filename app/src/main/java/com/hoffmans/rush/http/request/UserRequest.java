@@ -1,5 +1,7 @@
 package com.hoffmans.rush.http.request;
 
+import android.content.Context;
+
 import com.google.gson.JsonObject;
 import com.hoffmans.rush.bean.ForgotPassBean;
 import com.hoffmans.rush.bean.MessageBean;
@@ -7,6 +9,7 @@ import com.hoffmans.rush.bean.UserBean;
 import com.hoffmans.rush.http.ConnectionManager;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.listners.BaseListener;
+import com.hoffmans.rush.utils.AppPreference;
 
 import org.json.JSONObject;
 
@@ -226,6 +229,56 @@ public class UserRequest extends BaseRequest {
             }
         });
     }
+
+
+    /**
+     *
+     * @param token
+     * @param callback
+     */
+    public void getPendingRequest(String token, final Context context, final ApiCallback callback){
+        Call<ResponseBody> userCall=getAPIClient().getPendingRequest(token);
+        ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(userCall);
+        connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
+            @Override
+            public void onWebServiceComplete(ResponseBody responseBody) {
+                try {
+                    JSONObject obj=new JSONObject(responseBody.string());
+                    String message,msg1="";
+                    boolean status = obj.getBoolean(SUCCESS);
+                    String msg=obj.getString(MESSAGE);
+                    if(!obj.has(SPANISH_MESSAGE)) {
+                        message=msg;
+                    }else{
+                        msg1=obj.getString(SPANISH_MESSAGE);
+                        message=parseMessageUsingLocale(msg,msg1);
+                    }
+                    if (status) {
+                        String data = obj.getJSONObject(DATA).toString();
+                        JSONObject jsonObject=obj.getJSONObject("data");
+                        JSONObject serviceJson=jsonObject.getJSONObject("upcoming_services");
+                        String servieId=serviceJson.getString("id");
+                        AppPreference.newInstance(context).setServiceId(servieId);
+
+                        UserBean bean = getGsonBuilder().fromJson(data, UserBean.class);
+                        bean.setMessage(message);
+                        callback.onRequestSuccess(bean);
+                    } else {
+                        callback.onRequestFailed(message);
+                    }
+
+                }catch (Exception e){
+                    callback.onRequestFailed(e.getMessage());
+                }
+            }
+            @Override
+            public void onWebStatusFalse(String message) {
+                callback.onRequestFailed(message);
+            }
+        });
+    }
+
+
 
     /**
      * Update the driver status

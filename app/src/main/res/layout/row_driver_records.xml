@@ -9,6 +9,7 @@
     android:layout_marginBottom="@dimen/dp_7">
 
     <RelativeLayout
+        android:id="@+id/layout_driver_records"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_accept_order"
@@ -23,9 +24,46 @@
             android:layout_width="@dimen/dp_70"
             android:layout_height="@dimen/dp_70"
             app:civ_border_width="2dp"
+            android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
             android:src="@drawable/default_profile_photo"
             app:civ_border_color="@color/civ_border"/>
+
+        <LinearLayout
+            android:layout_below="@+id/imgProfile"
+            android:id="@+id/layoutRating"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/imgRating1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/start_unselect"/>
+            <ImageView
+                android:id="@+id/imgRating2"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/start_unselect"/>
+            <ImageView
+                android:id="@+id/imgRating3"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/start_unselect"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtRatingStaus"
+            android:textSize="@dimen/sp_10"
+            android:textColor="@color/colorPrimary"
+            android:layout_toLeftOf="@+id/relativeSourceDestination"
+            android:visibility="visible"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="@dimen/dp_7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layoutRating"/>
 
          <RelativeLayout
              android:layout_width="match_parent"
@@ -54,6 +92,7 @@
                  android:textColor="@color/colorPrimary"
                  android:textStyle="bold|italic"
                  android:textSize="@dimen/sp_12"
+                 android:layout_marginTop="@dimen/dp_10"
                  android:text=""/>
              <TextView
                  android:id="@+id/txtSource"
@@ -63,6 +102,7 @@
                  android:textStyle="normal|italic"
                  android:textSize="@dimen/sp_12"
                  android:layout_marginRight="@dimen/dp_2"
+                 android:layout_marginTop="@dimen/dp_10"
                  android:layout_alignParentLeft="true"
                  android:layout_below="@+id/txtdateTime"
                  android:layout_toLeftOf="@+id/viewPriceEstimated"
@@ -88,6 +128,7 @@
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
                  android:layout_centerVertical="true"
+                 android:visibility="visible"
                  android:layout_alignParentRight="true"
                  layout="@layout/layout_price_estimated"/>
 
@@ -100,12 +141,13 @@
             android:layout_alignParentRight="true"
             android:textStyle="italic"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/sp_15"
+            android:textSize="@dimen/sp_10"
             android:gravity="center"
+            android:text="finish"
             android:layout_marginTop="@dimen/dp_5"
             android:layout_below="@+id/relativeSourceDestination"
             android:background="@drawable/btn_estimated_bg"
-            android:layout_height="wrap_content"/>
+            android:layout_height="30dp"/>
 
         </RelativeLayout>
 

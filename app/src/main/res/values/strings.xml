@@ -6,8 +6,8 @@
     <string name="hint_confirm_new_password">Confirm new Password</string>
     <string name="hint_confirm_password">Confirm Password</string>
     <string name="str_login">Log in</string>
-    <string name="str_create_account">Create Account</string>
-    <string name="str_has_forgotPass">have you forgotten your password?</string>
+    <string name="str_create_account">Create an account</string>
+    <string name="str_has_forgotPass">Have you forgotten your password?</string>
     <string name="str_signup_with">Sign up with</string>
     <string name="str_facebook">Facebook</string>
     <string name="str_google">Google</string>
@@ -20,13 +20,24 @@
     <string name="str_city">City</string>
     <string name="str_card">Card</string>
     <string name="str_save">Save</string>
-    <string name="str_write_rush">Write  your Rush account</string>
+    <string name="str_save_card">Saved Cards</string>
+    <string name="str_write_rush">Write the email of your rush account</string>
     <string name="str_submit">Submit</string>
     <string name="str_fullname">Full name</string>
     <string name="str_password">Password</string>
     <string name="str_hint_password">Old Password</string>
     <string name="str_email">Email</string>
-    <string name="str_phone">Phone</string>
+    <string name="str_phone">Phone number</string>
+    <string name="str_change_photo">Change photo</string>
+
+    /****************************************************************User details.************\
+    <string name="str_pickup_location">Pickup Location</string>
+    <string name="str_drop_location">Drop Location</string>
+    <string name="str_record_details">Record Details</string>
+    <string name="str_order_details">Order detail</string>
+    <string name="str_add_comments">Add Comment</string>
+    <string name="str_comment">Comment</string>
+    <string name="error_empty_comment">Please enter comment</string>
 
 
     <string name="error_empty_email">Email address cannot be empty.</string>
@@ -43,6 +54,7 @@
     <string name="str_open_Camera">Open Camera</string>
     <string name="str_open_Gallery">Open Gallery</string>
     <string name="str_profile_pic">Select Profile Photo"</string>
+    <string name="str_terms_condition">Select Term and Condition</string>
 
     Nombre del titular de la tarjeta
     <string name="error_invalid_card_holdername">Fill Card Holder Name </string>
@@ -73,7 +85,7 @@
     <string name="str_menu_fav">My Favourite</string>
     <string name="str_settings">Settings</string>
     <string name="str_menu_logout">Sign Out</string>
-    <string name="str_select_currency">Please Select currency</string>
+    <string name="str_select_currency">Select currency</string>
 
 
     <string name="str_link_card">Please link a card to your account.</string>
@@ -82,15 +94,16 @@
 
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--<string name="map_debug_key">AIzaSyDwSOxeJ0GIxeqK-GPfBhOv8hFH-ssgFfE</string>-->
     <string name="map_debug_key">AIzaSyDwSOxeJ0GIxeqK-GPfBhOv8hFH-ssgFfE</string>
-    <string name="key_release">AIzaSyBXEHIlXNyrt0D9sqijDE4XGyx4TLdWDKs</string>
+    <string name="map_key_release">AIzaSyBXEHIlXNyrt0D9sqijDE4XGyx4TLdWDKs</string>
 
     <string name="str_reservation">Reservation</string>
     <string name="str_now">Now</string>
 
-    <string name="str_hint_start">Indicate starting point</string>
+    <string name="str_hint_start">Indicate the starting point</string>
 
-    <string name="str_hint_end">Indicate ending point</string>
+    <string name="str_hint_end">Indicate destination point</string>
 
     <string name="str_make_order">Make an order</string>
     <string name="str_value_estimate">Estimated Cost</string>
@@ -105,8 +118,8 @@
     <string name="progress_loading">Loading..</string>
     <string name="progress_estimate">Estimating Cost..</string>
     <string name="title_activity_place_autocomplete">PlaceAutocomplete</string>
-    <string name="str_record">Records</string>
-    <string name="str_scheduled">Scheduled</string>
+    <string name="str_record">Record</string>
+    <string name="str_scheduled">Scheduled order</string>
 
     <string name="str_another_des">Add another destination</string>
 
@@ -117,7 +130,7 @@
     <string name="str_fav">Favourite</string>
     <string name="str_mark_default">Mark Default</string>
 
-    <string name="str_favourites">FAVOURITES</string>
+    <string name="str_favourites">Favourite</string>
     <string name="str_estimate_cost">Estimate Cost</string>
     <string name="str_select_card">Please select card</string>
     <string name="str_confirm_order">Confirm Order</string>
@@ -127,11 +140,12 @@
     <string name="str_edit_profile">Edit Profile</string>
     <string name="str_edit">edit</string>
     <string name="str_add_card">Add Card</string>
-    <string name="str_frequent_address">Frequently used Address</string>
+    <string name="str_frequent_address">Frequently used address</string>
     <string name="str_receipt">Receipt</string>
     <string name="str_something_wrong">Something went wrong.</string>
     <string name="str_invalid_credentials">Invalid credentials</string>
-    <string name="str_upcoming">Upcoming</string>
+    <string name="str_upcoming">Upcoming order</string>
+    <string name="str_menu_upcoming">Upcoming</string>
     <string name="str_home">Home</string>
     <string name="str_select_reservation">Please select reservation date</string>
     <string name="str_select_source">Please select source</string>
@@ -140,7 +154,7 @@
 
     <string name="str_order_complete">Your order has been submitted, a driver will be assigned to you shortly</string>
 
-    <string name="str_terms_part_one">By continuing with registration, I agree with the\t</string>
+    <string name="str_terms_part_one">I agree with the\t</string>
     <string name="str_terms_part_two">Terms and Conditions\t</string>
     <string name="str_terms_part_three">And\t</string>
     <string name="str_terms_part_four">Privacy Policy</string>

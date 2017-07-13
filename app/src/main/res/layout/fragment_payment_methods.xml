@@ -210,6 +210,7 @@
         android:layout_marginTop="@dimen/dp_20"
         android:layout_marginLeft="@dimen/dp_40"
         android:text="@string/str_save"
+        android:textAllCaps="false"
         android:layout_marginRight="@dimen/dp_40"
         style="@style/AppTheme.Button"/>
 </LinearLayout>

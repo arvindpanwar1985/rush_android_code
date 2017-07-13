@@ -1,6 +1,9 @@
 package com.hoffmans.rush;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +14,9 @@ import com.hoffmans.rush.ui.activities.MainActivity;
 import com.hoffmans.rush.ui.driver.activities.DriverNavigationActivity;
 import com.hoffmans.rush.ui.driver.fragments.LoginFragment;
 import com.hoffmans.rush.utils.AppPreference;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -24,7 +30,7 @@ public class SplashActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         appPreference=AppPreference.newInstance(this);
-        //generateKeyHash();
+        generateKeyHash();
         initHandler();
     }
     /*
@@ -65,13 +71,12 @@ public class SplashActivity extends AppCompatActivity {
 
 
 
-    /*public void generateKeyHash() {
+    public void generateKeyHash() {
         try {
             PackageInfo info = getPackageManager().getPackageInfo("com.hoffmans.rush", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
-                Log.e("Keyhash: ", Base64.encodeToString(md.digest(), Base64.DEFAULT));
                 // Signedkey.setText(Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
         } catch (PackageManager.NameNotFoundException e) {
@@ -79,5 +84,5 @@ public class SplashActivity extends AppCompatActivity {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-    }*/
+    }
 }

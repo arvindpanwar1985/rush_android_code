@@ -1,5 +1,6 @@
 package com.hoffmans.rush.model;
 
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -80,7 +81,7 @@ public class Estimate implements Parcelable {
         this.symbol = in.readString();
     }
 
-    public static final Parcelable.Creator<Estimate> CREATOR = new Parcelable.Creator<Estimate>() {
+    public static final Creator<Estimate> CREATOR = new Creator<Estimate>() {
         @Override
         public Estimate createFromParcel(Parcel source) {
             return new Estimate(source);

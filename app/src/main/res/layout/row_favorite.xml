@@ -25,7 +25,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_10"
             android:padding="@dimen/dp_3"
-            android:src="@drawable/ic_favorite_24dp"
+            android:src="@drawable/ic_favorite_24dp_borderline"
             android:id="@+id/imgFav"
             />
 
@@ -37,7 +37,7 @@
             android:textColor="@android:color/white"
             android:textStyle="bold|italic"
             android:layout_centerVertical="true"
-            android:textSize="@dimen/sp_14"
+            android:textSize="@dimen/sp_12"
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_marginRight="@dimen/dp_4"
             />

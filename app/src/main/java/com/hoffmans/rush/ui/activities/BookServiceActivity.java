@@ -25,8 +25,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * The type Book service activity.
  */
-public class BookServiceActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
+public class BookServiceActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
 
     public static final int REQUEST_LOCATION_PERMISSION=2;
     private static final String KEY_IS_RECORD="isRecord";

@@ -1,7 +1,6 @@
 package com.hoffmans.rush.ui.adapters;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,11 +82,12 @@ public class FavouriteAdapter  extends RecyclerView.Adapter<FavouriteAdapter.Vie
     @Override
     public void onBindViewHolder(FavouriteAdapter.ViewHolder holder, final int position) {
 
-        if(showIcons){
+       /* if(showIcons){
             holder.imgFav.setVisibility(View.VISIBLE);
         }else{
             holder.imgFav.setVisibility(View.GONE);
-        }
+        }*/
+
         final PickDropAddress pickDropAddress=favDataList.get(position);
         holder.txtFAvAddress.setText(pickDropAddress.getStreetAddress());
         if(position==favDataList.size()-1){
@@ -95,11 +95,11 @@ public class FavouriteAdapter  extends RecyclerView.Adapter<FavouriteAdapter.Vie
         }else{
             holder.bottomLine.setVisibility(View.GONE);
         }
-        if(pickDropAddress.isFavorite()){
-            holder.imgFav.setBackground(ContextCompat.getDrawable(mContext,R.drawable.ic_favorite_24dp));
+        /*if(pickDropAddress.isFavorite()){
+            holder.imgFav.setBackground(ContextCompat.getDrawable(mContext,R.drawable.ic_favorite_24dp_borderline));
         }else{
             holder.imgFav.setBackground(ContextCompat.getDrawable(mContext,R.drawable.ic_favorite_border_24dp));
-        }
+        }*/
         holder.imgFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

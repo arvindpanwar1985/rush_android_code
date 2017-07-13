@@ -129,6 +129,42 @@ public class AppPreference {
 
     /**
      * set presaved notification token
+     * @param id
+     */
+    public void setServiceId(String id){
+        mEditor.putString(PrefConstant.KEY_SERVICE_ID,id).commit();
+    }
+
+    /**
+     *
+     * @return notification token
+     */
+    public String getServiceId(){
+        return mPref.getString(PrefConstant.KEY_SERVICE_ID,"");
+    }
+
+
+
+    /**
+     * set presaved notification token
+     * @param id
+     */
+    public void setStartServiceId(int id){
+        mEditor.putInt(PrefConstant.KEY_START_SERVICE_ID,id).commit();
+    }
+
+    /**
+     *
+     * @return notification token
+     */
+    public int getStartServiceId(){
+        return mPref.getInt(PrefConstant.KEY_START_SERVICE_ID,0);
+    }
+
+
+
+    /**
+     * set presaved notification token
      * @param token
      */
     public void setNotificationToken(String token){
@@ -143,12 +179,38 @@ public class AppPreference {
         return mPref.getString(PrefConstant.KEY_NOTIFICATION_TOKEN,"");
     }
 
+    /**
+     * set driver current status
+     */
+    public void setDriverStatus(String status){
+        mEditor.putString(PrefConstant.KEY_DRIVER_STATUS,status).commit();
+    }
+
+    /**
+     * return driver current status
+     * @return
+     */
+    public String getDriverStatus(){
+        return mPref.getString(PrefConstant.KEY_DRIVER_STATUS,"");
+    }
+
+
     public void setPause(boolean isPause){
         mPref.edit().putBoolean(PrefConstant.KEY_PAUSE_REUSME,isPause).commit();
     }
 
     public  boolean getPause(){
         return mPref.getBoolean(PrefConstant.KEY_PAUSE_REUSME,false);
+    }
+
+
+
+    public void setAdminMessage(String message){
+        mPref.edit().putString(PrefConstant.KEY_ADMIN_MESSAGE,message).commit();
+    }
+
+    public  String getAdminMessage(){
+        return mPref.getString(PrefConstant.KEY_ADMIN_MESSAGE,"");
     }
 
     public void saveCustomerLocation(LatLng location){

@@ -5,7 +5,40 @@ package com.hoffmans.rush.model;
  */
 
 public class Card {
-    private  String cardNumber,cardExpiry,cardCvv,countryCard,cityCard,cardHeadline;
+    private  String cardNumber;
+    private String cardExpiry;
+    private String cardCvv;
+    private String countryCard;
+    private String cityCard;
+    private String cardHeadline;
+    private String cardExpirationMonth;
+    private String cardExpirationYear;
+
+    public String getCardExpirationMonth() {
+        return cardExpirationMonth;
+    }
+
+    public void setCardExpirationMonth(String cardExpirationMonth) {
+        this.cardExpirationMonth = cardExpirationMonth;
+    }
+
+    public String getCardExpirationYear() {
+        return cardExpirationYear;
+    }
+
+    public void setCardExpirationYear(String cardExpirationYear) {
+        this.cardExpirationYear = cardExpirationYear;
+    }
+
+    public String getCardType() {
+        return cardType;
+    }
+
+    public void setCardType(String cardType) {
+        this.cardType = cardType;
+    }
+
+    private String cardType;
 
     public String getCardNumber() {
         return cardNumber;

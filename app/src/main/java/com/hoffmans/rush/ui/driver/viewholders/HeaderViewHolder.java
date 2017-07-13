@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.listners.OnHeaderButtonClickListners;
+import com.hoffmans.rush.listners.OnRecordsItemClickListeners;
 import com.hoffmans.rush.model.CustomerDetail;
 import com.hoffmans.rush.model.DateTime;
 import com.hoffmans.rush.model.Estimate;
@@ -36,12 +37,15 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
     private Context mContext;
     private CircleImageView imgAcceptreject;
     private RelativeLayout relativeLayoutHeader;
-    private OnHeaderButtonClickListners onHeaderButtonClickListner;
+    private OnHeaderButtonClickListners onHeaderButtonClickListner; OnRecordsItemClickListeners itemClickListeners;
+    private int position;
 
-    public HeaderViewHolder(View itemView, OnHeaderButtonClickListners onHeaderButtonClickListner) {
+    public HeaderViewHolder(View itemView, OnHeaderButtonClickListners onHeaderButtonClickListner, OnRecordsItemClickListeners itemClickListeners) {
+
         super(itemView);
         mContext=itemView.getContext();
         this.onHeaderButtonClickListner=onHeaderButtonClickListner;
+        this.itemClickListeners=itemClickListeners;
         mTxtname          = (TextView)itemView.findViewById(R.id.txtARName);
         mtxtPhone         = (TextView)itemView.findViewById(R.id.txtARPhone);
         mtxtSource        = (TextView)itemView.findViewById(R.id.txtARSource);
@@ -53,6 +57,9 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
         txtNoRecords      =(TextView)itemView.findViewById(R.id.txtNoRecords);
         relativeLayoutHeader=(RelativeLayout)itemView.findViewById(R.id.relativeHeader);
         txtNoUpcoming   =(TextView)itemView.findViewById(R.id.txtNoUpcoming);
+        this.position=position;
+
+
     }
     public void render(final ServiceData header) {
         if(header!=null ) {
@@ -92,6 +99,13 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
                      @Override
                      public void onClick(View view) {
                          onHeaderButtonClickListner.onStartStopButtonClicked(state, header.getId());
+                     }
+                 });
+
+                 relativeLayoutHeader.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View view) {
+                         itemClickListeners.onRecordsItemClicked(position);
                      }
                  });
 

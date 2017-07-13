@@ -64,6 +64,7 @@
           android:layout_marginTop="@dimen/dp_20"
           android:layout_marginLeft="@dimen/dp_40"
           android:text="@string/str_login"
+          android:textAllCaps="false"
           android:layout_marginRight="@dimen/dp_40"
           android:layout_below="@+id/flPassword"
           style="@style/AppTheme.Button"/>
@@ -126,7 +127,7 @@
             android:text="@string/str_has_forgotPass"
             android:textColor="@android:color/white"
             android:textStyle="bold|italic"
-            android:textSize="@dimen/sp_16"/>
+            android:textSize="@dimen/sp_14"/>
         </RelativeLayout>
 
 </RelativeLayout>

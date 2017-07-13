@@ -24,12 +24,14 @@ public class ConfirmServiceActivity extends BaseActivity {
         initToolBar(getString(R.string.str_menu_order),true);
         if(getIntent()!=null) {
             try {
+
                 Estimate estimate = getIntent().getParcelableExtra(Constants.KEY_ESTIMATE_DATA);
                 CardData defaultCard = getIntent().getParcelableExtra(Constants.KEY_CARD_DATA);
                 Service service = getIntent().getParcelableExtra(Constants.KEY_PARAM_DATA);
                 int transID = getIntent().getIntExtra(Constants.KEY_TRANSACTION_ID,0);
                 fragment = ConfirmServiceFragment.newInstance(estimate, defaultCard, service, transID);
                 replaceFragment(fragment, R.id.content_confirm_servicer, false);
+
             }catch (NullPointerException e){
 
             }

@@ -565,6 +565,11 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             return;
         }
 
+        if(!chekboxtermsCondition.isChecked()){
+            mActivity.showSnackbar(getString(R.string.str_terms_condition),Toast.LENGTH_SHORT);
+            return;
+        }
+
         if(selectedCurrency==null){
            // mActivity.showSnackbar(getString(R.string.str_select_currency), Toast.LENGTH_SHORT);
             Snackbar.make(getView(),"Currency data not found!",Snackbar.LENGTH_LONG)
@@ -610,6 +615,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             requestBodyMap.put(Constants.KEY_UDID, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),notificationToken));
             requestBodyMap.put(Constants.KEY_TYPE, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),Constants.DEVICE_TYPE));
             requestBodyMap.put(Constants.KEY_CURRENCY, RequestBody.create(MediaType.parse(Constants.TEXT_PLAIN_TYPE),selectedCurrency.getId().toString()));
+
             createAccount(requestBodyMap,imageFileBody);
         }catch (Exception e){
 

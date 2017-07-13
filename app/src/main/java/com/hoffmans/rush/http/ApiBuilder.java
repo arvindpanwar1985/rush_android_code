@@ -12,8 +12,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ApiBuilder {
 
-    private static final int CONNECT_TIME_OUT =15;// in seconds
-    private static final int READ_TIME_OUT    =20;// in seconds
+    private static final int CONNECT_TIME_OUT =60;// in seconds
+    private static final int READ_TIME_OUT    =60;// in seconds
     private static Retrofit retrofit;
     private static ApiInterface apiInterface;
     private static OkHttpClient.Builder okHttpClient =new OkHttpClient.Builder();

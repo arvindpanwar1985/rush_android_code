@@ -17,9 +17,9 @@
 
         <View
             android:id="@+id/viewDefaultCArd"
-            android:layout_width="@dimen/dp_25"
+            android:layout_width="@dimen/dp_20"
             android:layout_height="@dimen/dp_60"
-            android:background="@android:color/holo_green_dark"/>
+            android:background="@color/color_default_card"/>
         <RelativeLayout
             android:layout_toRightOf="@+id/viewDefaultCArd"
             android:id="@+id/viewCardDetails"

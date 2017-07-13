@@ -182,6 +182,9 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
     private void handleLoginResult(User user){
             appPreference.saveUser(user);
             appPreference.setUserLogin(true);
+            appPreference.setStartServiceId(user.getCurrent_running_service());
+
+
             Intent driverMainIntent=new Intent(mActivity, DriverNavigationActivity.class);
             driverMainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(driverMainIntent);

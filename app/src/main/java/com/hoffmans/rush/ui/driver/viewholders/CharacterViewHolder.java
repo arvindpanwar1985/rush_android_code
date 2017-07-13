@@ -8,10 +8,13 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.listners.OnRecordsItemClickListeners;
 import com.hoffmans.rush.model.CustomerDetail;
 import com.hoffmans.rush.model.DateTime;
 import com.hoffmans.rush.model.Estimate;
@@ -28,12 +31,17 @@ public class CharacterViewHolder  extends RecyclerView.ViewHolder {
 
     private ImageView imgProfile;
     private TextView txtNamePhone,txtSource,txtDestination,txtEstimatedPrice,txtDateTime,txtState;
+    private RelativeLayout mLayout;
+    private LinearLayout ratingLayout;
     private  Context mContext;
     private SpannableStringBuilder mbuilder=new SpannableStringBuilder();
+    private OnRecordsItemClickListeners itemClickListeners;
+    private int itemPosition;
 
-    public CharacterViewHolder(View itemView) {
+    public CharacterViewHolder(View itemView,OnRecordsItemClickListeners itemClickListeners) {
         super(itemView);
         this.mContext = itemView.getContext();
+        this.itemClickListeners=itemClickListeners;
         imgProfile     =(ImageView)itemView.findViewById(R.id.imgProfile);
         txtNamePhone   =(TextView)itemView.findViewById(R.id.txtNamePhone);
         txtSource      =(TextView)itemView.findViewById(R.id.txtSource);
@@ -41,14 +49,22 @@ public class CharacterViewHolder  extends RecyclerView.ViewHolder {
         txtEstimatedPrice=(TextView)itemView.findViewById(R.id.txtPriceEstimated);
         txtDateTime   =(TextView)itemView.findViewById(R.id.txtdateTime);
         txtState      =(TextView)itemView.findViewById(R.id.txtState);
+        ratingLayout=(LinearLayout)itemView.findViewById(R.id.layoutRating) ;
+        mLayout=(RelativeLayout)itemView.findViewById(R.id.layout_driver_records);
     }
 
-    public void render(Record record){
+    public void render(Record record, final int position){
+        this.itemPosition=position;
+
+
         CustomerDetail customerDetail=record.getCustomer_details();
         Estimate estimate=record.getEstimate();
         PickDropAddress pickUpAddress=record.getPick_up();
         DateTime dateTime=record.getDate_time();
         txtState.setText(record.getState());
+
+        ratingLayout.setVisibility(View.GONE);
+
         List<PickDropAddress> dropAddresses=record.getDrop_down();
         if(customerDetail!=null){
            setCustomerDetail(customerDetail);
@@ -65,6 +81,13 @@ public class CharacterViewHolder  extends RecyclerView.ViewHolder {
         if(dateTime!=null){
             txtDateTime.setText(dateTime.getDate()+" "+dateTime.getTime());
         }
+
+        mLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemClickListeners.onRecordsItemClicked(position);
+            }
+        });
     }
 
 

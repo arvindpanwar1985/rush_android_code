@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_30"
             android:layout_marginTop="@dimen/dp_7"
-            android:text=""
+
             android:textColor="@color/colorPrimaryDark"
             android:textSize="@dimen/sp_16"
             android:textStyle="bold|italic" />
@@ -37,7 +37,7 @@
             android:layout_marginRight="@dimen/dp_2"
             android:layout_marginTop="@dimen/dp_7"
             android:layout_toRightOf="@+id/txtARName"
-            android:text=""
+
             android:textColor="@color/colorPrimaryDark"
             android:textSize="@dimen/sp_16"
             android:textStyle="bold|italic" />
@@ -59,8 +59,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtARName"
+            android:layout_marginTop="@dimen/dp_10"
             android:layout_marginLeft="@dimen/dp_30"
-            android:text=""
+
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/sp_12"
             android:textStyle="bold|italic" />
@@ -74,17 +75,18 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/txtARName"
             android:layout_centerVertical="true"
+            android:visibility="gone"
             android:layout_marginLeft="@dimen/dp_20"
             android:layout_marginTop="@dimen/dp_20" />
 
         <LinearLayout
+            android:layout_marginLeft="@dimen/dp_30"
             android:id="@+id/linearSourceDestination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/viewPriceEstimated"
+            android:layout_marginTop="@dimen/dp_40"
             android:layout_below="@+id/txtARName"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:layout_marginTop="@dimen/dp_3"
             android:layout_toRightOf="@+id/viewPriceEstimated"
             android:orientation="vertical">
 
@@ -92,7 +94,6 @@
                 android:id="@+id/txtARSource"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/sp_12"
                 android:textStyle="italic" />
@@ -103,7 +104,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_5"
-                android:text=""
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/sp_12"
                 android:textStyle="italic" />

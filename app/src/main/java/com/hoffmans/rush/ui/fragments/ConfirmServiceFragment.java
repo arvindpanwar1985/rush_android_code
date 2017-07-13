@@ -35,6 +35,7 @@ import com.hoffmans.rush.model.Estimate;
 import com.hoffmans.rush.model.EstimateServiceParams;
 import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.Service;
+import com.hoffmans.rush.ui.activities.AddCommentActivity;
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
 import com.hoffmans.rush.ui.activities.CardListActivity;
 import com.hoffmans.rush.ui.activities.ConfirmServiceActivity;
@@ -50,8 +51,9 @@ import java.util.List;
 public class ConfirmServiceFragment extends BaseFragment implements View.OnClickListener ,OnMapReadyCallback{
 
 
-    private RelativeLayout viewCardDetails;
+    private RelativeLayout viewCardDetails, layoutAddComment;
     private static final int REQUEST_SELECT_CARD=108;
+    private static final int REQUEST_ADD_COMMENT=109;
     private ImageView imgCardType;
     private TextView txtCardData,txtCurrency,txtAmount,txtEstimatedTime;
     private int mTransactionId;
@@ -63,6 +65,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
     private LoadAddressAdapter addressAdapter;
     private GoogleMap mGoogleMap;
     private List<PickDropAddress>listAddressData=new ArrayList<>();
+    private String mStrUserComment=null;
 
     public ConfirmServiceFragment() {
         // Required empty public constructor
@@ -108,7 +111,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
         defaultCardData=selectedCard;
         if(selectedCard!=null){
             try{
-                txtCardData.setText("***********"+defaultCardData.getLast4());
+                txtCardData.setText("****"+defaultCardData.getNumber());
                 Glide.with(mActivity).load(defaultCardData.getImageUrl()).into(imgCardType);
             }catch (NullPointerException e){
 
@@ -132,6 +135,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
         txtAmount=(TextView)view.findViewById(R.id.txtAmount);
         txtEstimatedTime=(TextView)view.findViewById(R.id.txtEstimatedTime);
         btnMakeOrder=(Button)view.findViewById(R.id.btnMakeOrder);
+        layoutAddComment=(RelativeLayout)view.findViewById(R.id.addcomment);
         try {
             setEstimatedPrice();
             setEstimatedTime();
@@ -148,6 +152,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
 
         viewCardDetails.setOnClickListener(this);
         btnMakeOrder.setOnClickListener(this);
+        layoutAddComment.setOnClickListener(this);
     }
 
 
@@ -164,6 +169,16 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
                 btnMakeOrder.startAnimation(new AlphaAnimation(1.0f, 0.0f));
                 validateDefaultCard();
                 break;
+
+            case R.id.addcomment:
+
+                Intent intent=new Intent(mActivity, AddCommentActivity.class);
+                if(mStrUserComment!=null){
+                   intent.putExtra(Constants.KEY_COMMENT,mStrUserComment);
+                }else{
+                    intent.putExtra(Constants.KEY_COMMENT,"");
+                }
+                startActivityForResult(intent,REQUEST_ADD_COMMENT);
         }
      }
 
@@ -210,10 +225,13 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
 
     private void buildApiparams(){
         if(mServiceParams!=null){
+
             EstimateServiceParams estimateServiceParams=new EstimateServiceParams();
             estimateServiceParams.setTransaction_id(mTransactionId);
             if(defaultCardData!=null) {
-                estimateServiceParams.setPayment_method_token(defaultCardData.getToken());
+                // add comment string to service bean
+                mServiceParams.setComment(mStrUserComment);
+                estimateServiceParams.setPayment_method_token(defaultCardData.getPaypal_card_id());
                 estimateServiceParams.setService(mServiceParams);
                 //prompt user for dialog to show actual payment amount and card with which he pays for order
                 showPaymentAlert(getPaymentMessage(),estimateServiceParams);
@@ -233,7 +251,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
         stringMessage.append(mesTimatedData.getSymbol())
                 .append(mesTimatedData.getApproxConvertedAmount())
                 .append(" ")
-                .append("using card ************"+defaultCardData.getLast4())
+                .append("using card ****"+defaultCardData.getNumber())
                 .append("?");
 
         return stringMessage.toString();
@@ -260,7 +278,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
      */
     private void setEstimatedTime() throws NullPointerException{
         if(mesTimatedData!=null){
-            txtEstimatedTime.setText(mesTimatedData.getApproxTime());
+            txtEstimatedTime.setText("Time: "+mesTimatedData.getApproxTime());
         }
     }
 
@@ -272,7 +290,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
 
         if(defaultCardData!=null){
             try{
-                txtCardData.setText("***********"+defaultCardData.getLast4());
+                txtCardData.setText("*****"+defaultCardData.getNumber());
                 Glide.with(mActivity).load(defaultCardData.getImageUrl()).into(imgCardType);
             }catch (NullPointerException e){
 
@@ -300,6 +318,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
      * @param estimateServiceParams confirm service params
      */
     private void confirmService(EstimateServiceParams estimateServiceParams){
+
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         ServiceRequest serviceRequest=new ServiceRequest();
         String token=appPreference.getUserDetails().getToken();
@@ -308,6 +327,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
             public void onRequestSuccess(BaseBean body) {
                 Progress.dismissProgress();
                 ConfirmServiceBean confirmServiceBean=(ConfirmServiceBean)body;
+
                 if(confirmServiceBean.getService()!=null){
                     ConfirmService service=confirmServiceBean.getService();
                     Intent receiptIntent=new Intent(mActivity, ReceiptActivity.class);
@@ -343,6 +363,14 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
             if(data!=null){
                 CardData selectedCard=data.getParcelableExtra(ConfirmServiceActivity.KEY_CARD_DATA);
                 onCardSelected(selectedCard);
+
+            }
+        }
+        if(requestCode==REQUEST_ADD_COMMENT){
+            if(data!=null){
+                mStrUserComment=data.getStringExtra(Constants.KEY_COMMENT);
+
+
             }
         }
     }
@@ -355,7 +383,7 @@ public class ConfirmServiceFragment extends BaseFragment implements View.OnClick
     private void showPaymentAlert(String message, final  EstimateServiceParams confirmServiceParams){
         try {
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mActivity);
-            builder.setTitle(getString(R.string.str_confirm_order))
+            builder.setTitle(getString(R.string.app_name))
                     .setMessage(message)
                     .setCancelable(false)
                     .setNegativeButton(getString(R.string.str_cancel), new DialogInterface.OnClickListener() {

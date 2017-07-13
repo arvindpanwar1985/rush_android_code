@@ -15,9 +15,19 @@ public class Service implements Parcelable {
     private String date_time;
     private String Date_time;
     private int vehicle_type_id;
-
+    private String comment;
     private PickDropAddress pick_address;
     private List<PickDropAddress> drop_addresses;
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+
 
 
     public int getVehicle_type_id() {
@@ -56,8 +66,6 @@ public class Service implements Parcelable {
 
 
 
-    public Service() {
-    }
 
     public String getDate_time() {
         return Date_time;
@@ -66,6 +74,7 @@ public class Service implements Parcelable {
     public void setDate_time(String date_time) {
         Date_time = date_time;
     }
+
 
     @Override
     public int describeContents() {
@@ -77,14 +86,19 @@ public class Service implements Parcelable {
         dest.writeString(this.date_time);
         dest.writeString(this.Date_time);
         dest.writeInt(this.vehicle_type_id);
+        dest.writeString(this.comment);
         dest.writeParcelable(this.pick_address, flags);
         dest.writeTypedList(this.drop_addresses);
+    }
+
+    public Service() {
     }
 
     protected Service(Parcel in) {
         this.date_time = in.readString();
         this.Date_time = in.readString();
         this.vehicle_type_id = in.readInt();
+        this.comment = in.readString();
         this.pick_address = in.readParcelable(PickDropAddress.class.getClassLoader());
         this.drop_addresses = in.createTypedArrayList(PickDropAddress.CREATOR);
     }

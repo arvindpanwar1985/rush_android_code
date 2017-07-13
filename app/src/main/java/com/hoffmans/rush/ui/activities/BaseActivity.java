@@ -229,6 +229,9 @@ public abstract  class BaseActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+
     }
 
 
@@ -519,6 +522,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
     }
 
     public void startTrackingService(){
+
         Intent locationServiceIntent=new Intent(getApplicationContext(), TrackingService.class);
         startService(locationServiceIntent);
     }

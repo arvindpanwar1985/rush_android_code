@@ -88,31 +88,32 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_CANCELED;
+import static com.hoffmans.rush.R.drawable.marker;
 
 public class SelectVechileFragment extends BaseFragment implements OnitemClickListner.OnFrequentAddressClicked,
-                                                                   View.OnClickListener, GoogleApiClient.OnConnectionFailedListener,
-                                                                   LocationInterface ,OnMapReadyCallback,ServiceCallbacks{
+        View.OnClickListener, GoogleApiClient.OnConnectionFailedListener,
+        LocationInterface, OnMapReadyCallback, ServiceCallbacks {
 
-    private List<Marker> lastVisibleMeakers=new ArrayList<>();
+    private List<Marker> lastVisibleMeakers = new ArrayList<>();
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final int  PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
-    private static final int DESTINATION_SELECTED=1;
-    private static final int REQUEST_FAVOURITE=1008;
-    private String TAG=SelectVechileFragment.class.getCanonicalName();
+    private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    private static final int DESTINATION_SELECTED = 1;
+    private static final int REQUEST_FAVOURITE = 1008;
+    private String TAG = SelectVechileFragment.class.getCanonicalName();
     private int clickedAddressPostion;
-    private List<PickDropAddress> dropAddressList=new ArrayList<>();
+    private List<PickDropAddress> dropAddressList = new ArrayList<>();
     private String mParam1;
     private String mParam2;
-    private ArrayList<PickDropAddress> listAddressData=new ArrayList<>();
+    private ArrayList<PickDropAddress> listAddressData = new ArrayList<>();
     private View view;
     private RecyclerView recyclerView;
     private LoadAddressAdapter addressAdapter;
     private View imageViewLoadMoreAddress;
-    private TextView txtNow,txtReservation;
+    private TextView txtNow, txtReservation;
     private LocationData mLocationData;
     private Button btnEstimateCost;
-    private ImageView imgTypeCycle,imgTypeBike,imgTypeCar,imgTypeTruck;
+    private ImageView imgTypeCycle, imgTypeBike, imgTypeCar, imgTypeTruck;
     private GoogleMap mGoogleMap;
     private Location mCurrentLocation;
     private boolean isVehicleSelected;
@@ -120,10 +121,11 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     private String futureDataTime;
     private CircleImageView imageAcceptReject;
     private GoogleApiClient mGoogleApiClient;
-    private boolean calMoveToPlaceAutoCompleteActivity=true;
+    private boolean calMoveToPlaceAutoCompleteActivity = true;
     private boolean mBound;
 
     private UpdateDriversOnMapService mService;
+
     public SelectVechileFragment() {
         // Required empty public constructor
     }
@@ -141,10 +143,10 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     @Override
     public void onStart() {
         super.onStart();
-        if(appPreference.getUserDetails().getPic_url()!=null){
+        if (appPreference.getUserDetails().getPic_url() != null) {
             Glide.with(mActivity).load(appPreference.getUserDetails().getPic_url()).into(imageAcceptReject);
         }
-        if(!mBound){
+        if (!mBound) {
             bindService(mActivity);
         }
     }
@@ -157,7 +159,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             mParam2 = getArguments().getString(ARG_PARAM2);
 
         }
-        mDateUtils=DateUtils.getInstance();
+        mDateUtils = DateUtils.getInstance();
         mGoogleApiClient = new GoogleApiClient
                 .Builder(mActivity)
                 .addApi(Places.GEO_DATA_API)
@@ -166,21 +168,23 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                 .build();
 
 
-
     }
 
 
     /**
      * binding activity to service
+     *
      * @param activity
      */
-    public void bindService(Activity activity){
+    public void bindService(Activity activity) {
 
-        Intent bindIntent=new Intent(mActivity,UpdateDriversOnMapService.class);
+        Intent bindIntent = new Intent(mActivity, UpdateDriversOnMapService.class);
         mActivity.bindService(bindIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
-    /** Defines callbacks for service binding, passed to bindService() */
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
     private ServiceConnection mConnection = new ServiceConnection() {
 
         @Override
@@ -192,7 +196,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             mBound = true;
             //register the service callback when server(Service)connected with activity
             setServiceCallback();
-            Intent intent=new Intent(mActivity,UpdateDriversOnMapService.class);
+            Intent intent = new Intent(mActivity, UpdateDriversOnMapService.class);
             mActivity.startService(intent);
 
 
@@ -209,24 +213,24 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     /**
      * set the service callbacks in UpdateDriverLocation
      */
-    private  void setServiceCallback(){
+    private void setServiceCallback() {
         mService.setServiceCallBack(this);
 
     }
 
     @Override
     protected void initViews(View view) {
-        recyclerView            =(RecyclerView)view.findViewById(R.id.addressRecycler);
-        imageViewLoadMoreAddress=(View)view.findViewById(R.id.viewAddMoreAddress);
-        txtNow                  =(TextView)view.findViewById(R.id.txtACNow);
-        txtReservation          =(TextView)view.findViewById(R.id.txtACReserve);
-        btnEstimateCost         =(Button) view.findViewById(R.id.btnEstimatePrice);
+        recyclerView = (RecyclerView) view.findViewById(R.id.addressRecycler);
+        imageViewLoadMoreAddress = (View) view.findViewById(R.id.viewAddMoreAddress);
+        txtNow = (TextView) view.findViewById(R.id.txtACNow);
+        txtReservation = (TextView) view.findViewById(R.id.txtACReserve);
+        btnEstimateCost = (Button) view.findViewById(R.id.btnEstimatePrice);
         recyclerView.setHasFixedSize(true);
-        imgTypeCycle            =(ImageView)view.findViewById(R.id.imgTypeCycle);
-        imgTypeBike             =(ImageView)view.findViewById(R.id.imgTypeBike);
-        imgTypeCar              =(ImageView)view.findViewById(R.id.imgTypeCar);
-        imgTypeTruck            =(ImageView)view.findViewById(R.id.imgTypeTruck);
-        imageAcceptReject       =(CircleImageView)view.findViewById(R.id.imgAcceptreject);
+        imgTypeCycle = (ImageView) view.findViewById(R.id.imgTypeCycle);
+        imgTypeBike = (ImageView) view.findViewById(R.id.imgTypeBike);
+        imgTypeCar = (ImageView) view.findViewById(R.id.imgTypeCar);
+        imgTypeTruck = (ImageView) view.findViewById(R.id.imgTypeTruck);
+        imageAcceptReject = (CircleImageView) view.findViewById(R.id.imgAcceptreject);
         LinearLayoutManager llm = new LinearLayoutManager(mActivity);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
@@ -235,6 +239,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
     @Override
     protected void initListeners() {
+
         imageViewLoadMoreAddress.setOnClickListener(this);
         txtNow.setOnClickListener(this);
         txtReservation.setOnClickListener(this);
@@ -248,12 +253,13 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     /**
      * init the map fragment
      */
-    private void initMap(){
-       SupportMapFragment mapFragment = ((SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map_fragment));
-        if(mapFragment!=null){
-        mapFragment.getMapAsync(this);
-        }else {
-            Toast.makeText(getActivity(),"Error in iniializing map",Toast.LENGTH_SHORT).show();
+    private void initMap() {
+
+        SupportMapFragment mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment));
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        } else {
+            Toast.makeText(getActivity(), "Error in iniializing map", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -261,23 +267,24 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        if(view==null) {
+        if (view == null) {
             view = inflater.inflate(R.layout.fragment_select_vechile, container, false);
             initViews(view);
             initListeners();
             listAddressData.clear();
-            PickDropAddress start_address =new PickDropAddress();
-            PickDropAddress end_address   =new PickDropAddress();
+            PickDropAddress start_address = new PickDropAddress();
+            PickDropAddress end_address = new PickDropAddress();
             start_address.setStreetAddress("");
             end_address.setStreetAddress("");
             listAddressData.add(start_address);
             listAddressData.add(end_address);
-            addressAdapter=new LoadAddressAdapter(mActivity,listAddressData,this);
+            addressAdapter = new LoadAddressAdapter(mActivity, listAddressData, this);
             recyclerView.setAdapter(addressAdapter);
             //set default Vechile
             setBackgroundVehicle(imgTypeCycle);
             checkPermission();
-        }return view;
+        }
+        return view;
     }
 
 
@@ -299,38 +306,45 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     /**
      * check the permission
      */
-    private void checkPermission(){
-        String [] arrPermission=new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
-        if(mActivity.isPermissionGranted(arrPermission)){
-            mLocationData=new LocationData(mActivity,this);
+    private void checkPermission() {
+        String[] arrPermission = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+        if (mActivity.isPermissionGranted(arrPermission)) {
+            mLocationData = new LocationData(mActivity, this);
             initMap();
 
-        }else {
+        } else {
             requestPermissions(arrPermission, BookServiceActivity.REQUEST_LOCATION_PERMISSION);
         }
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.viewAddMoreAddress:
                 imageViewLoadMoreAddress.startAnimation(new AlphaAnimation(1.0f, 0.0f));
-                if(listAddressData!=null && listAddressData.size()!=4 ){
-                    int lastPostition=listAddressData.size()-1;
-                    PickDropAddress lastFilledDropAddress=listAddressData.get(lastPostition);
-                    if(lastFilledDropAddress!=null && !TextUtils.isEmpty(lastFilledDropAddress.getStreetAddress())) {
+
+                if (listAddressData != null && listAddressData.size() != 4) {
+
+                    int lastPostition = listAddressData.size() - 1;
+                    PickDropAddress lastFilledDropAddress = listAddressData.get(lastPostition);
+                    if (lastFilledDropAddress != null && !TextUtils.isEmpty(lastFilledDropAddress.getStreetAddress())) {
                         PickDropAddress newDetination = new PickDropAddress();
                         newDetination.setStreetAddress("");
                         listAddressData.add(newDetination);
                         addressAdapter.notifyDataSetChanged();
-                    }else{
-                        mActivity.showSnackbar(getString(R.string.str_select_destination),Toast.LENGTH_SHORT);
+                        if (listAddressData.size() == 4) {
+                            imageViewLoadMoreAddress.setVisibility(View.GONE);
+                        }
+                    } else {
+                        mActivity.showSnackbar(getString(R.string.str_select_destination), Toast.LENGTH_SHORT);
                     }
+                } else {
+
                 }
                 break;
             case R.id.txtACNow:
                 enableNow();
-                 break;
+                break;
             case R.id.txtACReserve:
                 enableReservation();
                 break;
@@ -355,7 +369,6 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     }
 
     /**
-     *
      * @return updated postion of source and destination
      */
     public int getUpdatedPosition() {
@@ -364,6 +377,7 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
     /**
      * set updated position
+     *
      * @param clickedAddressPostion
      */
     public void setUpdatedPosition(int clickedAddressPostion) {
@@ -373,131 +387,143 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     /**
      * validate the inputs
      */
-    private void validateFields(){
-        if(listAddressData==null){
+    private void validateFields() {
+        if (listAddressData == null) {
             return;
         }
-        String source =listAddressData.get(0).getStreetAddress();
-        String destination=listAddressData.get(1).getStreetAddress();
-        if(TextUtils.isEmpty(source)){
-            mActivity.showSnackbar(getString(R.string.str_select_source),0);
+        String source = listAddressData.get(0).getStreetAddress();
+        //String destination=listAddressData.get(1).getStreetAddress();
+        String destination = listAddressData.get(listAddressData.size() - 1).getStreetAddress();
+        if (TextUtils.isEmpty(source)) {
+            mActivity.showSnackbar(getString(R.string.str_select_source), 0);
 
             return;
         }
-        if(TextUtils.isEmpty(destination)){
-            mActivity.showSnackbar(getString(R.string.str_select_destination),0);
+        if (TextUtils.isEmpty(destination)) {
+            mActivity.showSnackbar(getString(R.string.str_select_destination), 0);
             return;
         }
-        if(!isVehicleSelected && getVechileType()==-1){
-            mActivity.showSnackbar(getString(R.string.str_select_vechile),0);
+        if (!isVehicleSelected && getVechileType() == -1) {
+            mActivity.showSnackbar(getString(R.string.str_select_vechile), 0);
             return;
         }
-        if(txtReservation.isSelected() && TextUtils.isEmpty(futureDataTime)){
+        if (txtReservation.isSelected() && TextUtils.isEmpty(futureDataTime)) {
             //mActivity.showSnackbar("SEle");
-            mActivity.showSnackbar(getString(R.string.str_select_reservation),0);
+            mActivity.showSnackbar(getString(R.string.str_select_reservation), 0);
             return;
         }
-         estimateService(buildEstimateServiceParams());
+        estimateService(buildEstimateServiceParams());
     }
 
     /**
-     *
      * @param event from buildAddress intent service
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFetchAddressEvent(FetchAddressEvent event) {
         Progress.dismissProgress();
-        if(event.isSucess()) {
-               if (getUpdatedPosition() == 0) {
-                    PickDropAddress pickDropAddress = listAddressData.get(getUpdatedPosition());
-                    pickDropAddress.setCountry(event.getCountry());
-                    pickDropAddress.setState(event.getState());
-                    pickDropAddress.setCity(event.getCity());
-                    pickDropAddress.setLatitude(event.getLat());
-                    pickDropAddress.setLongitude(event.getLng());
-                    pickDropAddress.setStreetAddress(event.getStreetAddress());
-                    listAddressData.set(getUpdatedPosition(), pickDropAddress);
-                    addressAdapter.notifyDataSetChanged();
-                    LatLng sourceLatng=new LatLng(event.getLat(),event.getLng());
-                    //do nothing with marker when not dragged
-                    if(!event.isDrag()) {
-                        mGoogleMap.clear();
-                        addlocationMArker(sourceLatng, true,R.drawable.marker);
-                    }
-                } else {
-                    PickDropAddress dropAddress = listAddressData.get(getUpdatedPosition());
-                    dropAddress.setCountry(event.getCountry());
-                    dropAddress.setState(event.getState());
-                    dropAddress.setLatitude(event.getLat());
-                    dropAddress.setLongitude(event.getLng());
-                    dropAddress.setCity(event.getCity());
-                    listAddressData.set(getUpdatedPosition(), dropAddress);
+        if (event.isSucess()) {
+            if (getUpdatedPosition() == 0) {
+                PickDropAddress pickDropAddress = listAddressData.get(getUpdatedPosition());
+                pickDropAddress.setCountry(event.getCountry());
+                pickDropAddress.setState(event.getState());
+                pickDropAddress.setCity(event.getCity());
+                pickDropAddress.setLatitude(event.getLat());
+                pickDropAddress.setLongitude(event.getLng());
+                pickDropAddress.setStreetAddress(event.getStreetAddress());
+                listAddressData.set(getUpdatedPosition(), pickDropAddress);
+                addressAdapter.notifyDataSetChanged();
+                LatLng sourceLatng = new LatLng(event.getLat(), event.getLng());
+                //do nothing with marker when not dragged
+                if (!event.isDrag()) {
+                    mGoogleMap.clear();
+                    addlocationMArker(sourceLatng, true, marker);
                 }
+
+                mCurrentLocation.setLatitude(pickDropAddress.getLatitude());
+                mCurrentLocation.setLongitude(pickDropAddress.getLongitude());
+                findNearbyDrivers(mCurrentLocation);
+
+            } else {
+                PickDropAddress dropAddress = listAddressData.get(getUpdatedPosition());
+                dropAddress.setCountry(event.getCountry());
+                dropAddress.setState(event.getState());
+                dropAddress.setLatitude(event.getLat());
+                dropAddress.setLongitude(event.getLng());
+                dropAddress.setCity(event.getCity());
+                listAddressData.set(getUpdatedPosition(), dropAddress);
+            }
+
+            //todo
+
+
         }
     }
 
 
     /**
      * event when new driver found from api
+     *
      * @param nearbyDriversBean
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFetchNearbyDrivers(NeaabyDriversBean nearbyDriversBean) {
-         if(nearbyDriversBean.isFoundDrivers()) {
-             List<User>nearbyDrivers=nearbyDriversBean.getListNearbyDrivers();
-             removeLastVisibleNMarker();
-             for (final User nearbyUser : nearbyDrivers) {
-                 UserLocation location = nearbyUser.getLocation();
-                 VechileDetail vechileDetail=nearbyUser.getVehicle_details();
-                 int vechile_id=vechileDetail.getVehicle_type_id();
-                 if (location != null && vechile_id==getVechileType()) {
-                     try {
-                         double lat = location.getLatitude();
-                         double lng = location.getLongitude();
-                         if (lat != 0.0 && lng != 0.0) {
-                             final LatLng driverLatLng = new LatLng(lat, lng);
-                             mActivity.runOnUiThread(new Runnable() {
-                                 @Override
-                                 public void run() {
-                                     Marker newMArker = mGoogleMap.addMarker(new MarkerOptions().position(driverLatLng).draggable(false).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_pink)));
-                                     newMArker.setTag(String.valueOf(nearbyUser.getId()));
-                                     lastVisibleMeakers.add(newMArker);
-                                 }
-                             });
-                         }
-                     } catch (NumberFormatException e) {
 
-                     }
-                 }
-             }
-         }else{
-             // remove the marker
-              removeLastVisibleNMarker();
-         }
-     }
+        if (nearbyDriversBean.isFoundDrivers()) {
+            List<User> nearbyDrivers = nearbyDriversBean.getListNearbyDrivers();
+            removeLastVisibleNMarker();
+            for (final User nearbyUser : nearbyDrivers) {
+                UserLocation location = nearbyUser.getLocation();
+                VechileDetail vechileDetail = nearbyUser.getVehicle_details();
+                int vechile_id = vechileDetail.getVehicle_type_id();
+                if (location != null && vechile_id == getVechileType()) {
+                    try {
+                        double lat = location.getLatitude();
+                        double lng = location.getLongitude();
+                        if (lat != 0.0 && lng != 0.0) {
+                            final LatLng driverLatLng = new LatLng(lat, lng);
+                            mActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
 
 
+                                    Marker newMArker = mGoogleMap.addMarker(new MarkerOptions().position(driverLatLng).draggable(false).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_green_marker)));
+                                    newMArker.setTag(String.valueOf(nearbyUser.getId()));
+                                    lastVisibleMeakers.add(newMArker);
+                                }
+                            });
+                        }
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } else {
+            // remove the marker
+            removeLastVisibleNMarker();
+        }
+    }
 
-     private void removeLastVisibleNMarker(){
-         if(lastVisibleMeakers!=null){
-             for(Marker marker:lastVisibleMeakers){
-                 marker.remove();
-             }
-         }
-         lastVisibleMeakers.clear();
-     }
+
+    private void removeLastVisibleNMarker() {
+        if (lastVisibleMeakers != null) {
+            for (Marker marker : lastVisibleMeakers) {
+                marker.remove();
+            }
+        }
+        lastVisibleMeakers.clear();
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mGoogleMap=googleMap;
+        mGoogleMap = googleMap;
         try {
             mGoogleMap.setMyLocationEnabled(true);
-        }catch (SecurityException e){
+        } catch (SecurityException e) {
 
         }
-        if(mCurrentLocation!=null){
-            LatLng latLng=new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
-            addlocationMArker(latLng,true,R.drawable.marker);
+        if (mCurrentLocation != null) {
+            LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            addlocationMArker(latLng, true, marker);
         }
 
         //set marker draglistener
@@ -515,18 +541,18 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
             @Override
             public void onMarkerDragEnd(Marker marker) {
-                Log.e(TAG,"drag end");
+
                 //set current location
                 mCurrentLocation.setLatitude(marker.getPosition().latitude);
-                mCurrentLocation.setLatitude(marker.getPosition().longitude);
+                mCurrentLocation.setLongitude(marker.getPosition().longitude);
                 // find the nearby drivers on location change
                 findNearbyDrivers(mCurrentLocation);
                 //set update postion to source location
                 setUpdatedPosition(0);
                 //save customer location
                 appPreference.saveCustomerLocation(marker.getPosition());
-                Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
-                GeoCodingService.getInstance(mActivity,marker.getPosition());
+                Progress.showprogress(mActivity, getString(R.string.progress_loading), false);
+                GeoCodingService.getInstance(mActivity, marker.getPosition());
             }
         });
         //on current location clicked icon
@@ -534,12 +560,12 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             @Override
             public boolean onMyLocationButtonClick() {
                 if (mLocationData != null) {
-                    mCurrentLocation=mLocationData.getLatKnowLocation();
-                    appPreference.saveCustomerLocation(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
+                    mCurrentLocation = mLocationData.getLatKnowLocation();
+                    appPreference.saveCustomerLocation(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()));
                     if (mCurrentLocation != null) {
                         mGoogleMap.clear();
                         LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-                        addlocationMArker(latLng, true, R.drawable.marker);
+                        addlocationMArker(latLng, true, marker);
                         setUpdatedPosition(0);
                         Progress.showprogress(mActivity, getString(R.string.progress_loading), false);
                         GeoCodingService.getInstance(mActivity, latLng);
@@ -554,102 +580,130 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
     /**
      * add marker on map
+     *
      * @param latLng
      * @param draggable
      */
-    private void addlocationMArker(LatLng latLng,boolean draggable ,int marker){
-        addlocationMarker(latLng, marker,mGoogleMap,draggable);
+    private void addlocationMArker(LatLng latLng, boolean draggable, int marker) {
+        addlocationMarker(latLng, marker, mGoogleMap, draggable);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
     }
 
-    private void enableNow(){
+    private void enableNow() {
 
-        if(txtReservation.isSelected()){
-            txtNow.setBackground(ContextCompat.getDrawable(mActivity,R.drawable.bg_now_btn));
-            txtNow.setTextColor(ContextCompat.getColor(mActivity,R.color.colorPrimaryDark));
-            txtReservation.setBackground(ContextCompat.getDrawable(mActivity,R.drawable.bg_reservation_btn));
-            txtReservation.setTextColor(ContextCompat.getColor(mActivity,android.R.color.white));
+        if (txtReservation.isSelected()) {
+            txtNow.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.bg_now_btn));
+            txtNow.setTextColor(ContextCompat.getColor(mActivity, R.color.colorPrimaryDark));
+            txtReservation.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.bg_reservation_btn));
+            txtReservation.setTextColor(ContextCompat.getColor(mActivity, android.R.color.white));
             txtNow.setSelected(true);
             txtReservation.setSelected(false);
         }
 
     }
 
-    private void enableReservation(){
-        if(txtNow.isSelected()){
-            txtReservation.setBackground(ContextCompat.getDrawable(mActivity,R.drawable.bg_now_btn));
-            txtReservation.setTextColor(ContextCompat.getColor(mActivity,R.color.colorPrimaryDark));
-            txtNow.setBackground(ContextCompat.getDrawable(mActivity,R.drawable.bg_reservation_btn));
-            txtNow.setTextColor(ContextCompat.getColor(mActivity,android.R.color.white));
+    private void enableReservation() {
+        if (txtNow.isSelected()) {
+            txtReservation.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.bg_now_btn));
+            txtReservation.setTextColor(ContextCompat.getColor(mActivity, R.color.colorPrimaryDark));
+            txtNow.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.bg_reservation_btn));
+            txtNow.setTextColor(ContextCompat.getColor(mActivity, android.R.color.white));
             txtReservation.setSelected(true);
             txtNow.setSelected(false);
-        }showDatePicker();
+        }
+        showDatePicker();
     }
 
 
     /**
-     *
      * @return the vechile type/return -1 if not selected
      */
-    private  int getVechileType(){
-        if(imgTypeCar.isSelected()){
+    private int getVechileType() {
+        if (imgTypeCar.isSelected()) {
             return 3;
         }
-        if(imgTypeBike.isSelected()){
+        if (imgTypeBike.isSelected()) {
             return 2;
         }
-        if(imgTypeCycle.isSelected()){
+        if (imgTypeCycle.isSelected()) {
             return 1;
         }
-        if(imgTypeTruck.isSelected()){
+        if (imgTypeTruck.isSelected()) {
             return 4;
         }
-        return  -1;
+        return -1;
     }
 
-    private void setBackgroundVehicle(ImageView view){
-        if(view.isSelected()){
-            view.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
-            view.setSelected(false);
-            isVehicleSelected=false;
-        }else{
-            view.setBackground(ContextCompat.getDrawable(mActivity,R.drawable.selection_ring));
+    private void setBackgroundVehicle(ImageView view) {
+
+        int id = view.getId();
+        if (id == R.id.imgTypeCycle) {
+
+            view.setImageResource(R.drawable.bike_selected_icon);
             view.setSelected(true);
-            isVehicleSelected=true;
-        }
-        int id=view.getId();
-        if(id==R.id.imgTypeCycle){
-            imgTypeCar.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
-            imgTypeBike.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
-            imgTypeTruck.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
+            isVehicleSelected = true;
+
+            imgTypeCar.setImageResource(R.drawable.car_icon);
+            imgTypeBike.setImageResource(R.drawable.moto_icon);
+            imgTypeTruck.setImageResource(R.drawable.truck_icon);
+
             imgTypeCar.setSelected(false);
             imgTypeBike.setSelected(false);
             imgTypeTruck.setSelected(false);
 
-        }else if(id==R.id.imgTypeBike){
-            imgTypeCar.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
-            imgTypeCycle.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
-            imgTypeTruck.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
+        } else if (id == R.id.imgTypeBike) {
+
+            view.setImageResource(R.drawable.moto_selected_icon);
+            view.setSelected(true);
+            isVehicleSelected = true;
+
+            imgTypeCar.setImageResource(R.drawable.car_icon);
+            imgTypeCycle.setImageResource(R.drawable.bike_icon);
+            imgTypeTruck.setImageResource(R.drawable.truck_icon);
+
             imgTypeCar.setSelected(false);
             imgTypeCycle.setSelected(false);
             imgTypeTruck.setSelected(false);
 
-        }else if(id==R.id.imgTypeCar){
-            imgTypeCycle.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
-            imgTypeBike.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
-            imgTypeTruck.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
+        } else if (id == R.id.imgTypeCar) {
+
+            view.setImageResource(R.drawable.car_selected_icon);
+            view.setSelected(true);
+            isVehicleSelected = true;
+
+            imgTypeCycle.setImageResource(R.drawable.bike_icon);
+            imgTypeBike.setImageResource(R.drawable.moto_icon);
+            imgTypeTruck.setImageResource(R.drawable.truck_icon);
+
             imgTypeCycle.setSelected(false);
             imgTypeBike.setSelected(false);
             imgTypeTruck.setSelected(false);
-        }else{
-            imgTypeCar.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
-            imgTypeBike.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
-            imgTypeCycle.setBackgroundColor(ContextCompat.getColor(mActivity,android.R.color.transparent));
+        } else {
+/*
+            if(view.isSelected()){
+                view.setImageResource(R.drawable.truck_icon);
+                view.setSelected(false);
+                isVehicleSelected=false;
+            }else{
+                view.setImageResource(R.drawable.truck_selected_icon);
+                view.setSelected(true);
+                isVehicleSelected=true;
+            }*/
+
+            view.setImageResource(R.drawable.truck_selected_icon);
+            view.setSelected(true);
+            isVehicleSelected = true;
+
+            imgTypeCar.setImageResource(R.drawable.car_icon);
+            imgTypeBike.setImageResource(R.drawable.moto_icon);
+            imgTypeCycle.setImageResource(R.drawable.bike_icon);
+
+
             imgTypeCar.setSelected(false);
             imgTypeBike.setSelected(false);
             imgTypeCycle.setSelected(false);
         }
-        if(view.isSelected()){
+        if (view.isSelected()) {
             findNearbyDrivers(mCurrentLocation);
         }
     }
@@ -657,34 +711,33 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     @Override
     public void onitemclicked(View view, int position) {
 
-        if(calMoveToPlaceAutoCompleteActivity) {
+        if (calMoveToPlaceAutoCompleteActivity) {
             setUpdatedPosition(position);
-            calMoveToPlaceAutoCompleteActivity=false;
+            calMoveToPlaceAutoCompleteActivity = false;
             try {
-                Intent intent =
-                        new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                                .build(mActivity);
+                Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).build(mActivity);
                 startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
             } catch (GooglePlayServicesRepairableException e) {
-                calMoveToPlaceAutoCompleteActivity=true;
+                calMoveToPlaceAutoCompleteActivity = true;
 
             } catch (GooglePlayServicesNotAvailableException e) {
-                calMoveToPlaceAutoCompleteActivity=true;
+                calMoveToPlaceAutoCompleteActivity = true;
             }
         }
     }
 
     /**
      * callback for frequent address clicked
-     * @param view view clicked
+     *
+     * @param view     view clicked
      * @param position postion from the adapter
      */
     @Override
     public void onfrequentAddressclicked(View view, int position) {
         setUpdatedPosition(position);
-        Intent favIntent=new Intent(mActivity, FavouriteActivity.class);
-        favIntent.putExtra(Constants.KEY_IS_FAVOURITE_SELECTABLE,false);
-        startActivityForResult(favIntent,REQUEST_FAVOURITE);
+        Intent favIntent = new Intent(mActivity, FavouriteActivity.class);
+        favIntent.putExtra(Constants.KEY_IS_FAVOURITE_SELECTABLE, false);
+        startActivityForResult(favIntent, REQUEST_FAVOURITE);
     }
 
     @Override
@@ -706,15 +759,15 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            PickDropAddress favouritePickDropAddress= listAddressData.get(position);
+                            PickDropAddress favouritePickDropAddress = listAddressData.get(position);
                             // Thread and Handler using Geocoder
-                            Progress.showprogress(mActivity,getString(R.string.str_marking_fav),false);
+                            Progress.showprogress(mActivity, getString(R.string.str_marking_fav), false);
                             addToFavourite(favouritePickDropAddress);
 
 
                         }
                     }).create().show();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -722,15 +775,21 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     @Override
     public void onCloseButtomClicked(View view, int postion) {
         setUpdatedPosition(postion);
-        if(listAddressData!=null){
+        if (listAddressData != null) {
             try {
                 PickDropAddress pickAddressToRemove = listAddressData.get(getUpdatedPosition());
                 listAddressData.remove(pickAddressToRemove);
-                if(addressAdapter!=null){
+
+                if (addressAdapter != null) {
                     addressAdapter.notifyDataSetChanged();
                 }
-            }catch (IndexOutOfBoundsException e){
-                Toast.makeText(mActivity,"something went wrong.",Toast.LENGTH_SHORT).show();
+                // check condition to visible add more button further
+                Log.e("show add more...", listAddressData.size() + "");
+                if (listAddressData.size() == 3) {
+                    imageViewLoadMoreAddress.setVisibility(View.VISIBLE);
+                }
+            } catch (IndexOutOfBoundsException e) {
+                Toast.makeText(mActivity, "something went wrong.", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -739,68 +798,75 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
-            calMoveToPlaceAutoCompleteActivity=true;
+            calMoveToPlaceAutoCompleteActivity = true;
             if (resultCode == mActivity.RESULT_OK) {
-                Progress.showprogress(mActivity,"Please wait..",false);
+                Progress.showprogress(mActivity, "Please wait..", false);
                 try {
                     Place place = PlaceAutocomplete.getPlace(mActivity, data);
-                    Log.i(TAG, "Place: " + place.getName()+ ""+place.getAddress());
+                    Log.i(TAG, "Place: " + place.getName() + "" + place.getAddress());
                     setAddress(place, getUpdatedPosition());
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(mActivity, data);
-                mActivity.showSnackbar(status.getStatusMessage(),0);
-                }
-                else if (resultCode == RESULT_CANCELED) {
-                }
-        }else if(requestCode==REQUEST_FAVOURITE && resultCode==mActivity.RESULT_OK){
-            if(data!=null){
-                PickDropAddress favouriteSelectedAddress=data.getParcelableExtra("fav_data");
-                setFavouriteSelected(favouriteSelectedAddress,getUpdatedPosition());
+                mActivity.showSnackbar(status.getStatusMessage(), 0);
+            } else if (resultCode == RESULT_CANCELED) {
+            }
+        } else if (requestCode == REQUEST_FAVOURITE && resultCode == mActivity.RESULT_OK) {
+            if (data != null) {
+                PickDropAddress favouriteSelectedAddress = data.getParcelableExtra("fav_data");
+                setFavouriteSelected(favouriteSelectedAddress, getUpdatedPosition());
             }
         }
     }
 
     /**
      * set address from favourite to list
+     *
      * @param favouriteSelected FavouriteAddress
-     * @param position position
+     * @param position          position
      */
-    private void setFavouriteSelected(PickDropAddress favouriteSelected,int position){
-        listAddressData.set(getUpdatedPosition(),favouriteSelected);
+    private void setFavouriteSelected(PickDropAddress favouriteSelected, int position) {
+        listAddressData.set(getUpdatedPosition(), favouriteSelected);
         addressAdapter.notifyDataSetChanged();
-        if(position>=DESTINATION_SELECTED){
+        if (position >= DESTINATION_SELECTED) {
             btnEstimateCost.setVisibility(View.VISIBLE);
         }
+
         // add marker
-        if(getUpdatedPosition()==0) {
+        if (getUpdatedPosition() == 0) {
+
+            mCurrentLocation.setLatitude(favouriteSelected.getLatitude());
+            mCurrentLocation.setLongitude(favouriteSelected.getLongitude());
+            findNearbyDrivers(mCurrentLocation);
+
             mGoogleMap.clear();
             LatLng favouriteLatLng = new LatLng(favouriteSelected.getLatitude(), favouriteSelected.getLongitude());
-            addlocationMArker(favouriteLatLng, true,R.drawable.marker);
+            addlocationMArker(favouriteLatLng, true, marker);
         }
     }
+
     /**
-     *
-     * @param place place from autocompleter
+     * @param place    place from autocompleter
      * @param position postion of list to be refreshed.
      */
-    private void setAddress(Place place ,int position){
+    private void setAddress(Place place, int position) {
 
-            PickDropAddress pickDropAddress=listAddressData.get(position);
-            pickDropAddress.setStreetAddress(place.getAddress().toString());
-            pickDropAddress.setFavorite(false);
-            pickDropAddress.setLatitude(place.getLatLng().latitude);
-            pickDropAddress.setLongitude(place.getLatLng().longitude);
-            pickDropAddress.setAddress_label(place.getName().toString());
-            listAddressData.set(position, pickDropAddress);
-            addressAdapter.notifyDataSetChanged();
-            if(position>=DESTINATION_SELECTED){
-                btnEstimateCost.setVisibility(View.VISIBLE);
-            }
+        PickDropAddress pickDropAddress = listAddressData.get(position);
+        pickDropAddress.setStreetAddress(place.getAddress().toString());
+        pickDropAddress.setFavorite(false);
+        pickDropAddress.setLatitude(place.getLatLng().latitude);
+        pickDropAddress.setLongitude(place.getLatLng().longitude);
+        pickDropAddress.setAddress_label(place.getName().toString());
+        listAddressData.set(position, pickDropAddress);
+        addressAdapter.notifyDataSetChanged();
+        if (position >= DESTINATION_SELECTED) {
+            btnEstimateCost.setVisibility(View.VISIBLE);
+        }
         //build address using place id .................
-           BuildAddressService.buildAddresses(mActivity,place.getId(),false);
+        BuildAddressService.buildAddresses(mActivity, place.getId(), false);
+
 
     }
 
@@ -808,13 +874,13 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     /**
      * show date picker
      */
-    private void showDatePicker(){
+    private void showDatePicker() {
         Calendar now = Calendar.getInstance();
         DatePickerDialog dpd = DatePickerDialog.newInstance(
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-                        String date =mActivity.formatDate(year,monthOfYear,dayOfMonth);
+                        String date = mActivity.formatDate(year, monthOfYear, dayOfMonth);
                         showTimePicker(date);
                     }
                 },
@@ -823,10 +889,17 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                 now.get(Calendar.DAY_OF_MONTH)
 
         );
-        // set minimum date for future booking Reservation.
+        // set maximum date for future booking Reservation.
         Calendar nextDaycalendar = Calendar.getInstance();
-        nextDaycalendar.add(Calendar.DATE, 1);
-        dpd.setMinDate(nextDaycalendar);
+        nextDaycalendar.add(Calendar.DATE, 30);
+
+        // set minimum date for future booking Reservation.
+        Calendar lastDayCalender = Calendar.getInstance();
+        nextDaycalendar.add(Calendar.DATE, 0);
+
+
+        dpd.setMinDate(lastDayCalender);
+        dpd.setMaxDate(nextDaycalendar);
 
 
         dpd.setTitle("Select date");
@@ -836,26 +909,27 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
     /**
      * show time picker
+     *
      * @param date date selected from date picker
      */
-    private void showTimePicker(final String date){
+    private void showTimePicker(final String date) {
+
         Calendar now = Calendar.getInstance();
         TimePickerDialog dpd = TimePickerDialog.newInstance(
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
 
-                        Log.e("dateTime",date+" "+hourOfDay+":"+minute+":"+second);
-                        String dateTime=date+" "+hourOfDay+":"+minute+":"+second;
-                        if(mDateUtils.getUtcDateTime(dateTime)!=null){
+                        String dateTime = date + " " + hourOfDay + ":" + minute + ":" + second;
+                        if (mDateUtils.getUtcDateTime(dateTime) != null) {
                             //set future scheduled date
-                            futureDataTime=mDateUtils.getUtcDateTime(dateTime);
+                            futureDataTime = mDateUtils.getUtcDateTime(dateTime);
                         }
                     }
                 },
                 now.get(Calendar.HOUR_OF_DAY),
                 now.get(Calendar.MINUTE),
-                now.get(Calendar.SECOND),true
+                now.get(Calendar.SECOND), true
         );
         dpd.show(mActivity.getFragmentManager(), "Datepickerdialog");
     }
@@ -863,39 +937,39 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
     /**
      * build the params of estimate service
+     *
      * @return estimate service param
      */
-    private EstimateServiceParams buildEstimateServiceParams(){
-        if(listAddressData!=null){
-        PickDropAddress pickAddress=listAddressData.get(0);
-        dropAddressList.clear();
-        for(int i=1;i<listAddressData.size();i++){
-            PickDropAddress dropAddress=listAddressData.get(i);
-            if(!TextUtils.isEmpty(dropAddress.getStreetAddress())) {
-                dropAddressList.add(dropAddress);
+    private EstimateServiceParams buildEstimateServiceParams() {
+        if (listAddressData != null) {
+            PickDropAddress pickAddress = listAddressData.get(0);
+            dropAddressList.clear();
+            for (int i = 1; i < listAddressData.size(); i++) {
+                PickDropAddress dropAddress = listAddressData.get(i);
+                if (!TextUtils.isEmpty(dropAddress.getStreetAddress())) {
+                    dropAddressList.add(dropAddress);
+                }
             }
-        }
-        DateUtils dateUtils=DateUtils.getInstance();
-        Service service =new Service();
-        service.setVehicle_type_id(getVechileType());
-        service.setPick_address(pickAddress);
-        service.setDrop_addresses(dropAddressList);
-        if(txtReservation.isSelected()){
-            //future order
-            service.setDate(futureDataTime);
-            service.setDate_time(futureDataTime);
-        }else {
-            //current order
-            if (dateUtils.getUtcDateTime() != null) {
-                Log.e("date", dateUtils.getUtcDateTime());
-                //server will pick default time in case of current booking
-               // service.setDate(dateUtils.getUtcDateTime());
-               // service.setDate_time(dateUtils.getUtcDateTime());
-           }
-        }
-        EstimateServiceParams estimateParams=new EstimateServiceParams();
-        estimateParams.setService(service);
-        return  estimateParams;
+            DateUtils dateUtils = DateUtils.getInstance();
+            Service service = new Service();
+            service.setVehicle_type_id(getVechileType());
+            service.setPick_address(pickAddress);
+            service.setDrop_addresses(dropAddressList);
+            if (txtReservation.isSelected()) {
+                //future order
+                service.setDate(futureDataTime);
+                service.setDate_time(futureDataTime);
+            } else {
+                //current order
+                if (dateUtils.getUtcDateTime() != null) {
+                    //server will pick default time in case of current booking
+                    // service.setDate(dateUtils.getUtcDateTime());
+                    // service.setDate_time(dateUtils.getUtcDateTime());
+                }
+            }
+            EstimateServiceParams estimateParams = new EstimateServiceParams();
+            estimateParams.setService(service);
+            return estimateParams;
         }
         return null;
     }
@@ -903,12 +977,13 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
     /**
      * api call for estimating  the order
+     *
      * @param estimateServiceParams params sent to server
      */
-    private void estimateService(final EstimateServiceParams estimateServiceParams){
-        Progress.showprogress(mActivity,getString(R.string.progress_estimate),false);
-        String token=appPreference.getUserDetails().getToken();
-        ServiceRequest serviceRequest=new ServiceRequest();
+    private void estimateService(final EstimateServiceParams estimateServiceParams) {
+        Progress.showprogress(mActivity, getString(R.string.progress_estimate), false);
+        String token = appPreference.getUserDetails().getToken();
+        ServiceRequest serviceRequest = new ServiceRequest();
         serviceRequest.estimateService(token, estimateServiceParams, new ApiCallback() {
             @Override
             public void onRequestSuccess(BaseBean body) {
@@ -917,23 +992,25 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
                     ServiceBean serviceBean = (ServiceBean) body;
                     Estimate estimate = serviceBean.getEstimate();
                     CardData defaultCardData = serviceBean.getDefault_card();
-                    Intent confirmServiceIntent=new Intent(mActivity, ConfirmServiceActivity.class);
-                    confirmServiceIntent.putExtra(Constants.KEY_ESTIMATE_DATA,estimate);
-                    confirmServiceIntent.putExtra(Constants.KEY_CARD_DATA,defaultCardData);
-                    confirmServiceIntent.putExtra(Constants.KEY_TRANSACTION_ID,serviceBean.getTransaction_id());
-                    confirmServiceIntent.putExtra(Constants.KEY_PARAM_DATA,estimateServiceParams.getService());
+
+                    Intent confirmServiceIntent = new Intent(mActivity, ConfirmServiceActivity.class);
+                    confirmServiceIntent.putExtra(Constants.KEY_ESTIMATE_DATA, estimate);
+                    confirmServiceIntent.putExtra(Constants.KEY_CARD_DATA, defaultCardData);
+                    confirmServiceIntent.putExtra(Constants.KEY_TRANSACTION_ID, serviceBean.getTransaction_id());
+                    confirmServiceIntent.putExtra(Constants.KEY_PARAM_DATA, estimateServiceParams.getService());
                     startActivity(confirmServiceIntent);
-                }catch (NullPointerException e){
+                } catch (NullPointerException e) {
 
                 }
             }
+
             @Override
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
-                mActivity.showSnackbar(message,0);
-                if(message.equals(Constants.AUTH_ERROR)){
+                mActivity.showSnackbar(message, 0);
+                if (message.equals(Constants.AUTH_ERROR)) {
                     mActivity.logOutUser();
-               }
+                }
             }
         });
 
@@ -941,40 +1018,42 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
     /**
      * find the nearby driver with respect to vecchile
+     *
      * @param location
      */
-    private void findNearbyDrivers(Location location){
-        int vechile_id=getVechileType();
-        if(vechile_id!=-1 && vechile_id!=0 && location!=null) {
-            FindNearbyDrivers.findDrivers(mActivity, location.getLatitude(), location.getLongitude(),"",String.valueOf(vechile_id));
+    private void findNearbyDrivers(Location location) {
+        int vechile_id = getVechileType();
+        if (vechile_id != -1 && vechile_id != 0 && location != null) {
+            FindNearbyDrivers.findDrivers(mActivity, location.getLatitude(), location.getLongitude(), "", String.valueOf(vechile_id));
         }
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mActivity.showSnackbar(connectionResult.getErrorMessage(),0);
+        mActivity.showSnackbar(connectionResult.getErrorMessage(), 0);
     }
 
 
     @Override
     public void onLocation(Location location) {
-     if(location!=null){
-         mCurrentLocation=location;
-         LatLng latLng=new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
-         addlocationMArker(latLng,true,R.drawable.marker);
-         //set the source when we get the location first time
-         //set update postion to source location
-         setUpdatedPosition(0);
-         LatLng latLng1=new LatLng(location.getLatitude(),location.getLongitude());
-         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
-         GeoCodingService.getInstance(mActivity,latLng1);
 
-         // save customer Location
-         appPreference.saveCustomerLocation(latLng1);
-         // find nearby drivers
-         findNearbyDrivers(mCurrentLocation);
+        if (location != null) {
+            mCurrentLocation = location;
+            LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            addlocationMArker(latLng, true, marker);
+            //set the source when we get the location first time
+            //set update postion to source location
+            setUpdatedPosition(0);
+            LatLng latLng1 = new LatLng(location.getLatitude(), location.getLongitude());
+            Progress.showprogress(mActivity, getString(R.string.progress_loading), false);
+            GeoCodingService.getInstance(mActivity, latLng1);
 
-     }
+            // save customer Location
+            appPreference.saveCustomerLocation(latLng1);
+            // find nearby drivers
+            findNearbyDrivers(mCurrentLocation);
+
+        }
     }
 
 
@@ -984,22 +1063,20 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     }
 
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
+        switch (requestCode) {
             case BookServiceActivity.REQUEST_LOCATION_PERMISSION:
-                if(mActivity.isPermissionGranted(grantResults)){
-                    mLocationData=new LocationData(mActivity,this);
+                if (mActivity.isPermissionGranted(grantResults)) {
+                    mLocationData = new LocationData(mActivity, this);
                     initMap();
-                }else{
-                    Toast.makeText(mActivity,getString(R.string.str_permission_denied),Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(mActivity, getString(R.string.str_permission_denied), Toast.LENGTH_LONG).show();
                 }
                 break;
         }
     }
-
 
 
     /**
@@ -1007,28 +1084,28 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
      *
      * @param pickDropAddress PickDropAddress
      */
-    private void addToFavourite(final PickDropAddress pickDropAddress){
+    private void addToFavourite(final PickDropAddress pickDropAddress) {
 
-        AddFavouriteBody favouriteBody=new AddFavouriteBody();
+        AddFavouriteBody favouriteBody = new AddFavouriteBody();
         favouriteBody.setAddress(pickDropAddress);
-        String token=appPreference.getUserDetails().getToken();
-        FavouriteRequest favouriteRequest=new FavouriteRequest();
+        String token = appPreference.getUserDetails().getToken();
+        FavouriteRequest favouriteRequest = new FavouriteRequest();
         favouriteRequest.addToFavourite(token, favouriteBody, new ApiCallback() {
             @Override
             public void onRequestSuccess(BaseBean body) {
                 Progress.dismissProgress();
-                mActivity.showSnackbar(body.getMessage(),0);
+                mActivity.showSnackbar(body.getMessage(), 0);
                 // make changes to pickdropAddress
                 pickDropAddress.setFavorite(true);
-                listAddressData.set(getUpdatedPosition(),pickDropAddress);
+                listAddressData.set(getUpdatedPosition(), pickDropAddress);
                 addressAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onRequestFailed(String message) {
-                mActivity.showSnackbar(message,0);
+                mActivity.showSnackbar(message, 0);
                 Progress.dismissProgress();
-                if(message.equals(Constants.AUTH_ERROR)){
+                if (message.equals(Constants.AUTH_ERROR)) {
                     mActivity.logOutUser();
                 }
             }
@@ -1037,58 +1114,77 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
 
 
     @Override
-    public void onDataRecieved(final String driver_id, final double latitude, final double longitude,final String vechile_id) {
-        final LatLng driverLAtLng=new LatLng(latitude,longitude);
-        Log.e("data receive",driver_id + " "+latitude +" "+longitude);
-        int vechile_type_id=Integer.parseInt(vechile_id);
-        if(lastVisibleMeakers!=null && vechile_type_id!=0 && getVechileType()==vechile_type_id){
-             final Marker marker =findMarkerByTag(driver_id);
-             if(marker!=null ){
-                 //marker already exists
-                 mActivity.runOnUiThread(new Runnable() {
-                     @Override
-                     public void run() {
-                         if(latitude!=0.0 && longitude!=0.0) {
-                             marker.setPosition(driverLAtLng);
-                         }else{
-                             marker.remove();
-                             lastVisibleMeakers.remove(marker);
-                         }
-                     }
-                 });
+    public void onDataRecieved(final String driver_id, final double latitude, final double longitude, final String vechile_id,String driverStatus, String serviceId) {
+        final LatLng driverLAtLng = new LatLng(latitude, longitude);
+        Log.e("data receive in", driver_id + " " + latitude + " " + longitude);
+        // Toast.makeText(mActivity,"data received...."+driver_id+" "+latitude+" "+longitude,Toast.LENGTH_LONG).show();
+        int vechile_type_id = Integer.parseInt(vechile_id);
+        if (lastVisibleMeakers != null && vechile_type_id != 0 && getVechileType() == vechile_type_id) {
+            Log.e("Tag", "1");
 
-             }else{
-                 //create a new marker
-                 mActivity.runOnUiThread(new Runnable() {
-                     @Override
-                     public void run() {
-                         Marker newMArker=  mGoogleMap.addMarker(new MarkerOptions().position(driverLAtLng).draggable(false).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_pink)));
-                         newMArker.setTag(driver_id);
-                         lastVisibleMeakers.add(newMArker);
-                     }
-                 });
+            final Marker marker = findMarkerByTag(driver_id);
 
-             }
-        }else{
+            if (marker != null) {
+                //marker already exists
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (latitude != 0.0 && longitude != 0.0) {
+                            marker.setPosition(driverLAtLng);
+                        } else {
+                            marker.remove();
+                            lastVisibleMeakers.remove(marker);
+                        }
+                    }
+                });
+
+            } else {
+                // Toast.makeText(mActivity,"create new marker...."+driver_id+" "+latitude+" "+longitude,Toast.LENGTH_LONG).show();
+                //create a new marker
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Marker newMArker = mGoogleMap.addMarker(new MarkerOptions().position(driverLAtLng).draggable(false).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_green_marker)));
+                        newMArker.setTag(driver_id);
+                        lastVisibleMeakers.add(newMArker);
+
+                        //Toast.makeText(mActivity,"add new marker....",Toast.LENGTH_LONG).show();
+                    }
+                });
+
+            }
+        } else {
             try {
+
                 lastVisibleMeakers.clear();
-            }catch (NullPointerException e){
-                lastVisibleMeakers=new ArrayList<>();
+
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                lastVisibleMeakers = new ArrayList<>();
             }
 
         }
     }
 
+   /* @Override
+    public void stopDriveUpdateService() {
+        Log.e("Service", "Stop");
+        stopService();
+        Log.e("Service", "Started");
+        if (isAdded())
+            bindService(getActivity());
+    }*/
 
-    private Marker findMarkerByTag(String tag){
+
+    private Marker findMarkerByTag(String tag) {
         try {
             for (Marker marker : lastVisibleMeakers) {
                 if (marker.getTag().equals(tag)) {
                     return marker;
                 }
             }
-        }catch (NullPointerException e){
-            lastVisibleMeakers=new ArrayList<>();
+        } catch (NullPointerException e) {
+            lastVisibleMeakers = new ArrayList<>();
         }
         return null;
     }
@@ -1101,11 +1197,11 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
             mGoogleApiClient.stopAutoManage(mActivity);
             mGoogleApiClient.disconnect();
         }
-        if(mLocationData!=null){
-            mLocationData=null;
+        if (mLocationData != null) {
+            mLocationData = null;
         }
-        if(addressAdapter!=null){
-            addressAdapter=null;
+        if (addressAdapter != null) {
+            addressAdapter = null;
         }
     }
 
@@ -1113,13 +1209,17 @@ public class SelectVechileFragment extends BaseFragment implements OnitemClickLi
     @Override
     public void onStop() {
         super.onStop();
-        if(mBound){
+        stopService();
+    }
+
+    private void stopService() {
+        if (mBound) {
             //unbind the service with activity
             mActivity.unbindService(mConnection);
             //stop service
-            Intent intent=new Intent(mActivity,UpdateDriversOnMapService.class);
+            Intent intent = new Intent(mActivity, UpdateDriversOnMapService.class);
             mActivity.stopService(intent);
-            mBound=false;
+            mBound = false;
         }
     }
 }

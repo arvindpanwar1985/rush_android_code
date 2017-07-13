@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.listners.OnHeaderButtonClickListners;
+import com.hoffmans.rush.listners.OnRecordsItemClickListeners;
 import com.hoffmans.rush.model.DriverDetail;
 import com.hoffmans.rush.model.Record;
 import com.hoffmans.rush.model.ServiceData;
@@ -22,24 +23,36 @@ import com.karumi.headerrecyclerview.HeaderRecyclerViewAdapter;
 
 public class UpcomingAdapter extends HeaderRecyclerViewAdapter<RecyclerView.ViewHolder, ServiceData,Record, DriverDetail>  {
 
-    private OnHeaderButtonClickListners onHeaderButtonClickListners;
+    private OnHeaderButtonClickListners onHeaderButtonClickListners;OnRecordsItemClickListeners itemListener;
     private static final String LOG_TAG = UpcomingAdapter.class.getSimpleName();
     private Context mContext;
-     public UpcomingAdapter(Context context ,OnHeaderButtonClickListners listener){
+     public UpcomingAdapter(Context context , OnHeaderButtonClickListners listener, OnRecordsItemClickListeners listeners){
         mContext=context;
         onHeaderButtonClickListners=listener;
+         itemListener=listeners;
     }
-    @Override protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
+    @Override protected RecyclerView.ViewHolder onCreateHeaderViewHolder(final ViewGroup parent, int viewType) {
         LayoutInflater inflater = getLayoutInflater(parent);
         View   headerView = inflater.inflate(R.layout.header_upcoming, parent, false);
-        return new HeaderViewHolder(headerView,onHeaderButtonClickListners);
+        return new HeaderViewHolder(headerView, onHeaderButtonClickListners, new OnRecordsItemClickListeners() {
+            @Override
+            public void onRecordsItemClicked(int position) {
+                itemListener.onRecordsItemClicked(position);
+            }
+        });
     }
 
 
-    @Override protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
+    @Override protected RecyclerView.ViewHolder onCreateItemViewHolder(final ViewGroup parent, int viewType) {
         LayoutInflater inflater = getLayoutInflater(parent);
         View characterView = inflater.inflate(R.layout.row_driver_records, parent, false);
-        return new CharacterViewHolder(characterView);
+        return new CharacterViewHolder(characterView, new OnRecordsItemClickListeners() {
+            @Override
+            public void onRecordsItemClicked(int position) {
+
+                itemListener.onRecordsItemClicked(position);
+            }
+        });
     }
 
 
@@ -55,7 +68,7 @@ public class UpcomingAdapter extends HeaderRecyclerViewAdapter<RecyclerView.View
     @Override protected void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
         Record record = getItem(position);
         CharacterViewHolder characterViewHolder = (CharacterViewHolder) holder;
-        characterViewHolder.render(record);
+        characterViewHolder.render(record,position);
     }
 
 

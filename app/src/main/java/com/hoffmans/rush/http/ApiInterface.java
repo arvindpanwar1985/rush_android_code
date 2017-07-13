@@ -20,6 +20,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
+import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
 
@@ -35,7 +36,9 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("/api/user/oauthRegister")
-    Call<ResponseBody> loginViaSocialNetwork(@Field("uid") String socialId,@Field("first_name") String password,@Field("last_name") String last_name,@Field("email") String email,@Field("provider") String provider,@Field("profile_url") String picture,@Field("uuid") String uuid,@Field("type") String type,@Field("time_zone") String time_zone);
+    Call<ResponseBody> loginViaSocialNetwork(@Field("uid") String socialId,@Field("first_name") String password,@Field("last_name") String last_name,
+                                             @Field("email") String email,@Field("provider") String provider,@Field("profile_url") String picture,
+                                             @Field("udid") String uuid,@Field("device_type") String type,@Field("time_zone") String time_zone);
 
     @Multipart
     @POST("/api/user/register")
@@ -49,9 +52,10 @@ public interface ApiInterface {
     @POST("/api/user/forgot_password")
     Call<ResponseBody> forgotPassword(@Field("email") String email);
 
-    @FormUrlEncoded
-    @POST("/api/creditcard/addCard")
-    Call<ResponseBody> addCreditCard(@Header("Authorization")String authorization,@Field("payment_method_nonce") String payment_method_nonce);
+
+   @POST("/api/creditcard/addCard")
+   Call<ResponseBody> addPayPalCreditCard(@Header("Authorization")String authorization, @Body HashMap<String,Object> cardDetails);
+
 
     @Multipart
     @POST("/api/user/profile_update")
@@ -61,8 +65,9 @@ public interface ApiInterface {
     @GET("/api/currencies/all_currency_symbols")
     Call<ResponseBody> getCurrency();
 
+
     @GET("/api/creditcard/list_cards")
-    Call<ResponseBody> getCardList(@Header("Authorization")String authorization);
+    Call<ResponseBody> getPayPalCardList(@Header("Authorization")String authorization);
 
 
     @POST("/api/services/estimate_service")
@@ -90,15 +95,19 @@ public interface ApiInterface {
     Call<ResponseBody> getPlacesDetails(@QueryMap(encoded = true) Map<String, String> params);
 
 
+
     @GET("/api/creditcard/delete_card")
-    Call<ResponseBody> deleteCard(@Header("Authorization")String authorization,@QueryMap(encoded = true) Map<String, String> params);
+    Call<ResponseBody> deletePayPalCard(@Header("Authorization")String authorization,@QueryMap(encoded = true) Map<String, String> params);
 
     @FormUrlEncoded
     @POST("/api/creditcard/default_card")
-    Call<ResponseBody> defaultCard(@Header("Authorization")String authorization,@Field("payment_method_token") String payment_method_Token);
+    Call<ResponseBody> defaultPayPalCard(@Header("Authorization")String authorization,@Field("card_id") String cardId);
 
     @GET("/api/user/profile")
     Call<ResponseBody> getProfile(@Header("Authorization")String authorization);
+
+    @GET("api/drivers/driver_pending_service")
+    Call<ResponseBody> getPendingRequest(@Header("Authorization")String authorization);
 
     @FormUrlEncoded
     @POST("/api/drivers/update_driver_status")
@@ -134,7 +143,14 @@ public interface ApiInterface {
 
     @POST("/api/rate")
     Call<ResponseBody>rateDriver(@Header("Authorization")String authorization , @Body RatingParam param);
+
     @FormUrlEncoded
     @POST("/api/driver_location/driver_locations")
     Call<ResponseBody>nearbyDrivers(@Header("Authorization")String authorization,@Field("lat")String lat,@Field("long")String lng,@Field("radius") String radius,@Field("vehicle_type_id")String vechile_id);
+
+    @GET("api/services/track_driver")
+    Call<ResponseBody> getTrackDriver(@Header("Authorization")String authorization, @Query("service_id") int id);
+
+
+
 }

@@ -35,6 +35,7 @@ public class DateTime implements Parcelable {
         this.time = time;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -54,7 +55,7 @@ public class DateTime implements Parcelable {
         this.time = in.readString();
     }
 
-    public static final Parcelable.Creator<DateTime> CREATOR = new Parcelable.Creator<DateTime>() {
+    public static final Creator<DateTime> CREATOR = new Creator<DateTime>() {
         @Override
         public DateTime createFromParcel(Parcel source) {
             return new DateTime(source);

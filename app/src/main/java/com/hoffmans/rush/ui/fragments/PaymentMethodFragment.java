@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,19 +14,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.braintreepayments.api.BraintreeFragment;
-import com.braintreepayments.api.exceptions.InvalidArgumentException;
-import com.braintreepayments.api.models.CardBuilder;
-import com.braintreepayments.api.models.PaymentMethodNonce;
+import com.google.gson.JsonObject;
 import com.hoffmans.rush.R;
 import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.http.request.PaymentRequest;
 import com.hoffmans.rush.listners.ApiCallback;
-import com.hoffmans.rush.listners.BrainTreeHandler;
 import com.hoffmans.rush.model.Card;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.BookServiceActivity;
-import com.hoffmans.rush.ui.activities.LoginActivity;
 import com.hoffmans.rush.utils.AppPreference;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
@@ -40,15 +37,22 @@ import com.hoffmans.rush.widgets.MonthYearPicker;
  * Use the {@link PaymentMethodFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PaymentMethodFragment extends BaseFragment implements View.OnClickListener ,BrainTreeHandler {
+public class PaymentMethodFragment extends BaseFragment implements View.OnClickListener{
 
     private static final String ARG_PARAM1 = "param1";
+    private static final String CARD_HOLDER_NAME="cardholder_name";
+    private static final String CARD_NUMBER="card_number";
+    private static final String CARD_TYPE="card_type";
+    private static final String EXPIRATION_MONTH="expiration_month";
+    private static final String EXPIRATION_YEAR="expiration_year";
+    private static final String CVV="cvv";
     private User user;
     private EditText edtCardNumber,edtEdtTitular,edtCvv;
     private TextView txtExpiry;
     private Button btnSaveCard;
-    private BraintreeFragment mBraintreeFragment;
     private LinearLayout topLinear;
+
+
 
     public PaymentMethodFragment() {
         // Required empty public constructor
@@ -67,7 +71,7 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
     public void onAttach(Context context) {
         super.onAttach(context);
         // set the listner for nounce generated and error from braintree
-        ((LoginActivity)context).setBrainTreeHandler(this);
+
     }
 
     @Override
@@ -89,7 +93,6 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
         mActivity.hideToolbar();
         initViews(paymentMethodView);
         initListeners();
-        initializeBrainTree();
         Utils.showAlertDialog(mActivity,"Please link a card to your account.");
         return paymentMethodView;
     }
@@ -119,14 +122,8 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
     }
 
 
-    private void initializeBrainTree(){
-        try {
-            mBraintreeFragment = BraintreeFragment.newInstance(mActivity, user.getBt_token());
 
-        } catch (InvalidArgumentException e) {
-            mActivity.showSnackbar("Error Initializing payment method",0);
-        }
-    }
+
 
     @Override
     public void onClick(View view) {
@@ -163,10 +160,24 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
         String expiry    =txtExpiry.getText().toString().trim();
         String headLine  =edtEdtTitular.getText().toString().trim();
         String cvv       =edtCvv.getText().toString().trim();
+
+        String cardType=Utils.getCreditCardTypeByNumber(cardnumber);
+
+        String expirationMonth="", expirationYear ="";
+        // split date into month and year
+        if (!TextUtils.isEmpty(expiry)) {
+            String[] dateSplit = expiry.split("/");
+            expirationMonth = dateSplit[0];
+            expirationYear = dateSplit[1];
+        }
+
         card.setCardNumber(cardnumber);
         card.setCardCvv(cvv);
         card.setCardHeadline(headLine);
         card.setCardExpiry(expiry);
+        card.setCardExpirationMonth(expirationMonth);
+        card.setCardExpirationYear(expirationYear);
+        card.setCardType(cardType);
 
         return card;
 
@@ -194,59 +205,56 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
             }
 
 
-            if (card.getCardCvv().length()<3 || card.getCardCvv().length()>4) {
+           /* if (card.getCardCvv().length()<3 || card.getCardCvv().length()>4) {
                 // Utils.showToast(mActivity, "Invalid Cvv.");
+                mActivity.showSnackbar(getString(R.string.str_invalid_cvv), 0);
+                return;
+            }*/
+
+            if(card.getCardNumber().length()==15 && card.getCardCvv().length()!=4){
                 mActivity.showSnackbar(getString(R.string.str_invalid_cvv), 0);
                 return;
             }
 
-            buildCreditCard(card);
+            if(card.getCardNumber().length()==16 && card.getCardCvv().length()!=3){
+                mActivity.showSnackbar(getString(R.string.str_invalid_cvv), 0);
+                return;
+            }
+
+            //buildCreditCard(card);
+            addPaymentMethod(card);
         }
     }
 
 
-    /**
-     * token the card at Braintree
-     * @param card user input card
-     */
-    private void buildCreditCard(Card card){
-        Progress.showprogress(mActivity,"Validating card..",false);
-        CardBuilder cardBuilder = new CardBuilder()
 
-                .cardholderName(card.getCardHeadline())
-                .cardNumber(card.getCardNumber())
-                .cardholderName(card.getCardHeadline())
-                .expirationDate(card.getCardExpiry()).cvv(card.getCardCvv());
-        if(mBraintreeFragment!=null) {
-            com.braintreepayments.api.Card.tokenize(mBraintreeFragment, cardBuilder);
-        }else{
-            Progress.dismissProgress();
-            mActivity.showSnackbar("Error in initailizing Braintree",0);
-        }
-       }
-
-    @Override
-    public void onError(Exception error) {
-        Progress.dismissProgress();
-        mActivity.showSnackbar(error.getMessage(),0);
-    }
-    @Override
-    public void onNonceCreated(PaymentMethodNonce paymentMethodNonce) {
-        Progress.dismissProgress();
-        if(paymentMethodNonce!=null) {
-            addPaymentMethod(paymentMethodNonce.getNonce());
-        }
-
-    }
 
     /**
      * api call to add new card
-     * @param nounce
+     * @param
      */
-    private void addPaymentMethod(String nounce){
+    private void addPaymentMethod(Card card){
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         PaymentRequest paymentRequest=new PaymentRequest();
-        paymentRequest.addCard(user.getToken(),nounce, new ApiCallback() {
+       // String token=appPreference.getUserDetails().getToken();
+
+        String token=user.getToken();
+        Log.e("token@@@2",token);
+
+        JsonObject jsonObject = new JsonObject();
+        try {
+
+            jsonObject.addProperty(CARD_HOLDER_NAME,card.getCardHeadline());
+            jsonObject.addProperty(CARD_NUMBER,card.getCardNumber());
+            jsonObject.addProperty(CARD_TYPE,card.getCardType());
+            jsonObject.addProperty(EXPIRATION_MONTH,card.getCardExpirationMonth());
+            jsonObject.addProperty(EXPIRATION_YEAR,card.getCardExpirationYear());
+            jsonObject.addProperty(CVV,card.getCardCvv());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        paymentRequest.addPayPalCard(token, jsonObject, new ApiCallback() {
             @Override
             public void onRequestSuccess(BaseBean body) {
                Progress.dismissProgress();
@@ -267,4 +275,6 @@ public class PaymentMethodFragment extends BaseFragment implements View.OnClickL
             }
         });
     }
+
+
 }

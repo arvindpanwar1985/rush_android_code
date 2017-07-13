@@ -29,13 +29,28 @@ public class Constants {
     public static final String KEY_CARD_DATA="card_data";
     public static final String KEY_TRANSACTION_ID="transaction_id";
     public static final String KEY_PARAM_DATA="param_data";
-    public static final String AUTH_ERROR="Authorization header not valid";
+    //public static final String AUTH_ERROR="Authorization header not valid";
+    public static final String AUTH_ERROR="You may be logged in from other device";
     public static final String KEY_AUTH_ERROR="auth_error";
     public static final String KEY_DATA_DATE_TIME="date_time";
     public static final String KEY_PICK_ADDRESS="pick_address";
     public static final String KEY_RECEIPT_DATA="receipt_data";
     public static final String KEY_DROP_ADDRESS="drop_address";
     public static final String KEY_DATA_TRANSACTION="transaction_data";
+    public static final String KEY_DRIVER_ID="driver_id";
+
+
+    public static final String KEY_VEHICLE_DETAILS="vehicle_details";
+    public  static  final  String KEY_DRIVER_DETAILS="driver_details";
+    public  static  final String KEY_PICKUP="pickup";
+    public static final String KEY_DROP_DOWN="drop_down";
+    public static  final String KEY_COMMENT="comment";
+    public static final String SERVICE_STATUS="status";
+    public static final String SERVICE_ID="service_id";
+    public static final String KEY_LAT="latitude";
+    public static final String KEY_LONG="longitude";
+
+
     public static final String IP="";
     public static final int PORT=3000;
 

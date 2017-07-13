@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.hoffmans.rush.R;
@@ -32,6 +31,9 @@ import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Status;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -43,6 +45,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
     private  String KEY_MESSAGE      ="message";
     private  String KEY_SERVICE_ID   ="service_id";
     private  String NEW_LINE         ="\n";
+    public static final String KEY_SERVICE_MESSAGE="service_msg";
 
     private RelativeLayout topRelative;
     private TextView mTxtname,mtxtPhone,mtxtSource,mtxtdestination,mtxtPriceEstimate,txtdateTime;
@@ -137,11 +140,16 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
                 topRelative.setVisibility(View.GONE);
-                showSnackbar(message,0);
+               // showSnackbar(message,0);
                 if(message.equals(Constants.AUTH_ERROR)){
                     logOutUser();
                 }else{
-                    showFailureDialog(message);
+                   // showFailureDialog(message);
+                    Intent driverMainIntent=new Intent(AcceptOrderActivity.this, DriverNavigationActivity.class);
+                    driverMainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    driverMainIntent.putExtra(KEY_SERVICE_MESSAGE,message);
+                    startActivity(driverMainIntent);
+                    finish();
                 }
             }
         });
@@ -179,7 +187,7 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void setCustomerDetails(CustomerDetail customerDetail){
-        mTxtname.setText("."+customerDetail.getName()+".");
+        mTxtname.setText(""+customerDetail.getName()+"");
         mtxtPhone.setText(customerDetail.getPhone());
         if(customerDetail.getPicUrl()!=null){
             Glide.with(getApplicationContext()).load(customerDetail.getPicUrl()).into(imgProfile);
@@ -236,30 +244,54 @@ public class AcceptOrderActivity extends BaseActivity implements View.OnClickLis
             public void onRequestSuccess(BaseBean body) {
                 Progress.dismissProgress();
                 ScheduledBean messageBean=(ScheduledBean) body;
-                showSnackbar(messageBean.getMessage(), Toast.LENGTH_LONG);
+               // showSnackbar(messageBean.getMessage(), Toast.LENGTH_LONG);
+
                 if(service_status.equals(Status.ACCEPTED)){
                     //update driver status to active
                     //SetDriverStatus.updateDriverStatus(getApplicationContext(), Status.ACTIVE);
-                    Toast.makeText(getApplicationContext(),messageBean.getMessage(),Toast.LENGTH_LONG).show();
-                    handleOrderAcceptRequest();
+                    //Toast.makeText(getApplicationContext(),messageBean.getMessage(),Toast.LENGTH_LONG).show();
+                    Intent driverMainIntent=new Intent(AcceptOrderActivity.this, DriverNavigationActivity.class);
+                    driverMainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    driverMainIntent.putExtra(KEY_SERVICE_MESSAGE,messageBean.getMessage());
+                    startActivity(driverMainIntent);
+                   // handleOrderAcceptRequest();
                     finish();
                 }else if(service_status.equals(STATUS_PENDING)){
                     //close current activity
+                    Intent driverMainIntent=new Intent(AcceptOrderActivity.this, DriverNavigationActivity.class);
+                    driverMainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    driverMainIntent.putExtra(KEY_SERVICE_MESSAGE,messageBean.getMessage());
+                    startActivity(driverMainIntent);
                     finish();
                 }
             }
             @Override
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
-                showSnackbar(message,0);
+               // showSnackbar(message,0);
                 if(message.equals(Constants.AUTH_ERROR)){
                     logOutUser();
+                }else{
+                    Intent driverMainIntent=new Intent(AcceptOrderActivity.this, DriverNavigationActivity.class);
+                    driverMainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    driverMainIntent.putExtra(KEY_SERVICE_MESSAGE,message);
+                    startActivity(driverMainIntent);
+                    finish();
                 }
             }
         });
     }
 
 
+    /**
+     * callback when notifcation received for new order
+     * @param serviceID
+     *
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNotificationRecevied(String serviceID) {
+       // Log.e("onNotificationReceived...","Ok.");
+    }
 
     private void handleOrderAcceptRequest(){
         //move control to upcoming activity

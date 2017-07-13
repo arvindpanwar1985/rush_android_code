@@ -21,7 +21,7 @@
             android:id="@+id/txtARName"
             android:textColor="@color/colorPrimaryDark"
             android:layout_width="wrap_content"
-            android:text=". Dev bhandari ."
+            android:text=""
             android:layout_marginTop="@dimen/dp_7"
             android:textStyle="bold|italic"
             android:textSize="@dimen/sp_15"
@@ -37,7 +37,7 @@
             android:textColor="@color/colorPrimaryDark"
             android:layout_width="wrap_content"
             android:text=""
-            android:layout_marginLeft="@dimen/dp_3"
+            android:layout_marginLeft="@dimen/dp_10"
             android:layout_toRightOf="@+id/txtARName"
             android:layout_marginRight="@dimen/dp_2"
             android:layout_marginTop="@dimen/dp_7"
@@ -64,6 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtARDatetime"
             android:background="@drawable/btn_estimated_bg"
+            android:visibility="gone"
             android:paddingTop="@dimen/dp_3"
             android:layout_marginTop="@dimen/dp_10"
             android:paddingBottom="@dimen/dp_3"
@@ -101,10 +102,10 @@
                android:orientation="vertical"
                android:layout_centerVertical="true"
                android:layout_alignTop="@+id/estimatedView"
-               android:layout_marginTop="@dimen/dp_3"
+               android:layout_marginTop="@dimen/dp_10"
                android:layout_below="@+id/txtARDatetime"
                android:layout_toRightOf="@+id/estimatedView"
-               android:layout_marginLeft="@dimen/dp_20">
+               android:layout_marginLeft="@dimen/dp_30">
 
                <TextView
                    android:id="@+id/txtARSource"

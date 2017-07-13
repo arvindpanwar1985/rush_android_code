@@ -34,6 +34,30 @@ public class User implements Parcelable {
     @Expose
     private String token;
 
+
+
+/*
+    private int current_running_service;
+
+    public int getCurrent_running_service() {
+        return current_running_service;
+    }
+
+    public void setCurrent_running_service(int current_running_service) {
+        this.current_running_service = current_running_service;
+    }*/
+
+
+    private int current_running_service;
+
+    public int getCurrent_running_service() {
+        return current_running_service;
+    }
+
+    public void setCurrent_running_service(int current_running_service) {
+        this.current_running_service = current_running_service;
+    }
+
     private String uid;
 
     private String provider;
@@ -186,6 +210,14 @@ public class User implements Parcelable {
         this.currency_symbol_id = currency_symbol_id;
     }
 
+    public VechileDetail getVehicle_details() {
+        return vehicle_details;
+    }
+
+    public void setVehicle_details(VechileDetail vehicle_details) {
+        this.vehicle_details = vehicle_details;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -200,6 +232,7 @@ public class User implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.role);
         dest.writeString(this.token);
+        dest.writeInt(this.current_running_service);
         dest.writeString(this.uid);
         dest.writeString(this.provider);
         dest.writeString(this.pic_url);
@@ -209,6 +242,7 @@ public class User implements Parcelable {
         dest.writeParcelable(this.location, flags);
         dest.writeByte(this.isSocialProvider ? (byte) 1 : (byte) 0);
         dest.writeInt(this.currency_symbol_id);
+        dest.writeParcelable(this.vehicle_details, flags);
     }
 
     protected User(Parcel in) {
@@ -219,6 +253,7 @@ public class User implements Parcelable {
         this.name = in.readString();
         this.role = in.readString();
         this.token = in.readString();
+        this.current_running_service = in.readInt();
         this.uid = in.readString();
         this.provider = in.readString();
         this.pic_url = in.readString();
@@ -228,6 +263,7 @@ public class User implements Parcelable {
         this.location = in.readParcelable(UserLocation.class.getClassLoader());
         this.isSocialProvider = in.readByte() != 0;
         this.currency_symbol_id = in.readInt();
+        this.vehicle_details = in.readParcelable(VechileDetail.class.getClassLoader());
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -241,12 +277,4 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
-
-    public VechileDetail getVehicle_details() {
-        return vehicle_details;
-    }
-
-    public void setVehicle_details(VechileDetail vehicle_details) {
-        this.vehicle_details = vehicle_details;
-    }
 }

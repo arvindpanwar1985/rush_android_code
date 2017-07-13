@@ -10,14 +10,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.hoffmans.rush.R;
+import com.hoffmans.rush.listners.OnRecordsItemClickListeners;
 import com.hoffmans.rush.model.CustomerDetail;
 import com.hoffmans.rush.model.DateTime;
 import com.hoffmans.rush.model.Estimate;
 import com.hoffmans.rush.model.PickDropAddress;
+import com.hoffmans.rush.model.Rating;
 import com.hoffmans.rush.model.Record;
 
 import java.util.List;
@@ -32,6 +35,7 @@ public class RecordAdapter  extends RecyclerView.Adapter<RecordAdapter.ViewHolde
     private List<Record> recordDataList;
     private Context mContext;
     private SpannableStringBuilder mbuilder=new SpannableStringBuilder();
+    private OnRecordsItemClickListeners itemClickListeners;
 
 
 
@@ -42,8 +46,9 @@ public class RecordAdapter  extends RecyclerView.Adapter<RecordAdapter.ViewHolde
         // each data item is just a string in this case
 
 
-        ImageView imgProfile;
-        TextView txtNamePhone,txtSource,txtDestination,txtEstimatedPrice,txtDateTime,txtState;
+        ImageView imgProfile,imgRating1,imgRating2,imgRating3;
+        TextView txtNamePhone,txtSource,txtDestination,txtEstimatedPrice,txtDateTime,txtState,txtRatingStaus;
+        RelativeLayout layoutDriverRow;
 
 
         public ViewHolder(View v) {
@@ -55,6 +60,12 @@ public class RecordAdapter  extends RecyclerView.Adapter<RecordAdapter.ViewHolde
             txtEstimatedPrice=(TextView)v.findViewById(R.id.txtPriceEstimated);
             txtDateTime      =(TextView)v.findViewById(R.id.txtdateTime);
             txtState         =(TextView)v.findViewById(R.id.txtState);
+            imgRating1=(ImageView)v.findViewById(R.id.imgRating1);
+            imgRating2=(ImageView)v.findViewById(R.id.imgRating2);
+            imgRating3=(ImageView)v.findViewById(R.id.imgRating3);
+            txtRatingStaus=(TextView)v.findViewById(R.id.txtRatingStaus) ;
+            layoutDriverRow   =(RelativeLayout)v.findViewById(R.id.layout_driver_records);
+            layoutDriverRow.setOnClickListener(this);
              v.setOnClickListener(this);
 
         }
@@ -63,12 +74,14 @@ public class RecordAdapter  extends RecyclerView.Adapter<RecordAdapter.ViewHolde
         public void onClick(View v) {
 
 
+
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RecordAdapter(Context context, List<Record> recordDataList) {
+    public RecordAdapter(Context context, List<Record> recordDataList,OnRecordsItemClickListeners listener) {
         this.recordDataList=recordDataList;
+        itemClickListeners=listener;
         mContext=context;
 
 
@@ -97,6 +110,7 @@ public class RecordAdapter  extends RecyclerView.Adapter<RecordAdapter.ViewHolde
         Estimate estimate=record.getEstimate();
         PickDropAddress pickUpAddress=record.getPick_up();
         DateTime dateTime=record.getDate_time();
+        Rating rating=record.getRate();
         List<PickDropAddress> dropAddresses=record.getDrop_down();
         if(customerDetail!=null){
             setCustomerDetail(customerDetail,holder);
@@ -113,7 +127,40 @@ public class RecordAdapter  extends RecyclerView.Adapter<RecordAdapter.ViewHolde
         if(dateTime!=null){
             holder.txtDateTime.setText(dateTime.getDate()+" "+dateTime.getTime());
         }
+
+
+
+        if(rating!=null && rating.getRating()!=null){
+
+
+            if(rating.getRating().equals("3")){
+                holder.imgRating1.setImageResource(R.drawable.star_select);
+                holder.imgRating2.setImageResource(R.drawable.star_select);
+                holder.imgRating3.setImageResource(R.drawable.star_select);
+                holder.txtRatingStaus.setText("Great Service");
+            }else if(rating.getRating().equals("2")){
+                holder.imgRating1.setImageResource(R.drawable.star_select);
+                holder.imgRating2.setImageResource(R.drawable.star_select);
+                holder.imgRating3.setImageResource(R.drawable.start_unselect);
+
+                holder.txtRatingStaus.setText("Average Service");
+            }else if(rating.getRating().equals("1")){
+                holder.imgRating1.setImageResource(R.drawable.star_select);
+                holder.imgRating2.setImageResource(R.drawable.start_unselect);
+                holder.imgRating3.setImageResource(R.drawable.start_unselect);
+                holder.txtRatingStaus.setText("Worst Service");
+            }
+
+        }
+
         holder.txtState.setText(mContext.getString(R.string.str_finished));
+
+        holder.layoutDriverRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemClickListeners.onRecordsItemClicked(position);
+            }
+        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -132,8 +179,8 @@ public class RecordAdapter  extends RecyclerView.Adapter<RecordAdapter.ViewHolde
         if(customerphone==null){
             customerphone="";
         }
-        StringBuilder namePhoneBuilder=new StringBuilder(".").append(customerDetail.getName())
-                .append(" . ").append(customerphone);
+        StringBuilder namePhoneBuilder=new StringBuilder("").append(customerDetail.getName())
+                .append("     ").append(customerphone);
         holder.txtNamePhone.setText(namePhoneBuilder.toString());
         if(customerDetail.getPicUrl()!=null){
             Glide.with(mContext).load(customerDetail.getPicUrl()).into(holder.imgProfile);

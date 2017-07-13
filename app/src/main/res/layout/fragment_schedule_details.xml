@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/colorPrimary"
+    android:layout_height="match_parent">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+    <fragment
+        android:id="@+id/map_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        class="com.google.android.gms.maps.SupportMapFragment" />
+
+         <ImageView
+             android:visibility="gone"
+             android:id="@+id/img_full_screenmap"
+            android:padding="@dimen/dp_10"
+           android:layout_gravity="bottom|right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_fullscreen_tracing"/>
+
+    </FrameLayout>
+
+<ScrollView
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/colorPrimary"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:background="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_90"
+            android:padding="@dimen/dp_10">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_alignParentLeft="true"
+                android:id="@+id/fEPImgProfile"
+                android:layout_width="@dimen/dp_50"
+                android:layout_height="@dimen/dp_50"
+                android:layout_centerVertical="true"
+                android:src="@drawable/default_profile_photo"/>
+
+            <RelativeLayout
+                android:id="@+id/layout_left"
+                android:layout_toRightOf="@+id/fEPImgProfile"
+                android:layout_toLeftOf="@+id/layout_right"
+                android:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_13"
+                android:paddingTop="@dimen/dp_7"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_name"
+                    android:layout_alignParentTop="true"
+                    android:layout_width="match_parent"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp_14"
+                    android:textStyle="bold"
+                    android:maxLines="2"
+                    android:layout_gravity="top"
+                    android:layout_height="wrap_content"
+                    android:text=""/>
+
+                <TextView
+                    android:id="@+id/txt_phone_number"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="bottom"
+                    android:layout_width="match_parent"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp_10"
+                    android:paddingTop="@dimen/dp_7"
+                    android:paddingBottom="@dimen/dp_7"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:layout_height="wrap_content"
+                    android:text=""/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+
+                android:id="@+id/layout_right"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_width="@dimen/dp_130"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_13"
+                android:paddingTop="@dimen/dp_7"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_currenty_type"
+                    android:layout_width="match_parent"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp_14"
+                    android:textStyle="bold"
+                    android:gravity="center|end"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="wrap_content"
+                    android:text=""/>
+
+                <TextView
+                    android:id="@+id/txt_date_time"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="bottom"
+                    android:layout_width="match_parent"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp_10"
+                    android:paddingTop="@dimen/dp_7"
+                    android:paddingBottom="@dimen/dp_7"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:gravity="center"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:layout_height="wrap_content"
+                    android:text=""/>
+
+                <!--
+                                <TextView
+                                    android:id="@+id/txt_date_time"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_width="match_parent"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="@dimen/sp_10"
+                                    android:textStyle="bold"
+                                    android:visibility="gone"
+                                    android:layout_marginBottom="@dimen/dp_10"
+                                    android:layout_height="wrap_content"
+                                    android:text="Une sjfdksj"/>-->
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_view_divider"
+            android:layout_height="@dimen/dp_2"/>
+        <!-- vehicle color and image layout-->
+        <RelativeLayout
+            android:id="@+id/layoutVehicleDetails"
+            android:background="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_90"
+            android:padding="@dimen/dp_10">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_alignParentLeft="true"
+                android:id="@+id/img_vehicle"
+                android:layout_width="@dimen/dp_50"
+                android:layout_height="@dimen/dp_50"
+                android:layout_centerVertical="true"
+                android:src="@drawable/default_profile_photo" />
+
+            <RelativeLayout
+
+                android:layout_toRightOf="@+id/img_vehicle"
+                android:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_7"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_vehicle_color"
+                    android:layout_alignParentTop="true"
+                    android:layout_width="match_parent"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp_14"
+                    android:textStyle="bold"
+                    android:maxLines="2"
+                    android:layout_gravity="top"
+                    android:layout_height="wrap_content"
+                    android:text="Color :"/>
+
+                <TextView
+                    android:id="@+id/txt_vehicle_plate"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="bottom"
+                    android:layout_width="match_parent"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp_10"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="@dimen/dp_13"
+                    android:layout_height="wrap_content"
+                    android:text="Plate No: "/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_view_divider"
+            android:layout_height="@dimen/dp_2"/>
+
+        <include
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            layout="@layout/view_user_details_pickup_location">
+
+        </include>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/color_view_divider"
+            android:layout_height="@dimen/dp_2"/>
+
+        <RelativeLayout
+            android:background="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10">
+
+            <ImageView
+                android:layout_alignParentLeft="true"
+                android:id="@+id/img_add_comment"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:layout_marginLeft="@dimen/dp_13"
+                android:src="@drawable/ic_addcomment" />
+
+            <RelativeLayout
+                android:layout_toRightOf="@+id/img_add_comment"
+                android:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_show_comment"
+                    android:layout_alignParentTop="true"
+                    android:layout_width="match_parent"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp_10"
+                    android:textStyle="bold"
+                    android:layout_gravity="top"
+                    android:layout_height="wrap_content"
+                    android:text="No additional info"/>
+
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+
+</ScrollView>
+
+</LinearLayout>

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
 
     private static final String ARG_CARD_SELECTABLE      ="is_card_selectable";
     private static final String KEY_PAYMENT_METHOD_TOKEN ="payment_method_token";
+    private static final String CARD_ID="card_id";
     private boolean isCardSelectable;
     private View view;
     private ArrayList<CardData> cardDataList;
@@ -80,7 +82,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if(view==null) {
-            mActivity.initToolBar("",true,false);
+            mActivity.initToolBar(getResources().getString(R.string.str_save_card),true,false);
             view = inflater.inflate(R.layout.fragment_card_list, container, false);
             initViews(view);
             initListeners();
@@ -126,7 +128,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
         Progress.showprogress(mActivity,"Loading cards..",false);
         String authToken=appPreference.getUserDetails().getToken();
         PaymentRequest request=new PaymentRequest();
-        request.getPaymentCardList(authToken, new ApiCallback() {
+        request.getPayPalPaymentList(authToken, new ApiCallback() {
             @Override
             public void onRequestSuccess(BaseBean body) {
                 Progress.dismissProgress();
@@ -140,6 +142,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onRequestFailed(String message) {
                 Progress.dismissProgress();
+                Log.e("onFailed message......",message);
                 mActivity.showSnackbar(message,0);
                 if(message.equals(Constants.AUTH_ERROR)){
                     mActivity.logOutUser();
@@ -154,6 +157,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
      */
     private void setCardAdapter(ArrayList<CardData> cardDataList ){
         boolean showDelete=(isCardSelectable)?false:true;
+
         adapter=new CardListAdapter(mActivity,cardDataList,this,showDelete);
         recyclerCardList.setAdapter(adapter);
     }
@@ -163,7 +167,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
     public void onitemclicked(View view, int position) {
         if(cardDataList!=null &&!isCardSelectable){
             CardData cardData=cardDataList.get(position);
-            showDialogDefaultCard(cardData.getToken());
+            showDialogDefaultCard(cardData.getToken(), cardData.getPaypal_card_id());
         }
     }
 
@@ -172,7 +176,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
 
         if(cardDataList!=null &&!isCardSelectable){
             CardData cardData=cardDataList.get(position);
-            showDialog(cardData.getToken());
+            showDialog(cardData.getToken(), cardData.getPaypal_card_id());
         }
     }
 
@@ -190,7 +194,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
    /**
      * popup for deleting a card
      */
-    private void showDialog(final String payment_token){
+    private void showDialog(final String payment_token,final String cardId){
         try {
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mActivity);
             builder.setTitle(R.string.app_name)
@@ -207,7 +211,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            deleteCard(payment_token);
+                            deleteCard(payment_token,cardId);
                         }
 
                     }).create().show();
@@ -220,7 +224,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
     /**
      * popup for deleting a card
      */
-    private void showDialogDefaultCard(final String token){
+    private void showDialogDefaultCard(final String token, final String cardId){
         try {
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mActivity);
             builder.setTitle(R.string.app_name)
@@ -237,7 +241,7 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            setDefaultCard(token);
+                            setDefaultCard(token,cardId);
                         }
 
                     }).create().show();
@@ -250,12 +254,14 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
      * delete the selected card
      * @param token token linked to card added previously
      */
-    private void deleteCard(String token){
+    private void deleteCard(String token,String cardId){
         HashMap<String ,String> params=new HashMap<>();
-        params.put(KEY_PAYMENT_METHOD_TOKEN,token);
+        params.put(CARD_ID,cardId);
+
+
         Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         PaymentRequest deleteCardRequest=new PaymentRequest();
-        deleteCardRequest.deleteCard(appPreference.getUserDetails().getToken(), params, new ApiCallback() {
+        deleteCardRequest.deletePayPalCard(appPreference.getUserDetails().getToken(), params, new ApiCallback() {
             @Override
             public void onRequestSuccess(BaseBean body) {
                 Progress.dismissProgress();
@@ -286,10 +292,10 @@ public class CardListFragment extends BaseFragment implements View.OnClickListen
      * make card default
      * @param token
      */
-    private void setDefaultCard(String token){
+    private void setDefaultCard(String token,String cardId){
        Progress.showprogress(mActivity,getString(R.string.progress_loading),false);
         PaymentRequest deleteCardRequest=new PaymentRequest();
-        deleteCardRequest.defaultCard(appPreference.getUserDetails().getToken(), token, new ApiCallback() {
+        deleteCardRequest.defaultPayPalCard(appPreference.getUserDetails().getToken(), cardId, new ApiCallback() {
             @Override
             public void onRequestSuccess(BaseBean body) {
                 Progress.dismissProgress();

@@ -43,6 +43,23 @@
                 android:src="@drawable/default_profile_photo"
                 app:civ_border_color="@color/civ_border"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_change_photo"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_vertical"
+                android:text="@string/str_change_photo"
+                android:textSize="@dimen/sp_16"
+                android:padding="@dimen/dp_4"
+                android:visibility="visible"
+                android:textStyle="bold|italic"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/dp_5"
+                android:textColor="@color/color_view_divider"
+                />
+
 
             <RelativeLayout
                 android:layout_width="match_parent"

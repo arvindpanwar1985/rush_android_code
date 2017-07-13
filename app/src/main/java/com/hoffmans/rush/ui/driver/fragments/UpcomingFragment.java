@@ -2,9 +2,11 @@ package com.hoffmans.rush.ui.driver.fragments;
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,15 +30,23 @@ import com.hoffmans.rush.http.request.ServiceRequest;
 import com.hoffmans.rush.http.request.UserRequest;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.listners.OnHeaderButtonClickListners;
+import com.hoffmans.rush.listners.OnRecordsItemClickListeners;
+import com.hoffmans.rush.model.CustomerDetail;
+import com.hoffmans.rush.model.DateTime;
+import com.hoffmans.rush.model.Estimate;
+import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.Record;
 import com.hoffmans.rush.model.ServiceData;
+import com.hoffmans.rush.ui.driver.activities.DriverDetailsActivity;
 import com.hoffmans.rush.ui.driver.adapters.UpcomingAdapter;
 import com.hoffmans.rush.ui.fragments.BaseFragment;
+import com.hoffmans.rush.utils.AppPreference;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.utils.Status;
 import com.hoffmans.rush.widgets.EndlessRecyclerViewScrollListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.hoffmans.rush.ui.driver.activities.UpcomingActivity.DEFAULT_ITEMS;
@@ -47,12 +57,13 @@ import static com.hoffmans.rush.ui.driver.activities.UpcomingActivity.DEFAULT_PA
  * Use the {@link UpcomingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClickListners {
+public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClickListners,OnRecordsItemClickListeners {
     private RecyclerView mRecyclerView;
     private UpcomingAdapter adapter;
     private LinearLayoutManager linearLayoutManager;
     private TextView txtNoRecordsFound;
     private ScheduledBean bean;
+    private ServiceData currentOrderData;
     private LinearLayout linearProgress;
     private EndlessRecyclerViewScrollListener scrollListener;
     private int records_count,currentListSize;
@@ -157,8 +168,8 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
      * @param bean schedule bean
      */
     private void setScheduledCurrentServicesAdapter(ScheduledBean bean){
-        adapter=new UpcomingAdapter(mActivity,this);
-        ServiceData currentOrderData=bean.getCurrentOrder();
+        adapter=new UpcomingAdapter(mActivity,this,this);
+        currentOrderData=bean.getCurrentOrder();
         if(currentOrderData==null){
             currentOrderData=new ServiceData();
             currentOrderData.setTypenoHeader(true);
@@ -175,7 +186,16 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
     @Override
     public void onStartStopButtonClicked(String state, int serviceId) {
          if(state!=null && serviceId!=0){
+
              String filteredStatus=(state.equals(Status.ACCEPTED))?Status.RUNNING:Status.COMPLETED;
+             // save sevice current status
+             if(filteredStatus.equals(Status.RUNNING)){
+                 AppPreference.newInstance(mActivity).setStartServiceId(serviceId);
+
+             }else if(filteredStatus.equals(Status.COMPLETED)){
+
+                 AppPreference.newInstance(mActivity).setStartServiceId(0);
+             }
              setServiceStatus(serviceId,filteredStatus);
          }
       }
@@ -193,10 +213,11 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
             public void onRequestSuccess(BaseBean body) {
                 Progress.dismissProgress();
                 ScheduledBean scheduledBean=(ScheduledBean) body;
+
                 mActivity.showSnackbar(scheduledBean.getMessage(),0);
                 if(scheduledBean!=null){
                     if(adapter!=null){
-                         ServiceData currentOrderData=scheduledBean.getCurrentOrder();
+                          currentOrderData=scheduledBean.getCurrentOrder();
                           if(currentOrderData==null){
                               currentOrderData=new ServiceData();
                               currentOrderData.setTypenoHeader(true);
@@ -362,5 +383,50 @@ public class UpcomingFragment extends BaseFragment implements OnHeaderButtonClic
                 }
             }
         });
+    }
+
+    @Override
+    public void onRecordsItemClicked(int position) {
+        CustomerDetail customerDetail;
+        Estimate estimate;
+        PickDropAddress pickUpAddress;
+        DateTime dateTime;
+        Record record = null;
+        List<PickDropAddress> pickDropAddressesList = null;
+        String comment;
+        String status;
+
+        if(position==0){
+            customerDetail=currentOrderData.getCustomerDetail();
+            estimate=currentOrderData.getEstimate();
+            pickUpAddress=currentOrderData.getPicAddress();
+            dateTime=currentOrderData.getDateTime();
+            comment=currentOrderData.getComment();
+            status=currentOrderData.getState();
+            pickDropAddressesList=currentOrderData.getDropAddressList();
+
+        }else{
+            record=recordList.get(position-1);
+            customerDetail=record.getCustomer_details();
+            estimate=record.getEstimate();
+            pickUpAddress=record.getPick_up();
+            dateTime=record.getDate_time();
+            comment=record.getComment();
+            status=record.getState();
+            pickDropAddressesList=record.getDrop_down();
+        }
+
+        Intent intent=new Intent(mActivity,DriverDetailsActivity.class);
+        intent.putExtra(Constants.KEY_ESTIMATE_DATA,estimate);
+        intent.putExtra(Constants.KEY_DRIVER_DETAILS,customerDetail);
+        intent.putExtra(Constants.KEY_PICK_ADDRESS,pickUpAddress);
+        intent.putExtra(Constants.KEY_DATA_DATE_TIME,dateTime);
+
+        intent.putParcelableArrayListExtra(Constants.KEY_DROP_DOWN, (ArrayList<? extends Parcelable>) pickDropAddressesList);
+        intent.putExtra(Constants.KEY_COMMENT,comment);
+        intent.putExtra(Constants.SERVICE_STATUS,status);
+        startActivity(intent);
+
+
     }
 }

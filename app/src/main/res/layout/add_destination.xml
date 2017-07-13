@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:background="@drawable/bg_accept_reject"
-    android:padding="@dimen/dp_5">
+    android:padding="@dimen/dp_3">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
         android:textStyle="bold|italic"
+        android:textSize="@dimen/dp_10"
         android:gravity="center_vertical"
         android:text="@string/str_another_des"/>
 

@@ -6,14 +6,17 @@ import com.hoffmans.rush.bean.RecordBean;
 import com.hoffmans.rush.bean.ScheduledBean;
 import com.hoffmans.rush.bean.ServiceBean;
 import com.hoffmans.rush.bean.ServiceDetailBean;
+import com.hoffmans.rush.bean.TrackDriverBean;
 import com.hoffmans.rush.http.ConnectionManager;
 import com.hoffmans.rush.listners.ApiCallback;
 import com.hoffmans.rush.listners.BaseListener;
 import com.hoffmans.rush.model.EstimateServiceParams;
 import com.hoffmans.rush.model.RatingParam;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import okhttp3.ResponseBody;
@@ -77,7 +80,9 @@ public class ServiceRequest extends BaseRequest {
      */
 
     public void confirmService(String header, EstimateServiceParams estimateServiceParams, final ApiCallback apiCallback){
+
         Call<ResponseBody> confirmCall=getAPIClient().confirmService(header,estimateServiceParams);
+
         ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(confirmCall);
         connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
             @Override
@@ -296,6 +301,53 @@ public class ServiceRequest extends BaseRequest {
             }
         });
     }
+
+    public void getTrackDriverDetails(String auth,String serviceId, final ApiCallback apiCallback){
+        Call<ResponseBody> call=getAPIClient().getTrackDriver(auth,Integer.parseInt(serviceId));
+        ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(call);
+        connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {
+            @Override
+            public void onWebServiceComplete(ResponseBody responseBody) {
+                try {
+                    JSONObject obj=new JSONObject(responseBody.string());
+
+                    boolean status = obj.getBoolean(SUCCESS);
+                    String message,msg,msg1="";
+                    msg=obj.getString(MESSAGE);
+                    if(!obj.has(SPANISH_MESSAGE)){
+                        message=msg;
+                    }else {
+                        msg1 = obj.getString(SPANISH_MESSAGE);
+                        message=parseMessageUsingLocale(msg,msg1);
+                    }
+
+                    if (status) {
+
+                        String data = obj.getJSONObject(DATA).toString();
+                        TrackDriverBean bean = getGsonBuilder().fromJson(data, TrackDriverBean.class);
+                        bean.setMessage(message);
+                        apiCallback.onRequestSuccess(bean);
+
+                    } else {
+                        apiCallback.onRequestFailed(message);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onWebStatusFalse(String message) {
+
+            }
+        });
+
+
+    }
+
     public void setServiceRating(String auth ,RatingParam ratingParam,final ApiCallback apiCallback){
         Call<ResponseBody> call=getAPIClient().rateDriver(auth, ratingParam);
         ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(call);
@@ -333,4 +385,7 @@ public class ServiceRequest extends BaseRequest {
         });
 
     }
+
+
+
 }

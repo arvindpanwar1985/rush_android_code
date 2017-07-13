@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:text="@string/str_frequent_address"
         android:textSize="@dimen/sp_10"
-        android:padding="@dimen/dp_5"
+        android:padding="@dimen/dp_3"
+        android:layout_marginTop="@dimen/dp_5"
         android:textColor="@android:color/white"
         android:textStyle="bold|italic"
         android:background="@drawable/bg_reservation_btn"/>
@@ -25,6 +26,7 @@
         android:visibility="gone"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_close_red"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_below="@+id/viewFrequentlyAddress"
@@ -32,7 +34,8 @@
         android:paddingLeft="@dimen/dp_2"
         android:paddingRight="@dimen/dp_2"
         android:paddingBottom="@dimen/dp_2"
-        android:layout_height="wrap_content">
+        android:layout_marginTop="@dimen/dp_3"
+        android:layout_height="@dimen/dp_40">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -56,7 +59,7 @@
         android:layout_marginLeft="@dimen/dp_2"
         android:layout_marginRight="@dimen/dp_7"
         android:padding="@dimen/dp_4"
-        android:src="@drawable/ic_favorite_border_24dp"
+        android:src="@drawable/ic_favorite_black_24dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"/>
 

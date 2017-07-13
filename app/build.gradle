@@ -11,17 +11,18 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
-}
 dependencies {
     // to see latest version available:
     // https://maven.fabric.io/public/com/crashlytics/sdk/android/crashlytics/maven-metadata.xml
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
-        transitive = true
+}
+
+subprojects {
+    repositories {
+        // Add repositories here
+        compile('com.crashlytics.sdk.android:crashlytics:2.6.5') {
+            transitive = true
+        }
     }
-    compile 'com.android.support:design:25.0.0'
-    compile 'com.android.support:appcompat-v7:25.0.0'
 }
 
 allprojects {
@@ -35,11 +36,19 @@ allprojects {
 
 
 android {
+    /* signingConfigs {
+         config {
+             keyAlias 'RushApp'
+             keyPassword 'U2hvZnVyQXJ89'
+             storeFile file('/home/devesh/Desktop/Keystore/rush/rush_store.jks') or  /media/tarun/data/Projects/Rush/RushNew
+             storePassword 'QXJtaXJTaG9mdX98='
+         }
+     }*/
     signingConfigs {
         config {
             keyAlias 'RushApp'
             keyPassword 'U2hvZnVyQXJ89'
-            storeFile file('/home/devesh/Desktop/Keystore/rush/rush_store.jks')
+            storeFile file('/media/arvind/Data/Projects/rush/rush_store.jks')
             storePassword 'QXJtaXJTaG9mdX98='
         }
     }
@@ -49,8 +58,8 @@ android {
         applicationId "com.hoffmans.rush"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName '1.1'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -59,9 +68,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            debuggable true
+            debuggable false
+            //signingConfig signingConfigs.config
             signingConfig signingConfigs.config
         }
+    }
+    productFlavors {
     }
 }
 
@@ -77,18 +89,24 @@ dependencies {
 
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.google.android.gms:play-services:10.2.1'
+    compile 'com.google.android.gms:play-services-maps:10.2.1'
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    //compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile 'com.squareup.okhttp3:okhttp:3.8.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+
+
+    compile 'com.android.support:design:25.0.0'
+    compile 'com.android.support:appcompat-v7:25.0.0'
 
     compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
     compile 'com.google.firebase:firebase-core:10.2.1'
     compile 'com.github.bumptech.glide:glide:3.6.0'
-
+/*
     compile 'com.braintreepayments.api:braintree:2.+'
+    compile 'com.braintreepayments.gateway:braintree-java:2.53.0'*/
 
-    compile 'com.braintreepayments.gateway:braintree-java:2.53.0'
     compile 'com.facebook.android:facebook-android-sdk:4.+'
     compile 'id.zelory:compressor:1.0.4'
     compile 'org.greenrobot:eventbus:3.0.0'
@@ -99,26 +117,14 @@ dependencies {
     compile 'com.karumi:headerrecyclerview:1.1.0'
 
     compile 'com.android.support:support-annotations:24.2.0'
+    compile 'com.android.support.constraint:constraint-layout:+'
 
 }
 apply plugin: 'com.google.gms.google-services'
 
-dependencies {
-    compile 'com.android.support.constraint:constraint-layout:+'
-}
-dependencies {
-    compile 'com.android.support.constraint:constraint-layout:+'
-}
-dependencies {
-    compile 'com.android.support:support-v4:25.+'
-}
-dependencies {
-    compile 'com.google.android.gms:play-services-maps:10.2.1'
-    compile 'com.android.support:appcompat-v7:25.+'
-}
-dependencies {
-    compile 'com.android.support.constraint:constraint-layout:+'
-}
+
+
+
 
 
 

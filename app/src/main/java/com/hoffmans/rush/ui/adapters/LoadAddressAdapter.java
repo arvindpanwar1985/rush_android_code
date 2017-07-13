@@ -111,7 +111,7 @@ public class LoadAddressAdapter  extends RecyclerView.Adapter<LoadAddressAdapter
             if(address.isFavorite()){
                 holder.imgFav.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_favorite_24dp));
             }else{
-               holder.imgFav.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_favorite_border_24dp));
+               holder.imgFav.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_favorite_black_24dp));
             }
         }else{
             holder.imgFav.setVisibility(View.INVISIBLE);

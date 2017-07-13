@@ -1,6 +1,7 @@
 package com.hoffmans.rush.http;
 
 import com.hoffmans.rush.listners.BaseListener;
+import com.hoffmans.rush.utils.Constants;
 
 import java.io.IOException;
 
@@ -48,7 +49,10 @@ public class ConnectionManager {
                     mListener.onWebServiceComplete(response.body());
                 }else{
                     //APIError error = ErrorUtils.parseError(response);
-                    mListener.onWebStatusFalse(response.message());
+                    if(response.message().equals("Unauthorized") || response.message().equals("Authorization header not valid")){
+                        mListener.onWebStatusFalse(Constants.AUTH_ERROR);
+                    }
+
                 }
 
             }

@@ -6,9 +6,10 @@ package com.hoffmans.rush.model;
 
 public class EstimateServiceParams {
 
-    private String payment_method_token;
+    private String card_id;
     private int transaction_id;
     private Service service;
+
     public Service getService() {
         return service;
     }
@@ -17,7 +18,7 @@ public class EstimateServiceParams {
         this.service = service;
     }
     public void setPayment_method_token(String payment_method_token) {
-        this.payment_method_token = payment_method_token;
+        this.card_id = payment_method_token;
     }
     public void setTransaction_id(int transaction_id) {
         this.transaction_id = transaction_id;

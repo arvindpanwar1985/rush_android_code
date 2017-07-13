@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
 
@@ -7,19 +8,19 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/dp_10"
+        android:layout_height="@dimen/dp_60"
         android:weightSum="1"
-        android:paddingBottom="@dimen/dp_10"
-
         android:background="@color/colorPrimary"
         android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="0sp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight=".5"
-            android:layout_marginLeft="@dimen/dp_10">
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/bg_estimate_time_layout"
+            android:layout_margin="@dimen/dp_10">
             <TextView
                 android:id="@+id/txtCurrency"
                 android:layout_width="wrap_content"
@@ -27,7 +28,7 @@
                 android:layout_alignParentLeft="true"
                 android:textColor="@android:color/white"
                 android:textStyle="bold|italic"
-                android:textSize="@dimen/sp_18"
+                android:textSize="@dimen/sp_14"
                 android:text=""/>
 
             <TextView
@@ -38,7 +39,7 @@
                 android:layout_marginLeft="@dimen/dp_4"
                 android:textColor="@android:color/white"
                 android:textStyle="bold|italic"
-                android:textSize="@dimen/sp_18"
+                android:textSize="@dimen/sp_14"
                 android:text=""/>
 
 
@@ -51,15 +52,22 @@
                 android:layout_alignParentLeft="true"
                 android:textColor="@android:color/white"
                 android:textStyle="italic"
-                android:textSize="@dimen/sp_16"
+                android:textSize="@dimen/sp_14"
                 android:text="@string/str_value_estimate"/>
 
             </RelativeLayout>
 
+
+
+
         <RelativeLayout
+
             android:layout_width="0sp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_gravity="center"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/dp_10"
+            android:gravity="center"
+            android:background="@drawable/bg_estimate_time_layout"
             android:layout_weight=".5">
 
 
@@ -70,10 +78,8 @@
                 android:layout_alignParentLeft="true"
                 android:textColor="@android:color/white"
                 android:textStyle="bold|italic"
-                android:textSize="@dimen/sp_18"
+                android:textSize="@dimen/sp_14"
                 />
-
-
 
 
             <TextView
@@ -84,16 +90,25 @@
                 android:layout_alignParentLeft="true"
                 android:textColor="@android:color/white"
                 android:textStyle="italic"
-                android:textSize="@dimen/sp_16"
+                android:textSize="@dimen/sp_14"
                 android:text="@string/str_value_time"/>
             </RelativeLayout>
 
         </LinearLayout>
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <RelativeLayout
         android:id="@+id/viewCardDetails"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="60dp"
         android:paddingTop="@dimen/dp_10"
         android:layout_marginTop="@dimen/dp_1"
@@ -104,23 +119,9 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginLeft="@dimen/dp_4"
             android:id="@+id/imgCardType"
             android:src="@drawable/visa_icon"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtCardNumber"
-            android:layout_toRightOf="@+id/imgCardType"
-            android:textColor="@android:color/white"
-            android:textStyle="bold|italic"
-            android:layout_centerVertical="true"
-            android:textSize="@dimen/sp_16"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:layout_marginRight="@dimen/dp_4"
-            android:text=""
-            android:layout_toLeftOf="@+id/imgArrow"/>
 
         <ImageView
             android:id="@+id/imgArrow"
@@ -128,16 +129,67 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_drop_down"/>
+            app:srcCompat="@drawable/ic_drop_down"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtCardNumber"
+            android:textColor="@android:color/white"
+            android:textStyle="bold|italic"
+            android:textSize="@dimen/sp_14"
+            android:text="*****7219"
+            android:layout_marginLeft="@dimen/sp_4"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+           android:layout_toRightOf="@id/imgCardType"
+            android:layout_toLeftOf="@+id/imgArrow"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="1.2dp"
+        android:layout_height="match_parent"></View>
+
+        <RelativeLayout
+            android:id="@+id/addcomment"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="60dp"
+            android:paddingTop="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_1"
+            android:paddingBottom="@dimen/dp_10"
+            android:background="@color/colorPrimaryDark">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_13"
+                android:id="@+id/imgAddComment"
+                android:src="@drawable/ic_addcomment"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtCardNumber1"
+                android:layout_toRightOf="@+id/imgAddComment"
+                android:textColor="@android:color/white"
+                android:textStyle="bold|italic"
+                android:layout_marginLeft="@dimen/sp_8"
+                android:layout_centerVertical="true"
+                android:textSize="@dimen/sp_14"
+                android:text="@string/str_add_comment" />
         </RelativeLayout>
+</LinearLayout>
+    </LinearLayout>
 
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:paddingTop="@dimen/dp_10"
+        android:layout_height="@dimen/dp_40"
+        android:paddingTop="@dimen/dp_5"
         android:layout_marginTop="@dimen/dp_1"
-        android:paddingBottom="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_5"
         android:background="@color/colorPrimaryDark">
 
 
@@ -150,6 +202,7 @@
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold|italic"
             android:background="@drawable/bg_now_btn"
-            android:layout_height="wrap_content"/>
+            android:textAllCaps="false"
+            android:layout_height="@dimen/dp_30"/>
 </RelativeLayout>
 </LinearLayout>

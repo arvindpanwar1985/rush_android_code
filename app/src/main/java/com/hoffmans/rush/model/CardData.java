@@ -15,6 +15,23 @@ public class CardData implements Parcelable {
     @SerializedName("token")
     @Expose
     private String token;
+
+    @SerializedName("paypal_card_id")
+    @Expose
+    private String paypal_card_id;
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    @SerializedName("number")
+    @Expose
+    private String number;
+
     @SerializedName("cardholder_name")
     @Expose
     private String cardholderName;
@@ -77,6 +94,14 @@ public class CardData implements Parcelable {
         this.last4 = last4;
     }
 
+    public String getPaypal_card_id() {
+        return paypal_card_id;
+    }
+
+    public void setPaypal_card_id(String paypal_card_id) {
+        this.paypal_card_id = paypal_card_id;
+    }
+
     public String getCardType() {
         return cardType;
     }
@@ -115,7 +140,10 @@ public class CardData implements Parcelable {
         dest.writeString(this.last4);
         dest.writeString(this.cardType);
         dest.writeString(this.imageUrl);
+        dest.writeString(this.paypal_card_id);
+        dest.writeString(this.number);
         dest.writeValue(this._default);
+
     }
 
     public CardData() {
@@ -129,6 +157,9 @@ public class CardData implements Parcelable {
         this.last4 = in.readString();
         this.cardType = in.readString();
         this.imageUrl = in.readString();
+        this.paypal_card_id=in.readString();
+        this.number=in.readString();
+
         this._default = (Boolean) in.readValue(Boolean.class.getClassLoader());
     }
 

@@ -70,6 +70,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
         mItemClickListener = listner;
         this.showDelete=showDelete;
 
+
     }
 
     // Create new views (invoked by the layout manager)
@@ -97,16 +98,45 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
         final CardData cardData=cardDataList.get(position);
 
         try {
-            holder.txtCardnumber.setText("********" + cardData.getLast4());
+            holder.txtCardnumber.setText("********" + cardData.getNumber());
             Glide.with(mContext).load(cardData.getImageUrl()).into(holder.imgCardType);
             holder.txtCardtype.setText(cardData.getCardType());
         }catch (NullPointerException e){
 
         }
 
-        if(!showDelete){//hide delete icon
+        if(cardData.getDefault()){
+            //not able to delete default card
+            holder.viewDeafultCard.setVisibility(View.VISIBLE);
             holder.imgDleteCard.setVisibility(View.INVISIBLE);
-            holder.viewDeafultCard.setVisibility(View.GONE);
+
+            if(!showDelete){
+                holder.imgDleteCard.setVisibility(View.INVISIBLE);
+            }else{
+                if(getItemCount()==1){
+                    //not able to delete single card.
+                    holder.imgDleteCard.setVisibility(View.INVISIBLE);
+                }
+            }
+        }else{
+            holder.viewDeafultCard.setVisibility(View.INVISIBLE);
+            holder.imgDleteCard.setVisibility(View.VISIBLE);
+            if(!showDelete){
+                holder.imgDleteCard.setVisibility(View.INVISIBLE);
+            }else{
+                if(getItemCount()==1){
+                    //not able to delete single card.
+                    holder.imgDleteCard.setVisibility(View.INVISIBLE);
+                }
+            }
+        }
+
+
+       /* if(!showDelete){//hide delete icon
+
+            holder.imgDleteCard.setVisibility(View.INVISIBLE);
+            holder.viewDeafultCard.setVisibility(View.VISIBLE);
+
         }else{
             if(cardData.getDefault()){
                 //not able to delete default card
@@ -121,7 +151,7 @@ public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.ViewHo
                 holder.imgDleteCard.setVisibility(View.INVISIBLE);
             }
 
-        }
+        }*/
 
         holder.imgDleteCard.setOnClickListener(new View.OnClickListener() {
             @Override

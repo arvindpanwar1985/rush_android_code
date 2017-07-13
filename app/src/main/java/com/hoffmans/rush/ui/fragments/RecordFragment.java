@@ -1,8 +1,10 @@
 package com.hoffmans.rush.ui.fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,16 +19,25 @@ import com.hoffmans.rush.bean.BaseBean;
 import com.hoffmans.rush.bean.RecordBean;
 import com.hoffmans.rush.http.request.ServiceRequest;
 import com.hoffmans.rush.listners.ApiCallback;
+import com.hoffmans.rush.listners.OnRecordsItemClickListeners;
+import com.hoffmans.rush.model.DateTime;
+import com.hoffmans.rush.model.DriverDetail;
+import com.hoffmans.rush.model.Estimate;
+import com.hoffmans.rush.model.PickDropAddress;
 import com.hoffmans.rush.model.Record;
+import com.hoffmans.rush.model.VechileDetail;
+import com.hoffmans.rush.ui.activities.ScheduleDetailsActivity;
+import com.hoffmans.rush.ui.activities.UserDetailsActivity;
 import com.hoffmans.rush.ui.adapters.RecordAdapter;
 import com.hoffmans.rush.utils.Constants;
 import com.hoffmans.rush.utils.Progress;
 import com.hoffmans.rush.widgets.EndlessRecyclerViewScrollListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class RecordFragment extends BaseFragment {
+public class RecordFragment extends BaseFragment implements OnRecordsItemClickListeners{
    private static final String KEY_IS_RECORD      ="isRecord";
    private static final String KEY_PAGE           ="page";
    private static final String KEY_STATE          ="state";
@@ -134,10 +145,10 @@ public class RecordFragment extends BaseFragment {
                  RecordBean recordBean=(RecordBean)body;
                  records_count=recordBean.getTotal_items();
                  if(records_count!=0 &&recordBean.getRecords().size()!=0){
+
                     recordList=recordBean.getRecords();
-                    mAdapter=new RecordAdapter(mActivity,recordList,isRecord);
-                    recyclerView.setAdapter(mAdapter);
-                    currentListSize=recordList.size();
+                     setAdapter(recordList);
+                     currentListSize=recordList.size();
 
                   }else{
                      txtNoRecords.setVisibility(View.VISIBLE);
@@ -152,6 +163,13 @@ public class RecordFragment extends BaseFragment {
                 }
             }
         });
+    }
+
+
+
+    public void setAdapter(List<Record> recordList){
+        mAdapter=new RecordAdapter(mActivity,recordList,isRecord,this);
+        recyclerView.setAdapter(mAdapter);
     }
     /**
      * load more data on endless scrolling
@@ -185,4 +203,38 @@ public class RecordFragment extends BaseFragment {
         });
    }
 
+    @Override
+    public void onRecordsItemClicked(int position) {
+        Intent intent;
+        Record record=recordList.get(position);
+
+
+        Estimate estimate=record.getEstimate();
+        VechileDetail vechileDetail=record.getVehicle_details();
+        DriverDetail driverDetail=record.getDriver_details();
+        PickDropAddress pickDropAddress=record.getPick_up();
+        DateTime dateTime=record.getDate_time();
+        //intent=new Intent(mActivity,UserDetailsActivity.class);
+
+        if(isRecord){
+            intent=new Intent(mActivity,UserDetailsActivity.class);
+        }else{
+            intent=new Intent(mActivity,ScheduleDetailsActivity.class);
+        }
+
+        intent.putExtra(Constants.KEY_ESTIMATE_DATA,estimate);
+        intent.putExtra(Constants.KEY_VEHICLE_DETAILS,vechileDetail);
+        intent.putExtra(Constants.KEY_DRIVER_DETAILS,driverDetail);
+        intent.putExtra(Constants.KEY_PICK_ADDRESS,pickDropAddress);
+        intent.putExtra(Constants.KEY_DATA_DATE_TIME,dateTime);
+        intent.putParcelableArrayListExtra(Constants.KEY_DROP_DOWN, (ArrayList<? extends Parcelable>) record.getDrop_down());
+        intent.putExtra(Constants.KEY_COMMENT,record.getComment());
+        intent.putExtra(Constants.SERVICE_STATUS,record.getState());
+        intent.putExtra(Constants.SERVICE_ID,record.getId());
+
+
+
+        startActivity(intent);
+
+    }
 }

@@ -26,6 +26,9 @@ import com.hoffmans.rush.utils.AppPreference;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
@@ -40,8 +43,8 @@ import static com.hoffmans.rush.location.LocationData.REQUEST_CHECK_SETTINGS;
  */
 public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
-    private static final long INTERVAL      =12000;
-    private static final int DISPLACEMENT   =250;
+    private static final long INTERVAL      =60*1000;
+    private static final float DISPLACEMENT   =100;
     private static LocationUpdate mLocationUpdate =null;
     private LocationInterface mLocationListener =null;
     private Context mContext;
@@ -90,7 +93,8 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
      */
     private void createLocationRequest() {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(INTERVAL);
+        mLocationRequest.setInterval(15000);
+        mLocationRequest.setFastestInterval(4000);
         mLocationRequest.setSmallestDisplacement(DISPLACEMENT);// set displacement in meters ,user must move this distance to get location update
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY); //initialize the builder and add location request paramenter like HIGH Aurracy
         startLocationUpdates();
@@ -158,7 +162,8 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
     }
 
     private void initWebsocket() {
-        client = new okhttp3.OkHttpClient();
+       /* client = new okhttp3.OkHttpClient();*/
+        client = new OkHttpClient().newBuilder().pingInterval(30, TimeUnit.SECONDS).build();
         //Request request = new Request.Builder().url("ws://echo.websocket.org").build();
         //TODO add the IP and port
         okhttp3.Request request= new okhttp3.Request.Builder().url(ApiConfig.URL_SOCKET).build();
@@ -168,6 +173,7 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
     }
 
     private void updateOnSocket(Location location){
+        Log.e("update on socket..","####");
         if(location!=null) {
             AppPreference appPreference=AppPreference.newInstance(mContext);
             User user=appPreference.getUserDetails();
@@ -179,17 +185,27 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
                     jsonObject.put("lat", latitude);
                     jsonObject.put("driver_id", "" + appPreference.getUserDetails().getId());
                     jsonObject.put("long", longitude);
+                    Log.e("driver status.....", AppPreference.newInstance(mContext).getDriverStatus());
+                    jsonObject.put("driver_status",AppPreference.newInstance(mContext).getDriverStatus());
+                    // check if service is already running
+                    if(AppPreference.newInstance(mContext).getStartServiceId()!=0){
+                        jsonObject.put("current_running_service", AppPreference.newInstance(mContext).getStartServiceId());
+                    }
+
                     if(user.getVehicle_details()!=null) {
                         int vechile_id=user.getVehicle_details().getVehicle_type_id();
                         if(vechile_id!=0) {
                             jsonObject.put("vehicle_type_id", String.valueOf(vechile_id));
+                            Log.e("updateOnSocket####",jsonObject.toString());
                             webSocket.send(jsonObject.toString());
-                            if (updateCount == 4 && isUpdateAfterFixedInterval()) {
+                            UpdateCurentLocation.startLocationUpdate(mContext, appPreference.getUserDetails().getToken(), latitude, longitude);
+/*
+                            if (updateCount == 50 && isUpdateAfterFixedInterval()) {
                                 UpdateCurentLocation.startLocationUpdate(mContext, appPreference.getUserDetails().getToken(), latitude, longitude);
                                 updateCount = 0;
                             } else {
                                 updateCount++;
-                            }
+                            }*/
                         }
                     }
                 } catch (JSONException e) {
@@ -203,6 +219,7 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
 
     @Override
     public void onLocationChanged(Location location) {
+        Log.e("Location", "onLocationChanged");
         try {
             newLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             updateOnSocket(newLocation);
@@ -294,9 +311,7 @@ public class LocationUpdate implements GoogleApiClient.ConnectionCallbacks, Goog
         @Override
         public void onOpen(WebSocket webSocket, Response response) {
 
-            //webSocket.send("Hello!");
-            //webSocket.send(ByteString.decodeHex("deadbeef"));
-            //webSocket.close(NORMAL_CLOSURE_STATUS, "Goodbye!");
+
         }
 
         @Override

@@ -1,5 +1,7 @@
 package com.hoffmans.rush.ui.driver.activities;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -18,8 +20,6 @@ import com.hoffmans.rush.R;
 import com.hoffmans.rush.location.LocationData;
 import com.hoffmans.rush.model.User;
 import com.hoffmans.rush.ui.activities.BaseActivity;
-import com.hoffmans.rush.ui.activities.BookServiceActivity;
-import com.hoffmans.rush.ui.activities.EditProfileActivity;
 import com.hoffmans.rush.ui.driver.fragments.HomeFragment;
 import com.hoffmans.rush.utils.AppPreference;
 
@@ -50,7 +50,12 @@ public class DriverNavigationActivity extends BaseActivity
         initManagers();
         initViews();
         initListeners();
-        fragment=HomeFragment.newInstance("","");
+        // checking intent when we are coming from AcceptOrder activity if we are getting intent with string
+        if(getIntent()!=null && getIntent().getExtras()!=null){
+            fragment=HomeFragment.newInstance(getIntent().getStringExtra(AcceptOrderActivity.KEY_SERVICE_MESSAGE),"");
+        }else {
+            fragment = HomeFragment.newInstance("", "");
+        }
         replaceFragment(fragment,R.id.driver_navigation_content,true);
     }
 
@@ -69,6 +74,7 @@ public class DriverNavigationActivity extends BaseActivity
 
     @Override
     protected void initManagers() {
+
 
     }
 
@@ -97,17 +103,24 @@ public class DriverNavigationActivity extends BaseActivity
         mDrawerToggle.setDrawerIndicatorEnabled(false);
         getToolBar().setNavigationIcon(R.drawable. ic_hamburger_icon);
         mDrawerToggle.syncState();
+
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View navHeader=navigationView.getHeaderView(0);
         initheaderView(navHeader);
+
+        // check if get admin message notification is pending
+        if(AppPreference.newInstance(this).getAdminMessage().equals("")){
+
+        }else{
+            showAlertDialog(this,AppPreference.newInstance(this).getAdminMessage());
+        }
     }
 
     @Override
     protected void initListeners() {
-
         edtprofileLinear.setOnClickListener(this);
-
     }
 
     private void initheaderView(View navHeader){
@@ -208,6 +221,27 @@ public class DriverNavigationActivity extends BaseActivity
             fragment.onActivityResult(requestCode, resultCode, data);
         }else {
          super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+
+    public  void showAlertDialog(Context context, String message) {
+        try {
+            AppPreference.newInstance(this).setAdminMessage("");
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
+            builder.setTitle(R.string.app_name)
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setPositiveButton(getResources().getString(R.string.str_cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            dialog.dismiss();
+
+                        }
+                    }).create().show();
+        }catch (Exception e){
+
         }
     }
 

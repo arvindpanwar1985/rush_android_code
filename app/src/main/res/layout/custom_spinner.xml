@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/dp_7"
-    android:background="@color/colorEdtBg">
+    android:background="@drawable/bg_edittext_shape">
 
     <Spinner
         android:layout_width="match_parent"

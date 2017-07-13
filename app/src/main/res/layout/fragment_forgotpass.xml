@@ -16,10 +16,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/str_write_rush"
-        android:layout_marginTop="@dimen/dp_30"
+        android:layout_marginTop="@dimen/dp_80"
         android:textColor="@android:color/white"
         android:textStyle="bold|italic"
-        android:textSize="@dimen/sp_16"/>
+        android:textSize="@dimen/sp_14"/>
 
 
     <EditText
@@ -28,7 +28,7 @@
         android:drawableLeft="@drawable/ic_email"
         android:inputType="textEmailAddress|textNoSuggestions"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_10"
         android:layout_marginLeft="@dimen/dp_40"
         android:layout_marginRight="@dimen/dp_40"
         style="@style/AppTheme.Input"/>
@@ -39,10 +39,11 @@
         android:id="@+id/fPBtnSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/dp_10"
-        android:paddingRight="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_70"
+        android:layout_marginRight="@dimen/dp_70"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_gravity="center_horizontal"
+        android:textAllCaps="false"
         android:text="@string/str_submit"
 
         style="@style/AppTheme.Button"/>

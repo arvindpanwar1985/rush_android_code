@@ -12,7 +12,7 @@ public class CardListActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getLayoutInflater().inflate(R.layout.activity_card_list, getParentView());
-        initToolBar(" ",false);
+        initToolBar(getString(R.string.str_save_card),false);
         hideToolbar();
         boolean isCardSelectable=getIntent().getBooleanExtra(Constants.KEY_IS_CARD_SELECTABLE,false);
         CardListFragment fragment=CardListFragment.newInstance(isCardSelectable,"");

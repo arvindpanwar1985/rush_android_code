@@ -1,9 +1,41 @@
 <resources>
 <string name="hint_user">Usuario</string>
+    <string name="app_name">Rush</string>
     <string name="hint_password">Contraseña</string>
     <string name="hint_confirm_password">Nueva Contrasena</string>
     <string name="hint_new_password">nueva contraseña</string>
     <string name="hint_confirm_new_password">Confirmar nueva contraseña</string>
+    <string name="str_facebook">Facebook</string>
+    <string name="str_google">Google</string>
+    <string name="str_cvv">CVV</string>
+    <string name="str_change_photo">Cambiar Fotografía</string>
+    <string name="str_pickup_location">Lugar de recogida</string>
+    <string name="str_drop_location">Gota Ubicación </string>
+    <string name="str_record_details">Detalles del registro</string>
+    <string name="str_add_comments">Agregar comentario</string>
+    <string name="str_comment">Comentario</string>
+    <string name="error_empty_comment">Por favor, introduzca  comentario</string>
+    <string name="str_terms_condition">Seleccione el término y la condición</string>
+    <string name="hello_blank_fragment">Hola fragmento en blanco</string>
+    <string name="map_debug_key">AIzaSyDwSOxeJ0GIxeqK-GPfBhOv8hFH-ssgFfE</string>
+    <string name="map_key_release">AIzaSyBXEHIlXNyrt0D9sqijDE4XGyx4TLdWDKs</string>
+    <string name="str_marking_fav">Marcado Favorito..</string>
+    <string name="progress_loading">Cargando..</string>
+    <string name="progress_estimate">Costo estimado..</string>
+    <string name="title_activity_place_autocomplete">PlaceAutocomplete</string>
+    <string name="str_select_card">Seleccione la tarjeta</string>
+    <string name="str_confirm_order">Confirmar pedido</string>
+    <string name="str_permission_denied">Permiso denegado.</string>
+    <string name="str_internet_error"></string>
+    <string name="str_something_wrong">Algo salió mal.</string>
+    <string name="str_invalid_credentials">credenciales no válidas</string>
+    <string name="title_activity_upcoming">Próximaactividad</string>
+    <string name="geo_coding_key">AIzaSyDCRfXUt0ipr-UfxIPhHGO5osj-bncoJWk</string>
+    <string name="title_activity_accept_order">AcceptOrderActivity</string>
+    <string name="title_activity_completed_records">CompletedRecords</string>
+    <string name="title_activity_test">Mapa</string>
+
+
 
     <string name="str_login">Iniciar Sesion</string>
     <string name="str_create_account">Crear cuenta</string>
@@ -17,17 +49,15 @@
     <string name="str_city">Cuidad</string>
     <string name="str_card">Tarjeta</string>
     <string name="str_save">Guardar</string>
+    <string name="str_save_card">Tarjetas</string>
     <string name ="str_write_rush">Escribe al carreo de tu cuenta Rush</string>
     <string name="str_submit">Enviar</string>
     <string name ="str_fullname">Nombre completo</string>
     <string name="str_password">Contraseña</string>
     <string name="str_hint_password">Contraseña anterior</string>
     <string name="str_email">Email</string>
-    <string name="str_phone">Teléfono</string>
-
-
-
-
+    <string name="str_phone">número de teléfono</string>
+    <string name="str_order_details">Detalle de la orden</string>
 
     <string name="error_empty_email">La dirección de correo electrónico no puede estar vacía.</string>
     <string name="error_empty_username">El nombre de usuario no puede estar vacío.</string>
@@ -85,8 +115,8 @@
     <string name="str_reservation">reserva</string>
     <string name="str_now">Ahora</string>
 
-    <string name="str_hint_start">indica punto de partida</string>
-    <string name="str_hint_end">indica punto de destino</string>
+    <string name="str_hint_start">Indique el punto de partida</string>
+    <string name="str_hint_end">Indicar el punto de destino</string>
 
     <string name="str_make_order">Realizar pedido</string>
     <string name="str_value_estimate">Valor estimado</string>
@@ -95,7 +125,7 @@
     <string name="str_fav_message">¿Estás seguro de que quieres marcar esta dirección en Favoritos?</string>
     <string name="str_fav_remove">¿Seguro que quieres eliminar esta dirección de Favorito?</string>
     <string name="str_record">Archivos</string>
-    <string name="str_scheduled">Programado</string>
+    <string name="str_scheduled">Pedido programado</string>
     <string name="str_delete_Card">¿Estás seguro de que quieres eliminar esta tarjeta?</string>
     <string name="str_default_Card">¿Estás seguro de que quieres marcar esta tarjeta por defecto?</string>
     <string name="str_another_des">Añadir otro destino</string>
@@ -115,7 +145,8 @@
     <string name="str_edit">editar</string>
     <string name="str_add_card">Agregar tarjeta</string>
     <string name="str_frequent_address">Dirección de uso frecuente</string>
-    <string name="str_upcoming">Próximo</string>
+    <string name="str_upcoming">Próximos pedidos</string>
+    <string name="str_menu_upcoming">Próximo</string>
     <string name="str_receipt">Recibo</string>
     <string name="str_home">Casa</string>
     <string name="str_select_reservation">Por favor, seleccione la fecha de reserva</string>
@@ -125,7 +156,7 @@
     <string name="str_select_destination">Por favor seleccione el destino</string>
     <string name="str_select_vechile">Seleccione el vehículo</string>
 
-    <string name ="str_terms_part_one">Al continuar con el registro, estoy de acuerdo con el \t</string>
+    <string name ="str_terms_part_one">estoy de acuerdo con\t</string>
     <string name ="str_terms_part_two">Términos y Condiciones \t</string>
     <string name ="str_terms_part_three">y \t</string>
     <string name ="str_terms_part_four">Política de privacidad</string>
@@ -144,10 +175,8 @@
     <string name="str_finished">Terminado</string>
     <string name="str_source">Recoger</string>
     <string name="str_dest">Entregar</string>
-
     <string name="str_notify_text">¿Ha recibido una solicitud?</string>
     <string name="str_add_comment">agregar comentario</string>
     <string name="str_try_again">Inténtalo de nuevo</string>
-
     <string name="str_no_order">No posees ordenes por el momento.</string>
 </resources>

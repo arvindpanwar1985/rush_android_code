@@ -43,6 +43,23 @@
                 android:src="@drawable/default_profile_photo"
                 app:civ_border_color="@color/civ_border"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_change_photo"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_vertical"
+                android:text="@string/str_change_photo"
+                android:textSize="@dimen/sp_16"
+                android:padding="@dimen/dp_4"
+                android:visibility="visible"
+                android:textStyle="bold|italic"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/dp_5"
+                android:textColor="@color/color_view_divider"
+                />
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -275,11 +292,7 @@
                     android:layout_toLeftOf="@+id/editablePhone"
                     android:orientation="horizontal"
                     android:background="@drawable/bg_edittext_shape">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/dp_2"
-                        android:src="@drawable/ic_phone"/>
+
 
 
                     <include
@@ -294,8 +307,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/fEPEdtPhone"
+                        android:drawableLeft="@drawable/ic_phone"
+                        android:drawableStart="@drawable/ic_phone"
                         android:textSize="@dimen/sp_16"
-
                         android:singleLine="true"
                         android:layout_gravity="center_vertical"
                         android:textColor="@android:color/white"
@@ -360,6 +374,7 @@
                     android:id="@+id/includeSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+
                     layout="@layout/custom_spinner"/>
             </LinearLayout>
 
@@ -443,8 +458,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/linearnotify"
             android:layout_marginTop="@dimen/dp_20"
-            android:layout_marginLeft="@dimen/dp_40"
+            android:layout_marginLeft="@dimen/dp_20"
             android:text="@string/str_save"
+            android:textAllCaps="false"
             android:layout_marginRight="@dimen/dp_40"
             android:layout_marginBottom="@dimen/dp_30"
             style="@style/AppTheme.Button"/>

@@ -83,7 +83,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
     private static final String ARG_PARAM2         = "param2";
     private EditText edtname,edtEmail,edtphone,edtoldPassword,edtNewPassword,edtConfirmNewPassword;
     private RelativeLayout linearNewPass,linearConfirmNewPass,linearOldPass,topView;
-    private TextView editableName,editableNumber,editablePassword,txtCountryCode;
+    private TextView editableName,editableNumber,editablePassword,txtCountryCode,txtChangePhoto;
     private CircleImageView imgProfilePic;
     private Spinner spinnerCurrency;
     private Button btnSave;
@@ -155,6 +155,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         linearOldPass=(RelativeLayout)view.findViewById(R.id.linearOldPass);
         editableName=(TextView)view.findViewById(R.id.editableName);
         editablePassword=(TextView)view.findViewById(R.id.editablePassword);
+        txtChangePhoto=(TextView)view.findViewById(R.id.txt_change_photo);
         editableNumber=(TextView)view.findViewById(R.id.editablePhone);
         btnSave=(Button)view.findViewById(R.id.fEPBtnSave);
         imgProfilePic=(CircleImageView)view.findViewById(R.id.fEPImgProfile);
@@ -187,6 +188,7 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         btnSave.setOnClickListener(this);
         topView.setOnClickListener(this);
         incCountryCodes.setOnClickListener(this);
+        txtChangePhoto.setOnClickListener(this);
 
     }
 
@@ -225,6 +227,10 @@ public class EditProfileFragment extends BaseFragment implements View.OnClickLis
         switch (view.getId()){
             case R.id.fEPBtnSave:
                 validateFields();
+                break;
+
+            case R.id.txt_change_photo:
+                checkPermission();
                 break;
 
             case R.id.fEPImgProfile:

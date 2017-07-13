@@ -5,11 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
-import com.braintreepayments.api.interfaces.BraintreeErrorListener;
-import com.braintreepayments.api.interfaces.PaymentMethodNonceCreatedListener;
-import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.hoffmans.rush.R;
-import com.hoffmans.rush.listners.BrainTreeHandler;
 import com.hoffmans.rush.ui.fragments.LoginFragment;
 import com.hoffmans.rush.ui.fragments.PaymentMethodFragment;
 import com.hoffmans.rush.ui.fragments.UpdateAccountFragment;
@@ -20,9 +16,9 @@ import com.hoffmans.rush.utils.Utils;
  * Created by devesh on 19/12/16.
  */
 
-public class LoginActivity extends BaseActivity implements PaymentMethodNonceCreatedListener, BraintreeErrorListener {
+public class LoginActivity extends BaseActivity  {
 
-    private BrainTreeHandler brainTreeHandler;
+
 
     public  static final int IMAGE_REQUEST_PERMISSION=100;
     public  static final int CAMERA_PIC_REQUEST    = 101;
@@ -75,32 +71,19 @@ public class LoginActivity extends BaseActivity implements PaymentMethodNonceCre
         super.onBackPressed();
     }
 
-    @Override
-    public void onError(Exception error) {
-        brainTreeHandler.onError(error);
-    }
 
-    @Override
-    public void onPaymentMethodNonceCreated(PaymentMethodNonce paymentMethodNonce) {
-        brainTreeHandler.onNonceCreated(paymentMethodNonce);
-
-    }
 
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(brainTreeHandler!=null){
-            brainTreeHandler=null;
-        }
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
-    public void setBrainTreeHandler(BrainTreeHandler handler){
-        this.brainTreeHandler=handler;
-    }
+
 
 }

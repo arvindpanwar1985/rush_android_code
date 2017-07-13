@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:padding="@dimen/dp_10"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/layout_pickup_location"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_70">
+
+            <ImageView
+
+                android:paddingTop="@dimen/dp_5"
+                android:id="@+id/img_place"
+                android:src="@drawable/ic_place"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <View
+                android:layout_marginTop="@dimen/dp_2"
+                android:layout_gravity="center"
+                android:layout_width="@dimen/dp_2"
+                android:layout_height="wrap_content"
+                android:background="@color/color_view_divider"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_below="@+id/layout_pickup_location"
+            android:layout_marginTop="@dimen/dp_2"
+            android:id="@+id/img_place_drop"
+            android:src="@drawable/ic_place"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="wrap_content" />
+
+
+
+        <LinearLayout
+            android:id="@+id/layout_drop_location"
+            android:paddingTop="@dimen/dp_5"
+            android:layout_toRightOf="@+id/layout_pickup_location"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_80"
+            android:layout_marginLeft="@dimen/dp_7"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_pickup_location"
+                android:layout_alignParentTop="true"
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_14"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:layout_gravity="top"
+                android:layout_height="wrap_content"
+                android:text="@string/str_pickup_location"/>
+
+            <TextView
+                android:id="@+id/txt_pickup_address"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_10"
+                android:textStyle="bold"
+                android:layout_height="wrap_content"
+                android:text=""></TextView>
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_below="@+id/layout_drop_location"
+            android:layout_toRightOf="@+id/img_place_drop"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_7"
+            android:layout_marginTop="@dimen/dp_13"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_drop_location"
+                android:layout_alignParentTop="true"
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_14"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:layout_gravity="top"
+                android:layout_height="wrap_content"
+                android:text="@string/str_drop_location"/>
+
+            <TextView
+                android:id="@+id/txt_drop_address1"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_10"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:text="1. A-5, IT Park, shastraRoad Dehradun"/>
+            <TextView
+                android:id="@+id/txt_drop_address2"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_10"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:text="2. A-5, IT Park, shastraRoad Dehradun"/>
+            <TextView
+                android:id="@+id/txt_drop_address3"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sp_10"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:text="3. A-5, IT Park, shastraRoad Dehradun"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

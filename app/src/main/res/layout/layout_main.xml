@@ -21,6 +21,7 @@
         android:layout_centerInParent="true"
         android:layout_marginLeft="@dimen/dp_40"
         android:text="@string/login_as_user"
+        android:textAllCaps="false"
         android:layout_marginRight="@dimen/dp_40"
         style="@style/AppTheme.Button"/>
 
@@ -32,9 +33,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnCustomer"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/dp_60"
+        android:layout_marginTop="@dimen/dp_25"
         android:layout_marginLeft="@dimen/dp_40"
         android:text="@string/login_as_driver"
+        android:textAllCaps="false"
         android:layout_marginRight="@dimen/dp_40"
         style="@style/AppTheme.Button"/>
 

@@ -57,6 +57,7 @@ public class LocationRequest extends BaseRequest {
     }
 
     public void getNearbyDrivers(String auth,String lat,String lng,String radius,String vechile_id,final ApiCallback callback){
+
         Call<ResponseBody> nearbyCall=getAPIClient().nearbyDrivers(auth,lat,lng,radius,vechile_id);
         ConnectionManager connectionManager=ConnectionManager.getConnectionInstance(nearbyCall);
         connectionManager.callApi(new BaseListener.OnWebServiceCompleteListener() {

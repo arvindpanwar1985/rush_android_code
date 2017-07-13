@@ -4,12 +4,17 @@
     <color name="colorPrimaryDark">#c1413a</color>
     <color name="colorAccent">#c1413a</color>
     <color name="colorEdtBg">#d27872</color>
+    <color name="color_EdtBg_light">#f2d1cf</color>
     <color name="civ_border">#6c2420</color>
     <color name="color_accept_reject">#e8503e</color>
     <color name="color_custom_toast">#B63f33</color>
     <color name="color_notify">#f08f82</color>
     <color name="color_notify_border">#98979c</color>
-    <color name="color_drawer_top">#E8503e</color>
+    <color name="color_drawer_top">#e8503e</color>
     <color name="color_drawer_bottom">#c44435</color>
+    <color name="color_view_divider">#FFFFFF</color>
+    <color name="color_default_card">#00FF00</color>
+    <color name="color_add_comment_bg">#FFEAE7</color>
+    <color name="color_add_comment_border">#FEC2BD</color>
 
 </resources>
